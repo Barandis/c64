@@ -1,0 +1,37 @@
+/**
+ * Copyright (c) 2020 Thomas J. Otterson
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+const path = require("path")
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.join(__dirname, "lib"),
+    library: "c64",
+    libraryTarget: "umd",
+    globalObject: "this",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
+  resolve: {
+    alias: {
+      index: path.resolve(__dirname, "src/index.js"),
+      utils: path.resolve(__dirname, "src/utils.js"),
+      components: path.resolve(__dirname, "src/components"),
+      test: path.resolve(__dirname, "test"),
+    },
+  },
+}
