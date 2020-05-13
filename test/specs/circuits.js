@@ -43,21 +43,24 @@ describe("Circuit components", () => {
     })
 
     describe("state", () => {
-      it("can be set to HIGH, LOW, or HIGH_Z", () => {
+      it("can be set to HIGH, LOW, or HIGH_Z at initialization", () => {
         const rdy = createPin(2, "RDY", IN, HIGH)
         expect(rdy.state).to.equal(HIGH)
+        expect(rdy.value).to.equal(1)
         expect(rdy.high).to.be.true
         expect(rdy.low).to.be.false
         expect(rdy.highZ).to.be.false
 
         const a0 = createPin(7, "A0", OUT, LOW)
         expect(a0.state).to.equal(LOW)
+        expect(a0.value).to.equal(0)
         expect(a0.high).to.be.false
         expect(a0.low).to.be.true
         expect(a0.highZ).to.be.false
 
         const d0 = createPin(37, "D0", IN_OUT, HIGH_Z)
         expect(d0.state).to.equal(HIGH_Z)
+        expect(d0.value).to.be.null
         expect(d0.high).to.be.false
         expect(d0.low).to.be.false
         expect(d0.highZ).to.be.true
@@ -66,6 +69,34 @@ describe("Circuit components", () => {
       it("defaults to LOW", () => {
         const d0 = createPin(27, "D0", IN_OUT)
         expect(d0.state).to.equal(LOW)
+      })
+
+      it("can be set via state", () => {
+        const pin = createPin(2, "RDY", IN, HIGH)
+        expect(pin.state).to.equal(HIGH)
+
+        pin.set(LOW)
+        expect(pin.state).to.equal(LOW)
+
+        pin.set(HIGH_Z)
+        expect(pin.state).to.equal(HIGH_Z)
+
+        pin.set(HIGH)
+        expect(pin.state).to.equal(HIGH)
+      })
+
+      it("can be set via value", () => {
+        const pin = createPin(2, "RDY", IN, HIGH)
+        expect(pin.state).to.equal(HIGH)
+
+        pin.setValue(0)
+        expect(pin.state).to.equal(LOW)
+
+        pin.setValue(null)
+        expect(pin.state).to.equal(HIGH_Z)
+
+        pin.setValue(1)
+        expect(pin.state).to.equal(HIGH)
       })
 
       it("does not fire listeners if not set from a trace", () => {
@@ -78,12 +109,14 @@ describe("Circuit components", () => {
         const spy = sinon.spy()
 
         const pin = createPin(2, "RDY", IN, HIGH)
+        const trace = createTrace(pin)
+
         pin.addListener(spy)
-        pin.setFromTrace(LOW)
+        trace.set(HIGH)
         expect(spy).to.have.been.calledOnce
 
         pin.removeListener(spy)
-        pin.setFromTrace(HIGH)
+        trace.set(LOW)
         expect(spy).to.have.been.calledOnce
       })
 
@@ -129,10 +162,41 @@ describe("Circuit components", () => {
       })
     })
 
-    it("cannot be set to HIGH_Z", () => {
-      const trace = createTrace()
-      trace.set(HIGH_Z)
-      expect(trace.state).to.equal(LOW)
+    describe("setting state", () => {
+      it("can be set to HIGH", () => {
+        const trace = createTrace()
+
+        trace.set(HIGH)
+        expect(trace.state).to.equal(HIGH)
+        expect(trace.value).to.equal(1)
+      })
+
+      it("can be set to LOW", () => {
+        const trace = createTrace()
+
+        trace.set(LOW)
+        expect(trace.state).to.equal(LOW)
+        expect(trace.value).to.equal(0)
+      })
+
+      it("cannot be set to HIGH_Z", () => {
+        const trace = createTrace()
+        trace.set(HIGH_Z)
+        expect(trace.state).to.equal(LOW)
+      })
+
+      it("can be set via values", () => {
+        const trace = createTrace()
+
+        trace.setValue(1)
+        expect(trace.state).to.equal(HIGH)
+
+        trace.setValue(null) // setting to HIGH_Z does nothing
+        expect(trace.state).to.equal(HIGH)
+
+        trace.setValue(0)
+        expect(trace.state).to.equal(LOW)
+      })
     })
   })
 
@@ -216,6 +280,31 @@ describe("Circuit components", () => {
       expect(pin3.state).to.equal(LOW)
     })
 
+    it("changes a non-out pin's state to that of the trace when changed away from HIGH_Z", () => {
+      pin1.set(HIGH_Z)
+      pin2.set(HIGH_Z)
+      pin3.set(HIGH_Z)
+      trace.set(LOW)
+
+      pin1.set(HIGH)
+      expect(trace.state).to.equal(LOW)
+      expect(pin1.state).to.equal(LOW)
+      expect(pin2.state).to.equal(HIGH_Z)
+      expect(pin3.state).to.equal(HIGH_Z)
+
+      pin2.set(HIGH)
+      expect(trace.state).to.equal(HIGH)
+      expect(pin1.state).to.equal(HIGH)
+      expect(pin2.state).to.equal(HIGH)
+      expect(pin3.state).to.equal(HIGH_Z)
+
+      pin3.set(LOW)
+      expect(trace.state).to.equal(LOW)
+      expect(pin1.state).to.equal(LOW)
+      expect(pin2.state).to.equal(LOW)
+      expect(pin3.state).to.equal(LOW)
+    })
+
     describe("notifications", () => {
       let spy1 = null
       let spy2 = null
@@ -256,7 +345,16 @@ describe("Circuit components", () => {
       })
 
       it("does not fire pins twice if they were added twice", () => {
+        pin1 = createPin(2, "RDY", IN, HIGH)
+        pin2 = createPin(30, "D7", IN_OUT)
+        pin3 = createPin(38, "R/W", OUT, HIGH)
+
+        pin1.addListener(spy1)
+        pin2.addListener(spy2)
+        pin3.addListener(spy3)
+
         trace = createTrace(pin1, pin2, pin3, pin1)
+
         trace.set(LOW)
 
         expect(spy1).to.be.calledOnce

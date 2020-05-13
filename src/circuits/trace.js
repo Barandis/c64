@@ -10,11 +10,27 @@ import { LOW, HIGH } from "circuits/state"
 export function createTrace(...connectedPins) {
   const pins = []
 
-  let state = LOW
+  let state
+
+  function set(value) {
+    if ((value === HIGH || value === LOW) && state !== value) {
+      state = value
+      pins.forEach(pin => {
+        pin.setFromTrace()
+      })
+    }
+  }
+
+  function setValue(value) {
+    set(value === 1 ? HIGH : value === 0 ? LOW : null)
+  }
 
   const trace = {
     get state() {
       return state
+    },
+    get value() {
+      return state === HIGH ? 1 : 0
     },
     get high() {
       return state === HIGH
@@ -23,25 +39,21 @@ export function createTrace(...connectedPins) {
       return state === LOW
     },
 
-    set(value) {
-      if ((value === HIGH || value === LOW) && state !== value) {
-        state = value
-        pins.forEach(pin => {
-          pin.setFromTrace(this)
-        })
-      }
-    },
+    set,
+    setValue,
   }
 
   for (const pin of connectedPins) {
     if (!pins.includes(pin)) {
       pins.push(pin)
-      pin.addTrace(trace)
+      pin.setTrace(trace)
     }
   }
 
   if (pins.some(pin => pin.out && pin.high)) {
     trace.set(HIGH)
+  } else {
+    trace.set(LOW)
   }
 
   return trace

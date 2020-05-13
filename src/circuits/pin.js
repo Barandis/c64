@@ -13,7 +13,7 @@ export const IN_OUT = 3
 
 export function createPin(num, name, direction = IN, init = LOW) {
   const listeners = []
-  const traces = []
+  let trace = null
   const in_ = (direction & IN) > 0
   const out = (direction & OUT) > 0
 
@@ -21,25 +21,35 @@ export function createPin(num, name, direction = IN, init = LOW) {
 
   function set(value) {
     if ((value === HIGH || value === LOW || value === HIGH_Z) && state !== value) {
-      state = value
-      if (state !== HIGH_Z) {
-        if (out) {
-          traces.forEach(trace => trace.set(state))
+      if (!out && state === HIGH_Z && trace !== null) {
+        state = trace.state
+      } else {
+        state = value
+        if (state !== HIGH_Z) {
+          if (out && trace !== null) {
+            trace.set(state)
+          }
         }
       }
     }
   }
 
-  function setFromTrace(trace) {
-    const value = trace.state
+  function setValue(value) {
+    set(value === 1 ? HIGH : value === 0 ? LOW : HIGH_Z)
+  }
 
-    if (state === HIGH_Z) {
-      return
-    }
-    if (state !== value) {
-      state = value
-      if (in_) {
-        listeners.forEach(listener => listener(this))
+  function setFromTrace() {
+    if (trace !== null) {
+      const value = trace.state
+
+      if (state === HIGH_Z) {
+        return
+      }
+      if (state !== value) {
+        state = value
+        if (in_) {
+          listeners.forEach(listener => listener(this))
+        }
       }
     }
   }
@@ -48,9 +58,9 @@ export function createPin(num, name, direction = IN, init = LOW) {
     set(state === HIGH_Z ? HIGH_Z : state === LOW ? HIGH : LOW)
   }
 
-  function addTrace(trace) {
-    if (!traces.includes(trace)) {
-      traces.push(trace)
+  function setTrace(newTrace) {
+    if (trace === null) {
+      trace = newTrace
     }
   }
 
@@ -83,6 +93,9 @@ export function createPin(num, name, direction = IN, init = LOW) {
     get state() {
       return state
     },
+    get value() {
+      return state === HIGH ? 1 : state === LOW ? 0 : null
+    },
 
     get high() {
       return state === HIGH
@@ -95,9 +108,10 @@ export function createPin(num, name, direction = IN, init = LOW) {
     },
 
     set,
+    setValue,
     setFromTrace,
     toggle,
-    addTrace,
+    setTrace,
     addListener,
     removeListener,
   }
