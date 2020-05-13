@@ -30,7 +30,8 @@ module.exports = {
     alias: {
       index: path.resolve(__dirname, "src/index.js"),
       utils: path.resolve(__dirname, "src/utils.js"),
-      components: path.resolve(__dirname, "src/components"),
+      circuits: path.resolve(__dirname, "src/circuits"),
+      chips: path.resolve(__dirname, "src/chips"),
       test: path.resolve(__dirname, "test"),
     },
   },

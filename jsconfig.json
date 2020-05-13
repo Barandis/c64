@@ -4,7 +4,8 @@
     "paths": {
       "index": ["src/index.js"],
       "utils": ["src/utils.js"],
-      "components": ["src/components/*"],
+      "circuits": ["src/circuits/*"],
+      "chips": ["src/chips/*"],
       "test": ["test/*"],
     }
   },
