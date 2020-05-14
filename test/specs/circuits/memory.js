@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * Copyright (c) 2020 Thomas J. Otterson
  *
@@ -333,7 +334,7 @@ describe("Complete CPU-to-memory circuit", () => {
     showChipState(memory, "_CASRAM low")
   })
 
-  it.only("can read a byte back from a certain location", () => {
+  it("can read a byte back from a certain location", () => {
     memory._aec.state = LOW
     setAddress(memory, 0x06c1)
     setData(memory, 0x2f)
