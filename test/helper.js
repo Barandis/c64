@@ -19,12 +19,10 @@ export function rand(min, max = null) {
   return Math.floor(Math.random() * (hi - lo)) + lo
 }
 
-export function chipState(chip) {
+export function chipState(chip, name) {
   const terms = []
-  for (const pin of chip.pins
-    .filter(pin => pin !== null)
-    .sort((p1, p2) => (p1.name < p2.name ? -1 : p1.name > p2.name ? 1 : 0))) {
+  for (const pin of chip.pins) {
     terms.push(`${pin.name}: ${pin.value === null ? "z" : pin.value}`)
   }
-  return `[${terms.join(", ")}]`
+  return `${name}: [${terms.join(", ")}]`
 }

@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "module": "esnext",
+    "target": "esnext",
+    "baseUrl": ".",
     "paths": {
-      "index": ["src/index.js"],
-      "utils": ["src/utils.js"],
-      "circuits": ["src/circuits/*"],
-      "chips": ["src/chips/*"],
-      "test": ["test/*"],
+      "index": ["./src/index.js"],
+      "utils": ["./src/utils.js"],
+      "circuits": ["./src/circuits/*"],
+      "chips": ["./src/chips/*"],
+      "test": ["./test/*"],
     }
   },
   "exclude": ["node_modules", "lib"]
