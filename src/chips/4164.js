@@ -36,8 +36,8 @@
 // writes to happen within a single 256-address page of memory without incurring the cost of
 // resetting the row address.
 
-import { createPin, IN, OUT } from "circuits/pin"
-import { LOW, HIGH, HIGH_Z } from "circuits/state"
+import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { LOW, TRI } from "circuits/state"
 
 // Pin 1 on the 4164 is a no-contact.
 export const NC = 0
@@ -49,11 +49,11 @@ export const D = 1
 
 // The write-enable pin. If this is high, the chip is in read mode; if it and /CAS are low, the
 // chip is in either write or read-modify-write mode, depending on which pin went low first.
-export const W = 2
+export const _W = 2
 
 // The row address strobe. Setting this low latches the values of A0-A7, saving them to be part of
 // the address used to access the memory array.
-export const RAS = 3
+export const _RAS = 3
 
 // Address pin 0
 export const A0 = 4
@@ -88,7 +88,7 @@ export const Q = 13
 
 // The column address strobe. Setting this low latches A0-A7 into the second part of the memory
 // address. It also initiates read or write mode, depending on the value of /W.
-export const CAS = 14
+export const _CAS = 14
 
 // Electrical ground. This is not emulated.
 export const VSS = 15
@@ -97,22 +97,22 @@ export function create4164() {
   // The actual pinout of the 4164 chip. Pins 1, 8, and 16 are no-contacts or power supply pins and
   // are not emulated (set to IN, HIGH_Z to not change from traces that may be connected to them).
   const pins = [
-    createPin(1, "NC", IN, HIGH_Z),
-    createPin(2, "D"),
-    createPin(3, "/W", IN, HIGH),
-    createPin(4, "/RAS", IN, HIGH),
+    createPin(1, "NC", INPUT, TRI),
+    createPin(2, "D", INPUT),
+    createPin(3, "_W", INPUT),
+    createPin(4, "_RAS", INPUT),
     createPin(5, "A0"),
     createPin(6, "A2"),
     createPin(7, "A1"),
-    createPin(8, "VCC", IN, HIGH_Z),
+    createPin(8, "VCC", INPUT, TRI),
     createPin(9, "A7"),
     createPin(10, "A5"),
     createPin(11, "A4"),
     createPin(12, "A3"),
     createPin(13, "A6"),
-    createPin(14, "Q", OUT, HIGH_Z),
-    createPin(15, "/CAS", IN, HIGH),
-    createPin(16, "VSS", IN, HIGH_Z),
+    createPin(14, "Q", OUTPUT, TRI),
+    createPin(15, "_CAS", INPUT),
+    createPin(16, "VSS", INPUT, TRI),
   ]
 
   // 2048 32-bit unsigned integers is 65,536 bits.
@@ -161,7 +161,7 @@ export function create4164() {
   function read() {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    pins[Q].setValue(value)
+    pins[Q].value = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array.
@@ -203,14 +203,14 @@ export function create4164() {
   function casLatch(cas) {
     if (cas.low) {
       col = address()
-      if (pins[W].low) {
+      if (pins[_W].low) {
         data = pins[D].value
         write()
       } else {
         read()
       }
     } else {
-      pins[Q].set(HIGH_Z)
+      pins[Q].state = TRI
       col = null
       data = null
     }
@@ -232,22 +232,21 @@ export function create4164() {
   // but nothing is available to be read).
   function writeLatch(w) {
     if (w.low) {
-      pins[D].set(LOW)
-      if (pins[CAS].low) {
+      pins[D].state = LOW
+      if (pins[_CAS].low) {
         data = pins[D].value
         write()
       } else {
-        pins[Q].set(HIGH_Z)
+        pins[Q].state = TRI
       }
     } else {
-      pins[D].set(HIGH_Z)
       data = null
     }
   }
 
-  pins[RAS].addListener(rasLatch)
-  pins[CAS].addListener(casLatch)
-  pins[W].addListener(writeLatch)
+  pins[_RAS].addListener(rasLatch)
+  pins[_CAS].addListener(casLatch)
+  pins[_W].addListener(writeLatch)
 
   return {
     pins,

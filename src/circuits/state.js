@@ -7,4 +7,4 @@
 
 export const LOW = Symbol("LOW")
 export const HIGH = Symbol("HIGH")
-export const HIGH_Z = Symbol("HIGH_Z")
+export const TRI = Symbol("TRI")

@@ -24,7 +24,7 @@ export function chipState(chip) {
   for (const pin of chip.pins
     .filter(pin => pin !== null)
     .sort((p1, p2) => (p1.name < p2.name ? -1 : p1.name > p2.name ? 1 : 0))) {
-    terms.push(`${pin.name}: ${pin.value === null ? "x" : pin.value}`)
+    terms.push(`${pin.name}: ${pin.value === null ? "z" : pin.value}`)
   }
   return `[${terms.join(", ")}]`
 }

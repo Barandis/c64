@@ -5,57 +5,50 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { HIGH, LOW, HIGH_Z } from "circuits/state"
+import { HIGH, LOW, TRI } from "circuits/state"
 
-export const IN = 1
-export const OUT = 2
-export const IN_OUT = 3
+export const INPUT = 1
+export const OUTPUT = 2
+export const BIDIRECTIONAL = 3
 
-export function createPin(num, name, direction = IN, init = LOW) {
+export function createPin(num, name, direction = INPUT, init = LOW) {
   const listeners = []
   let trace = null
-  const in_ = (direction & IN) > 0
-  const out = (direction & OUT) > 0
+  const input = (direction & INPUT) > 0
+  const output = (direction & OUTPUT) > 0
 
   let state = init
 
   function set(value) {
-    if ((value === HIGH || value === LOW || value === HIGH_Z) && state !== value) {
-      if (!out && state === HIGH_Z && trace !== null) {
+    if ((value === HIGH || value === LOW || value === TRI) && state !== value) {
+      if (!output && trace !== null) {
         state = trace.state
       } else {
         state = value
-        if (state !== HIGH_Z) {
-          if (out && trace !== null) {
-            trace.set(state)
-          }
+        if (output && trace !== null) {
+          trace.state = state
         }
       }
     }
   }
 
   function setValue(value) {
-    set(value === 1 ? HIGH : value === 0 ? LOW : HIGH_Z)
+    set(value === 1 ? HIGH : value === 0 ? LOW : TRI)
   }
 
   function setFromTrace() {
     if (trace !== null) {
       const value = trace.state
 
-      if (state === HIGH_Z) {
-        return
-      }
-      if (state !== value) {
+      if (input & (state !== value)) {
         state = value
-        if (in_) {
-          listeners.forEach(listener => listener(this))
-        }
+        listeners.forEach(listener => listener(this))
       }
     }
   }
 
   function toggle() {
-    set(state === HIGH_Z ? HIGH_Z : state === LOW ? HIGH : LOW)
+    set(state === TRI ? TRI : state === LOW ? HIGH : LOW)
   }
 
   function setTrace(newTrace) {
@@ -65,7 +58,7 @@ export function createPin(num, name, direction = IN, init = LOW) {
   }
 
   function addListener(listener) {
-    if (in_ && !listeners.includes(listener)) {
+    if (input && !listeners.includes(listener)) {
       listeners.push(listener)
     }
   }
@@ -84,17 +77,11 @@ export function createPin(num, name, direction = IN, init = LOW) {
     get name() {
       return name
     },
-    get in() {
-      return in_
+    get input() {
+      return input
     },
-    get out() {
-      return out
-    },
-    get state() {
-      return state
-    },
-    get value() {
-      return state === HIGH ? 1 : state === LOW ? 0 : null
+    get output() {
+      return output
     },
 
     get high() {
@@ -103,12 +90,24 @@ export function createPin(num, name, direction = IN, init = LOW) {
     get low() {
       return state === LOW
     },
-    get highZ() {
-      return state === HIGH_Z
+    get tri() {
+      return state === TRI
     },
 
-    set,
-    setValue,
+    get state() {
+      return state
+    },
+    set state(value) {
+      set(value)
+    },
+
+    get value() {
+      return state === HIGH ? 1 : state === LOW ? 0 : null
+    },
+    set value(value) {
+      setValue(value)
+    },
+
     setFromTrace,
     toggle,
     setTrace,
