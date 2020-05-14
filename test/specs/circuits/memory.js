@@ -77,7 +77,7 @@ function createMemory() {
     ram6._CAS,
     ram7._CAS,
   )
-  const rw = createTrace(ram0._W, ram1._W, ram2._W, ram3._W, ram4._W, ram5._W, ram6._W, ram7._W)
+  const _rw = createTrace(ram0._W, ram1._W, ram2._W, ram3._W, ram4._W, ram5._W, ram6._W, ram7._W)
   const _ras = createTrace(
     ram0._RAS,
     ram1._RAS,
@@ -92,7 +92,7 @@ function createMemory() {
   _aec.state = HIGH
   _cas.state = HIGH
   _casram.state = HIGH
-  rw.state = HIGH
+  _rw.state = HIGH
   _ras.state = HIGH
 
   return {
@@ -123,7 +123,7 @@ function createMemory() {
     _aec,
     _cas,
     _casram,
-    rw,
+    _rw,
     _ras,
     ram0,
     ram1,
@@ -221,7 +221,7 @@ describe("Complete CPU-to-memory circuit", () => {
     memory._cas.state = LOW
     showChipState(memory, "_CAS low")
 
-    memory.rw.state = LOW
+    memory._rw.state = LOW
     showChipState(memory, "R_W low")
 
     memory._casram.state = LOW
@@ -234,11 +234,11 @@ describe("Complete CPU-to-memory circuit", () => {
     setData(memory, 0x2f)
     memory._ras.state = LOW
     memory._cas.state = LOW
-    memory.rw.state = LOW
+    memory._rw.state = LOW
     memory._casram.state = LOW
 
     memory._casram.state = HIGH
-    memory.rw.state = HIGH
+    memory._rw.state = HIGH
     memory._cas.state = HIGH
     memory._ras.state = HIGH
     setData(memory, 0)
