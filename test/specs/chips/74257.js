@@ -17,8 +17,8 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
 
   beforeEach(() => {
     chip = create74257()
-    for (const pin of chip.pins) {
-      traces[pin.name] = createTrace(pin)
+    for (const name in chip.pins) {
+      traces[name] = createTrace(chip.pins[name])
     }
   })
 

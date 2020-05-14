@@ -21,8 +21,9 @@ export function rand(min, max = null) {
 
 export function chipState(chip, name) {
   const terms = []
-  for (const pin of chip.pins) {
-    terms.push(`${pin.name}: ${pin.value === null ? "z" : pin.value}`)
+  for (const name in chip.pins) {
+    const pin = chip.pins[name]
+    terms.push(`${name}: ${pin.value === null ? "z" : pin.value}`)
   }
   return `${name}: [${terms.join(", ")}]`
 }
