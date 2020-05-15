@@ -16,7 +16,7 @@
 //
 // The output enable pin (_OE) is used to put all of the output pins into a high-impedence state,
 // effectively disconnecting them from whatever circuit they're connected to. A low _OE means normal
-// operation; setting _OE high forces the outputs into hi-Z no matter what the values of any other
+// operation; setting _OE high forces the outputs into hi-z no matter what the values of any other
 // pins.
 //
 // Each multiplexer is independent of the other three. Their inputs and outputs are unaffected by
@@ -24,7 +24,7 @@
 // simultaneously.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HIGH, TRI } from "circuits/state"
+import { LOW, HIGH, HI_Z } from "circuits/state"
 
 export function create74257() {
   const pins = {
@@ -33,8 +33,8 @@ export function create74257() {
     // pins.
     SEL: createPin(1, "SEL", INPUT),
 
-    // Output enable. When this is high, all of the Y output pins will be forced into tri-state,
-    // whatever the values of their input pins.
+    // Output enable. When this is high, all of the Y output pins will be forced into hi-z, whatever
+    // the values of their input pins.
     _OE: createPin(15, "_OE", INPUT),
 
     // Group 1 inputs and output
@@ -58,15 +58,15 @@ export function create74257() {
     Y4: createPin(12, "Y4", OUTPUT),
 
     // Power supply pins. These are not emulated.
-    GND: createPin(8, "GND", INPUT, TRI),
-    VCC: createPin(16, "VCC", INPUT, TRI),
+    GND: createPin(8, "GND", INPUT, HI_Z),
+    VCC: createPin(16, "VCC", INPUT, HI_Z),
   }
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
   function setOutput(apin, bpin, ypin) {
     if (pins._OE.state === HIGH) {
-      ypin.state = TRI
+      ypin.state = HI_Z
     } else if (pins.SEL.state === LOW) {
       ypin.state = apin.state
     } else {

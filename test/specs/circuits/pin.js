@@ -10,7 +10,7 @@ import sinon from "sinon"
 
 import { createPin, INPUT, OUTPUT, INPUT_OUTPUT } from "circuits/pin"
 import { createTrace } from "circuits/trace"
-import { LOW, HIGH, TRI } from "circuits/state"
+import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("Pin", () => {
   it("has a number and a name", () => {
@@ -36,27 +36,27 @@ describe("Pin", () => {
   })
 
   describe("state", () => {
-    it("can be set to HIGH, LOW, or TRI at initialization", () => {
+    it("can be set to HIGH, LOW, or HI_Z at initialization", () => {
       const rdy = createPin(2, "RDY", INPUT, HIGH)
       expect(rdy.state).to.equal(HIGH)
       expect(rdy.value).to.equal(1)
       expect(rdy.high).to.be.true
       expect(rdy.low).to.be.false
-      expect(rdy.tri).to.be.false
+      expect(rdy.hiZ).to.be.false
 
       const a0 = createPin(7, "A0", OUTPUT, LOW)
       expect(a0.state).to.equal(LOW)
       expect(a0.value).to.equal(0)
       expect(a0.high).to.be.false
       expect(a0.low).to.be.true
-      expect(a0.tri).to.be.false
+      expect(a0.hiZ).to.be.false
 
-      const d0 = createPin(37, "D0", INPUT_OUTPUT, TRI)
-      expect(d0.state).to.equal(TRI)
+      const d0 = createPin(37, "D0", INPUT_OUTPUT, HI_Z)
+      expect(d0.state).to.equal(HI_Z)
       expect(d0.value).to.be.null
       expect(d0.high).to.be.false
       expect(d0.low).to.be.false
-      expect(d0.tri).to.be.true
+      expect(d0.hiZ).to.be.true
     })
 
     it("defaults to LOW", () => {
@@ -71,8 +71,8 @@ describe("Pin", () => {
       pin.state = LOW
       expect(pin.state).to.equal(LOW)
 
-      pin.state = TRI
-      expect(pin.state).to.equal(TRI)
+      pin.state = HI_Z
+      expect(pin.state).to.equal(HI_Z)
 
       pin.state = HIGH
       expect(pin.state).to.equal(HIGH)
@@ -86,7 +86,7 @@ describe("Pin", () => {
       expect(pin.state).to.equal(LOW)
 
       pin.value = null
-      expect(pin.state).to.equal(TRI)
+      expect(pin.state).to.equal(HI_Z)
 
       pin.value = 1
       expect(pin.state).to.equal(HIGH)
@@ -101,13 +101,13 @@ describe("Pin", () => {
       expect(pin.high).to.be.true
     })
 
-    it("does not change when toggling an TRI pin", () => {
-      const pin = createPin(2, "RDY", INPUT, TRI)
+    it("does not change when toggling an HI_Z pin", () => {
+      const pin = createPin(2, "RDY", INPUT, HI_Z)
       pin.toggle()
-      expect(pin.tri).to.be.true
+      expect(pin.hiZ).to.be.true
 
       pin.toggle()
-      expect(pin.tri).to.be.true
+      expect(pin.hiZ).to.be.true
     })
 
     it("sets input pin's state to trace's state", () => {
@@ -118,7 +118,7 @@ describe("Pin", () => {
       pin.state = LOW
       expect(pin.state).to.equal(HIGH)
 
-      pin.state = TRI
+      pin.state = HI_Z
       expect(pin.state).to.equal(HIGH)
     })
 
@@ -149,8 +149,8 @@ describe("Pin", () => {
       expect(trace.state).to.equal(HIGH)
     })
 
-    it("can be changed from TRI by a trace's state change", () => {
-      const pin = createPin(2, "RDY", INPUT_OUTPUT, TRI)
+    it("can be changed from HI_Z by a trace's state change", () => {
+      const pin = createPin(2, "RDY", INPUT_OUTPUT, HI_Z)
       const trace = createTrace(pin)
 
       trace.state = HIGH

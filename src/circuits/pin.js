@@ -8,8 +8,8 @@
 // A representation of a single pin of an integrated circuit.
 //
 // A pin is essentially a state, along with some other metadata to describe it. The state can be one
-// of three values: HIGH, representing binary 1; LOW, representing binary 0; and TRI, representing a
-// high-impedence state that effectively just turns the pin off. This third state is commonly used
+// of three values: HIGH, representing binary 1; LOW, representing binary 0; and HI_Z, representing
+// a high-impedence state that effectively just turns the pin off. This third state is commonly used
 // in pins connected to a shared bus; only one device at a time should be writing to such a bus, and
 // other devices often set the pins connected to that bus to high-impedence so that they are
 // unaffected by and cannot affect changes made by the writing device.
@@ -26,14 +26,14 @@
 // in this mode). Setting the `mode` parameter has no effect on a non-INPUT_OUTPUT pin.
 //
 // The state of the pin is available in three ways, all of which are useful in different scenarios.
-// The `state` property returns the state as HIGH, LOW, or TRI. The `value` property returns the
+// The `state` property returns the state as HIGH, LOW, or HI_Z. The `value` property returns the
 // same state, but represented as a binary digit (either 1, 0, or null). Finally, the properties
-// `high`, `low`, and `tri` are boolean properties that return true for the appropriate state. These
+// `high`, `low`, and `hiZ` are boolean properties that return true for the appropriate state. These
 // boolean properties are read-only, but `state` and `value` can both be used to *set* the pin's
 // state as well. (This will not invoke listeners; only setting the state via `setFromTrace` will do
 // that.)
 
-import { HIGH, LOW, TRI } from "circuits/state"
+import { HIGH, LOW, HI_Z } from "circuits/state"
 
 // The direction in which data flows through the pin. An INPUT_OUTPUT pin can be changed from input
 // to output and back after creation; the others are fixed.
@@ -59,7 +59,7 @@ export function createPin(num, name, direction, init = LOW) {
   // This is intended to reflect changes made internally to the chip. For changing state from the
   // outside, through the state change of a trace connected to an input pin, see `setFromTrace`.
   function set(value) {
-    if ((value === HIGH || value === LOW || value === TRI) && state !== value) {
+    if ((value === HIGH || value === LOW || value === HI_Z) && state !== value) {
       if (mode === INPUT && trace !== null) {
         state = trace.state
       } else {
@@ -72,10 +72,10 @@ export function createPin(num, name, direction, init = LOW) {
   }
 
   // Sets the state of the pin, but by using a binary value instead of a state constant. A 1 or a 0
-  // sets the state to HIGH or LOW respectively; any other value puts the pin into tri-state (`null`
-  // is the canonical value for tri-state).
+  // sets the state to HIGH or LOW respectively; any other value puts the pin into hi-z(`null` is
+  // the canonical value for hi-z).
   function setValue(value) {
-    set(value === 1 ? HIGH : value === 0 ? LOW : TRI)
+    set(value === 1 ? HIGH : value === 0 ? LOW : HI_Z)
   }
 
   // Sets the state of the pin to match its trace's state, if the pin is an input pin. This is also
@@ -94,10 +94,10 @@ export function createPin(num, name, direction, init = LOW) {
     }
   }
 
-  // Changes the pin's state to the opposite of its current state. If the pin is in tri-state, it
+  // Changes the pin's state to the opposite of its current state. If the pin is hi-z, it
   // does not change.
   function toggle() {
-    set(state === TRI ? TRI : state === LOW ? HIGH : LOW)
+    set(state === HI_Z ? HI_Z : state === LOW ? HIGH : LOW)
   }
 
   // Associates a trace with the pin. Only one trace can be connected to a pin; connecting multiple
@@ -163,8 +163,8 @@ export function createPin(num, name, direction, init = LOW) {
     get low() {
       return state === LOW
     },
-    get tri() {
-      return state === TRI
+    get hiZ() {
+      return state === HI_Z
     },
 
     get state() {

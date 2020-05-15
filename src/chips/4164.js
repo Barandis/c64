@@ -37,7 +37,7 @@
 // resetting the row address.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, TRI } from "circuits/state"
+import { LOW, HI_Z } from "circuits/state"
 
 export function create4164() {
   const pins = {
@@ -64,18 +64,18 @@ export function create4164() {
     A7: createPin(9, "A7", INPUT),
 
     // The data input pin. When the chip is in write or read-modify-write mode, the value of this
-    // pin will be written to the appropriate bit in the memory array. In read mode, it will be in
-    // tri-state.
+    // pin will be written to the appropriate bit in the memory array. In read mode, it will be
+    // hi-z.
     D: createPin(2, "D", INPUT),
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
-    // the bit at the address latched by _RAS and _CAS. In write mode, it is in tri-state.
-    Q: createPin(14, "Q", OUTPUT, TRI),
+    // the bit at the address latched by _RAS and _CAS. In write mode, it is hi-z.
+    Q: createPin(14, "Q", OUTPUT, HI_Z),
 
     // Power supply and no-contact pins. These are not emulated.
-    NC: createPin(1, "NC", INPUT, TRI),
-    VCC: createPin(8, "VCC", INPUT, TRI),
-    VSS: createPin(16, "VSS", INPUT, TRI),
+    NC: createPin(1, "NC", INPUT, HI_Z),
+    VCC: createPin(8, "VCC", INPUT, HI_Z),
+    VSS: createPin(16, "VSS", INPUT, HI_Z),
   }
 
   // 2048 32-bit unsigned integers is 65,536 bits.
@@ -173,7 +173,7 @@ export function create4164() {
         read()
       }
     } else {
-      pins.Q.state = TRI
+      pins.Q.state = HI_Z
       col = null
       data = null
     }
@@ -200,7 +200,7 @@ export function create4164() {
         data = pins.D.value
         write()
       } else {
-        pins.Q.state = TRI
+        pins.Q.state = HI_Z
       }
     } else {
       data = null

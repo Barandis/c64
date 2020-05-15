@@ -9,7 +9,7 @@ import { expect } from "test/helper"
 
 import { create74257 } from "chips/74257"
 import { createTrace } from "circuits/trace"
-import { LOW, HIGH, TRI } from "circuits/state"
+import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("74257 3-State Quad 2-Data Multiplexers", () => {
   let chip
@@ -49,10 +49,10 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
       expect(traces.Y1.state).to.equal(HIGH)
 
       traces._OE.state = HIGH
-      expect(traces.Y1.state).to.equal(TRI)
+      expect(traces.Y1.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y1.state).to.equal(TRI)
+      expect(traces.Y1.state).to.equal(HI_Z)
     })
   })
 
@@ -83,10 +83,10 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
       expect(traces.Y2.state).to.equal(HIGH)
 
       traces._OE.state = HIGH
-      expect(traces.Y2.state).to.equal(TRI)
+      expect(traces.Y2.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y2.state).to.equal(TRI)
+      expect(traces.Y2.state).to.equal(HI_Z)
     })
   })
 
@@ -117,10 +117,10 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
       expect(traces.Y3.state).to.equal(HIGH)
 
       traces._OE.state = HIGH
-      expect(traces.Y3.state).to.equal(TRI)
+      expect(traces.Y3.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y3.state).to.equal(TRI)
+      expect(traces.Y3.state).to.equal(HI_Z)
     })
   })
 
@@ -151,10 +151,10 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
       expect(traces.Y4.state).to.equal(HIGH)
 
       traces._OE.state = HIGH
-      expect(traces.Y4.state).to.equal(TRI)
+      expect(traces.Y4.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y4.state).to.equal(TRI)
+      expect(traces.Y4.state).to.equal(HI_Z)
     })
   })
 })

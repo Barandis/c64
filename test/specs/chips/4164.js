@@ -9,7 +9,7 @@ import { expect } from "test/helper"
 
 import { create4164 } from "chips/4164"
 import { createTrace } from "circuits/trace"
-import { LOW, HIGH, TRI } from "circuits/state"
+import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("4164 64k x 1 bit DRAM", () => {
   let chip
@@ -26,8 +26,8 @@ describe("4164 64k x 1 bit DRAM", () => {
   })
 
   describe("idle state", () => {
-    it("has Q set to tri-state", () => {
-      expect(traces.Q.state).to.equal(TRI)
+    it("has Q set to hi-z", () => {
+      expect(traces.Q.state).to.equal(HI_Z)
     })
   })
 
@@ -39,7 +39,7 @@ describe("4164 64k x 1 bit DRAM", () => {
 
       traces._RAS.state = HIGH
       traces._CAS.state = HIGH
-      expect(traces.Q.state).to.equal(TRI)
+      expect(traces.Q.state).to.equal(HI_Z)
     })
   })
 
@@ -48,12 +48,12 @@ describe("4164 64k x 1 bit DRAM", () => {
       traces._RAS.state = LOW
       traces._W.state = LOW
       traces._CAS.state = LOW
-      expect(traces.Q.state).to.equal(TRI)
+      expect(traces.Q.state).to.equal(HI_Z)
 
       traces._RAS.state = HIGH
       traces._W.state = HIGH
       traces._CAS.state = HIGH
-      expect(traces.Q.state).to.equal(TRI)
+      expect(traces.Q.state).to.equal(HI_Z)
     })
   })
 
@@ -67,7 +67,7 @@ describe("4164 64k x 1 bit DRAM", () => {
       traces._RAS.state = HIGH
       traces._CAS.state = HIGH
       traces._W.state = HIGH
-      expect(traces.Q.state).to.equal(TRI)
+      expect(traces.Q.state).to.equal(HI_Z)
     })
   })
 
