@@ -8,18 +8,24 @@
 import { expect } from "test/helper"
 
 import { create4164 } from "chips/4164"
-import { createTrace } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("4164 64k x 1 bit DRAM", () => {
   let chip
-  const traces = []
+  const traces = {}
 
   beforeEach(() => {
     chip = create4164()
     for (const name in chip.pins) {
-      traces[name] = createTrace(chip.pins[name])
+      if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
+        traces[name] = createTrace(chip.pins[name])
+      }
     }
+
+    traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
+    traces.VSS = createTrace(chip.pins.VSS, PULL_DOWN)
+
     traces._W.state = HIGH
     traces._RAS.state = HIGH
     traces._CAS.state = HIGH
