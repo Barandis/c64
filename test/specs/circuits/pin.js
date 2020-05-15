@@ -8,7 +8,7 @@
 import { expect } from "test/helper"
 import sinon from "sinon"
 
-import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "circuits/pin"
+import { createPin, INPUT, OUTPUT, INPUT_OUTPUT } from "circuits/pin"
 import { createTrace } from "circuits/trace"
 import { LOW, HIGH, TRI } from "circuits/state"
 
@@ -20,7 +20,7 @@ describe("Pin", () => {
   })
 
   describe("direction", () => {
-    it("can be set to input, output, or bidirectional", () => {
+    it("can be set to input, output, or input/output", () => {
       const rdy = createPin(2, "RDY", INPUT, HIGH)
       expect(rdy.input).to.be.true
       expect(rdy.output).to.be.false
@@ -29,15 +29,9 @@ describe("Pin", () => {
       expect(rw.input).to.be.false
       expect(rw.output).to.be.true
 
-      const d0 = createPin(37, "D0", BIDIRECTIONAL)
+      const d0 = createPin(37, "D0", INPUT_OUTPUT)
       expect(d0.input).to.be.true
-      expect(d0.output).to.be.true
-    })
-
-    it("defaults to input", () => {
-      const rdy = createPin(2, "RDY")
-      expect(rdy.input).to.be.true
-      expect(rdy.output).to.be.false
+      expect(d0.output).to.be.false
     })
   })
 
@@ -57,7 +51,7 @@ describe("Pin", () => {
       expect(a0.low).to.be.true
       expect(a0.tri).to.be.false
 
-      const d0 = createPin(37, "D0", BIDIRECTIONAL, TRI)
+      const d0 = createPin(37, "D0", INPUT_OUTPUT, TRI)
       expect(d0.state).to.equal(TRI)
       expect(d0.value).to.be.null
       expect(d0.high).to.be.false
@@ -66,7 +60,7 @@ describe("Pin", () => {
     })
 
     it("defaults to LOW", () => {
-      const d0 = createPin(27, "D0", BIDIRECTIONAL)
+      const d0 = createPin(27, "D0", INPUT_OUTPUT)
       expect(d0.state).to.equal(LOW)
     })
 
@@ -117,7 +111,7 @@ describe("Pin", () => {
     })
 
     it("sets input pin's state to trace's state", () => {
-      const pin = createPin(2, "RDY")
+      const pin = createPin(2, "RDY", INPUT)
       const trace = createTrace(pin)
 
       trace.state = HIGH
@@ -128,8 +122,27 @@ describe("Pin", () => {
       expect(pin.state).to.equal(HIGH)
     })
 
+    it("sets input/output pin's state in input mode to trace's state", () => {
+      const pin = createPin(37, "D0", INPUT_OUTPUT)
+      pin.mode = INPUT
+      const trace = createTrace(pin)
+
+      trace.state = HIGH
+      pin.state = LOW
+      expect(pin.state).to.equal(HIGH)
+    })
+
     it("sets its trace's state if it is an output pin", () => {
-      const pin = createPin(37, "D0", BIDIRECTIONAL)
+      const pin = createPin(38, "RW", OUTPUT)
+      const trace = createTrace(pin)
+
+      pin.state = HIGH
+      expect(trace.state).to.equal(HIGH)
+    })
+
+    it("sets its trace's state if it is an input/output pin in output mode", () => {
+      const pin = createPin(37, "D0", INPUT_OUTPUT)
+      pin.mode = OUTPUT
       const trace = createTrace(pin)
 
       pin.state = HIGH
@@ -137,11 +150,85 @@ describe("Pin", () => {
     })
 
     it("can be changed from TRI by a trace's state change", () => {
-      const pin = createPin(2, "RDY", BIDIRECTIONAL, TRI)
+      const pin = createPin(2, "RDY", INPUT_OUTPUT, TRI)
       const trace = createTrace(pin)
 
       trace.state = HIGH
       expect(pin.state).to.equal(HIGH)
+    })
+  })
+
+  describe("mode", () => {
+    it("changes the mode of an input/output pin", () => {
+      const pin = createPin(1, "A", INPUT_OUTPUT)
+      expect(pin.mode).to.equal(INPUT) // initializes to INPUT
+      pin.mode = OUTPUT
+      expect(pin.mode).to.equal(OUTPUT)
+    })
+
+    it("does nothing to input or output pins", () => {
+      const pin1 = createPin(1, "A", INPUT)
+      const pin2 = createPin(2, "B", OUTPUT)
+
+      pin1.mode = OUTPUT
+      pin2.mode = INPUT
+
+      expect(pin1.mode).to.equal(INPUT)
+      expect(pin2.mode).to.equal(OUTPUT)
+    })
+
+    it("does nothing if the value set is neither INPUT nor OUTPUT", () => {
+      const pin1 = createPin(1, "A", INPUT_OUTPUT)
+      pin1.mode = INPUT_OUTPUT
+      expect(pin1.mode).to.equal(INPUT)
+      pin1.mode = false
+      expect(pin1.mode).to.equal(INPUT)
+      pin1.mode = OUTPUT
+      expect(pin1.mode).to.equal(OUTPUT)
+    })
+
+    it("gives the mode that a pin is currently in", () => {
+      expect(createPin(1, "A", INPUT).mode).to.equal(INPUT)
+      expect(createPin(2, "B", OUTPUT).mode).to.equal(OUTPUT)
+
+      const pin = createPin(3, "C", INPUT_OUTPUT)
+      expect(pin.mode).to.equal(INPUT)
+      pin.mode = OUTPUT
+      expect(pin.mode).to.equal(OUTPUT)
+    })
+
+    it("interacts with the input and output properties", () => {
+      const pin1 = createPin(1, "A", INPUT)
+      const pin2 = createPin(2, "B", OUTPUT)
+      const pin3 = createPin(3, "C", INPUT_OUTPUT)
+
+      expect(pin1.mode).to.equal(INPUT)
+      expect(pin1.input).to.be.true
+      expect(pin1.output).to.be.false
+
+      expect(pin2.mode).to.equal(OUTPUT)
+      expect(pin2.input).to.be.false
+      expect(pin2.output).to.be.true
+
+      expect(pin3.mode).to.equal(INPUT)
+      expect(pin3.input).to.be.true
+      expect(pin3.output).to.be.false
+      pin3.mode = OUTPUT
+      expect(pin3.input).to.be.false
+      expect(pin3.output).to.be.true
+    })
+
+    it("retains the same state when switching from input to output mode", () => {
+      const pin = createPin(1, "A", INPUT_OUTPUT)
+      const trace = createTrace(pin)
+      trace.state = HIGH
+
+      expect(pin.state).to.equal(HIGH)
+      pin.mode = OUTPUT
+      expect(pin.state).to.equal(HIGH)
+      expect(trace.state).to.equal(HIGH)
+      pin.state = LOW
+      expect(trace.state).to.equal(LOW)
     })
   })
 
@@ -154,8 +241,8 @@ describe("Pin", () => {
     let spy3
 
     beforeEach(() => {
-      pin1 = createPin(2, "RDY")
-      pin2 = createPin(37, "D0", BIDIRECTIONAL)
+      pin1 = createPin(2, "RDY", INPUT)
+      pin2 = createPin(37, "D0", INPUT_OUTPUT)
       pin3 = createPin(38, "R/W", OUTPUT)
 
       spy1 = sinon.spy()
@@ -186,6 +273,15 @@ describe("Pin", () => {
       trace.state = HIGH
       expect(spy1).to.be.called
       expect(spy2).to.be.called
+      expect(spy3).not.to.be.called
+    })
+
+    it("does not fire on input/output pins in output mode if their trace's state is set", () => {
+      const trace = createTrace(pin1, pin2, pin3)
+      pin2.mode = OUTPUT
+      trace.state = HIGH
+      expect(spy1).to.be.called
+      expect(spy2).not.to.be.called
       expect(spy3).not.to.be.called
     })
 

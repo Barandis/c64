@@ -16,31 +16,35 @@
 //
 // Input pin states can be set only by the trace to which they are connected. Output pin states
 // *cannot* be set by the trace state; they can only be set directly, probably by the device that
-// they're a part of. Bidirectional pins can be set in either manner. If an input pin changes state
-// by its trace changing state, it can optionally invoke one or more listener functions
-// automatically.
+// they're a part of.
+//
+// Input/output pins can act either way. Their direction is controlled by the `mode` property, which
+// has a value of either INPUT or OUTPUT (the same constants as used for direction on creation,
+// though there is no INPUT_OUTPUT mode) and will be set to INPUT on creation. It will act in every
+// way like an input pin while in INPUT mode and like an output pin in OUTPUT mode with the sole
+// difference that a listener can be added to it even in OUTPUT mode (though it will not fire while
+// in this mode). Setting the `mode` parameter has no effect on a non-INPUT_OUTPUT pin.
 //
 // The state of the pin is available in three ways, all of which are useful in different scenarios.
 // The `state` property returns the state as HIGH, LOW, or TRI. The `value` property returns the
 // same state, but represented as a binary digit (either 1, 0, or null). Finally, the properties
 // `high`, `low`, and `tri` are boolean properties that return true for the appropriate state. These
 // boolean properties are read-only, but `state` and `value` can both be used to *set* the pin's
-// state as well. (This will not invoke listeners; only setting the state via `setFromTrace` will
-// do that.)
+// state as well. (This will not invoke listeners; only setting the state via `setFromTrace` will do
+// that.)
 
 import { HIGH, LOW, TRI } from "circuits/state"
 
-// The direction in which data flows through the pin, choosable only at creation time. These values
-// are chosen to facilitate bit manipulation; bit 0 is input, bit 1 is output.
-export const INPUT = 1
-export const OUTPUT = 2
-export const BIDIRECTIONAL = 3
+// The direction in which data flows through the pin. An INPUT_OUTPUT pin can be changed from input
+// to output and back after creation; the others are fixed.
+export const INPUT = Symbol("INPUT")
+export const OUTPUT = Symbol("OUTPUT")
+export const INPUT_OUTPUT = Symbol("INPUT_OUTPUT")
 
-export function createPin(num, name, direction = INPUT, init = LOW) {
+export function createPin(num, name, direction, init = LOW) {
   const listeners = []
   let trace = null
-  const input = (direction & INPUT) > 0
-  const output = (direction & OUTPUT) > 0
+  let mode = direction === INPUT_OUTPUT ? INPUT : direction
 
   let state = init
 
@@ -56,11 +60,11 @@ export function createPin(num, name, direction = INPUT, init = LOW) {
   // outside, through the state change of a trace connected to an input pin, see `setFromTrace`.
   function set(value) {
     if ((value === HIGH || value === LOW || value === TRI) && state !== value) {
-      if (!output && trace !== null) {
+      if (mode === INPUT && trace !== null) {
         state = trace.state
       } else {
         state = value
-        if (output && trace !== null) {
+        if (mode === OUTPUT && trace !== null) {
           trace.state = state
         }
       }
@@ -83,7 +87,7 @@ export function createPin(num, name, direction = INPUT, init = LOW) {
     if (trace !== null) {
       const value = trace.state
 
-      if (input & (state !== value)) {
+      if (mode === INPUT && state !== value) {
         state = value
         listeners.forEach(listener => listener(this))
       }
@@ -113,7 +117,7 @@ export function createPin(num, name, direction = INPUT, init = LOW) {
   //
   // The same listener cannot be added twice. Attempting to do so will meet with silent ignoring.
   function addListener(listener) {
-    if (input && !listeners.includes(listener)) {
+    if (direction !== OUTPUT && !listeners.includes(listener)) {
       listeners.push(listener)
     }
   }
@@ -134,10 +138,23 @@ export function createPin(num, name, direction = INPUT, init = LOW) {
       return name
     },
     get input() {
-      return input
+      return mode === INPUT
     },
     get output() {
-      return output
+      return mode === OUTPUT
+    },
+
+    get mode() {
+      return mode
+    },
+    set mode(value) {
+      if (direction !== INPUT_OUTPUT) {
+        return
+      }
+      if (value !== INPUT && value !== OUTPUT) {
+        return
+      }
+      mode = value
     },
 
     get high() {

@@ -11,11 +11,11 @@
 // accurate.
 //
 // The state of a trace affects and is affected by the pins connected to it. Specifically, output
-// pins (created with OUTPUT or BIDIRECTIONAL) change the state of the trace when their own state
-// changes, while input pins (created with INPUT or BIDIRECTIONAL) will have their state set to the
-// trace's state when it changes. The state of a trace can also be set manually through the `state`
-// or `value` properties; this can be used to represent external connections to whatever circuit is
-// being modeled.
+// pins (created with OUTPUT or with BIDIRECTIONAL and in OUTPUT mode) change the state of the trace
+// when their own state changes, while input pins (created with INPUT or with BIDIRECTIONAL and in
+// INPUT mode) will have their state set to the trace's state when it changes. The state of a trace
+// can also be set manually through the `state` or `value` properties; this can be used to represent
+// external connections to whatever circuit is being modeled.
 //
 // Trace states are typically either LOW or HIGH. If an output pin's state changes to TRI, the trace
 // will go through a series of possibilities before settling on TRI for itself. If there is another

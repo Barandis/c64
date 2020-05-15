@@ -54,19 +54,19 @@ export function create4164() {
     _W: createPin(3, "_W", INPUT),
 
     // Address pins 0-7
-    A0: createPin(5, "A0"),
-    A1: createPin(7, "A1"),
-    A2: createPin(6, "A2"),
-    A3: createPin(12, "A3"),
-    A4: createPin(11, "A4"),
-    A5: createPin(10, "A5"),
-    A6: createPin(13, "A6"),
-    A7: createPin(9, "A7"),
+    A0: createPin(5, "A0", INPUT),
+    A1: createPin(7, "A1", INPUT),
+    A2: createPin(6, "A2", INPUT),
+    A3: createPin(12, "A3", INPUT),
+    A4: createPin(11, "A4", INPUT),
+    A5: createPin(10, "A5", INPUT),
+    A6: createPin(13, "A6", INPUT),
+    A7: createPin(9, "A7", INPUT),
 
     // The data input pin. When the chip is in write or read-modify-write mode, the value of this
     // pin will be written to the appropriate bit in the memory array. In read mode, it will be in
     // tri-state.
-    D: createPin(2, "D"),
+    D: createPin(2, "D", INPUT),
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
     // the bit at the address latched by _RAS and _CAS. In write mode, it is in tri-state.
