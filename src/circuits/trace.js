@@ -11,8 +11,8 @@
 // accurate.
 //
 // The state of a trace affects and is affected by the pins connected to it. Specifically, output
-// pins (created with OUTPUT or with BIDIRECTIONAL and in OUTPUT mode) change the state of the trace
-// when their own state changes, while input pins (created with INPUT or with BIDIRECTIONAL and in
+// pins (created with OUTPUT or with INPUT_OUTPUT and in OUTPUT mode) change the state of the trace
+// when their own state changes, while input pins (created with INPUT or with INPUT_OUTPUT and in
 // INPUT mode) will have their state set to the trace's state when it changes. The state of a trace
 // can also be set manually through the `state` or `value` properties; this can be used to represent
 // external connections to whatever circuit is being modeled.
@@ -22,7 +22,7 @@
 // output pin that is not TRI, then it will set the state of the trace (even if its state hasn't
 // changed). If all output pins are TRI at the same time, then the state of the trace will be
 // determined by the `floating` value passed optionally as the last parameter to the creation
-// function. This parameter can represent a pull-up (PULLUP) or pull-down (PULLDOWN) resistor in a
+// function. This parameter can represent a pull-up (PULL_UP) or pull-down (PULL_DOWN) resistor in a
 // circuit, setting the value of a trace to HIGH or LOW respectively in the same way that real
 // circuits connect a trace to the supply voltage or the ground to force the trace to a particular
 // state when no output pin is driving it. Only if all connected output pins are TRI, and either no
@@ -36,8 +36,8 @@
 import { LOW, HIGH, TRI } from "circuits/state"
 
 export const FLOAT = Symbol("FLOAT")
-export const PULLUP = Symbol("PULLUP")
-export const PULLDOWN = Symbol("PULLDOWN")
+export const PULL_UP = Symbol("PULL_UP")
+export const PULL_DOWN = Symbol("PULL_DOWN")
 
 // Creates a trace. The values passed to it are pins, optionally with a value of FLOAT (the
 // default), PULLUP, or PULLDOWN at the end.
@@ -46,7 +46,7 @@ export function createTrace(...args) {
   let floating
 
   const last = args.slice(-1)[0]
-  if (last === FLOAT || last === PULLUP || last === PULLDOWN) {
+  if (last === FLOAT || last === PULL_UP || last === PULL_DOWN) {
     connectedPins = args.slice(0, -1)
     floating = last
   } else {
@@ -66,8 +66,8 @@ export function createTrace(...args) {
   // connected output pins are HIGH but at least one is LOW, or if there are no connected output
   // pins at all, then the state will be set to LOW. If all connected output pins are TRI, then the
   // trace's state will be set to TRI, but only if no floating parameter was specified at creation
-  // (or if FLOAT was selected). Otherwise the trace's state will be HIGH if PULLUP was selected or
-  // LOW if PULLDOWN was selected.
+  // (or if FLOAT was selected). Otherwise the trace's state will be HIGH if PULL_UP was selected or
+  // LOW if PULL_DOWN was selected.
   function triState() {
     if (pins.filter(pin => pin.output).length === 0) {
       return LOW
@@ -78,7 +78,7 @@ export function createTrace(...args) {
     if (pins.some(pin => pin.output && pin.low)) {
       return LOW
     }
-    return floating === PULLUP ? HIGH : floating === PULLDOWN ? LOW : TRI
+    return floating === PULL_UP ? HIGH : floating === PULL_DOWN ? LOW : TRI
   }
 
   // Sets the trace's state to the supplied value. If that value is TRI, the porocess laid out in

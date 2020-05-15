@@ -7,7 +7,7 @@
 
 import { expect } from "test/helper"
 
-import { createTrace, PULLDOWN, PULLUP } from "circuits/trace"
+import { createTrace, PULL_DOWN, PULL_UP } from "circuits/trace"
 import { createPin, INPUT, OUTPUT, INPUT_OUTPUT } from "circuits/pin"
 import { LOW, HIGH, TRI } from "circuits/state"
 
@@ -41,19 +41,19 @@ describe("Trace", () => {
       expect(trace.tri).to.be.true
     })
 
-    it("is low if PULLDOWN is specified and all connected output pins are tri", () => {
+    it("is low if PULL_DOWN is specified and all connected output pins are tri", () => {
       const pin1 = createPin(1, "A", OUTPUT, TRI)
       const pin2 = createPin(2, "B", OUTPUT, TRI)
       const pin3 = createPin(3, "C", INPUT)
-      const trace = createTrace(pin1, pin2, pin3, PULLDOWN)
+      const trace = createTrace(pin1, pin2, pin3, PULL_DOWN)
       expect(trace.low).to.be.true
     })
 
-    it("is high if PULLUP is specified and all connected output pins are tri", () => {
+    it("is high if PULL_UP is specified and all connected output pins are tri", () => {
       const pin1 = createPin(1, "A", OUTPUT, TRI)
       const pin2 = createPin(2, "B", OUTPUT, TRI)
       const pin3 = createPin(3, "C", INPUT)
-      const trace = createTrace(pin1, pin2, pin3, PULLUP)
+      const trace = createTrace(pin1, pin2, pin3, PULL_UP)
       expect(trace.high).to.be.true
     })
   })
@@ -155,7 +155,7 @@ describe("Trace", () => {
       pin1 = createPin(1, "A", INPUT)
       pin2 = createPin(2, "B", INPUT_OUTPUT)
       pin3 = createPin(3, "C", OUTPUT)
-      trace = createTrace(pin1, pin2, pin3, PULLUP)
+      trace = createTrace(pin1, pin2, pin3, PULL_UP)
 
       pin2.mode = OUTPUT
 
@@ -165,7 +165,7 @@ describe("Trace", () => {
       expect(pin2.state).to.equal(LOW)
       expect(pin3.state).to.equal(TRI)
 
-      pin2.state = TRI // Actually gets set to HIGH because of PULLUP
+      pin2.state = TRI // Actually gets set to HIGH because of PULL_UP
       expect(trace.state).to.equal(HIGH)
       expect(pin1.state).to.equal(HIGH)
       expect(pin2.state).to.equal(TRI)
@@ -176,7 +176,7 @@ describe("Trace", () => {
       pin1 = createPin(1, "A", INPUT)
       pin2 = createPin(2, "B", INPUT_OUTPUT)
       pin3 = createPin(3, "C", OUTPUT)
-      trace = createTrace(pin1, pin2, pin3, PULLDOWN)
+      trace = createTrace(pin1, pin2, pin3, PULL_DOWN)
 
       pin2.mode = OUTPUT
 
@@ -186,7 +186,7 @@ describe("Trace", () => {
       expect(pin2.state).to.equal(LOW)
       expect(pin3.state).to.equal(TRI)
 
-      pin2.state = TRI // Actually gets set to LOW because of PULLDOWN
+      pin2.state = TRI // Actually gets set to LOW because of PULL_DOWN
       expect(trace.state).to.equal(LOW)
       expect(pin1.state).to.equal(LOW)
       expect(pin2.state).to.equal(TRI)
