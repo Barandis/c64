@@ -10,7 +10,7 @@ import { expect, DEBUG, chipState } from "test/helper"
 import { create4164 } from "chips/4164"
 import { create74257 } from "chips/74257"
 
-import { createTrace } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { LOW, HIGH } from "circuits/state"
 
 function createMemory() {
@@ -88,6 +88,15 @@ function createMemory() {
     ram6._RAS,
     ram7._RAS,
   )
+
+  // Power supply and ground traces (not necessary, but for completeness)
+  createTrace(ram0.VCC, ram1.VCC, ram2.VCC, ram3.VCC, PULL_UP)
+  createTrace(ram4.VCC, ram5.VCC, ram6.VCC, ram7.VCC, PULL_UP)
+  createTrace(mux0.VCC, mux1.VCC, PULL_UP)
+
+  createTrace(ram0.VSS, ram1.VSS, ram2.VSS, ram3.VSS, PULL_DOWN)
+  createTrace(ram4.VSS, ram5.VSS, ram6.VSS, ram7.VSS, PULL_DOWN)
+  createTrace(mux0.GND, mux1.GND, PULL_DOWN)
 
   _aec.state = HIGH
   _cas.state = HIGH
