@@ -7,7 +7,7 @@
 
 import { expect } from "test/helper"
 
-import { create74257 } from "chips/74257"
+import { create74LS257 } from "chips/74LS257"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 
@@ -16,7 +16,7 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
   const traces = {}
 
   beforeEach(() => {
-    chip = create74257()
+    chip = create74LS257()
     for (const name in chip.pins) {
       if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
         traces[name] = createTrace(chip.pins[name])

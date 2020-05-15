@@ -26,7 +26,7 @@
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 
-export function create74257() {
+export function create74LS257() {
   const pins = {
     // Select. When this is low, the Y output pins will take on the same value as their A input
     // pins. When this is high, the Y output pins will instead take on the value of their B input

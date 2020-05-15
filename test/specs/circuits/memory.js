@@ -8,7 +8,7 @@
 import { expect, DEBUG, chipState } from "test/helper"
 
 import { create4164 } from "chips/4164"
-import { create74257 } from "chips/74257"
+import { create74LS257 } from "chips/74LS257"
 
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { LOW, HIGH } from "circuits/state"
@@ -23,8 +23,8 @@ function createMemory() {
   const ram6 = create4164()
   const ram7 = create4164()
 
-  const mux0 = create74257()
-  const mux1 = create74257()
+  const mux0 = create74LS257()
+  const mux1 = create74LS257()
 
   // Internal connections between the multiplexers and the DRAM
   createTrace(mux0.Y1, ram0.A3, ram1.A3, ram2.A3, ram3.A3, ram4.A3, ram5.A3, ram6.A3, ram7.A3)
