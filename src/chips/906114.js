@@ -225,26 +225,26 @@ export function create906114() {
     const p31 = !cas && a15 && a14 && !a13 && a12 && !aec && !rw
 
     // These are the sum term equations programmed into the PLA for use in a C64.
-    const f1 = p0
-    const f2 = p1 || p2
-    const f3 = p3 || p4 || p5 || p6 || p7
-    const f4 = p9 || p10 || p11 || p12 || p13 || p14 || p15 || p16 || p17 || p18
-    const f5 = p19 || p20
-    const f6 = p21 || p22 || p23
-    const f7 = p31
+    const s1 = p0
+    const s2 = p1 || p2
+    const s3 = p3 || p4 || p5 || p6 || p7
+    const s4 = p9 || p10 || p11 || p12 || p13 || p14 || p15 || p16 || p17 || p18
+    const s5 = p19 || p20
+    const s6 = p21 || p22 || p23
+    const s7 = p31
 
     // No RAM access whenever BASIC, KERNAL, CHAROM, IO, ROML, or ROMH are accessed or any area
     // with RAM disabled in Ultimax mode or when there is no CAS signal from the VIC
-    const f0 = f1 || f2 || f3 || f4 || f5 || f6 || p24 || p25 || p26 || p27 || p28 || p30
+    const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27 || p28 || p30
 
-    pins._CASRAM.state = f0 ? HIGH : LOW
-    pins._BASIC.state = f1 ? LOW : HIGH
-    pins._KERNAL.state = f2 ? LOW : HIGH
-    pins._CHAROM.state = f3 ? LOW : HIGH
-    pins.GR__W.state = f7 ? LOW : HIGH
-    pins._IO.state = f4 ? LOW : HIGH
-    pins._ROML.state = f5 ? LOW : HIGH
-    pins._ROMH.state = f6 ? LOW : HIGH
+    pins._CASRAM.state = s0 ? HIGH : LOW
+    pins._BASIC.state = s1 ? LOW : HIGH
+    pins._KERNAL.state = s2 ? LOW : HIGH
+    pins._CHAROM.state = s3 ? LOW : HIGH
+    pins.GR__W.state = s7 ? LOW : HIGH
+    pins._IO.state = s4 ? LOW : HIGH
+    pins._ROML.state = s5 ? LOW : HIGH
+    pins._ROMH.state = s6 ? LOW : HIGH
   }
   /* eslint-enable complexity */
 
