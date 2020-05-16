@@ -19,6 +19,20 @@ export function rand(min, max = null) {
   return Math.floor(Math.random() * (hi - lo)) + lo
 }
 
+export function hex(value, digits) {
+  if (value === null) {
+    return "null"
+  }
+  return "$" + ("0000000000000000" + value.toString(16).toUpperCase()).substr(-digits)
+}
+
+export function bin(value, digits) {
+  if (value === null) {
+    return "null"
+  }
+  return ("0000000000000000" + value.toString(2)).substr(-digits)
+}
+
 export function chipState(chip, name) {
   const terms = []
   for (const pin of Object.values(chip.pins).sort((a, b) => a.num - b.num)) {
