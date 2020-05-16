@@ -9,7 +9,7 @@ import { expect, bin, setupTraces } from "test/helper"
 
 import { create82S100 } from "chips/82S100"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { HIGH, HI_Z } from "circuits/state"
+import { HIGH, LOW, HI_Z } from "circuits/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
 // all of the possible inputs. The original is located at
@@ -149,9 +149,8 @@ describe("82S100 Programmable Logic Array", () => {
   const traces = {}
 
   setupTraces(traces, chip)
-  traces._OE = createTrace(chip.pins._OE, PULL_DOWN)
-  traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
-  traces.GND = createTrace(chip.pins.GND, PULL_DOWN)
+  traces.VCC = createTrace(chip.VCC, PULL_UP)
+  traces.GND = createTrace(chip.GND, PULL_DOWN)
 
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 
@@ -189,15 +188,15 @@ describe("82S100 Programmable Logic Array", () => {
 
   it("disables all outputs if _OE is set high", () => {
     traces._OE.state = HIGH
-    expect(traces.F1.hiZ).to.be.true
-    expect(traces.F2.hiZ).to.be.true
-    expect(traces.F3.hiZ).to.be.true
-    expect(traces.F3.hiZ).to.be.true
-    expect(traces.F4.hiZ).to.be.true
-    expect(traces.F5.hiZ).to.be.true
-    expect(traces.F6.hiZ).to.be.true
-    expect(traces.F7.hiZ).to.be.true
-    traces._OE.state = HI_Z
+    expect(traces.F0.state).to.equal(HI_Z)
+    expect(traces.F1.state).to.equal(HI_Z)
+    expect(traces.F2.state).to.equal(HI_Z)
+    expect(traces.F3.state).to.equal(HI_Z)
+    expect(traces.F4.state).to.equal(HI_Z)
+    expect(traces.F5.state).to.equal(HI_Z)
+    expect(traces.F6.state).to.equal(HI_Z)
+    expect(traces.F7.state).to.equal(HI_Z)
+    traces._OE.state = LOW
   })
 
   function runTest(lo, hi) {

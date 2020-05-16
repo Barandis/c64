@@ -42,22 +42,22 @@ export function create74LS257() {
     // Group 1 inputs and output
     A1: createPin(2, "A1", INPUT),
     B1: createPin(3, "B1", INPUT),
-    Y1: createPin(4, "Y1", OUTPUT),
+    Y1: createPin(4, "Y1", OUTPUT, LOW),
 
     // Group 2 input and output
     A2: createPin(5, "A2", INPUT),
     B2: createPin(6, "B2", INPUT),
-    Y2: createPin(7, "Y2", OUTPUT),
+    Y2: createPin(7, "Y2", OUTPUT, LOW),
 
     // Group 3 inputs and output
     A3: createPin(11, "A3", INPUT),
     B3: createPin(10, "B3", INPUT),
-    Y3: createPin(9, "Y3", OUTPUT),
+    Y3: createPin(9, "Y3", OUTPUT, LOW),
 
     // Group 4 inputs and output
     A4: createPin(14, "A4", INPUT),
     B4: createPin(13, "B4", INPUT),
-    Y4: createPin(12, "Y4", OUTPUT),
+    Y4: createPin(12, "Y4", OUTPUT, LOW),
 
     // Power supply pins. These are not emulated.
     GND: createPin(8, "GND", INPUT, HI_Z),

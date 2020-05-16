@@ -118,17 +118,17 @@ export function create82S100() {
     I15: createPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    F0: createPin(18, "F0", OUTPUT),
-    F1: createPin(17, "F1", OUTPUT),
-    F2: createPin(16, "F2", OUTPUT),
-    F3: createPin(15, "F3", OUTPUT),
-    F4: createPin(13, "F4", OUTPUT),
-    F5: createPin(12, "F5", OUTPUT),
-    F6: createPin(11, "F6", OUTPUT),
-    F7: createPin(10, "F7", OUTPUT),
+    F0: createPin(18, "F0", OUTPUT, LOW),
+    F1: createPin(17, "F1", OUTPUT, HIGH),
+    F2: createPin(16, "F2", OUTPUT, HIGH),
+    F3: createPin(15, "F3", OUTPUT, HIGH),
+    F4: createPin(13, "F4", OUTPUT, HIGH),
+    F5: createPin(12, "F5", OUTPUT, HIGH),
+    F6: createPin(11, "F6", OUTPUT, HIGH),
+    F7: createPin(10, "F7", OUTPUT, HIGH),
 
     // Output enable, disables all outputs when set HIGH
-    _OE: createPin(19, "_OE", INPUT, HI_Z),
+    _OE: createPin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not emulated
     FE: createPin(1, "FE", INPUT, HI_Z),
@@ -157,14 +157,14 @@ export function create82S100() {
   /* eslint-disable complexity */
   function oneListener() {
     if (pins._OE.high) {
-      pins.F0.value = HI_Z
-      pins.F1.value = HI_Z
-      pins.F2.value = HI_Z
-      pins.F3.value = HI_Z
-      pins.F4.value = HI_Z
-      pins.F5.value = HI_Z
-      pins.F6.value = HI_Z
-      pins.F7.value = HI_Z
+      pins.F0.state = HI_Z
+      pins.F1.state = HI_Z
+      pins.F2.state = HI_Z
+      pins.F3.state = HI_Z
+      pins.F4.state = HI_Z
+      pins.F5.state = HI_Z
+      pins.F6.state = HI_Z
+      pins.F7.state = HI_Z
 
       return
     }

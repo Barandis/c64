@@ -40,14 +40,14 @@ export function create74LS373() {
     D7: createPin(18, "D7", INPUT),
 
     // Output pins.
-    O0: createPin(2, "O0", OUTPUT),
-    O1: createPin(5, "O1", OUTPUT),
-    O2: createPin(6, "O2", OUTPUT),
-    O3: createPin(9, "O3", OUTPUT),
-    O4: createPin(12, "O4", OUTPUT),
-    O5: createPin(15, "O5", OUTPUT),
-    O6: createPin(16, "O6", OUTPUT),
-    O7: createPin(19, "O7", OUTPUT),
+    O0: createPin(2, "O0", OUTPUT, LOW),
+    O1: createPin(5, "O1", OUTPUT, LOW),
+    O2: createPin(6, "O2", OUTPUT, LOW),
+    O3: createPin(9, "O3", OUTPUT, LOW),
+    O4: createPin(12, "O4", OUTPUT, LOW),
+    O5: createPin(15, "O5", OUTPUT, LOW),
+    O6: createPin(16, "O6", OUTPUT, LOW),
+    O7: createPin(19, "O7", OUTPUT, LOW),
 
     // Output enable. When this is high, the outputs function normally according to their inputs
     // and LE. When this is low, the outputs are all hi-Z.
@@ -66,7 +66,7 @@ export function create74LS373() {
   // "Memory" for the latched values. When _OE returns high while LE is low, these values will
   // be put onto the output pins. (Otherwise, if LE is high, the output pins just get the values
   // of the input pins like normal.)
-  const latches = []
+  const latches = [LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW]
 
   function inputChanged(dpin, opin) {
     if (pins.LE.state === HIGH && pins._OE.state === LOW) {
