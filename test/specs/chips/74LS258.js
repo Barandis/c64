@@ -7,16 +7,16 @@
 
 import { expect } from "test/helper"
 
-import { create74LS257 } from "chips/74LS257"
+import { create74LS258 } from "chips/74LS258"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 
-describe("74LS257 3-State Quad 2-Data Multiplexers", () => {
+describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74LS257()
+    chip = create74LS258()
     for (const name in chip.pins) {
       if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
         traces[name] = createTrace(chip.pins[name])
@@ -35,29 +35,29 @@ describe("74LS257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is low", () => {
       traces.SEL.state = LOW
-      expect(traces.Y1.state).to.equal(LOW)
+      expect(traces._Y1.state).to.equal(HIGH)
 
       traces.A1.state = HIGH
-      expect(traces.Y1.state).to.equal(HIGH)
+      expect(traces._Y1.state).to.equal(LOW)
     })
 
     it("selects B when SEL is high", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y1.state).to.equal(HIGH)
+      expect(traces._Y1.state).to.equal(LOW)
 
       traces.B1.state = LOW
-      expect(traces.Y1.state).to.equal(LOW)
+      expect(traces._Y1.state).to.equal(HIGH)
     })
 
     it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y1.state).to.equal(HIGH)
+      expect(traces._Y1.state).to.equal(LOW)
 
       traces._OE.state = HIGH
-      expect(traces.Y1.state).to.equal(HI_Z)
+      expect(traces._Y1.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y1.state).to.equal(HI_Z)
+      expect(traces._Y1.state).to.equal(HI_Z)
     })
   })
 
@@ -69,29 +69,29 @@ describe("74LS257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is low", () => {
       traces.SEL.state = LOW
-      expect(traces.Y2.state).to.equal(LOW)
+      expect(traces._Y2.state).to.equal(HIGH)
 
       traces.A2.state = HIGH
-      expect(traces.Y2.state).to.equal(HIGH)
+      expect(traces._Y2.state).to.equal(LOW)
     })
 
     it("selects B when SEL is high", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y2.state).to.equal(HIGH)
+      expect(traces._Y2.state).to.equal(LOW)
 
       traces.B2.state = LOW
-      expect(traces.Y2.state).to.equal(LOW)
+      expect(traces._Y2.state).to.equal(HIGH)
     })
 
     it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y2.state).to.equal(HIGH)
+      expect(traces._Y2.state).to.equal(LOW)
 
       traces._OE.state = HIGH
-      expect(traces.Y2.state).to.equal(HI_Z)
+      expect(traces._Y2.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y2.state).to.equal(HI_Z)
+      expect(traces._Y2.state).to.equal(HI_Z)
     })
   })
 
@@ -103,29 +103,29 @@ describe("74LS257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is low", () => {
       traces.SEL.state = LOW
-      expect(traces.Y3.state).to.equal(LOW)
+      expect(traces._Y3.state).to.equal(HIGH)
 
       traces.A3.state = HIGH
-      expect(traces.Y3.state).to.equal(HIGH)
+      expect(traces._Y3.state).to.equal(LOW)
     })
 
     it("selects B when SEL is high", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y3.state).to.equal(HIGH)
+      expect(traces._Y3.state).to.equal(LOW)
 
       traces.B3.state = LOW
-      expect(traces.Y3.state).to.equal(LOW)
+      expect(traces._Y3.state).to.equal(HIGH)
     })
 
     it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y3.state).to.equal(HIGH)
+      expect(traces._Y3.state).to.equal(LOW)
 
       traces._OE.state = HIGH
-      expect(traces.Y3.state).to.equal(HI_Z)
+      expect(traces._Y3.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y3.state).to.equal(HI_Z)
+      expect(traces._Y3.state).to.equal(HI_Z)
     })
   })
 
@@ -137,29 +137,29 @@ describe("74LS257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is low", () => {
       traces.SEL.state = LOW
-      expect(traces.Y4.state).to.equal(LOW)
+      expect(traces._Y4.state).to.equal(HIGH)
 
       traces.A4.state = HIGH
-      expect(traces.Y4.state).to.equal(HIGH)
+      expect(traces._Y4.state).to.equal(LOW)
     })
 
     it("selects B when SEL is high", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y4.state).to.equal(HIGH)
+      expect(traces._Y4.state).to.equal(LOW)
 
       traces.B4.state = LOW
-      expect(traces.Y4.state).to.equal(LOW)
+      expect(traces._Y4.state).to.equal(HIGH)
     })
 
     it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.state = HIGH
-      expect(traces.Y4.state).to.equal(HIGH)
+      expect(traces._Y4.state).to.equal(LOW)
 
       traces._OE.state = HIGH
-      expect(traces.Y4.state).to.equal(HI_Z)
+      expect(traces._Y4.state).to.equal(HI_Z)
 
       traces.SEL.state = LOW
-      expect(traces.Y4.state).to.equal(HI_Z)
+      expect(traces._Y4.state).to.equal(HI_Z)
     })
   })
 })
