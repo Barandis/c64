@@ -5,9 +5,9 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, bin } from "test/helper"
+import { expect, bin, setupTraces } from "test/helper"
 
-import { create906114 } from "chips/906114"
+import { create82S100 } from "chips/82S100"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 import { HIGH, HI_Z } from "circuits/state"
 
@@ -144,15 +144,11 @@ function getExpected(input) {
 }
 /* eslint-enable complexity, camelcase */
 
-describe("906114 Programmable Logic Array", () => {
-  const chip = create906114()
+describe("82S100 Programmable Logic Array", () => {
+  const chip = create82S100()
   const traces = {}
 
-  for (const name in chip.pins) {
-    if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
-      traces[name] = createTrace(chip.pins[name])
-    }
-  }
+  setupTraces(traces, chip)
   traces._OE = createTrace(chip.pins._OE, PULL_DOWN)
   traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
   traces.GND = createTrace(chip.pins.GND, PULL_DOWN)
@@ -160,47 +156,47 @@ describe("906114 Programmable Logic Array", () => {
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 
   function applyInputs(input) {
-    traces._CAS.value = bitValue(input, 0)
-    traces._LORAM.value = bitValue(input, 1)
-    traces._HIRAM.value = bitValue(input, 2)
-    traces._CHAREN.value = bitValue(input, 3)
-    traces._VA14.value = bitValue(input, 4)
-    traces.A15.value = bitValue(input, 5)
-    traces.A14.value = bitValue(input, 6)
-    traces.A13.value = bitValue(input, 7)
-    traces.A12.value = bitValue(input, 8)
-    traces.BA.value = bitValue(input, 9)
-    traces._AEC.value = bitValue(input, 10)
-    traces.R__W.value = bitValue(input, 11)
-    traces._EXROM.value = bitValue(input, 12)
-    traces._GAME.value = bitValue(input, 13)
-    traces.VA13.value = bitValue(input, 14)
-    traces.VA12.value = bitValue(input, 15)
+    traces.I0.value = bitValue(input, 0)
+    traces.I1.value = bitValue(input, 1)
+    traces.I2.value = bitValue(input, 2)
+    traces.I3.value = bitValue(input, 3)
+    traces.I4.value = bitValue(input, 4)
+    traces.I5.value = bitValue(input, 5)
+    traces.I6.value = bitValue(input, 6)
+    traces.I7.value = bitValue(input, 7)
+    traces.I8.value = bitValue(input, 8)
+    traces.I9.value = bitValue(input, 9)
+    traces.I10.value = bitValue(input, 10)
+    traces.I11.value = bitValue(input, 11)
+    traces.I12.value = bitValue(input, 12)
+    traces.I13.value = bitValue(input, 13)
+    traces.I14.value = bitValue(input, 14)
+    traces.I15.value = bitValue(input, 15)
   }
 
   function outputValue() {
     let output = 0
-    output |= traces._CASRAM.value << 0
-    output |= traces._BASIC.value << 1
-    output |= traces._KERNAL.value << 2
-    output |= traces._CHAROM.value << 3
-    output |= traces.GR__W.value << 4
-    output |= traces._IO.value << 5
-    output |= traces._ROML.value << 6
-    output |= traces._ROMH.value << 7
+    output |= traces.F0.value << 0
+    output |= traces.F1.value << 1
+    output |= traces.F2.value << 2
+    output |= traces.F3.value << 3
+    output |= traces.F4.value << 4
+    output |= traces.F5.value << 5
+    output |= traces.F6.value << 6
+    output |= traces.F7.value << 7
     return output
   }
 
   it("disables all outputs if _OE is set high", () => {
     traces._OE.state = HIGH
-    expect(traces._CASRAM.hiZ).to.be.true
-    expect(traces._BASIC.hiZ).to.be.true
-    expect(traces._KERNAL.hiZ).to.be.true
-    expect(traces._CHAROM.hiZ).to.be.true
-    expect(traces.GR__W.hiZ).to.be.true
-    expect(traces._IO.hiZ).to.be.true
-    expect(traces._ROML.hiZ).to.be.true
-    expect(traces._ROMH.hiZ).to.be.true
+    expect(traces.F1.hiZ).to.be.true
+    expect(traces.F2.hiZ).to.be.true
+    expect(traces.F3.hiZ).to.be.true
+    expect(traces.F3.hiZ).to.be.true
+    expect(traces.F4.hiZ).to.be.true
+    expect(traces.F5.hiZ).to.be.true
+    expect(traces.F6.hiZ).to.be.true
+    expect(traces.F7.hiZ).to.be.true
     traces._OE.state = HI_Z
   })
 
