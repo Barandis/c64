@@ -14,7 +14,7 @@ import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("74LS373 Octal tri-state transparent latch", () => {
   let chip
-  const traces = []
+  const traces = {}
 
   beforeEach(() => {
     chip = create74LS373()

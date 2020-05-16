@@ -2,10 +2,10 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "index": ["src/index.js"],
-      "utils": ["src/utils.js"],
+      "index": ["src/index"],
+      "utils": ["src/utils"],
       "circuits": ["src/circuits/*"],
       "chips": ["src/chips/*"],
       "test": ["test/*"],
