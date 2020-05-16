@@ -9,6 +9,7 @@ import { expect, bin } from "test/helper"
 
 import { create906114 } from "chips/906114"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { HIGH, HI_Z } from "circuits/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
 // all of the possible inputs. The original is located at
@@ -189,6 +190,19 @@ describe("906114 Programmable Logic Array", () => {
     output |= traces._ROMH.value << 7
     return output
   }
+
+  it("disables all outputs if _OE is set high", () => {
+    traces._OE.state = HIGH
+    expect(traces._CASRAM.hiZ).to.be.true
+    expect(traces._BASIC.hiZ).to.be.true
+    expect(traces._KERNAL.hiZ).to.be.true
+    expect(traces._CHAROM.hiZ).to.be.true
+    expect(traces.GR__W.hiZ).to.be.true
+    expect(traces._IO.hiZ).to.be.true
+    expect(traces._ROML.hiZ).to.be.true
+    expect(traces._ROMH.hiZ).to.be.true
+    traces._OE.state = HI_Z
+  })
 
   function runTest(lo, hi) {
     for (let i = lo; i < hi; i++) {

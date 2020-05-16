@@ -17,12 +17,12 @@
 // in the field.
 //
 // THe 906114 was essentially a clone of the 82S100 except that it was not programmable (the logic
-// was baked in at production time) and that it was about twice as fast. It uses only 29 of the
-// available 48 P-terms (there are also two additional unused P-terms that still managed to get
-// baked into the chip) and uses all 8 outputs. To illustrate just how much of a clone it was, the
-// _OE pin, which when set high will disable all of the outputs, was included in the 906114 despite
-// that pin always being connected straight to ground in the C64 (meaning that it was never high and
-// therefore never disabled the outputs).
+// was baked in at production time) and that it was about twice as fast, as it was reverse
+// engineered and then rebuilt with newer technology. It uses only 29 of the available 48 P-terms
+// (there are also two additional unused P-terms that still managed to get baked into the chip) and
+// uses all 8 outputs. To illustrate how faithfully the chip was reverse engineered, Commodore
+// included a working _OE pin, which would disable all of the outputs if set high, despite it being
+// tied to ground (and thus always low) in the only computer that it could have been used in.
 //
 // The input pins of the 82S100 were generically named I0, I1, I2, ... I15, and the output pins were
 // similarly named F0, F1, ... F7. However, since the device modeled here was for a specific purpose
