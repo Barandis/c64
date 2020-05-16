@@ -19,6 +19,17 @@ describe("Pin", () => {
     expect(rw.name).to.equal("R/W")
   })
 
+  it("will only be attached to the first trace that refers to it", () => {
+    const pin = createPin(1, "A", INPUT)
+    const trace1 = createTrace(pin)
+    const trace2 = createTrace(pin)
+
+    trace1.state = HIGH
+    trace2.state = LOW
+
+    expect(pin.state).to.equal(HIGH)
+  })
+
   describe("direction", () => {
     it("can be set to input, output, or input/output", () => {
       const rdy = createPin(2, "RDY", INPUT, HIGH)
@@ -89,6 +100,12 @@ describe("Pin", () => {
       expect(pin.state).to.equal(HI_Z)
 
       pin.value = 1
+      expect(pin.state).to.equal(HIGH)
+    })
+
+    it("will be unchanged when set from setFromTrace with no trace", () => {
+      const pin = createPin(1, "A", INPUT, HIGH)
+      pin.setFromTrace()
       expect(pin.state).to.equal(HIGH)
     })
 
@@ -309,6 +326,15 @@ describe("Pin", () => {
       pin1.removeListener(spy1)
       trace.state = LOW
       expect(spy1).to.be.calledOnce
+    })
+
+    it("will ignore calls to remove listeners that have not been added", () => {
+      const trace = createTrace(pin1, pin2, pin3)
+      pin1.removeListener(spy2)
+      trace.state = HIGH
+      expect(spy1).to.be.calledOnce
+      expect(spy2).to.be.calledOnce
+      expect(spy3).not.to.be.called
     })
   })
 })
