@@ -8,6 +8,8 @@
 import chai from "chai"
 import sinonChai from "sinon-chai"
 
+import { createTrace } from "circuits/trace"
+
 chai.use(sinonChai)
 
 export const expect = chai.expect
@@ -39,4 +41,12 @@ export function chipState(chip, name) {
     terms.push(`${pin.name}: ${pin.value === null ? "z" : pin.value}`)
   }
   return `${name}: [${terms.join(", ")}]`
+}
+
+export function setupTraces(traces, chip) {
+  for (const name in chip.pins) {
+    if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
+      traces[name] = createTrace(chip.pins[name])
+    }
+  }
 }
