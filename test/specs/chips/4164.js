@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect } from "test/helper"
+import { expect, setupTraces } from "test/helper"
 
 import { create4164 } from "chips/4164"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
@@ -17,12 +17,7 @@ describe("4164 64k x 1 bit DRAM", () => {
 
   beforeEach(() => {
     chip = create4164()
-    for (const name in chip.pins) {
-      if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
-        traces[name] = createTrace(chip.pins[name])
-      }
-    }
-
+    setupTraces(traces, chip)
     traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
     traces.VSS = createTrace(chip.pins.VSS, PULL_DOWN)
 

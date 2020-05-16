@@ -5,6 +5,25 @@
  * https://opensource.org/licenses/MIT
  */
 
+// An emulation of the 74373 family of octal, tri-state transparent latches. The version used in the
+// C64 was the 74LS373, but the differences between members are electrical in nature and this
+// emulation should serve for all of them.
+//
+// The concept of this chip is quite simple. When the LE pin is low, data flows transparently
+// through the chip from its input pins (D0...D7) to their respective output pins (O0...O7). Once
+// LE goes high, however, the current state of the input pins is latched, and that state will remain
+// fixed on the output pins for as long as LE remains high, no matter what changes are made to the
+// input pins. Once LE returns to low, transparent operation resumes and the output pins again
+// reflect their inputs.
+//
+// The _OE pin can be set to high to force the outputs into a high-impedance state, effectively
+// cutting them off from the rest of the circuit. This allows the chip to be used on busses. The
+// latches remain active while in hi-Z; once _OE returns to low, if LE is high, then the output pins
+// will be immediately set to the latched values (if LE is low, they'll be set to the input values
+// as normal).
+//
+// On the C64 schematic, there is a 74LS373 at U26.
+
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 

@@ -23,6 +23,8 @@
 // Each multiplexer is independent of the other three. Their inputs and outputs are unaffected by
 // the inputs and outputs of any other multiplexer. Only SEL and _OE affects all four multiplexers
 // simultaneously.
+//
+// On the C64 schematic, a 74LS258 is found at U14.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 import { LOW, HIGH, HI_Z } from "circuits/state"

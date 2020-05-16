@@ -201,7 +201,7 @@ export function create82S100() {
     const p5 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && !i12 && !i13
     const p6 = i4 && !i14 && i15 && i10 && i13
     const p7 = i4 && !i14 && i15 && i10 && !i12 && !i13
-    // const p8 = cas && a15 && a14 && !a13 && a12 && !aec && !rw
+    // const p8 = i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
     const p9 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
     const p10 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
     const p11 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
@@ -222,7 +222,7 @@ export function create82S100() {
     const p26 = !i5 && i6 && i12 && !i13
     const p27 = i5 && !i6 && i7 && i12 && !i13
     const p28 = i5 && i6 && !i7 && !i8 && i12 && !i13
-    // const p29 = !cas
+    // const p29 = !i1
     const p30 = i0
     const p31 = !i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
 

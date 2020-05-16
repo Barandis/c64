@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect } from "test/helper"
+import { expect, setupTraces } from "test/helper"
 
 import { create74LS258 } from "chips/74LS258"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
@@ -17,12 +17,7 @@ describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
 
   beforeEach(() => {
     chip = create74LS258()
-    for (const name in chip.pins) {
-      if (!(chip.pins[name].hiZ && chip.pins[name].input)) {
-        traces[name] = createTrace(chip.pins[name])
-      }
-    }
-
+    setupTraces(traces, chip)
     traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
     traces.GND = createTrace(chip.pins.GND, PULL_DOWN)
   })
