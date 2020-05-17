@@ -5,8 +5,17 @@
  * https://opensource.org/licenses/MIT
  */
 
+// Emulation of the 7408 series of quad 2-input AND gates. The variant used in the Commodore 64 was
+// the 74LS08, but differences between variants boil down mostly to timing and levels, and this
+// emulation should serve for all of them.
+//
+// The chip consists of four independent dual-input AND gates. The operation is what one would
+// expect from AND gates - if both inputs are high, the output is high; otherwise the output is low.
+//
+// On the C64 schematic, U27 is a 74LS08.
+
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HIGH, HI_Z } from "circuits/state"
+import { LOW, HI_Z } from "circuits/state"
 
 export function create74LS08() {
   const pins = {
@@ -36,7 +45,7 @@ export function create74LS08() {
   }
 
   function setOutput(apin, bpin, ypin) {
-    ypin.state = apin.state === HIGH && bpin.state === HIGH ? HIGH : LOW
+    ypin.state = apin.truth && bpin.truth
   }
 
   function setGate1() {

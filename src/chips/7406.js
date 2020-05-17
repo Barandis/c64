@@ -15,7 +15,7 @@
 // On the C64 schematic, U8 is a 7406.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HIGH, HI_Z } from "circuits/state"
+import { HIGH, HI_Z } from "circuits/state"
 
 export function create7406() {
   const pins = {
@@ -43,7 +43,7 @@ export function create7406() {
   }
 
   function inputChanged(apin, ypin) {
-    ypin.state = apin.high ? LOW : HIGH
+    ypin.state = apin.low
   }
 
   for (let i = 1; i <= 6; i++) {

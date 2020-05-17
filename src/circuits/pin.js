@@ -28,10 +28,9 @@
 // The state of the pin is available in three ways, all of which are useful in different scenarios.
 // The `state` property returns the state as HIGH, LOW, or HI_Z. The `value` property returns the
 // same state, but represented as a binary digit (either 1, 0, or null). Finally, the properties
-// `high`, `low`, and `hiZ` are boolean properties that return true for the appropriate state. These
-// boolean properties are read-only, but `state` and `value` can both be used to *set* the pin's
-// state as well. (This will not invoke listeners; only setting the state via `setFromTrace` will do
-// that.)
+// `high`, `low`, and `hiZ` are boolean properties that return true for the appropriate state. Among
+// these, only the `state` property can be set, but it can take all three forms of values (constant,
+// number, or boolean).
 
 import { HIGH, LOW, HI_Z } from "circuits/state"
 
@@ -48,6 +47,21 @@ export function createPin(num, name, direction, init = LOW) {
 
   let state = init
 
+  // Turns a constant (HIGH, LOW, HI_Z), number (1, 0, null), or boolean (true, false, null) state
+  // value into a constant value.
+  function translate(value) {
+    if (value === HIGH || value === 1 || value === true) {
+      return HIGH
+    }
+    if (value === LOW || value === 0 || value === false) {
+      return LOW
+    }
+    if (value === HI_Z || value === null) {
+      return HI_Z
+    }
+    return value
+  }
+
   // Sets the state of the pin. If the pin is an output pin, then this state change will be
   // propagated to the trace to which it is connected. If it is NOT an output pin, `value` will only
   // be used if the pin is unconnected; otherwise the pin's state will simply be set to the trace's
@@ -59,23 +73,17 @@ export function createPin(num, name, direction, init = LOW) {
   // This is intended to reflect changes made internally to the chip. For changing state from the
   // outside, through the state change of a trace connected to an input pin, see `setFromTrace`.
   function set(value) {
-    if ((value === HIGH || value === LOW || value === HI_Z) && state !== value) {
+    const tValue = translate(value)
+    if ((tValue === HIGH || tValue === LOW || tValue === HI_Z) && state !== tValue) {
       if (mode === INPUT && trace !== null) {
         state = trace.state
       } else {
-        state = value
+        state = tValue
         if (mode === OUTPUT && trace !== null) {
           trace.state = state
         }
       }
     }
-  }
-
-  // Sets the state of the pin, but by using a binary value instead of a state constant. A 1 or a 0
-  // sets the state to HIGH or LOW respectively; any other value puts the pin into hi-z(`null` is
-  // the canonical value for hi-z).
-  function setValue(value) {
-    set(value === 1 ? HIGH : value === 0 ? LOW : HI_Z)
   }
 
   // Sets the state of the pin to match its trace's state, if the pin is an input pin. This is also
@@ -177,8 +185,9 @@ export function createPin(num, name, direction, init = LOW) {
     get value() {
       return state === HIGH ? 1 : state === LOW ? 0 : null
     },
-    set value(value) {
-      setValue(value)
+
+    get truth() {
+      return state === HIGH ? true : state === LOW ? false : null
     },
 
     setFromTrace,

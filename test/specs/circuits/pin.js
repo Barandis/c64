@@ -75,7 +75,7 @@ describe("Pin", () => {
       expect(d0.state).to.equal(LOW)
     })
 
-    it("can be set via state", () => {
+    it("can be set with a constant", () => {
       const pin = createPin(2, "RDY", INPUT, HIGH)
       expect(pin.state).to.equal(HIGH)
 
@@ -89,18 +89,32 @@ describe("Pin", () => {
       expect(pin.state).to.equal(HIGH)
     })
 
-    it("can be set via value", () => {
+    it("can be set with a numeric value", () => {
       const pin = createPin(2, "RDY", INPUT, HIGH)
       expect(pin.state).to.equal(HIGH)
 
-      pin.value = 0
-      expect(pin.state).to.equal(LOW)
+      pin.state = 0
+      expect(pin.value).to.equal(0)
 
-      pin.value = null
-      expect(pin.state).to.equal(HI_Z)
+      pin.state = null
+      expect(pin.value).to.be.null
 
-      pin.value = 1
+      pin.state = 1
+      expect(pin.value).to.equal(1)
+    })
+
+    it("can be set with a boolean value", () => {
+      const pin = createPin(2, "RDY", INPUT, HIGH)
       expect(pin.state).to.equal(HIGH)
+
+      pin.state = false
+      expect(pin.truth).to.be.false
+
+      pin.state = null
+      expect(pin.truth).to.be.null
+
+      pin.state = true
+      expect(pin.truth).to.be.true
     })
 
     it("will be unchanged when set from setFromTrace with no trace", () => {
@@ -274,13 +288,6 @@ describe("Pin", () => {
     it("does not fire if state is set", () => {
       pin2.state = HIGH
       pin3.state = HIGH
-      expect(spy2).not.to.be.called
-      expect(spy3).not.to.be.called
-    })
-
-    it("does not fire if value is set", () => {
-      pin2.value = 1
-      pin3.value = 1
       expect(spy2).not.to.be.called
       expect(spy3).not.to.be.called
     })

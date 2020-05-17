@@ -236,14 +236,14 @@ export function create82S100() {
     const s7 = p31
     const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27 || p28 || p30
 
-    pins.F0.state = s0 ? HIGH : LOW
-    pins.F1.state = s1 ? LOW : HIGH
-    pins.F2.state = s2 ? LOW : HIGH
-    pins.F3.state = s3 ? LOW : HIGH
-    pins.F4.state = s7 ? LOW : HIGH
-    pins.F5.state = s4 ? LOW : HIGH
-    pins.F6.state = s5 ? LOW : HIGH
-    pins.F7.state = s6 ? LOW : HIGH
+    pins.F0.state = s0
+    pins.F1.state = !s1
+    pins.F2.state = !s2
+    pins.F3.state = !s3
+    pins.F4.state = !s7
+    pins.F5.state = !s4
+    pins.F6.state = !s5
+    pins.F7.state = !s6
   }
   /* eslint-enable complexity */
 

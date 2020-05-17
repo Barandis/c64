@@ -155,22 +155,22 @@ describe("82S100 Programmable Logic Array", () => {
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 
   function applyInputs(input) {
-    traces.I0.value = bitValue(input, 0)
-    traces.I1.value = bitValue(input, 1)
-    traces.I2.value = bitValue(input, 2)
-    traces.I3.value = bitValue(input, 3)
-    traces.I4.value = bitValue(input, 4)
-    traces.I5.value = bitValue(input, 5)
-    traces.I6.value = bitValue(input, 6)
-    traces.I7.value = bitValue(input, 7)
-    traces.I8.value = bitValue(input, 8)
-    traces.I9.value = bitValue(input, 9)
-    traces.I10.value = bitValue(input, 10)
-    traces.I11.value = bitValue(input, 11)
-    traces.I12.value = bitValue(input, 12)
-    traces.I13.value = bitValue(input, 13)
-    traces.I14.value = bitValue(input, 14)
-    traces.I15.value = bitValue(input, 15)
+    traces.I0.state = bitValue(input, 0)
+    traces.I1.state = bitValue(input, 1)
+    traces.I2.state = bitValue(input, 2)
+    traces.I3.state = bitValue(input, 3)
+    traces.I4.state = bitValue(input, 4)
+    traces.I5.state = bitValue(input, 5)
+    traces.I6.state = bitValue(input, 6)
+    traces.I7.state = bitValue(input, 7)
+    traces.I8.state = bitValue(input, 8)
+    traces.I9.state = bitValue(input, 9)
+    traces.I10.state = bitValue(input, 10)
+    traces.I11.state = bitValue(input, 11)
+    traces.I12.state = bitValue(input, 12)
+    traces.I13.state = bitValue(input, 13)
+    traces.I14.state = bitValue(input, 14)
+    traces.I15.state = bitValue(input, 15)
   }
 
   function outputValue() {

@@ -168,33 +168,33 @@ function showChipState(memory, title) {
 }
 
 function setAddress(memory, addr) {
-  memory.a0.value = (addr >> 0) & 1
-  memory.a1.value = (addr >> 1) & 1
-  memory.a2.value = (addr >> 2) & 1
-  memory.a3.value = (addr >> 3) & 1
-  memory.a4.value = (addr >> 4) & 1
-  memory.a5.value = (addr >> 5) & 1
-  memory.a6.value = (addr >> 6) & 1
-  memory.a7.value = (addr >> 7) & 1
-  memory.a8.value = (addr >> 8) & 1
-  memory.a9.value = (addr >> 9) & 1
-  memory.a10.value = (addr >> 10) & 1
-  memory.a11.value = (addr >> 11) & 1
-  memory.a12.value = (addr >> 12) & 1
-  memory.a13.value = (addr >> 13) & 1
-  memory.a14.value = (addr >> 14) & 1
-  memory.a15.value = (addr >> 15) & 1
+  memory.a0.state = (addr >> 0) & 1
+  memory.a1.state = (addr >> 1) & 1
+  memory.a2.state = (addr >> 2) & 1
+  memory.a3.state = (addr >> 3) & 1
+  memory.a4.state = (addr >> 4) & 1
+  memory.a5.state = (addr >> 5) & 1
+  memory.a6.state = (addr >> 6) & 1
+  memory.a7.state = (addr >> 7) & 1
+  memory.a8.state = (addr >> 8) & 1
+  memory.a9.state = (addr >> 9) & 1
+  memory.a10.state = (addr >> 10) & 1
+  memory.a11.state = (addr >> 11) & 1
+  memory.a12.state = (addr >> 12) & 1
+  memory.a13.state = (addr >> 13) & 1
+  memory.a14.state = (addr >> 14) & 1
+  memory.a15.state = (addr >> 15) & 1
 }
 
 function setData(memory, data) {
-  memory.d0.value = (data >> 0) & 1
-  memory.d1.value = (data >> 1) & 1
-  memory.d2.value = (data >> 2) & 1
-  memory.d3.value = (data >> 3) & 1
-  memory.d4.value = (data >> 4) & 1
-  memory.d5.value = (data >> 5) & 1
-  memory.d6.value = (data >> 6) & 1
-  memory.d7.value = (data >> 7) & 1
+  memory.d0.state = (data >> 0) & 1
+  memory.d1.state = (data >> 1) & 1
+  memory.d2.state = (data >> 2) & 1
+  memory.d3.state = (data >> 3) & 1
+  memory.d4.state = (data >> 4) & 1
+  memory.d5.state = (data >> 5) & 1
+  memory.d6.state = (data >> 6) & 1
+  memory.d7.state = (data >> 7) & 1
 }
 
 function getData(memory) {

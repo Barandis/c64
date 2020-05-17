@@ -88,21 +88,38 @@ describe("Trace", () => {
       expect(pin2.state).to.equal(LOW)
     })
 
-    it("can be set the same way by value", () => {
-      trace.value = 1
+    it("can be set the same way by numeric value", () => {
+      trace.state = 1
       expect(trace.value).to.equal(1)
       expect(pin1.value).to.equal(1)
       expect(pin2.value).to.equal(1)
 
-      trace.value = 0
+      trace.state = 0
       expect(trace.value).to.equal(0)
       expect(pin1.value).to.equal(0)
       expect(pin2.value).to.equal(0)
 
-      trace.value = null // Actually set to 0 because the output pin is 0
+      trace.state = null // Actually set to 0 because the output pin is 0
       expect(trace.value).to.equal(0)
       expect(pin1.value).to.equal(0)
       expect(pin2.value).to.equal(0)
+    })
+
+    it("can be set the same way by boolean value", () => {
+      trace.state = true
+      expect(trace.truth).to.be.true
+      expect(pin1.truth).to.be.true
+      expect(pin2.truth).to.be.true
+
+      trace.state = false
+      expect(trace.truth).to.be.false
+      expect(pin1.truth).to.be.false
+      expect(pin2.truth).to.be.false
+
+      trace.state = null // Actually set to false because the output pin is false
+      expect(trace.truth).to.be.false
+      expect(pin1.truth).to.be.false
+      expect(pin2.truth).to.be.false
     })
 
     it("can be set low or high via an output pin", () => {
@@ -128,27 +145,50 @@ describe("Trace", () => {
       expect(pin2.state).to.equal(HI_Z)
     })
 
-    it("can be set by value via an output pin", () => {
-      pin3.value = 1
+    it("can be set by numeric value via an output pin", () => {
+      pin3.state = 1
       expect(trace.value).to.equal(1)
       expect(pin1.value).to.equal(1)
       expect(pin2.value).to.equal(1)
 
-      pin3.value = 0
+      pin3.state = 0
       expect(trace.value).to.equal(0)
       expect(pin1.value).to.equal(0)
       expect(pin2.value).to.equal(0)
 
       pin2.mode = OUTPUT
-      pin3.value = null // Actually set to 0 because the other output pin is 0
+      pin3.state = null // Actually set to 0 because the other output pin is 0
       expect(trace.value).to.equal(0)
       expect(pin1.value).to.equal(0)
       expect(pin2.value).to.equal(0)
 
-      pin2.value = null // Actually get set to null because all output pins are null
+      pin2.state = null // Actually get set to null because all output pins are null
       expect(trace.value).to.be.null
       expect(pin1.value).to.be.null
       expect(pin2.value).to.be.null
+    })
+
+    it("can be set by boolean value via an output pin", () => {
+      pin3.state = true
+      expect(trace.truth).to.be.true
+      expect(pin1.truth).to.be.true
+      expect(pin2.truth).to.be.true
+
+      pin3.state = false
+      expect(trace.truth).to.be.false
+      expect(pin1.truth).to.be.false
+      expect(pin2.truth).to.be.false
+
+      pin2.mode = OUTPUT
+      pin3.state = null // Actually set to false because the other output pin is false
+      expect(trace.truth).to.false
+      expect(pin1.truth).to.false
+      expect(pin2.truth).to.false
+
+      pin2.state = null // Actually get set to null because all output pins are null
+      expect(trace.truth).to.be.null
+      expect(pin1.truth).to.be.null
+      expect(pin2.truth).to.be.null
     })
 
     it("can be configured to become high when all output pins are hi-z", () => {

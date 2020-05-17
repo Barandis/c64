@@ -127,7 +127,7 @@ export function create4164() {
   function read() {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    pins.Q.value = value
+    pins.Q.state = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array.

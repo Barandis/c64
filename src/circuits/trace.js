@@ -81,25 +81,35 @@ export function createTrace(...args) {
     return floating === PULL_UP ? HIGH : floating === PULL_DOWN ? LOW : HI_Z
   }
 
+  // Turns a constant (HIGH, LOW, HI_Z), number (1, 0, null), or boolean (true, false, null) state
+  // value into a constant value.
+  function translate(value) {
+    if (value === HIGH || value === 1 || value === true) {
+      return HIGH
+    }
+    if (value === LOW || value === 0 || value === false) {
+      return LOW
+    }
+    if (value === HI_Z || value === null) {
+      return HI_Z
+    }
+    return value
+  }
+
   // Sets the trace's state to the supplied value. If that value is HI_Z, the process laid out in
   // `hiZState` will be followed. Changing the trace state will also set the state of any input pins
   // connected to it, and it will invoke any listeners added to those pins.
   function set(value) {
-    if (state !== value) {
-      if (value === HIGH || value === LOW) {
-        state = value
+    const tValue = translate(value)
+    if (state !== tValue) {
+      if (tValue === HIGH || tValue === LOW) {
+        state = tValue
         pins.forEach(pin => pin.setFromTrace())
-      } else if (value === HI_Z) {
+      } else if (tValue === HI_Z) {
         state = hiZState()
         pins.forEach(pin => pin.setFromTrace())
       }
     }
-  }
-
-  // Sets the trace's state exactly as `set`, except that it accepts a binary digit rather than a
-  // state constant.
-  function setValue(value) {
-    set(value === 1 ? HIGH : value === 0 ? LOW : null)
   }
 
   const trace = {
@@ -123,8 +133,9 @@ export function createTrace(...args) {
     get value() {
       return state === HIGH ? 1 : state === LOW ? 0 : null
     },
-    set value(value) {
-      setValue(value)
+
+    get truth() {
+      return state === HIGH ? true : state === LOW ? false : null
     },
   }
 

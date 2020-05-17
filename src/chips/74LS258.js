@@ -71,9 +71,9 @@ export function create74LS258() {
     if (pins._OE.state === HIGH) {
       ypin.state = HI_Z
     } else if (pins.SEL.state === LOW) {
-      ypin.state = apin.state === HIGH ? LOW : HIGH
+      ypin.state = !apin.truth
     } else {
-      ypin.state = bpin.state === HIGH ? LOW : HIGH
+      ypin.state = !bpin.truth
     }
   }
 
