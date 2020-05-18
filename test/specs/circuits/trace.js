@@ -8,7 +8,7 @@
 import { expect } from "test/helper"
 
 import { createTrace, PULL_DOWN, PULL_UP } from "circuits/trace"
-import { createPin, INPUT, OUTPUT, INPUT_OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "circuits/pin"
 import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("Trace", () => {
@@ -66,7 +66,7 @@ describe("Trace", () => {
 
     beforeEach(() => {
       pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", INPUT_OUTPUT)
+      pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
       trace = createTrace(pin1, pin2, pin3)
     })
@@ -116,7 +116,6 @@ describe("Trace", () => {
       expect(pin1.value).to.equal(LOW)
       expect(pin2.value).to.equal(LOW)
 
-      pin2.mode = OUTPUT
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)
       expect(pin1.value).to.equal(LOW)
@@ -139,7 +138,6 @@ describe("Trace", () => {
       expect(pin1.state).to.be.false
       expect(pin2.state).to.be.false
 
-      pin2.mode = OUTPUT
       pin3.value = null // Actually set to false because the other output pin is false
       expect(trace.state).to.false
       expect(pin1.state).to.false
@@ -153,11 +151,9 @@ describe("Trace", () => {
 
     it("can be configured to become high when all output pins are hi-z", () => {
       pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", INPUT_OUTPUT)
+      pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
       trace = createTrace(pin1, pin2, pin3, PULL_UP)
-
-      pin2.mode = OUTPUT
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)
@@ -168,17 +164,15 @@ describe("Trace", () => {
       pin2.value = HI_Z // Actually gets set to HIGH because of PULL_UP
       expect(trace.value).to.equal(HIGH)
       expect(pin1.value).to.equal(HIGH)
-      expect(pin2.value).to.equal(HI_Z)
+      expect(pin2.value).to.equal(HIGH) // it's an input pin, pulling up sets it as well
       expect(pin3.value).to.equal(HI_Z)
     })
 
     it("can be configured to become low when all output pins are hi-z", () => {
       pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", INPUT_OUTPUT)
+      pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
       trace = createTrace(pin1, pin2, pin3, PULL_DOWN)
-
-      pin2.mode = OUTPUT
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)
@@ -189,7 +183,7 @@ describe("Trace", () => {
       pin2.value = HI_Z // Actually gets set to LOW because of PULL_DOWN
       expect(trace.value).to.equal(LOW)
       expect(pin1.value).to.equal(LOW)
-      expect(pin2.value).to.equal(HI_Z)
+      expect(pin2.value).to.equal(LOW) // it's an input pin, pulling it down sets it as well
       expect(pin3.value).to.equal(HI_Z)
     })
   })

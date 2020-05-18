@@ -16,38 +16,34 @@
 // Any number is suitable for the value of a pin, allowing it to handle analog signals. Values of 1
 // and 0 represent high and low pins for digital circuits. For the `high`, `low`, and `truth`
 // properties, any value of 0.5 or greater translates to high and anything lower to low. Generally
-// speaking, in this project "state" refers to a digital value (true or false, also represented as
-// 1 or 0) while "value" refers to that or any analog value.
+// speaking, in this project "state" refers to a digital value (true or false, also represented as 1
+// or 0) while "value" refers to that or any analog value.
 //
-// Input pin values can be set only by the trace to which they are connected. Output pin values
-// *cannot* be set by the trace value; they can only be set directly, probably by the device that
-// they're a part of.
-//
-// Input/output pins can act either way. Their direction is controlled by the `mode` property, which
-// has a value of either INPUT or OUTPUT (the same constants as used for direction on creation,
-// though there is no INPUT_OUTPUT mode) and will be set to INPUT on creation. It will act in every
-// way like an input pin while in INPUT mode and like an output pin in OUTPUT mode with the sole
-// difference that a listener can be added to it even in OUTPUT mode (though it will not fire while
-// in this mode). Setting the `mode` parameter has no effect on a non-INPUT_OUTPUT pin.
+// An input can be in one of three modes which define how it reacts to the outside world (i.e., to
+// its trace). In INPUT mode, the pin's value can only be changed by changing the value of its trace
+// (if it has no trace, it can be set normally). In OUTPUT mode, changing the value of the pin will
+// also change the value of its trace. BIDIRECTIONAL mode is a combination of the two; changing the
+// value of its trace will set the value of the pin, but setting the value of the pin will also
+// change the value of its trace.
 //
 // Setting the value of a pin can be done in two ways. The `value` property deals with the pin's
 // value as a number; reading it returns a number (or null) and writing to it can be done with a
-// number (in fact, this is the only way to set a pin to an analog - i.e., non-1-or-0 - value).
-// The `state` property returns the value as a boolean when read, and when written sets the value
-// with a boolean. There are also `high`, `low`, and `hiZ` properties that are read-only and
-// indicate whether the pin is in one of those states.
+// number (in fact, this is the only way to set a pin to an analog - i.e., non-1-or-0 - value). The
+// `state` property returns the value as a boolean when read, and when written sets the value with a
+// boolean. There are also `high`, `low`, and `hiZ` properties that are read-only and indicate
+// whether the pin is in one of those states.
 
 // The direction in which data flows through the pin. An INPUT_OUTPUT pin can be changed from input
 // to output and back after creation; the others are fixed.
 export const INPUT = Symbol("INPUT")
 export const OUTPUT = Symbol("OUTPUT")
-export const INPUT_OUTPUT = Symbol("INPUT_OUTPUT")
+export const BIDIRECTIONAL = Symbol("BIDIRECTIONAL")
 
 export function createPin(num, name, direction, init = 0) {
   const listeners = []
   let trace = null
-  let mode = direction === INPUT_OUTPUT ? INPUT : direction
-
+  let mode = INPUT
+  setMode(direction)
   let pinValue = translate(init)
 
   // Normalizes a value so that it's either `null` or a number. This translates `true` to `1` and
@@ -59,10 +55,10 @@ export function createPin(num, name, direction, init = 0) {
     return Number(value)
   }
 
-  // Sets the value of the pin. If the pin is an output pin, then this value change will be
-  // propagated to the trace to which it is connected. If it is NOT an output pin, `value` will only
-  // be used if the pin is unconnected; otherwise the pin's value will simply be set to the trace's
-  // value.
+  // Sets the value of the pin. If the pin is an output or bidirectional pin, then this value change
+  // will be propagated to the trace to which it is connected. If it is an input pin, `value` will
+  // only be used if the pin is unconnected; otherwise the pin's value will simply be set to the
+  // trace's value.
   //
   // This function does nothing if the value hasn't actually changed; i.e., if `value` is the same
   // as the value the pin already had.
@@ -76,26 +72,32 @@ export function createPin(num, name, direction, init = 0) {
         pinValue = trace.value
       } else {
         pinValue = tValue
-        if (mode === OUTPUT && trace !== null) {
+        if ((mode === OUTPUT || mode === BIDIRECTIONAL) && trace !== null) {
           trace.value = tValue
         }
       }
     }
   }
 
-  // Sets the value of the pin to match its trace's value, if the pin is an input pin. This is also
-  // the only way to fire a listener on a value change. It is intended to reflect changes to pin
-  // value that happen from the outside.
+  // Sets the value of the pin to match its trace's value, if the pin is an input or bidirectional
+  // pin. This is also the only way to fire a listener on a value change. It is intended to reflect
+  // changes to pin value that happen from the outside.
   //
   // This function is called by trace objects. It's unlikely to be useful as a call from a user.
   function setFromTrace() {
     if (trace !== null) {
       const value = trace.value
 
-      if (mode === INPUT && pinValue !== value) {
+      if ((mode === INPUT || mode === BIDIRECTIONAL) && pinValue !== value) {
         pinValue = value
         listeners.forEach(listener => listener(this))
       }
+    }
+  }
+
+  function setMode(value) {
+    if ([INPUT, OUTPUT, BIDIRECTIONAL].includes(value)) {
+      mode = value
     }
   }
 
@@ -117,14 +119,16 @@ export function createPin(num, name, direction, init = 0) {
   }
 
   // Adds a listener. This is a function that accepts one parameter, which is set to the pin itself
-  // when the listener is called. Listeners are called on value change if that change came through
-  // a value change from a trace, and only if the pin is an input pin (output-only pins do not
-  // call listeners ever). An arbitary number of listeners can be added; they will be called in the
-  // order in which they were added.
+  // when the listener is called. Listeners are called on value change if that change came through a
+  // value change from a trace, and only if the pin is an input or bidirectional pin. An arbitary
+  // number of listeners can be added; they will be called in the order in which they were added.
+  //
+  // This function will set a listener to an output pin, but that listener will never be called
+  // unless the pin later changes its mode.
   //
   // The same listener cannot be added twice. Attempting to do so will meet with silent ignoring.
   function addListener(listener) {
-    if (direction !== OUTPUT && !listeners.includes(listener)) {
+    if (!listeners.includes(listener)) {
       listeners.push(listener)
     }
   }
@@ -145,23 +149,17 @@ export function createPin(num, name, direction, init = 0) {
       return name
     },
     get input() {
-      return mode === INPUT
+      return mode === INPUT || mode === BIDIRECTIONAL
     },
     get output() {
-      return mode === OUTPUT
+      return mode === OUTPUT || mode === BIDIRECTIONAL
     },
 
     get mode() {
       return mode
     },
     set mode(value) {
-      if (direction !== INPUT_OUTPUT) {
-        return
-      }
-      if (value !== INPUT && value !== OUTPUT) {
-        return
-      }
-      mode = value
+      setMode(value)
     },
 
     get high() {
