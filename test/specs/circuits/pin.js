@@ -50,21 +50,18 @@ describe("Pin", () => {
     it("can be set to HIGH, LOW, or HI_Z at initialization", () => {
       const rdy = createPin(2, "RDY", INPUT, HIGH)
       expect(rdy.value).to.equal(HIGH)
-      expect(rdy.state).to.be.true
       expect(rdy.high).to.be.true
       expect(rdy.low).to.be.false
       expect(rdy.hiZ).to.be.false
 
       const a0 = createPin(7, "A0", OUTPUT, LOW)
       expect(a0.value).to.equal(LOW)
-      expect(a0.state).to.be.false
       expect(a0.high).to.be.false
       expect(a0.low).to.be.true
       expect(a0.hiZ).to.be.false
 
       const d0 = createPin(37, "D0", BIDIRECTIONAL, HI_Z)
       expect(d0.value).to.equal(HI_Z)
-      expect(d0.state).to.be.null
       expect(d0.high).to.be.false
       expect(d0.low).to.be.false
       expect(d0.hiZ).to.be.true

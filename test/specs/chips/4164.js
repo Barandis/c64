@@ -10,7 +10,7 @@ import { expect, setupTraces } from "test/helper"
 import { create4164 } from "chips/4164"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 
-describe("4164 64k x 1 bit DRAM", () => {
+describe("4164 64k x 1 bit dynamic RAM", () => {
   let chip
   const traces = {}
 
