@@ -67,7 +67,7 @@ export function createTrace(...args) {
   // output pins are `null`, then the trace's value will be set to `null`, but only if no floating
   // parameter was specified at creation (or if FLOAT was selected). Otherwise the trace's value
   // will be 1 if PULL_UP was selected or 0 if PULL_DOWN was selected.
-  function hiZValue() {
+  function recalculate() {
     if (pins.filter(pin => pin.output).length === 0) {
       return 0
     }
@@ -98,7 +98,7 @@ export function createTrace(...args) {
     const tValue = translate(value)
     if (traceValue !== tValue) {
       if (tValue === null) {
-        traceValue = hiZValue()
+        traceValue = recalculate()
       } else {
         traceValue = tValue
       }
@@ -130,6 +130,10 @@ export function createTrace(...args) {
     set state(value) {
       set(value === null ? null : !!value)
     },
+
+    reset() {
+      traceValue = recalculate()
+    },
   }
 
   for (const pin of connectedPins) {
@@ -139,7 +143,7 @@ export function createTrace(...args) {
     }
   }
 
-  trace.value = hiZValue()
+  trace.value = recalculate()
 
   return trace
 }

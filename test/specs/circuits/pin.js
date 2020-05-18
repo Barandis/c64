@@ -267,6 +267,27 @@ describe("Pin", () => {
     })
   })
 
+  describe("reset", () => {
+    it("sets the trace to the value of the pin if it's not an input pin", () => {
+      const pin1 = createPin(1, "A", OUTPUT, LOW)
+      const pin2 = createPin(2, "B", BIDIRECTIONAL, HIGH)
+      const trace = createTrace(pin1, pin2)
+      expect(trace.value).to.equal(HIGH)
+      pin1.reset()
+      expect(trace.value).to.equal(LOW)
+    })
+
+    it("forces the trace to recalculate its value if the pin is an input pin", () => {
+      const pin1 = createPin(1, "A", OUTPUT, LOW)
+      const pin2 = createPin(2, "B", BIDIRECTIONAL, HIGH)
+      const trace = createTrace(pin1, pin2)
+      expect(trace.value).to.equal(HIGH)
+      pin2.mode = INPUT
+      pin2.reset()
+      expect(trace.value).to.equal(LOW) // because pin2 is no longer output and pin1 is low
+    })
+  })
+
   describe("notifications", () => {
     let pin1
     let pin2
@@ -314,6 +335,15 @@ describe("Pin", () => {
 
     it("fires only once even if the pin has been connected to the trace more than once", () => {
       const trace = createTrace(pin1, pin2, pin3, pin1)
+      trace.value = HIGH
+      expect(spy1).to.be.calledOnce
+      expect(spy2).to.be.calledOnce
+      expect(spy3).not.to.be.called
+    })
+
+    it("fires only once even if the same listener has been added more than once", () => {
+      const trace = createTrace(pin1, pin2, pin3)
+      pin1.addListener(spy1)
       trace.value = HIGH
       expect(spy1).to.be.calledOnce
       expect(spy2).to.be.calledOnce

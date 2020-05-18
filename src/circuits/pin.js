@@ -118,6 +118,20 @@ export function createPin(num, name, direction, init = 0) {
     }
   }
 
+  // Resets the value of the pin's trace. If this is a bidirectional or output pin, it just sets the
+  // trace to the same value as the pin. If it's an input pin, it forces the trace to check the
+  // value of all of its output pins to choose an appropriate level.
+  //
+  // This is primarily useful for when pins switch modes and the new mode would leave the trace in
+  // an inconsistent state.
+  function reset() {
+    if (mode === INPUT) {
+      trace.reset()
+    } else {
+      trace.value = pinValue
+    }
+  }
+
   // Adds a listener. This is a function that accepts one parameter, which is set to the pin itself
   // when the listener is called. Listeners are called on value change if that change came through a
   // value change from a trace, and only if the pin is an input or bidirectional pin. An arbitary
@@ -189,6 +203,7 @@ export function createPin(num, name, direction, init = 0) {
     setFromTrace,
     toggle,
     setTrace,
+    reset,
     addListener,
     removeListener,
   }
