@@ -63,7 +63,6 @@
 // The 82S100 PLA is U17 on the C64 schematic.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HIGH, HI_Z } from "circuits/state"
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each pin in
 // the Commodore 64. They can be used to access the same pins with a different naming convention.
@@ -118,24 +117,24 @@ export function create82S100() {
     I15: createPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    F0: createPin(18, "F0", OUTPUT, LOW),
-    F1: createPin(17, "F1", OUTPUT, HIGH),
-    F2: createPin(16, "F2", OUTPUT, HIGH),
-    F3: createPin(15, "F3", OUTPUT, HIGH),
-    F4: createPin(13, "F4", OUTPUT, HIGH),
-    F5: createPin(12, "F5", OUTPUT, HIGH),
-    F6: createPin(11, "F6", OUTPUT, HIGH),
-    F7: createPin(10, "F7", OUTPUT, HIGH),
+    F0: createPin(18, "F0", OUTPUT, false),
+    F1: createPin(17, "F1", OUTPUT, true),
+    F2: createPin(16, "F2", OUTPUT, true),
+    F3: createPin(15, "F3", OUTPUT, true),
+    F4: createPin(13, "F4", OUTPUT, true),
+    F5: createPin(12, "F5", OUTPUT, true),
+    F6: createPin(11, "F6", OUTPUT, true),
+    F7: createPin(10, "F7", OUTPUT, true),
 
     // Output enable, disables all outputs when set HIGH
     _OE: createPin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not emulated
-    FE: createPin(1, "FE", INPUT, HI_Z),
+    FE: createPin(1, "FE", INPUT, null),
 
     // Power supply pins, not emulated
-    VCC: createPin(28, "VCC", INPUT, HI_Z),
-    GND: createPin(14, "GND", INPUT, HI_Z),
+    VCC: createPin(28, "VCC", INPUT, null),
+    GND: createPin(14, "GND", INPUT, null),
   }
 
   // One listener to rule them all
@@ -157,14 +156,14 @@ export function create82S100() {
   /* eslint-disable complexity */
   function oneListener() {
     if (pins._OE.high) {
-      pins.F0.state = HI_Z
-      pins.F1.state = HI_Z
-      pins.F2.state = HI_Z
-      pins.F3.state = HI_Z
-      pins.F4.state = HI_Z
-      pins.F5.state = HI_Z
-      pins.F6.state = HI_Z
-      pins.F7.state = HI_Z
+      pins.F0.state = null
+      pins.F1.state = null
+      pins.F2.state = null
+      pins.F3.state = null
+      pins.F4.state = null
+      pins.F5.state = null
+      pins.F6.state = null
+      pins.F7.state = null
 
       return
     }

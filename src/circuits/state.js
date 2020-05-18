@@ -9,6 +9,6 @@
 // respectively. HI_Z refers to a high impedence, which is the equivalent of no value at all.
 // High impedence states effectively remove a pin from the circuit to which it is connected.
 
-export const LOW = Symbol("LOW")
-export const HIGH = Symbol("HIGH")
-export const HI_Z = Symbol("HI_Z")
+export const LOW = 0
+export const HIGH = 1
+export const HI_Z = null

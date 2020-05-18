@@ -40,7 +40,6 @@
 // U11, U24, and U12.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HI_Z } from "circuits/state"
 
 export function create4164() {
   const pins = {
@@ -73,12 +72,12 @@ export function create4164() {
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
     // the bit at the address latched by _RAS and _CAS. In write mode, it is hi-z.
-    Q: createPin(14, "Q", OUTPUT, HI_Z),
+    Q: createPin(14, "Q", OUTPUT, null),
 
     // Power supply and no-contact pins. These are not emulated.
-    NC: createPin(1, "NC", INPUT, HI_Z),
-    VCC: createPin(8, "VCC", INPUT, HI_Z),
-    VSS: createPin(16, "VSS", INPUT, HI_Z),
+    NC: createPin(1, "NC", INPUT, null),
+    VCC: createPin(8, "VCC", INPUT, null),
+    VSS: createPin(16, "VSS", INPUT, null),
   }
 
   // 2048 32-bit unsigned integers is 65,536 bits.
@@ -127,7 +126,7 @@ export function create4164() {
   function read() {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    pins.Q.state = value
+    pins.Q.value = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array.
@@ -176,7 +175,7 @@ export function create4164() {
         read()
       }
     } else {
-      pins.Q.state = HI_Z
+      pins.Q.state = null
       col = null
       data = null
     }
@@ -198,12 +197,12 @@ export function create4164() {
   // but nothing is available to be read).
   function writeLatch(_w) {
     if (_w.low) {
-      pins.D.state = LOW
+      pins.D.state = false
       if (pins._CAS.low) {
         data = pins.D.value
         write()
       } else {
-        pins.Q.state = HI_Z
+        pins.Q.state = null
       }
     } else {
       data = null

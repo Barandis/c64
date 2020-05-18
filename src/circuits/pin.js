@@ -7,15 +7,20 @@
 
 // A representation of a single pin of an integrated circuit.
 //
-// A pin is essentially a state, along with some other metadata to describe it. The state can be one
-// of three values: HIGH, representing binary 1; LOW, representing binary 0; and HI_Z, representing
-// a high-impedence state that effectively just turns the pin off. This third state is commonly used
-// in pins connected to a shared bus; only one device at a time should be writing to such a bus, and
-// other devices often set the pins connected to that bus to high-impedence so that they are
-// unaffected by and cannot affect changes made by the writing device.
+// A pin is essentially a value, along with some other metadata to describe it. The value can be
+// either a numeric value or `null`, which represents a high-impedance state. This third state is
+// commonly used in pins connected to a shared bus; only one device at a time should be writing to
+// such a bus, and other devices often set the pins connected to that bus to high-impedence so that
+// they are unaffected by and cannot affect changes made by the writing device.
 //
-// Input pin states can be set only by the trace to which they are connected. Output pin states
-// *cannot* be set by the trace state; they can only be set directly, probably by the device that
+// Any number is suitable for the value of a pin, allowing it to handle analog signals. Values of 1
+// and 0 represent high and low pins for digital circuits. For the `high`, `low`, and `truth`
+// properties, any value of 0.5 or greater translates to high and anything lower to low. Generally
+// speaking, in this project "state" refers to a digital value (true or false, also represented as
+// 1 or 0) while "value" refers to that or any analog value.
+//
+// Input pin values can be set only by the trace to which they are connected. Output pin values
+// *cannot* be set by the trace value; they can only be set directly, probably by the device that
 // they're a part of.
 //
 // Input/output pins can act either way. Their direction is controlled by the `mode` property, which
@@ -25,14 +30,12 @@
 // difference that a listener can be added to it even in OUTPUT mode (though it will not fire while
 // in this mode). Setting the `mode` parameter has no effect on a non-INPUT_OUTPUT pin.
 //
-// The state of the pin is available in three ways, all of which are useful in different scenarios.
-// The `state` property returns the state as HIGH, LOW, or HI_Z. The `value` property returns the
-// same state, but represented as a binary digit (either 1, 0, or null). Finally, the properties
-// `high`, `low`, and `hiZ` are boolean properties that return true for the appropriate state. Among
-// these, only the `state` property can be set, but it can take all three forms of values (constant,
-// number, or boolean).
-
-import { HIGH, LOW, HI_Z } from "circuits/state"
+// Setting the value of a pin can be done in two ways. The `value` property deals with the pin's
+// value as a number; reading it returns a number (or null) and writing to it can be done with a
+// number (in fact, this is the only way to set a pin to an analog - i.e., non-1-or-0 - value).
+// The `state` property returns the value as a boolean when read, and when written sets the value
+// with a boolean. There are also `high`, `low`, and `hiZ` properties that are read-only and
+// indicate whether the pin is in one of those states.
 
 // The direction in which data flows through the pin. An INPUT_OUTPUT pin can be changed from input
 // to output and back after creation; the others are fixed.
@@ -40,72 +43,68 @@ export const INPUT = Symbol("INPUT")
 export const OUTPUT = Symbol("OUTPUT")
 export const INPUT_OUTPUT = Symbol("INPUT_OUTPUT")
 
-export function createPin(num, name, direction, init = LOW) {
+export function createPin(num, name, direction, init = 0) {
   const listeners = []
   let trace = null
   let mode = direction === INPUT_OUTPUT ? INPUT : direction
 
-  let state = init
+  let pinValue = translate(init)
 
-  // Turns a constant (HIGH, LOW, HI_Z), number (1, 0, null), or boolean (true, false, null) state
-  // value into a constant value.
+  // Normalizes a value so that it's either `null` or a number. This translates `true` to `1` and
+  // `false` to `0`.
   function translate(value) {
-    if (value === HIGH || value === 1 || value === true) {
-      return HIGH
+    if (value === null) {
+      return null
     }
-    if (value === LOW || value === 0 || value === false) {
-      return LOW
-    }
-    if (value === HI_Z || value === null) {
-      return HI_Z
-    }
-    return value
+    return Number(value)
   }
 
-  // Sets the state of the pin. If the pin is an output pin, then this state change will be
+  // Sets the value of the pin. If the pin is an output pin, then this value change will be
   // propagated to the trace to which it is connected. If it is NOT an output pin, `value` will only
-  // be used if the pin is unconnected; otherwise the pin's state will simply be set to the trace's
-  // state.
+  // be used if the pin is unconnected; otherwise the pin's value will simply be set to the trace's
+  // value.
   //
-  // This function does nothing if the state hasn't actually changed; i.e., if `value` is the same
-  // as the state the pin is already in.
+  // This function does nothing if the value hasn't actually changed; i.e., if `value` is the same
+  // as the value the pin already had.
   //
-  // This is intended to reflect changes made internally to the chip. For changing state from the
-  // outside, through the state change of a trace connected to an input pin, see `setFromTrace`.
+  // This is intended to reflect changes made internally to the chip. For changing value from the
+  // outside, through the value change of a trace connected to an input pin, see `setFromTrace`.
   function set(value) {
     const tValue = translate(value)
-    if ((tValue === HIGH || tValue === LOW || tValue === HI_Z) && state !== tValue) {
+    if (pinValue !== tValue) {
       if (mode === INPUT && trace !== null) {
-        state = trace.state
+        pinValue = trace.value
       } else {
-        state = tValue
+        pinValue = tValue
         if (mode === OUTPUT && trace !== null) {
-          trace.state = state
+          trace.value = tValue
         }
       }
     }
   }
 
-  // Sets the state of the pin to match its trace's state, if the pin is an input pin. This is also
-  // the only way to fire a listener on a state change. It is intended to reflect changes to pin
-  // state that happen from the outside.
+  // Sets the value of the pin to match its trace's value, if the pin is an input pin. This is also
+  // the only way to fire a listener on a value change. It is intended to reflect changes to pin
+  // value that happen from the outside.
   //
   // This function is called by trace objects. It's unlikely to be useful as a call from a user.
   function setFromTrace() {
     if (trace !== null) {
-      const value = trace.state
+      const value = trace.value
 
-      if (mode === INPUT && state !== value) {
-        state = value
+      if (mode === INPUT && pinValue !== value) {
+        pinValue = value
         listeners.forEach(listener => listener(this))
       }
     }
   }
 
-  // Changes the pin's state to the opposite of its current state. If the pin is hi-z, it
-  // does not change.
+  // Changes the pin's value to the "opposite" of its current value. If the pin is hi-z, it does not
+  // change. If the pin is analog, its old value is subtracted from 1, so this only makes any real
+  // sense if the range for the pin is 0...1 and in particular if it is being used for digital
+  // values.
   function toggle() {
-    set(state === HI_Z ? HI_Z : state === LOW ? HIGH : LOW)
+    set(pinValue === null ? null : 1 - pinValue)
   }
 
   // Associates a trace with the pin. Only one trace can be connected to a pin; connecting multiple
@@ -118,8 +117,8 @@ export function createPin(num, name, direction, init = LOW) {
   }
 
   // Adds a listener. This is a function that accepts one parameter, which is set to the pin itself
-  // when the listener is called. Listeners are called on state change if that change came through
-  // a state change from a trace, and only if the pin is an input pin (output-only pins do not
+  // when the listener is called. Listeners are called on value change if that change came through
+  // a value change from a trace, and only if the pin is an input pin (output-only pins do not
   // call listeners ever). An arbitary number of listeners can be added; they will be called in the
   // order in which they were added.
   //
@@ -166,28 +165,27 @@ export function createPin(num, name, direction, init = LOW) {
     },
 
     get high() {
-      return state === HIGH
+      return pinValue >= 0.5
     },
     get low() {
-      return state === LOW
+      return pinValue < 0.5 && pinValue !== null
     },
     get hiZ() {
-      return state === HI_Z
-    },
-
-    get state() {
-      return state
-    },
-    set state(value) {
-      set(value)
+      return pinValue === null
     },
 
     get value() {
-      return state === HIGH ? 1 : state === LOW ? 0 : null
+      return pinValue
+    },
+    set value(value) {
+      set(value)
     },
 
-    get truth() {
-      return state === HIGH ? true : state === LOW ? false : null
+    get state() {
+      return pinValue === null ? null : pinValue >= 0.5
+    },
+    set state(value) {
+      set(value === null ? null : !!value)
     },
 
     setFromTrace,

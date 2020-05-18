@@ -7,7 +7,6 @@ import { expect, setupTraces } from "test/helper"
 
 import { create74LS08 } from "chips/74LS08"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { LOW, HIGH } from "circuits/state"
 
 describe("74LS08 quad 2-input AND gate", () => {
   let chip
@@ -21,74 +20,74 @@ describe("74LS08 quad 2-input AND gate", () => {
   })
 
   it("properly ANDs on gate 1", () => {
-    traces.A1.state = LOW
-    traces.B1.state = LOW
-    expect(traces.Y1.state).to.equal(LOW)
+    traces.A1.state = false
+    traces.B1.state = false
+    expect(traces.Y1.state).to.be.false
 
-    traces.A1.state = LOW
-    traces.B1.state = HIGH
-    expect(traces.Y1.state).to.equal(LOW)
+    traces.A1.state = false
+    traces.B1.state = true
+    expect(traces.Y1.state).to.be.false
 
-    traces.A1.state = HIGH
-    traces.B1.state = LOW
-    expect(traces.Y1.state).to.equal(LOW)
+    traces.A1.state = true
+    traces.B1.state = false
+    expect(traces.Y1.state).to.be.false
 
-    traces.A1.state = HIGH
-    traces.B1.state = HIGH
-    expect(traces.Y1.state).to.equal(HIGH)
+    traces.A1.state = true
+    traces.B1.state = true
+    expect(traces.Y1.state).to.be.true
   })
 
   it("properly ANDs on gate 2", () => {
-    traces.A2.state = LOW
-    traces.B2.state = LOW
-    expect(traces.Y2.state).to.equal(LOW)
+    traces.A2.state = false
+    traces.B2.state = false
+    expect(traces.Y2.state).to.be.false
 
-    traces.A2.state = LOW
-    traces.B2.state = HIGH
-    expect(traces.Y2.state).to.equal(LOW)
+    traces.A2.state = false
+    traces.B2.state = true
+    expect(traces.Y2.state).to.be.false
 
-    traces.A2.state = HIGH
-    traces.B2.state = LOW
-    expect(traces.Y2.state).to.equal(LOW)
+    traces.A2.state = true
+    traces.B2.state = false
+    expect(traces.Y2.state).to.be.false
 
-    traces.A2.state = HIGH
-    traces.B2.state = HIGH
-    expect(traces.Y2.state).to.equal(HIGH)
+    traces.A2.state = true
+    traces.B2.state = true
+    expect(traces.Y2.state).to.be.true
   })
 
   it("properly ANDs on gate 3", () => {
-    traces.A3.state = LOW
-    traces.B3.state = LOW
-    expect(traces.Y3.state).to.equal(LOW)
+    traces.A3.state = false
+    traces.B3.state = false
+    expect(traces.Y3.state).to.be.false
 
-    traces.A3.state = LOW
-    traces.B3.state = HIGH
-    expect(traces.Y3.state).to.equal(LOW)
+    traces.A3.state = false
+    traces.B3.state = true
+    expect(traces.Y3.state).to.be.false
 
-    traces.A3.state = HIGH
-    traces.B3.state = LOW
-    expect(traces.Y3.state).to.equal(LOW)
+    traces.A3.state = true
+    traces.B3.state = false
+    expect(traces.Y3.state).to.be.false
 
-    traces.A3.state = HIGH
-    traces.B3.state = HIGH
-    expect(traces.Y3.state).to.equal(HIGH)
+    traces.A3.state = true
+    traces.B3.state = true
+    expect(traces.Y3.state).to.be.true
   })
 
   it("properly ANDs on gate 4", () => {
-    traces.A4.state = LOW
-    traces.B4.state = LOW
-    expect(traces.Y4.state).to.equal(LOW)
+    traces.A4.state = false
+    traces.B4.state = false
+    expect(traces.Y4.state).to.be.false
 
-    traces.A4.state = LOW
-    traces.B4.state = HIGH
-    expect(traces.Y4.state).to.equal(LOW)
+    traces.A4.state = false
+    traces.B4.state = true
+    expect(traces.Y4.state).to.be.false
 
-    traces.A4.state = HIGH
-    traces.B4.state = LOW
-    expect(traces.Y4.state).to.equal(LOW)
+    traces.A4.state = true
+    traces.B4.state = false
+    expect(traces.Y4.state).to.be.false
 
-    traces.A4.state = HIGH
-    traces.B4.state = HIGH
-    expect(traces.Y4.state).to.equal(HIGH)
+    traces.A4.state = true
+    traces.B4.state = true
+    expect(traces.Y4.state).to.be.true
   })
 })

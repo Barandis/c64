@@ -9,7 +9,6 @@ import { expect, setupTraces } from "test/helper"
 
 import { create4164 } from "chips/4164"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("4164 64k x 1 bit DRAM", () => {
   let chip
@@ -21,66 +20,66 @@ describe("4164 64k x 1 bit DRAM", () => {
     traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
     traces.VSS = createTrace(chip.pins.VSS, PULL_DOWN)
 
-    traces._W.state = HIGH
-    traces._RAS.state = HIGH
-    traces._CAS.state = HIGH
+    traces._W.state = true
+    traces._RAS.state = true
+    traces._CAS.state = true
   })
 
   describe("idle state", () => {
     it("has Q set to hi-z", () => {
-      expect(traces.Q.state).to.equal(HI_Z)
+      expect(traces.Q.state).to.be.null
     })
   })
 
   describe("read mode", () => {
     it("enables Q", () => {
-      traces._RAS.state = LOW
-      traces._CAS.state = LOW
-      expect(traces.Q.state).to.equal(LOW) // data at 0x0000
+      traces._RAS.state = false
+      traces._CAS.state = false
+      expect(traces.Q.state).to.be.false // data at 0x0000
 
-      traces._RAS.state = HIGH
-      traces._CAS.state = HIGH
-      expect(traces.Q.state).to.equal(HI_Z)
+      traces._RAS.state = true
+      traces._CAS.state = true
+      expect(traces.Q.state).to.be.null
     })
   })
 
   describe("write mode", () => {
     it("disables Q", () => {
-      traces._RAS.state = LOW
-      traces._W.state = LOW
-      traces._CAS.state = LOW
-      expect(traces.Q.state).to.equal(HI_Z)
+      traces._RAS.state = false
+      traces._W.state = false
+      traces._CAS.state = false
+      expect(traces.Q.state).to.be.null
 
-      traces._RAS.state = HIGH
-      traces._W.state = HIGH
-      traces._CAS.state = HIGH
-      expect(traces.Q.state).to.equal(HI_Z)
+      traces._RAS.state = true
+      traces._W.state = true
+      traces._CAS.state = true
+      expect(traces.Q.state).to.be.null
     })
   })
 
   describe("read-modify-write mode", () => {
     it("enables Q", () => {
-      traces._RAS.state = LOW
-      traces._CAS.state = LOW
-      traces._W.state = LOW
-      expect(traces.Q.state).to.equal(LOW)
+      traces._RAS.state = false
+      traces._CAS.state = false
+      traces._W.state = false
+      expect(traces.Q.state).to.be.false
 
-      traces._RAS.state = HIGH
-      traces._CAS.state = HIGH
-      traces._W.state = HIGH
-      expect(traces.Q.state).to.equal(HI_Z)
+      traces._RAS.state = true
+      traces._CAS.state = true
+      traces._W.state = true
+      expect(traces.Q.state).to.be.null
     })
   })
 
   function setAddressPins(value) {
-    traces.A0.state = (value & 0b00000001) >> 0
-    traces.A1.state = (value & 0b00000010) >> 1
-    traces.A2.state = (value & 0b00000100) >> 2
-    traces.A3.state = (value & 0b00001000) >> 3
-    traces.A4.state = (value & 0b00010000) >> 4
-    traces.A5.state = (value & 0b00100000) >> 5
-    traces.A6.state = (value & 0b01000000) >> 6
-    traces.A7.state = (value & 0b10000000) >> 7
+    traces.A0.value = (value & 0b00000001) >> 0
+    traces.A1.value = (value & 0b00000010) >> 1
+    traces.A2.value = (value & 0b00000100) >> 2
+    traces.A3.value = (value & 0b00001000) >> 3
+    traces.A4.value = (value & 0b00010000) >> 4
+    traces.A5.value = (value & 0b00100000) >> 5
+    traces.A6.value = (value & 0b01000000) >> 6
+    traces.A7.value = (value & 0b10000000) >> 7
   }
 
   function bitValue(row, col) {
@@ -94,17 +93,17 @@ describe("4164 64k x 1 bit DRAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.state = LOW
+      traces._RAS.state = false
 
       setAddressPins(col)
-      traces._CAS.state = LOW
+      traces._CAS.state = false
 
       traces.D.state = bitValue(row, col)
-      traces._W.state = LOW
+      traces._W.state = false
 
-      traces._RAS.state = HIGH
-      traces._CAS.state = HIGH
-      traces._W.state = HIGH
+      traces._RAS.state = true
+      traces._CAS.state = true
+      traces._W.state = true
     }
 
     for (let addr = lo; addr < hi; addr++) {
@@ -112,15 +111,15 @@ describe("4164 64k x 1 bit DRAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.state = LOW
+      traces._RAS.state = false
 
       setAddressPins(col)
-      traces._CAS.state = LOW
+      traces._CAS.state = false
 
       expect(traces.Q.value).to.equal(bitValue(row, col))
 
-      traces._RAS.state = HIGH
-      traces._CAS.state = HIGH
+      traces._RAS.state = true
+      traces._CAS.state = true
     }
   }
 
@@ -177,29 +176,29 @@ describe("4164 64k x 1 bit DRAM", () => {
     it("reads and writes within the same page without resetting row addresses", () => {
       const row = 0x2f // arbitrary
       setAddressPins(row)
-      traces._RAS.state = LOW
+      traces._RAS.state = false
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.state = LOW
+        traces._CAS.state = false
 
         traces.D.state = bitValue(row, col)
-        traces._W.state = LOW
+        traces._W.state = false
 
-        traces._CAS.state = HIGH
-        traces._W.state = HIGH
+        traces._CAS.state = true
+        traces._W.state = true
       }
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.state = LOW
+        traces._CAS.state = false
 
         expect(traces.Q.value).to.equal(bitValue(row, col))
 
-        traces._CAS.state = HIGH
+        traces._CAS.state = true
       }
 
-      traces._RAS.state = HIGH
+      traces._RAS.state = true
     })
   })
 })

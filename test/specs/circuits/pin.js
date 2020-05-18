@@ -24,10 +24,10 @@ describe("Pin", () => {
     const trace1 = createTrace(pin)
     const trace2 = createTrace(pin)
 
-    trace1.state = HIGH
-    trace2.state = LOW
+    trace1.value = HIGH
+    trace2.value = LOW
 
-    expect(pin.state).to.equal(HIGH)
+    expect(pin.value).to.equal(HIGH)
   })
 
   describe("direction", () => {
@@ -49,22 +49,22 @@ describe("Pin", () => {
   describe("state", () => {
     it("can be set to HIGH, LOW, or HI_Z at initialization", () => {
       const rdy = createPin(2, "RDY", INPUT, HIGH)
-      expect(rdy.state).to.equal(HIGH)
-      expect(rdy.value).to.equal(1)
+      expect(rdy.value).to.equal(HIGH)
+      expect(rdy.state).to.be.true
       expect(rdy.high).to.be.true
       expect(rdy.low).to.be.false
       expect(rdy.hiZ).to.be.false
 
       const a0 = createPin(7, "A0", OUTPUT, LOW)
-      expect(a0.state).to.equal(LOW)
-      expect(a0.value).to.equal(0)
+      expect(a0.value).to.equal(LOW)
+      expect(a0.state).to.be.false
       expect(a0.high).to.be.false
       expect(a0.low).to.be.true
       expect(a0.hiZ).to.be.false
 
       const d0 = createPin(37, "D0", INPUT_OUTPUT, HI_Z)
-      expect(d0.state).to.equal(HI_Z)
-      expect(d0.value).to.be.null
+      expect(d0.value).to.equal(HI_Z)
+      expect(d0.state).to.be.null
       expect(d0.high).to.be.false
       expect(d0.low).to.be.false
       expect(d0.hiZ).to.be.true
@@ -72,55 +72,41 @@ describe("Pin", () => {
 
     it("defaults to LOW", () => {
       const d0 = createPin(27, "D0", INPUT_OUTPUT)
-      expect(d0.state).to.equal(LOW)
-    })
-
-    it("can be set with a constant", () => {
-      const pin = createPin(2, "RDY", INPUT, HIGH)
-      expect(pin.state).to.equal(HIGH)
-
-      pin.state = LOW
-      expect(pin.state).to.equal(LOW)
-
-      pin.state = HI_Z
-      expect(pin.state).to.equal(HI_Z)
-
-      pin.state = HIGH
-      expect(pin.state).to.equal(HIGH)
+      expect(d0.value).to.equal(LOW)
     })
 
     it("can be set with a numeric value", () => {
       const pin = createPin(2, "RDY", INPUT, HIGH)
-      expect(pin.state).to.equal(HIGH)
+      expect(pin.value).to.equal(HIGH)
 
-      pin.state = 0
+      pin.value = LOW
       expect(pin.value).to.equal(0)
 
-      pin.state = null
+      pin.value = HI_Z
       expect(pin.value).to.be.null
 
-      pin.state = 1
+      pin.value = HIGH
       expect(pin.value).to.equal(1)
     })
 
     it("can be set with a boolean value", () => {
       const pin = createPin(2, "RDY", INPUT, HIGH)
-      expect(pin.state).to.equal(HIGH)
+      expect(pin.value).to.equal(HIGH)
 
       pin.state = false
-      expect(pin.truth).to.be.false
+      expect(pin.state).to.be.false
 
       pin.state = null
-      expect(pin.truth).to.be.null
+      expect(pin.state).to.be.null
 
       pin.state = true
-      expect(pin.truth).to.be.true
+      expect(pin.state).to.be.true
     })
 
     it("will be unchanged when set from setFromTrace with no trace", () => {
       const pin = createPin(1, "A", INPUT, HIGH)
       pin.setFromTrace()
-      expect(pin.state).to.equal(HIGH)
+      expect(pin.value).to.equal(HIGH)
     })
 
     it("can be toggled to the opposite state", () => {
@@ -141,51 +127,51 @@ describe("Pin", () => {
       expect(pin.hiZ).to.be.true
     })
 
-    it("sets input pin's state to trace's state", () => {
+    it("sets input pin's value to trace's value", () => {
       const pin = createPin(2, "RDY", INPUT)
       const trace = createTrace(pin)
 
-      trace.state = HIGH
-      pin.state = LOW
-      expect(pin.state).to.equal(HIGH)
+      trace.value = HIGH
+      pin.value = LOW
+      expect(pin.value).to.equal(HIGH)
 
-      pin.state = HI_Z
-      expect(pin.state).to.equal(HIGH)
+      pin.value = HI_Z
+      expect(pin.value).to.equal(HIGH)
     })
 
-    it("sets input/output pin's state in input mode to trace's state", () => {
+    it("sets input/output pin's value in input mode to trace's value", () => {
       const pin = createPin(37, "D0", INPUT_OUTPUT)
       pin.mode = INPUT
       const trace = createTrace(pin)
 
-      trace.state = HIGH
-      pin.state = LOW
-      expect(pin.state).to.equal(HIGH)
+      trace.value = HIGH
+      pin.value = LOW
+      expect(pin.value).to.equal(HIGH)
     })
 
-    it("sets its trace's state if it is an output pin", () => {
+    it("sets its trace's value if it is an output pin", () => {
       const pin = createPin(38, "RW", OUTPUT)
       const trace = createTrace(pin)
 
-      pin.state = HIGH
-      expect(trace.state).to.equal(HIGH)
+      pin.value = HIGH
+      expect(trace.value).to.equal(HIGH)
     })
 
-    it("sets its trace's state if it is an input/output pin in output mode", () => {
+    it("sets its trace's value if it is an input/output pin in output mode", () => {
       const pin = createPin(37, "D0", INPUT_OUTPUT)
       pin.mode = OUTPUT
       const trace = createTrace(pin)
 
-      pin.state = HIGH
-      expect(trace.state).to.equal(HIGH)
+      pin.value = HIGH
+      expect(trace.value).to.equal(HIGH)
     })
 
-    it("can be changed from HI_Z by a trace's state change", () => {
+    it("can be changed from HI_Z by a trace's value change", () => {
       const pin = createPin(2, "RDY", INPUT_OUTPUT, HI_Z)
       const trace = createTrace(pin)
 
-      trace.state = HIGH
-      expect(pin.state).to.equal(HIGH)
+      trace.value = HIGH
+      expect(pin.value).to.equal(HIGH)
     })
   })
 
@@ -249,17 +235,17 @@ describe("Pin", () => {
       expect(pin3.output).to.be.true
     })
 
-    it("retains the same state when switching from input to output mode", () => {
+    it("retains the same value when switching from input to output mode", () => {
       const pin = createPin(1, "A", INPUT_OUTPUT)
       const trace = createTrace(pin)
-      trace.state = HIGH
+      trace.value = HIGH
 
-      expect(pin.state).to.equal(HIGH)
+      expect(pin.value).to.equal(HIGH)
       pin.mode = OUTPUT
-      expect(pin.state).to.equal(HIGH)
-      expect(trace.state).to.equal(HIGH)
-      pin.state = LOW
-      expect(trace.state).to.equal(LOW)
+      expect(pin.value).to.equal(HIGH)
+      expect(trace.value).to.equal(HIGH)
+      pin.value = LOW
+      expect(trace.value).to.equal(LOW)
     })
   })
 
@@ -285,33 +271,33 @@ describe("Pin", () => {
       pin3.addListener(spy3)
     })
 
-    it("does not fire if state is set", () => {
-      pin2.state = HIGH
-      pin3.state = HIGH
+    it("does not fire if value is set", () => {
+      pin2.value = HIGH
+      pin3.value = HIGH
       expect(spy2).not.to.be.called
       expect(spy3).not.to.be.called
     })
 
-    it("fires on input pins if their trace's state is set", () => {
+    it("fires on input pins if their trace's value is set", () => {
       const trace = createTrace(pin1, pin2, pin3)
-      trace.state = HIGH
+      trace.value = HIGH
       expect(spy1).to.be.called
       expect(spy2).to.be.called
       expect(spy3).not.to.be.called
     })
 
-    it("does not fire on input/output pins in output mode if their trace's state is set", () => {
+    it("does not fire on input/output pins in output mode if their trace's value is set", () => {
       const trace = createTrace(pin1, pin2, pin3)
       pin2.mode = OUTPUT
-      trace.state = HIGH
+      trace.value = HIGH
       expect(spy1).to.be.called
       expect(spy2).not.to.be.called
       expect(spy3).not.to.be.called
     })
 
-    it("does not fire if the trace's state is set to what it was", () => {
+    it("does not fire if the trace's value is set to what it was", () => {
       const trace = createTrace(pin1, pin2, pin3)
-      trace.state = LOW
+      trace.value = LOW
       expect(spy1).not.to.be.called
       expect(spy2).not.to.be.called
       expect(spy3).not.to.be.called
@@ -319,7 +305,7 @@ describe("Pin", () => {
 
     it("fires only once even if the pin has been connected to the trace more than once", () => {
       const trace = createTrace(pin1, pin2, pin3, pin1)
-      trace.state = HIGH
+      trace.value = HIGH
       expect(spy1).to.be.calledOnce
       expect(spy2).to.be.calledOnce
       expect(spy3).not.to.be.called
@@ -327,18 +313,18 @@ describe("Pin", () => {
 
     it("ceases to fire after the listener has been removed", () => {
       const trace = createTrace(pin1, pin2, pin3, pin1)
-      trace.state = HIGH
+      trace.value = HIGH
       expect(spy1).to.be.calledOnce
 
       pin1.removeListener(spy1)
-      trace.state = LOW
+      trace.value = LOW
       expect(spy1).to.be.calledOnce
     })
 
     it("will ignore calls to remove listeners that have not been added", () => {
       const trace = createTrace(pin1, pin2, pin3)
       pin1.removeListener(spy2)
-      trace.state = HIGH
+      trace.value = HIGH
       expect(spy1).to.be.calledOnce
       expect(spy2).to.be.calledOnce
       expect(spy3).not.to.be.called

@@ -15,7 +15,6 @@
 // On the C64 schematic, U8 is a 7406.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { HIGH, HI_Z } from "circuits/state"
 
 export function create7406() {
   const pins = {
@@ -30,16 +29,16 @@ export function create7406() {
     A6: createPin(13, "A6", INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as "1Y", "2Y", etc.
-    Y1: createPin(2, "Y1", OUTPUT, HIGH),
-    Y2: createPin(4, "Y2", OUTPUT, HIGH),
-    Y3: createPin(6, "Y3", OUTPUT, HIGH),
-    Y4: createPin(8, "Y4", OUTPUT, HIGH),
-    Y5: createPin(10, "Y5", OUTPUT, HIGH),
-    Y6: createPin(12, "Y6", OUTPUT, HIGH),
+    Y1: createPin(2, "Y1", OUTPUT, true),
+    Y2: createPin(4, "Y2", OUTPUT, true),
+    Y3: createPin(6, "Y3", OUTPUT, true),
+    Y4: createPin(8, "Y4", OUTPUT, true),
+    Y5: createPin(10, "Y5", OUTPUT, true),
+    Y6: createPin(12, "Y6", OUTPUT, true),
 
     // Power supply and ground pins, not emulated
-    VCC: createPin(14, "VCC", INPUT, HI_Z),
-    GND: createPin(7, "GND", INPUT, HI_Z),
+    VCC: createPin(14, "VCC", INPUT, null),
+    GND: createPin(7, "GND", INPUT, null),
   }
 
   function inputChanged(apin, ypin) {

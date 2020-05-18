@@ -15,37 +15,36 @@
 // On the C64 schematic, U27 is a 74LS08.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
-import { LOW, HI_Z } from "circuits/state"
 
 export function create74LS08() {
   const pins = {
     // Gate 1 inputs and output
     A1: createPin(1, "A1", INPUT),
     B1: createPin(2, "B1", INPUT),
-    Y1: createPin(3, "Y1", OUTPUT, LOW),
+    Y1: createPin(3, "Y1", OUTPUT, 0),
 
     // Gate 2 inputs and output
     A2: createPin(4, "A2", INPUT),
     B2: createPin(5, "B2", INPUT),
-    Y2: createPin(6, "Y2", OUTPUT, LOW),
+    Y2: createPin(6, "Y2", OUTPUT, 0),
 
     // Gate 3 inputs and output
     A3: createPin(9, "A3", INPUT),
     B3: createPin(10, "B3", INPUT),
-    Y3: createPin(8, "Y3", OUTPUT, LOW),
+    Y3: createPin(8, "Y3", OUTPUT, 0),
 
     // Gate 4 inputs and output
     A4: createPin(12, "A4", INPUT),
     B4: createPin(13, "B4", INPUT),
-    Y4: createPin(11, "Y4", OUTPUT, LOW),
+    Y4: createPin(11, "Y4", OUTPUT, 0),
 
     // Power supply and ground pins, not emulated
-    VCC: createPin(14, "VCC", INPUT, HI_Z),
-    GND: createPin(7, "GND", INPUT, HI_Z),
+    VCC: createPin(14, "VCC", INPUT, null),
+    GND: createPin(7, "GND", INPUT, null),
   }
 
   function setOutput(apin, bpin, ypin) {
-    ypin.state = apin.truth && bpin.truth
+    ypin.state = apin.state && bpin.state
   }
 
   function setGate1() {

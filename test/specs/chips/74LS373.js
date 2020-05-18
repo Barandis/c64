@@ -10,7 +10,6 @@ import { expect, setupTraces } from "test/helper"
 import { create74LS373 } from "chips/74LS373"
 
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { LOW, HIGH, HI_Z } from "circuits/state"
 
 describe("74LS373 Octal tri-state transparent latch", () => {
   let chip
@@ -23,98 +22,98 @@ describe("74LS373 Octal tri-state transparent latch", () => {
     traces.GND = createTrace(chip.GND, PULL_DOWN)
   })
 
-  it("allows data to pass through when LE is HIGH", () => {
-    traces.LE.state = HIGH
+  it("alfalses data to pass through when LE is true", () => {
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].state = HIGH
-      expect(traces["O" + i].state).to.equal(HIGH)
+      traces["D" + i].state = true
+      expect(traces["O" + i].state).to.be.true
     }
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].state = LOW
-      expect(traces["O" + i].state).to.equal(LOW)
+      traces["D" + i].state = false
+      expect(traces["O" + i].state).to.be.false
     }
   })
 
-  it("latches the data when LE goes low", () => {
-    traces.LE.state = HIGH
+  it("latches the data when LE goes false", () => {
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = HIGH
+      traces[`D${i}`].state = true
     }
 
-    traces.LE.state = LOW
+    traces.LE.state = false
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = HIGH
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0 ? HIGH : LOW)
+      traces[`D${i}`].state = true
+      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
     }
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = LOW
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0 ? HIGH : LOW)
+      traces[`D${i}`].state = false
+      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
     }
   })
 
-  it("returns to transparent data flow when LE returns to HIGH", () => {
-    traces.LE.state = HIGH
+  it("returns to transparent data ffalse when LE returns to true", () => {
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = HIGH
+      traces[`D${i}`].state = true
     }
 
-    traces.LE.state = LOW
+    traces.LE.state = false
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = HIGH
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0 ? HIGH : LOW)
+      traces[`D${i}`].state = true
+      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
     }
 
-    traces.LE.state = HIGH
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.equal(HIGH)
+      expect(traces[`O${i}`].state).to.be.true
     }
   })
 
-  it("sets all outputs to HI_Z when _OE is HIGH", () => {
-    traces.LE.state = HIGH
+  it("sets all outputs to null when _OE is true", () => {
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = HIGH
+      traces[`D${i}`].state = true
     }
 
-    traces._OE.state = HIGH
+    traces._OE.state = true
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.equal(HI_Z)
+      expect(traces[`O${i}`].state).to.be.null
     }
 
-    traces._OE.state = LOW
+    traces._OE.state = false
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.equal(HIGH)
+      expect(traces[`O${i}`].state).to.be.true
     }
   })
 
-  it("remembers latched states, returning them to the output pins after _OE goes low", () => {
-    traces.LE.state = HIGH
+  it("remembers latched states, returning them to the output pins after _OE goes false", () => {
+    traces.LE.state = true
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = HIGH
+      traces[`D${i}`].state = true
     }
 
-    traces._OE.state = HIGH
+    traces._OE.state = true
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = LOW
+      traces[`D${i}`].state = false
     }
-    traces.LE.state = LOW
+    traces.LE.state = false
 
-    traces._OE.state = LOW
+    traces._OE.state = false
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0 ? LOW : HIGH)
+      expect(traces[`O${i}`].state).to.equal(i % 2 !== 0)
     }
   })
 })
