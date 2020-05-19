@@ -105,12 +105,13 @@ export function create74373() {
   pins.LE.addListener(latchChanged)
   pins._OE.addListener(enableChanged)
 
-  const latch = {
-    pins,
-  }
+  const latch = []
+  latch.pins = pins
 
   for (const name in pins) {
-    latch[name] = pins[name]
+    const pin = pins[name]
+    latch[name] = pin
+    latch[pin.num] = pin
   }
 
   return latch

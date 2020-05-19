@@ -64,12 +64,13 @@ export function create6581() {
     GND: createPin(14, "GND", INPUT, null),
   }
 
-  const sid = {
-    pins,
-  }
+  const sid = []
+  sid.pins = pins
 
   for (const name in pins) {
-    sid[name] = pins[name]
+    const pin = pins[name]
+    sid[name] = pin
+    sid[pin.num] = pin
   }
 
   return sid

@@ -113,12 +113,13 @@ export function create2364(buffer) {
     }
   })
 
-  const rom = {
-    pins,
-  }
+  const rom = []
+  rom.pins = pins
 
   for (const name in pins) {
-    rom[name] = pins[name]
+    const pin = pins[name]
+    rom[name] = pin
+    rom[pin.num] = pin
   }
 
   return rom

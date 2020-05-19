@@ -119,12 +119,13 @@ export function create2114() {
     }
   })
 
-  const ram = {
-    pins,
-  }
+  const ram = []
+  ram.pins = pins
 
   for (const name in pins) {
-    ram[name] = pins[name]
+    const pin = pins[name]
+    ram[name] = pin
+    ram[pin.num] = pin
   }
 
   return ram

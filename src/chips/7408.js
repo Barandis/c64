@@ -72,12 +72,13 @@ export function create7408() {
   pins.A4.addListener(setGate4)
   pins.B4.addListener(setGate4)
 
-  const gates = {
-    pins,
-  }
+  const gates = []
+  gates.pins = pins
 
   for (const name in pins) {
-    gates[name] = pins[name]
+    const pin = pins[name]
+    gates[name] = pin
+    gates[pin.num] = pin
   }
 
   return gates

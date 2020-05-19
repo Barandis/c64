@@ -87,12 +87,13 @@ export function create6526() {
     VSS: createPin(1, "VSS", INPUT, null),
   }
 
-  const cia = {
-    pins,
-  }
+  const cia = []
+  cia.pins = pins
 
   for (const name in pins) {
-    cia[name] = pins[name]
+    const pin = pins[name]
+    cia[name] = pin
+    cia[pin.num] = pin
   }
 
   return cia

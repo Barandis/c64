@@ -117,12 +117,13 @@ export function create2332(buffer) {
   pins._CS1.addListener(chipEnable)
   pins._CS2.addListener(chipEnable)
 
-  const rom = {
-    pins,
-  }
+  const rom = []
+  rom.pins = pins
 
   for (const name in pins) {
-    rom[name] = pins[name]
+    const pin = pins[name]
+    rom[name] = pin
+    rom[pin.num] = pin
   }
 
   return rom

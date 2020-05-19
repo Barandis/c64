@@ -213,13 +213,14 @@ export function create4164() {
   pins._CAS.addListener(casLatch)
   pins._W.addListener(writeLatch)
 
-  const dram = {
-    pins,
-  }
+  const ram = []
+  ram.pins = pins
 
   for (const name in pins) {
-    dram[name] = pins[name]
+    const pin = pins[name]
+    ram[name] = pin
+    ram[pin.num] = pin
   }
 
-  return dram
+  return ram
 }

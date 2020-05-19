@@ -116,12 +116,13 @@ export function create4066() {
   pins.X4.addListener(() => setDataX(4))
   pins.Y4.addListener(() => setDataY(4))
 
-  const switches = {
-    pins,
-  }
+  const switches = []
+  switches.pins = pins
 
   for (const name in pins) {
-    switches[name] = pins[name]
+    const pin = pins[name]
+    switches[name] = pin
+    switches[pin.num] = pin
   }
 
   return switches

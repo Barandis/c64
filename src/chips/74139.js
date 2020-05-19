@@ -73,12 +73,13 @@ export function create74139() {
   pins.A2.addListener(setDemux2)
   pins.B2.addListener(setDemux2)
 
-  const demux = {
-    pins,
-  }
+  const demux = []
+  demux.pins = pins
 
   for (const name in pins) {
-    demux[name] = pins[name]
+    const pin = pins[name]
+    demux[name] = pin
+    demux[pin.num] = pin
   }
 
   return demux

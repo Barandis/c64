@@ -79,12 +79,13 @@ export function create6510() {
     GND: createPin(21, "GND", INPUT, null),
   }
 
-  const cpu = {
-    pins,
-  }
+  const cpu = []
+  cpu.pins = pins
 
   for (const name in pins) {
-    cpu[name] = pins[name]
+    const pin = pins[name]
+    cpu[name] = pin
+    cpu[pin.num] = pin
   }
 
   return cpu

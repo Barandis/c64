@@ -99,12 +99,13 @@ export function create6567() {
     GND: createPin(20, "GND", INPUT, null),
   }
 
-  const vic = {
-    pins,
-  }
+  const vic = []
+  vic.pins = pins
 
   for (const name in pins) {
-    vic[name] = pins[name]
+    const pin = pins[name]
+    vic[name] = pin
+    vic[pin.num] = pin
   }
 
   return vic

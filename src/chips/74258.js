@@ -121,12 +121,13 @@ export function create74258() {
   pins.A4.addListener(() => setGroup4())
   pins.B4.addListener(() => setGroup4())
 
-  const mux = {
-    pins,
-  }
+  const mux = []
+  mux.pins = pins
 
   for (const name in pins) {
-    mux[name] = pins[name]
+    const pin = pins[name]
+    mux[name] = pin
+    mux[pin.num] = pin
   }
 
   return mux

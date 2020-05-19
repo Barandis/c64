@@ -264,12 +264,13 @@ export function create82S100() {
   pins.I14.addListener(oneListener)
   pins.I15.addListener(oneListener)
 
-  const pla = {
-    pins,
-  }
+  const pla = []
+  pla.pins = pins
 
   for (const name in pins) {
-    pla[name] = pins[name]
+    const pin = pins[name]
+    pla[name] = pin
+    pla[pin.num] = pin
   }
 
   return pla

@@ -49,13 +49,14 @@ export function create7406() {
     pins[`A${i}`].addListener(() => inputChanged(pins[`A${i}`], pins[`Y${i}`]))
   }
 
-  const inverter = {
-    pins,
-  }
+  const inverters = []
+  inverters.pins = pins
 
   for (const name in pins) {
-    inverter[name] = pins[name]
+    const pin = pins[name]
+    inverters[name] = pin
+    inverters[pin.num] = pin
   }
 
-  return inverter
+  return inverters
 }
