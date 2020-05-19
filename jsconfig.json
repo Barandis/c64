@@ -8,6 +8,7 @@
       "utils": ["src/utils"],
       "circuits": ["src/circuits/*"],
       "chips": ["src/chips/*"],
+      "data": ["src/data/*"],
       "test": ["test/*"],
     }
   },

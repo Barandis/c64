@@ -27,6 +27,7 @@ import { createPin, INPUT, BIDIRECTIONAL } from "circuits/pin"
 
 export function create2114() {
   const pins = {
+    // Address pins A0...A9
     A0: createPin(5, "A0", INPUT),
     A1: createPin(6, "A1", INPUT),
     A2: createPin(7, "A2", INPUT),
@@ -38,15 +39,20 @@ export function create2114() {
     A8: createPin(16, "A8", INPUT),
     A9: createPin(15, "A9", INPUT),
 
+    // Data pins D0...D3
     D0: createPin(14, "D0", BIDIRECTIONAL, 0),
     D1: createPin(13, "D1", BIDIRECTIONAL, 0),
     D2: createPin(12, "D2", BIDIRECTIONAL, 0),
     D3: createPin(11, "D3", BIDIRECTIONAL, 0),
 
+    // Chip enable pin. Setting this to low is what begins a read or write cycle.
     _CE: createPin(8, "_CE", INPUT),
 
+    // Write enable pin. If this is low when _CE goes low, then the cycle is a write cycle,
+    // otherwise it's a read cycle.
     _WE: createPin(10, "_WE", INPUT),
 
+    // Power supply and ground pins. These are not emulated.
     VCC: createPin(18, "VCC", INPUT, null),
     GND: createPin(9, "GND", INPUT, null),
   }
@@ -69,6 +75,10 @@ export function create2114() {
     )
   }
 
+  // Turns the address currently on the address pins into an index and shift amount for the internal
+  // memory array. The index is the array index for that location in the memory array, while the
+  // shift amount is the number of bits that a 4-bit value would have to be shifted to be in the
+  // right position to write those bits in that array index.
   function resolve() {
     const addr = address()
     const arrayIndex = addr >> 3
@@ -76,6 +86,8 @@ export function create2114() {
     return [arrayIndex, bitIndex * 4]
   }
 
+  // Reads the 4-bit value at the location indicated by the address pins and puts that value on the
+  // data pins.
   function read() {
     const [index, shift] = resolve()
     const value = (memory[index] & (0b1111 << shift)) >> shift
@@ -85,6 +97,8 @@ export function create2114() {
     pins.D3.value = (value & 0b1000) >> 3
   }
 
+  // Writes the 4-bit value currently on the data pins to the location indicated by the address
+  // pins.
   function write() {
     const value = pins.D0.value | (pins.D1.value << 1) | (pins.D2.value << 2) | (pins.D3.value << 3)
     const [index, shift] = resolve()
