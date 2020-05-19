@@ -7,9 +7,9 @@
 
 import { expect } from "test/helper"
 
-import { createTrace, PULL_DOWN, PULL_UP } from "circuits/trace"
-import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "circuits/pin"
-import { LOW, HIGH, HI_Z } from "circuits/state"
+import { createTrace, PULL_DOWN, PULL_UP } from "components/trace"
+import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
+import { LOW, HIGH, HI_Z } from "components/state"
 
 describe("Trace", () => {
   describe("initial value", () => {

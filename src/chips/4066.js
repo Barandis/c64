@@ -11,7 +11,7 @@
 // input/outputs and a single digital control input. If the control is low, then data passes freely
 // back and forth across the data pins. When the control goes high, it acts as an opening switch,
 // and the data input/outputs become disconnected.
-// 
+//
 // There is no hi-Z state with this chip. If the switch is opened, each data pin takes on the value
 // dictated by the rest of its circuit.
 //
@@ -21,12 +21,12 @@
 // set determines the value of both pins when the switch closes.
 //
 // This chip works fine with either analog or digital signals. In fact, in the Commodore 64 there
-// are two 4066's, and one works with analog signals (the analog inputs of the control ports) while 
+// are two 4066's, and one works with analog signals (the analog inputs of the control ports) while
 // the other works with digital (part of the data bus).
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { createPin, INPUT, BIDIRECTIONAL } from "circuits/pin"
+import { createPin, INPUT, BIDIRECTIONAL } from "components/pin"
 
 export function create4066() {
   const pins = {

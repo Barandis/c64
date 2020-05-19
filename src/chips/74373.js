@@ -24,7 +24,7 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create74373() {
   const pins = {

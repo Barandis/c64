@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create2114 } from "chips/2114"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("2114 1024 x 4-bit static RAM", () => {
   let chip

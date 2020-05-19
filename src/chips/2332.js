@@ -27,7 +27,7 @@
 //
 // On the C64 schematic, the CHARACTER ROM is U5.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create2332(buffer) {
   const pins = {

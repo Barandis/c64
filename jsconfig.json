@@ -4,7 +4,7 @@
     "target": "esnext",
     "baseUrl": "./",
     "paths": {
-      "circuits/*": ["src/circuits/*"],
+      "components/*": ["src/components/*"],
       "chips/*": ["src/chips/*"],
       "data/*": ["src/data/*"],
       "test/*": ["test/*"],

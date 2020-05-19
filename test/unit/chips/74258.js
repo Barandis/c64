@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create74258 } from "chips/74258"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74258 3-State Quad 2-Data Multiplexers", () => {
   let chip

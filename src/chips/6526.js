@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create6526() {
   const pins = {

@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create7408() {
   const pins = {

@@ -18,7 +18,7 @@
 //
 // On the C64 schematic, a 74LS139 can be found as U15.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create74139() {
   // A typical naming scheme for these pins (Fairchild, Texas Instruments) has the outputs as 1Y0,

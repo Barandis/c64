@@ -8,7 +8,7 @@
 import { expect, setupTraces, DEBUG, hex } from "test/helper"
 
 import { create2364 } from "chips/2364"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { kernal } from "data/kernal"
 import { basic } from "data/basic"
 

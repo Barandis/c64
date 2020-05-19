@@ -10,8 +10,8 @@ import { expect, DEBUG, chipState } from "test/helper"
 import { create4164 } from "chips/4164"
 import { create74257 } from "chips/74257"
 
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { LOW, HIGH } from "circuits/state"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { LOW, HIGH } from "components/state"
 
 function createMemory() {
   const ram0 = create4164()

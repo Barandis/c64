@@ -9,7 +9,7 @@ import { expect, setupTraces } from "test/helper"
 
 import { create74373 } from "chips/74373"
 
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74373 Octal tri-state transparent latch", () => {
   let chip

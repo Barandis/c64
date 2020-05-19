@@ -25,7 +25,7 @@
 //
 // On the C64 schematic, both U13 and U25 were 74LS257's.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create74257() {
   const pins = {

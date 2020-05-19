@@ -39,7 +39,7 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order, were U21, U9, U22, U10, U23,
 // U11, U24, and U12.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create4164() {
   const pins = {

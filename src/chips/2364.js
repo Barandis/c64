@@ -25,7 +25,7 @@
 //
 // On the C64 schematic, the BASIC ROM is U3 and the KERNAL ROM is U4.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create2364(buffer) {
   const pins = {

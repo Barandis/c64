@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create7406() {
   const pins = {

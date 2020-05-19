@@ -26,7 +26,7 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { createPin, INPUT, OUTPUT } from "circuits/pin"
+import { createPin, INPUT, OUTPUT } from "components/pin"
 
 export function create74258() {
   const pins = {

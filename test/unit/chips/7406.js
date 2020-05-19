@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create7406 } from "chips/7406"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("7406 hex inverter", () => {
   let chip

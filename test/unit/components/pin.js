@@ -8,9 +8,9 @@
 import { expect } from "test/helper"
 import sinon from "sinon"
 
-import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "circuits/pin"
-import { createTrace } from "circuits/trace"
-import { LOW, HIGH, HI_Z } from "circuits/state"
+import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
+import { createTrace } from "components/trace"
+import { LOW, HIGH, HI_Z } from "components/state"
 
 describe("Pin", () => {
   it("has a number and a name", () => {

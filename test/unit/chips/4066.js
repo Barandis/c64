@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create4066 } from "chips/4066"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("4066 quad bilateral switch", () => {
   let chip

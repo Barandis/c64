@@ -8,7 +8,7 @@
 import { expect, setupTraces, DEBUG, hex } from "test/helper"
 
 import { create2332 } from "chips/2332"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { character } from "data/character"
 
 describe("2332 4k x 8-bit ROM", () => {

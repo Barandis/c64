@@ -23,7 +23,7 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { createPin, INPUT, BIDIRECTIONAL } from "circuits/pin"
+import { createPin, INPUT, BIDIRECTIONAL } from "components/pin"
 
 export function create2114() {
   const pins = {

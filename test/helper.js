@@ -8,7 +8,7 @@
 import chai from "chai"
 import sinonChai from "sinon-chai"
 
-import { createTrace } from "circuits/trace"
+import { createTrace } from "components/trace"
 
 chai.use(sinonChai)
 

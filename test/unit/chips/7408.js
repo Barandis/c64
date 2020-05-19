@@ -6,7 +6,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create7408 } from "chips/7408"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("7408 quad 2-input AND gate", () => {
   let chip

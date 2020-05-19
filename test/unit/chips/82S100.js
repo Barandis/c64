@@ -8,8 +8,8 @@
 import { expect, bin, setupTraces } from "test/helper"
 
 import { create82S100 } from "chips/82S100"
-import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
-import { HIGH, LOW, HI_Z } from "circuits/state"
+import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { HIGH, LOW, HI_Z } from "components/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
 // all of the possible inputs. The original is located at

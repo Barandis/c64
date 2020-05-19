@@ -28,7 +28,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      circuits: path.resolve(__dirname, "src/circuits"),
+      components: path.resolve(__dirname, "src/components"),
       chips: path.resolve(__dirname, "src/chips"),
       data: path.resolve(__dirname, "src/data"),
       test: path.resolve(__dirname, "test"),
