@@ -28,8 +28,6 @@ module.exports = {
   },
   resolve: {
     alias: {
-      index: path.resolve(__dirname, "src/index.js"),
-      utils: path.resolve(__dirname, "src/utils.js"),
       circuits: path.resolve(__dirname, "src/circuits"),
       chips: path.resolve(__dirname, "src/chips"),
       data: path.resolve(__dirname, "src/data"),
