@@ -7,15 +7,15 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74LS258 } from "chips/74LS258"
+import { create74257 } from "chips/74257"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 
-describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
+describe("74257 3-State Quad 2-Data Multiplexers", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74LS258()
+    chip = create74257()
     setupTraces(traces, chip)
     traces.VCC = createTrace(chip.pins.VCC, PULL_UP)
     traces.GND = createTrace(chip.pins.GND, PULL_DOWN)
@@ -29,29 +29,29 @@ describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.state = false
-      expect(traces._Y1.state).to.be.true
+      expect(traces.Y1.state).to.be.false
 
       traces.A1.state = true
-      expect(traces._Y1.state).to.be.false
+      expect(traces.Y1.state).to.be.true
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.state = true
-      expect(traces._Y1.state).to.be.false
+      expect(traces.Y1.state).to.be.true
 
       traces.B1.state = false
-      expect(traces._Y1.state).to.be.true
+      expect(traces.Y1.state).to.be.false
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.state = true
-      expect(traces._Y1.state).to.be.false
+      expect(traces.Y1.state).to.be.true
 
       traces._OE.state = true
-      expect(traces._Y1.state).to.be.null
+      expect(traces.Y1.state).to.be.null
 
       traces.SEL.state = false
-      expect(traces._Y1.state).to.be.null
+      expect(traces.Y1.state).to.be.null
     })
   })
 
@@ -63,29 +63,29 @@ describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.state = false
-      expect(traces._Y2.state).to.be.true
+      expect(traces.Y2.state).to.be.false
 
       traces.A2.state = true
-      expect(traces._Y2.state).to.be.false
+      expect(traces.Y2.state).to.be.true
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.state = true
-      expect(traces._Y2.state).to.be.false
+      expect(traces.Y2.state).to.be.true
 
       traces.B2.state = false
-      expect(traces._Y2.state).to.be.true
+      expect(traces.Y2.state).to.be.false
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.state = true
-      expect(traces._Y2.state).to.be.false
+      expect(traces.Y2.state).to.be.true
 
       traces._OE.state = true
-      expect(traces._Y2.state).to.be.null
+      expect(traces.Y2.state).to.be.null
 
       traces.SEL.state = false
-      expect(traces._Y2.state).to.be.null
+      expect(traces.Y2.state).to.be.null
     })
   })
 
@@ -97,29 +97,29 @@ describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.state = false
-      expect(traces._Y3.state).to.be.true
+      expect(traces.Y3.state).to.be.false
 
       traces.A3.state = true
-      expect(traces._Y3.state).to.be.false
+      expect(traces.Y3.state).to.be.true
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.state = true
-      expect(traces._Y3.state).to.be.false
+      expect(traces.Y3.state).to.be.true
 
       traces.B3.state = false
-      expect(traces._Y3.state).to.be.true
+      expect(traces.Y3.state).to.be.false
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.state = true
-      expect(traces._Y3.state).to.be.false
+      expect(traces.Y3.state).to.be.true
 
       traces._OE.state = true
-      expect(traces._Y3.state).to.be.null
+      expect(traces.Y3.state).to.be.null
 
       traces.SEL.state = false
-      expect(traces._Y3.state).to.be.null
+      expect(traces.Y3.state).to.be.null
     })
   })
 
@@ -131,29 +131,29 @@ describe("74LS258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.state = false
-      expect(traces._Y4.state).to.be.true
+      expect(traces.Y4.state).to.be.false
 
       traces.A4.state = true
-      expect(traces._Y4.state).to.be.false
+      expect(traces.Y4.state).to.be.true
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.state = true
-      expect(traces._Y4.state).to.be.false
+      expect(traces.Y4.state).to.be.true
 
       traces.B4.state = false
-      expect(traces._Y4.state).to.be.true
+      expect(traces.Y4.state).to.be.false
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.state = true
-      expect(traces._Y4.state).to.be.false
+      expect(traces.Y4.state).to.be.true
 
       traces._OE.state = true
-      expect(traces._Y4.state).to.be.null
+      expect(traces.Y4.state).to.be.null
 
       traces.SEL.state = false
-      expect(traces._Y4.state).to.be.null
+      expect(traces.Y4.state).to.be.null
     })
   })
 })

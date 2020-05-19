@@ -5,15 +5,14 @@
  * https://opensource.org/licenses/MIT
  */
 
-// An emulation of the 74258 family of quad dual-input tri-state multiplexers. The most commonly
-// used member of this family was the 74LS258, but the differences between members are electrical in
-// nature and this emulation will serve for all of them. This IC differs from the 74LS257 in that
-// this one inverts the outputs.
+// An emulation of the 74257 family of quad dual-input tri-state multiplexers. The most commonly
+// used member of this family was the 74LS257, but the differences between members are electrical
+// in nature and this emulation will serve for all of them.
 //
 // This multiplexer chooses the value of its four output pins (Y1-Y4) based on the values of its
-// input pins (A1-A4 and B1-B4) and the SEL pin. When SEL is low, the Y pins take on the inverse of
-// the value of the A pins of their groups (Y1 becomes A1's value, Y2 becomes A2's value, etc.).
-// When SEL is high, the Y pins instead take on the inverse of the value of their B pins instead.
+// input pins (A1-A4 and B1-B4) and the SEL pin. When SEL is low, the Y pins take on the value of
+// the A pins of their groups (Y1 becomes A1's value, Y2 becomes A2's value, etc.). When SEL is
+// high, the Y pins instead take on the value of their B pins instead.
 //
 // The output enable pin (_OE) is used to put all of the output pins into a high-impedence state,
 // effectively disconnecting them from whatever circuit they're connected to. A low _OE means normal
@@ -24,11 +23,11 @@
 // the inputs and outputs of any other multiplexer. Only SEL and _OE affects all four multiplexers
 // simultaneously.
 //
-// On the C64 schematic, a 74LS258 is found at U14.
+// On the C64 schematic, both U13 and U25 were 74LS257's.
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
-export function create74LS258() {
+export function create74257() {
   const pins = {
     // Select. When this is low, the Y output pins will take on the same value as their A input
     // pins. When this is high, the Y output pins will instead take on the value of their B input
@@ -42,22 +41,22 @@ export function create74LS258() {
     // Group 1 inputs and output
     A1: createPin(2, "A1", INPUT),
     B1: createPin(3, "B1", INPUT),
-    _Y1: createPin(4, "_Y1", OUTPUT, true),
+    Y1: createPin(4, "Y1", OUTPUT, false),
 
     // Group 2 input and output
     A2: createPin(5, "A2", INPUT),
     B2: createPin(6, "B2", INPUT),
-    _Y2: createPin(7, "_Y2", OUTPUT, true),
+    Y2: createPin(7, "Y2", OUTPUT, false),
 
     // Group 3 inputs and output
     A3: createPin(11, "A3", INPUT),
     B3: createPin(10, "B3", INPUT),
-    _Y3: createPin(9, "_Y3", OUTPUT, true),
+    Y3: createPin(9, "Y3", OUTPUT, false),
 
     // Group 4 inputs and output
     A4: createPin(14, "A4", INPUT),
     B4: createPin(13, "B4", INPUT),
-    _Y4: createPin(12, "_Y4", OUTPUT, true),
+    Y4: createPin(12, "Y4", OUTPUT, false),
 
     // Power supply pins. These are not emulated.
     GND: createPin(8, "GND", INPUT, null),
@@ -70,30 +69,30 @@ export function create74LS258() {
     if (pins._OE.high) {
       ypin.state = null
     } else if (pins.SEL.low) {
-      ypin.state = !apin.state
+      ypin.state = apin.state
     } else {
-      ypin.state = !bpin.state
+      ypin.state = bpin.state
     }
   }
 
   // Sets Y1 based on A1, B1, SEL, and _OE.
   function setGroup1() {
-    setOutput(pins.A1, pins.B1, pins._Y1)
+    setOutput(pins.A1, pins.B1, pins.Y1)
   }
 
   // Sets Y2 based on A2, B2, SEL, and _OE.
   function setGroup2() {
-    setOutput(pins.A2, pins.B2, pins._Y2)
+    setOutput(pins.A2, pins.B2, pins.Y2)
   }
 
   // Sets Y3 based on A3, B3, SEL, and _OE.
   function setGroup3() {
-    setOutput(pins.A3, pins.B3, pins._Y3)
+    setOutput(pins.A3, pins.B3, pins.Y3)
   }
 
   // Sets Y4 based on A4, B4, SEL, and _OE.
   function setGroup4() {
-    setOutput(pins.A4, pins.B4, pins._Y4)
+    setOutput(pins.A4, pins.B4, pins.Y4)
   }
 
   // Fires when the value of SEL changes. This recalculates the values of all Y pins.

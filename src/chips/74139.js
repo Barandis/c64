@@ -20,7 +20,7 @@
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
-export function create74LS139() {
+export function create74139() {
   // A typical naming scheme for these pins (Fairchild, Texas Instruments) has the outputs as 1Y0,
   // 1Y1, etc. (TI also has the inputs in this number-first form, 1G, 1A, and 1B, for instance).
   // Since using these names wouldn't allow access with the dot operator, I've moved the first

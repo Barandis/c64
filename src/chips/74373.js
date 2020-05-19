@@ -26,7 +26,7 @@
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
-export function create74LS373() {
+export function create74373() {
   const pins = {
     // Input pins.
     D0: createPin(3, "D0", INPUT),

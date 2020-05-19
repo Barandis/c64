@@ -7,16 +7,16 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74LS373 } from "chips/74LS373"
+import { create74373 } from "chips/74373"
 
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 
-describe("74LS373 Octal tri-state transparent latch", () => {
+describe("74373 Octal tri-state transparent latch", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74LS373()
+    chip = create74373()
     setupTraces(traces, chip)
     traces.VCC = createTrace(chip.VCC, PULL_UP)
     traces.GND = createTrace(chip.GND, PULL_DOWN)

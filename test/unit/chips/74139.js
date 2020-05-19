@@ -7,15 +7,15 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74LS139 } from "chips/74LS139"
+import { create74139 } from "chips/74139"
 import { createTrace, PULL_UP, PULL_DOWN } from "circuits/trace"
 
-describe("74LS139 dual 2-line to 4-line demultiplexer", () => {
+describe("74139 dual 2-line to 4-line demultiplexer", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74LS139()
+    chip = create74139()
     setupTraces(traces, chip)
     traces.VCC = createTrace(chip.VCC, PULL_UP)
     traces.GND = createTrace(chip.GND, PULL_DOWN)

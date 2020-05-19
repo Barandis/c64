@@ -16,7 +16,7 @@
 
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
-export function create74LS08() {
+export function create7408() {
   const pins = {
     // Gate 1 inputs and output
     A1: createPin(1, "A1", INPUT),
