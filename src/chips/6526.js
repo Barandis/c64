@@ -69,7 +69,7 @@ export function create6526() {
     CNT: createPin(40, "CNT", INPUT),
 
     // System clock input. In the 6526 this is expected to be a 1 MHz clock. It's actually typically
-    // named "Φ2" but that's difficult to type.
+    // named "φ2" but that's difficult to type.
     O2: createPin(25, "O2", INPUT),
 
     // TOD clock input. This can be either 50Hz or 60Hz, selectable from a control register.
