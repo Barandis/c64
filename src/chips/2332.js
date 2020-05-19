@@ -5,6 +5,28 @@
  * https://opensource.org/licenses/MIT
  */
 
+// An emulation for the 2332 4k x 8-bit read-only memory. The variant used in the Commodore 64 was
+// the 2332A, which had a slightly faster access time than the vanilla variant.
+//
+// This, along with its sister chip the 2364, was far and away the simplest memory chip used in the
+// C64. With its full complement of address pins and 8-bit wide data path, there was no need to use
+// multiple chips or multiplex addresses. Internally it's implemented as a typed array of 4096 8-bit
+// unsigned integers. Well, sorta - it takes an array buffer as a parameter to its factory function,
+// and it sizes the array to it, but the max addressable memory with the 13 address pins is 4096
+// elements, so if there are more they get ignored.
+//
+// Timing of the read cycle (there is, of course, no write cycle) is done with the pair of chip
+// select (_CS1 and _CS2) pins. This is also very simple - when both the _CS1 and _CS2 pins goes
+// low, the chip reads the address on its address pins and makes the value at that location
+// available on the data pins. In the C64, _CS2 was tied to ground and therefore was always
+// "enabled", meaning that _CS1 was the only chip select pin that had to be manipulated.
+//
+// The 2332 was used for CHARACTERROM in the C64. This was directly selectable with one of the I/O
+// port lines on the 6510, and if it was switched out (or written to), then RAM would be available
+// at the same addresses.
+//
+// On the C64 schematic, the CHARACTER ROM is U5.
+
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
 export function create2332(buffer) {

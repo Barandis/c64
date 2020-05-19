@@ -5,6 +5,26 @@
  * https://opensource.org/licenses/MIT
  */
 
+// An emulation for the 2364 8k x 8-bit read-only memory. The variant used in the Commodore 64 was
+// the 2364A, which had a slightly faster access time than the vanilla variant.
+//
+// This, along with its sister chip the 2332, was far and away the simplest memory chip used in the
+// C64. With its full complement of address pins and 8-bit wide data path, there was no need to use
+// multiple chips or multiplex addresses. Internally it's implemented as a typed array of 8192 8-bit
+// unsigned integers. Well, sorta - it takes an array buffer as a parameter to its factory function,
+// and it sizes the array to it, but the max addressable memory with the 13 address pins is 8192
+// elements, so if there are more they get ignored.
+//
+// Timing of the read cycle (there is, of course, no write cycle) is done with the chip select (_CS)
+// pin. This is also very simple - when the _CS pin goes low, the chip reads the address on its
+// address pins and makes the value at that location available on the data pins.
+//
+// The 2364 was used for KERNAL and BASIC ROM in the C64. These were directly selectable with two of
+// the I/O port lines on the 6510, and if it was switched out (or written to), then RAM would be
+// available at the same addresses.
+//
+// On the C64 schematic, the BASIC ROM is U3 and the KERNAL ROM is U4.
+
 import { createPin, INPUT, OUTPUT } from "circuits/pin"
 
 export function create2364(buffer) {
