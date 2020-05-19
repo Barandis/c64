@@ -4,10 +4,10 @@
     "target": "esnext",
     "baseUrl": "./",
     "paths": {
-      "circuits": ["src/circuits/*"],
-      "chips": ["src/chips/*"],
-      "data": ["src/data/*"],
-      "test": ["test/*"],
+      "circuits/*": ["src/circuits/*"],
+      "chips/*": ["src/chips/*"],
+      "data/*": ["src/data/*"],
+      "test/*": ["test/*"],
     }
   },
   "exclude": ["node_modules", "lib"]
