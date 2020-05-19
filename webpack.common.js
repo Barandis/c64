@@ -31,6 +31,7 @@ module.exports = {
       components: path.resolve(__dirname, "src/components"),
       chips: path.resolve(__dirname, "src/chips"),
       data: path.resolve(__dirname, "src/data"),
+      ports: path.resolve(__dirname, "src/ports"),
       test: path.resolve(__dirname, "test"),
     },
   },
