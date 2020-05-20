@@ -26,7 +26,7 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { createPin, INPUT, BIDIRECTIONAL, createPinArray } from "components/pin"
+import { createPin, INPUT, BIDIRECTIONAL, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create4066() {
   const pins = createPinArray(
@@ -51,8 +51,8 @@ export function create4066() {
     createPin(12, "A4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(14, "VDD", "INPUT", null),
-    createPin(7, "GND", INPUT, null),
+    createPin(14, "VDD", UNCONNECTED),
+    createPin(7, "GND", UNCONNECTED),
   )
 
   const last = [null, null, null, null]

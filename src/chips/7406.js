@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create7406() {
   const pins = createPinArray(
@@ -37,8 +37,8 @@ export function create7406() {
     createPin(12, "Y6", OUTPUT, true),
 
     // Power supply and ground pins, not emulated
-    createPin(14, "VCC", INPUT, null),
-    createPin(7, "GND", INPUT, null),
+    createPin(14, "VCC", UNCONNECTED),
+    createPin(7, "GND", UNCONNECTED),
   )
 
   function inputChanged(apin, ypin) {

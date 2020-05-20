@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create6526() {
   const pins = createPinArray(
@@ -83,8 +83,8 @@ export function create6526() {
     createPin(34, "_RES", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(20, "VCC", INPUT, null),
-    createPin(1, "VSS", INPUT, null),
+    createPin(20, "VCC", UNCONNECTED),
+    createPin(1, "VSS", UNCONNECTED),
   )
 
   const cia = {

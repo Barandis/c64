@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create6581() {
   const pins = createPinArray(
@@ -53,15 +53,15 @@ export function create6581() {
     // Filter capacitor connections. Larger capacitors, necessary for the proper operation of the
     // on-board filters, are connected across these pairs of pins. There is no need to emulate them
     // here.
-    createPin(1, "CAP1A", INPUT, null),
-    createPin(2, "CAP1B", INPUT, null),
-    createPin(3, "CAP2A", INPUT, null),
-    createPin(4, "CAP2B", INPUT, null),
+    createPin(1, "CAP1A", UNCONNECTED),
+    createPin(2, "CAP1B", UNCONNECTED),
+    createPin(3, "CAP2A", UNCONNECTED),
+    createPin(4, "CAP2B", UNCONNECTED),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(25, "VCC", INPUT, null),
-    createPin(28, "VDD", INPUT, null),
-    createPin(14, "GND", INPUT, null),
+    createPin(25, "VCC", UNCONNECTED),
+    createPin(28, "VDD", UNCONNECTED),
+    createPin(14, "GND", UNCONNECTED),
   )
 
   const sid = {

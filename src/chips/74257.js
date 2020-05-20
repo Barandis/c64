@@ -25,7 +25,7 @@
 //
 // On the C64 schematic, both U13 and U25 were 74LS257's.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create74257() {
   const pins = createPinArray(
@@ -59,8 +59,8 @@ export function create74257() {
     createPin(12, "Y4", OUTPUT, false),
 
     // Power supply pins. These are not emulated.
-    createPin(8, "GND", INPUT, null),
-    createPin(16, "VCC", INPUT, null),
+    createPin(8, "GND", UNCONNECTED),
+    createPin(16, "VCC", UNCONNECTED),
   )
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the

@@ -26,7 +26,7 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create74258() {
   const pins = createPinArray(
@@ -60,8 +60,8 @@ export function create74258() {
     createPin(12, "_Y4", OUTPUT, true),
 
     // Power supply pins. These are not emulated.
-    createPin(8, "GND", INPUT, null),
-    createPin(16, "VCC", INPUT, null),
+    createPin(8, "GND", UNCONNECTED),
+    createPin(16, "VCC", UNCONNECTED),
   )
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the

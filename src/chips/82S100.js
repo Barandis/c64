@@ -62,7 +62,7 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, UNCONNECTED, createPinArray } from "components/pin"
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each pin in
 // the Commodore 64. They can be used to access the same pins with a different naming convention.
@@ -130,11 +130,11 @@ export function create82S100() {
     createPin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not emulated
-    createPin(1, "FE", INPUT, null),
+    createPin(1, "FE", UNCONNECTED),
 
     // Power supply pins, not emulated
-    createPin(28, "VCC", INPUT, null),
-    createPin(14, "GND", INPUT, null),
+    createPin(28, "VCC", UNCONNECTED),
+    createPin(14, "GND", UNCONNECTED),
   )
 
   // One listener to rule them all

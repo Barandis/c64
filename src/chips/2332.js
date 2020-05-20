@@ -27,7 +27,7 @@
 //
 // On the C64 schematic, the CHARACTER ROM is U5.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create2332(buffer) {
   const pins = createPinArray(
@@ -61,8 +61,8 @@ export function create2332(buffer) {
     createPin(21, "_CS2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(24, "VCC", INPUT, null),
-    createPin(12, "GND", INPUT, null),
+    createPin(24, "VCC", UNCONNECTED),
+    createPin(12, "GND", UNCONNECTED),
   )
 
   const memory = new Uint8Array(buffer)

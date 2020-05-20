@@ -24,7 +24,7 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create74373() {
   const pins = createPinArray(
@@ -58,8 +58,8 @@ export function create74373() {
     createPin(11, "LE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(10, "GND", INPUT, null),
-    createPin(20, "VCC", INPUT, null),
+    createPin(10, "GND", UNCONNECTED),
+    createPin(20, "VCC", UNCONNECTED),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is low, these values will

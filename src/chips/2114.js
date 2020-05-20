@@ -23,7 +23,7 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { createPin, INPUT, BIDIRECTIONAL, createPinArray } from "components/pin"
+import { createPin, INPUT, BIDIRECTIONAL, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create2114() {
   const pins = createPinArray(
@@ -53,8 +53,8 @@ export function create2114() {
     createPin(10, "_WE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(18, "VCC", INPUT, null),
-    createPin(9, "GND", INPUT, null),
+    createPin(18, "VCC", UNCONNECTED),
+    createPin(9, "GND", UNCONNECTED),
   )
 
   const memory = new Uint32Array(128)

@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create7408() {
   const pins = createPinArray(
@@ -39,8 +39,8 @@ export function create7408() {
     createPin(11, "Y4", OUTPUT, 0),
 
     // Power supply and ground pins, not emulated
-    createPin(14, "VCC", INPUT, null),
-    createPin(7, "GND", INPUT, null),
+    createPin(14, "VCC", UNCONNECTED),
+    createPin(7, "GND", UNCONNECTED),
   )
 
   function setOutput(apin, bpin, ypin) {

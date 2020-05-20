@@ -18,7 +18,7 @@
 //
 // On the C64 schematic, a 74LS139 can be found as U15.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create74139() {
   // A typical naming scheme for these pins (Fairchild, Texas Instruments) has the outputs as 1Y0,
@@ -47,8 +47,8 @@ export function create74139() {
     createPin(15, "_G2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(16, "VCC", INPUT, null),
-    createPin(8, "GND", INPUT, null),
+    createPin(16, "VCC", UNCONNECTED),
+    createPin(8, "GND", UNCONNECTED),
   )
 
   function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {

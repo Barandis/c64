@@ -39,7 +39,7 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order, were U21, U9, U22, U10, U23,
 // U11, U24, and U12.
 
-import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
 
 export function create4164() {
   const pins = createPinArray(
@@ -75,9 +75,9 @@ export function create4164() {
     createPin(14, "Q", OUTPUT, null),
 
     // Power supply and no-contact pins. These are not emulated.
-    createPin(1, "NC", INPUT, null),
-    createPin(8, "VCC", INPUT, null),
-    createPin(16, "VSS", INPUT, null),
+    createPin(1, "NC", UNCONNECTED),
+    createPin(8, "VCC", UNCONNECTED),
+    createPin(16, "VSS", UNCONNECTED),
   )
 
   // 2048 32-bit unsigned integers is 65,536 bits.
