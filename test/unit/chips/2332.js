@@ -5,24 +5,19 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces, DEBUG, hex } from "test/helper"
-
+import { expect, deviceTraces, DEBUG, hex } from "test/helper"
 import { new2332 } from "chips/2332"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { character } from "data/character"
 
 describe("2332 4k x 8-bit ROM", () => {
   describe("Character ROM", () => {
     let chip
-    const traces = {}
+    let traces
     const expected = new Uint8Array(character)
 
     before(() => {
       chip = new2332(character)
-      setupTraces(traces, chip)
-      traces.VCC = newTrace(chip.VCC, PULL_UP)
-      traces.GND = newTrace(chip.GND, PULL_DOWN)
-
+      traces = deviceTraces(chip)
       traces._CS2.value = 0
       traces._CS1.value = 1
     })

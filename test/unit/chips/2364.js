@@ -5,25 +5,20 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces, DEBUG, hex } from "test/helper"
-
+import { expect, deviceTraces, DEBUG, hex } from "test/helper"
 import { new2364 } from "chips/2364"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { kernal } from "data/kernal"
 import { basic } from "data/basic"
 
 describe("2364 8k x 8-bit ROM", () => {
   describe("KERNAL ROM", () => {
     let chip
-    const traces = {}
+    let traces
     const expected = new Uint8Array(kernal)
 
     before(() => {
       chip = new2364(kernal)
-      setupTraces(traces, chip)
-      traces.VCC = newTrace(chip.VCC, PULL_UP)
-      traces.GND = newTrace(chip.GND, PULL_DOWN)
-
+      traces = deviceTraces(chip)
       traces._CS.value = 1
     })
 
@@ -87,14 +82,12 @@ describe("2364 8k x 8-bit ROM", () => {
 
   describe("BASIC ROM", () => {
     let chip
-    const traces = {}
+    let traces
     const expected = new Uint8Array(basic)
 
     before(() => {
       chip = new2364(basic)
-      setupTraces(traces, chip)
-      traces.VCC = newTrace(chip.VCC, PULL_UP)
-      traces.GND = newTrace(chip.GND, PULL_DOWN)
+      traces = deviceTraces(chip)
 
       traces._CS.value = 1
     })

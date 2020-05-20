@@ -5,20 +5,16 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces } from "test/helper"
-
+import { expect, deviceTraces } from "test/helper"
 import { new74257 } from "chips/74257"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74257 3-State Quad 2-Data Multiplexers", () => {
   let chip
-  const traces = {}
+  let traces
 
   beforeEach(() => {
     chip = new74257()
-    setupTraces(traces, chip)
-    traces.VCC = newTrace(chip.pins.VCC, PULL_UP)
-    traces.GND = newTrace(chip.pins.GND, PULL_DOWN)
+    traces = deviceTraces(chip)
   })
 
   describe("group 1", () => {

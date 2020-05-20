@@ -3,20 +3,16 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, setupTraces } from "test/helper"
-
+import { expect, deviceTraces } from "test/helper"
 import { new7408 } from "chips/7408"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("7408 quad 2-input AND gate", () => {
   let chip
-  const traces = {}
+  let traces
 
   beforeEach(() => {
     chip = new7408()
-    setupTraces(traces, chip)
-    traces.VCC = newTrace(chip.VCC, PULL_UP)
-    traces.GND = newTrace(chip.GND, PULL_DOWN)
+    traces = deviceTraces(chip)
   })
 
   it("properly ANDs on gate 1", () => {

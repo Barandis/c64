@@ -5,10 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, bin, setupTraces } from "test/helper"
-
+import { expect, bin, deviceTraces } from "test/helper"
 import { new82S100 } from "chips/82S100"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { HIGH, LOW, HI_Z } from "components/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
@@ -146,11 +144,7 @@ function getExpected(input) {
 
 describe("82S100 Programmable Logic Array", () => {
   const chip = new82S100()
-  const traces = {}
-
-  setupTraces(traces, chip)
-  traces.VCC = newTrace(chip.VCC, PULL_UP)
-  traces.GND = newTrace(chip.GND, PULL_DOWN)
+  const traces = deviceTraces(chip)
 
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 

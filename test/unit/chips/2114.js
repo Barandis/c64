@@ -5,20 +5,16 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces } from "test/helper"
-
+import { expect, deviceTraces } from "test/helper"
 import { new2114 } from "chips/2114"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("2114 1024 x 4-bit static RAM", () => {
   let chip
-  const traces = {}
+  let traces
 
   beforeEach(() => {
     chip = new2114()
-    setupTraces(traces, chip)
-    traces.VCC = newTrace(chip.VCC, PULL_UP)
-    traces.GND = newTrace(chip.GND, PULL_DOWN)
+    traces = deviceTraces(chip)
 
     traces._CE.state = true
     traces._WE.state = true

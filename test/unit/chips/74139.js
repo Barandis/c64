@@ -5,20 +5,16 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces } from "test/helper"
-
+import { expect, deviceTraces } from "test/helper"
 import { new74139 } from "chips/74139"
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74139 dual 2-line to 4-line demultiplexer", () => {
   let chip
-  const traces = {}
+  let traces
 
   beforeEach(() => {
     chip = new74139()
-    setupTraces(traces, chip)
-    traces.VCC = newTrace(chip.VCC, PULL_UP)
-    traces.GND = newTrace(chip.GND, PULL_DOWN)
+    traces = deviceTraces(chip)
   })
 
   it("pulls all demux 1 outputs high when _G1 is high", () => {

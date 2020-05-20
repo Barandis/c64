@@ -5,21 +5,16 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, setupTraces } from "test/helper"
-
+import { expect, deviceTraces } from "test/helper"
 import { new74373 } from "chips/74373"
-
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74373 Octal tri-state transparent latch", () => {
   let chip
-  const traces = {}
+  let traces
 
   beforeEach(() => {
     chip = new74373()
-    setupTraces(traces, chip)
-    traces.VCC = newTrace(chip.VCC, PULL_UP)
-    traces.GND = newTrace(chip.GND, PULL_DOWN)
+    traces = deviceTraces(chip)
   })
 
   it("alfalses data to pass through when LE is true", () => {
