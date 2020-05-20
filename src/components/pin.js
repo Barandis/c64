@@ -33,16 +33,17 @@
 // boolean. There are also `high`, `low`, and `hiZ` properties that are read-only and indicate
 // whether the pin is in one of those states.
 
-// The direction in which data flows through the pin. An INPUT_OUTPUT pin can be changed from input
-// to output and back after creation; the others are fixed.
-export const INPUT = Symbol("INPUT")
-export const OUTPUT = Symbol("OUTPUT")
-export const BIDIRECTIONAL = Symbol("BIDIRECTIONAL")
+// The direction in which data flows through the pin. A BIDIRECTIONAL pin acts as both an input and
+// output pin at the same time; an UNCONNECTED pin acts as neither.
+export const UNCONNECTED = 0b00
+export const INPUT = 0b01
+export const OUTPUT = 0b10
+export const BIDIRECTIONAL = 0b11
 
 export function createPin(num, name, direction, init = 0) {
   const listeners = []
   let trace = null
-  let mode = INPUT
+  let mode = UNCONNECTED
   setMode(direction)
   let pinValue = translate(init)
 
@@ -72,7 +73,7 @@ export function createPin(num, name, direction, init = 0) {
         pinValue = trace.value
       } else {
         pinValue = tValue
-        if ((mode === OUTPUT || mode === BIDIRECTIONAL) && trace !== null) {
+        if (mode & OUTPUT && trace !== null) {
           trace.value = tValue
         }
       }
@@ -88,7 +89,7 @@ export function createPin(num, name, direction, init = 0) {
     if (trace !== null) {
       const value = trace.value
 
-      if ((mode === INPUT || mode === BIDIRECTIONAL) && pinValue !== value) {
+      if (mode & INPUT && pinValue !== value) {
         pinValue = value
         listeners.forEach(listener => listener(this))
       }
@@ -96,7 +97,7 @@ export function createPin(num, name, direction, init = 0) {
   }
 
   function setMode(value) {
-    if ([INPUT, OUTPUT, BIDIRECTIONAL].includes(value)) {
+    if ([UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL].includes(value)) {
       mode = value
     }
   }
@@ -125,10 +126,10 @@ export function createPin(num, name, direction, init = 0) {
   // This is primarily useful for when pins switch modes and the new mode would leave the trace in
   // an inconsistent state.
   function reset() {
-    if (mode === INPUT) {
-      trace.reset()
-    } else {
+    if (mode & OUTPUT) {
       trace.value = pinValue
+    } else {
+      trace.reset()
     }
   }
 
@@ -163,10 +164,10 @@ export function createPin(num, name, direction, init = 0) {
       return name
     },
     get input() {
-      return mode === INPUT || mode === BIDIRECTIONAL
+      return (mode & INPUT) > 0
     },
     get output() {
-      return mode === OUTPUT || mode === BIDIRECTIONAL
+      return (mode & OUTPUT) > 0
     },
 
     get mode() {
