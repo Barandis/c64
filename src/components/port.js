@@ -18,7 +18,7 @@ export function newPort(...pins) {
   }
 
   for (const name in pinArray) {
-    port[name] = port.pins[name]
+    port[name] = pinArray[name]
   }
 
   return port

@@ -62,13 +62,14 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { newPin, INPUT, OUTPUT, UNCONNECTED, newPinArray } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each pin in
 // the Commodore 64. They can be used to access the same pins with a different naming convention.
 // For example, the I0 pin, which accepts the _CAS signal from the VIC, can be accessed regularly
 // with `chip.I0` or `chip.pins.I0`. With these constants, if so desired, it can also be accessed as
-// `chip[_CAS]` or `chip.pins[_CAS]`.
+// `chip.pins[_CAS]`.
 export const _CAS = "I0"
 export const _LORAM = "I1"
 export const _HIRAM = "I2"
@@ -96,7 +97,7 @@ export const F6 = "_ROML"
 export const F7 = "_ROMH"
 
 export function new82S100() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Input pins. In the 82S100, these were generically named I0 through I15, since each pin could
     // serve any function depending on the programming applies.
     newPin(9, "I0", INPUT),
@@ -155,35 +156,35 @@ export function new82S100() {
   //
   /* eslint-disable complexity */
   function oneListener() {
-    if (pins._OE.high) {
-      pins.F0.state = null
-      pins.F1.state = null
-      pins.F2.state = null
-      pins.F3.state = null
-      pins.F4.state = null
-      pins.F5.state = null
-      pins.F6.state = null
-      pins.F7.state = null
+    if (chip._OE.high) {
+      chip.F0.state = null
+      chip.F1.state = null
+      chip.F2.state = null
+      chip.F3.state = null
+      chip.F4.state = null
+      chip.F5.state = null
+      chip.F6.state = null
+      chip.F7.state = null
 
       return
     }
 
-    const i0 = pins.I0.high
-    const i1 = pins.I1.high
-    const i2 = pins.I2.high
-    const i3 = pins.I3.high
-    const i4 = pins.I4.high
-    const i5 = pins.I5.high
-    const i6 = pins.I6.high
-    const i7 = pins.I7.high
-    const i8 = pins.I8.high
-    const i9 = pins.I9.high
-    const i10 = pins.I10.high
-    const i11 = pins.I11.high
-    const i12 = pins.I12.high
-    const i13 = pins.I13.high
-    const i14 = pins.I14.high
-    const i15 = pins.I15.high
+    const i0 = chip.I0.high
+    const i1 = chip.I1.high
+    const i2 = chip.I2.high
+    const i3 = chip.I3.high
+    const i4 = chip.I4.high
+    const i5 = chip.I5.high
+    const i6 = chip.I6.high
+    const i7 = chip.I7.high
+    const i8 = chip.I8.high
+    const i9 = chip.I9.high
+    const i10 = chip.I10.high
+    const i11 = chip.I11.high
+    const i12 = chip.I12.high
+    const i13 = chip.I13.high
+    const i14 = chip.I14.high
+    const i15 = chip.I15.high
 
     // These are the product term equations programmed into the PLA for use in a Commodore 64. The
     // names for each signal reflect the names of the pins that those signals come from, but that is
@@ -235,42 +236,34 @@ export function new82S100() {
     const s7 = p31
     const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27 || p28 || p30
 
-    pins.F0.state = s0
-    pins.F1.state = !s1
-    pins.F2.state = !s2
-    pins.F3.state = !s3
-    pins.F4.state = !s7
-    pins.F5.state = !s4
-    pins.F6.state = !s5
-    pins.F7.state = !s6
+    chip.F0.state = s0
+    chip.F1.state = !s1
+    chip.F2.state = !s2
+    chip.F3.state = !s3
+    chip.F4.state = !s7
+    chip.F5.state = !s4
+    chip.F6.state = !s5
+    chip.F7.state = !s6
   }
   /* eslint-enable complexity */
 
-  pins._OE.addListener(oneListener)
-  pins.I0.addListener(oneListener)
-  pins.I1.addListener(oneListener)
-  pins.I2.addListener(oneListener)
-  pins.I3.addListener(oneListener)
-  pins.I4.addListener(oneListener)
-  pins.I5.addListener(oneListener)
-  pins.I6.addListener(oneListener)
-  pins.I7.addListener(oneListener)
-  pins.I8.addListener(oneListener)
-  pins.I9.addListener(oneListener)
-  pins.I10.addListener(oneListener)
-  pins.I11.addListener(oneListener)
-  pins.I12.addListener(oneListener)
-  pins.I13.addListener(oneListener)
-  pins.I14.addListener(oneListener)
-  pins.I15.addListener(oneListener)
+  chip._OE.addListener(oneListener)
+  chip.I0.addListener(oneListener)
+  chip.I1.addListener(oneListener)
+  chip.I2.addListener(oneListener)
+  chip.I3.addListener(oneListener)
+  chip.I4.addListener(oneListener)
+  chip.I5.addListener(oneListener)
+  chip.I6.addListener(oneListener)
+  chip.I7.addListener(oneListener)
+  chip.I8.addListener(oneListener)
+  chip.I9.addListener(oneListener)
+  chip.I10.addListener(oneListener)
+  chip.I11.addListener(oneListener)
+  chip.I12.addListener(oneListener)
+  chip.I13.addListener(oneListener)
+  chip.I14.addListener(oneListener)
+  chip.I15.addListener(oneListener)
 
-  const pla = {
-    pins,
-  }
-
-  for (const name in pins) {
-    pla[name] = pins[name]
-  }
-
-  return pla
+  return chip
 }

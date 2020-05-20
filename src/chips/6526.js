@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new6526() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Register select pins. The 6526 has 16 addressable 8-bit registers, which requires four pins.
     newPin(38, "RS0", INPUT),
     newPin(37, "RS1", INPUT),
@@ -87,13 +88,5 @@ export function new6526() {
     newPin(1, "VSS", UNCONNECTED),
   )
 
-  const cia = {
-    pins,
-  }
-
-  for (const name in pins) {
-    cia[name] = pins[name]
-  }
-
-  return cia
+  return chip
 }

@@ -24,10 +24,11 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new74373() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Input pins.
     newPin(3, "D0", INPUT),
     newPin(4, "D1", INPUT),
@@ -68,7 +69,7 @@ export function new74373() {
   const latches = [false, false, false, false, false, false, false, false]
 
   function inputChanged(dpin, opin) {
-    if (pins.LE.high && pins._OE.low) {
+    if (chip.LE.high && chip._OE.low) {
       opin.state = dpin.state
     }
   }
@@ -76,11 +77,11 @@ export function new74373() {
   function latchChanged(le) {
     if (le.low) {
       for (let i = 0; i < 8; i++) {
-        latches[i] = pins[`D${i}`].state
+        latches[i] = chip[`D${i}`].state
       }
     } else {
       for (let i = 0; i < 8; i++) {
-        pins[`O${i}`].state = pins[`D${i}`].state
+        chip[`O${i}`].state = chip[`D${i}`].state
         latches[i] = null
       }
     }
@@ -89,29 +90,21 @@ export function new74373() {
   function enableChanged(_oe) {
     if (_oe.high) {
       for (let i = 0; i < 8; i++) {
-        pins[`O${i}`].state = null
+        chip[`O${i}`].state = null
       }
     } else {
-      const le = pins.LE.low
+      const le = chip.LE.low
       for (let i = 0; i < 8; i++) {
-        pins[`O${i}`].state = le ? latches[i] : pins[`D${i}`].state
+        chip[`O${i}`].state = le ? latches[i] : chip[`D${i}`].state
       }
     }
   }
 
   for (let i = 0; i < 8; i++) {
-    pins[`D${i}`].addListener(() => inputChanged(pins[`D${i}`], pins[`O${i}`]))
+    chip[`D${i}`].addListener(() => inputChanged(chip[`D${i}`], chip[`O${i}`]))
   }
-  pins.LE.addListener(latchChanged)
-  pins._OE.addListener(enableChanged)
+  chip.LE.addListener(latchChanged)
+  chip._OE.addListener(enableChanged)
 
-  const latch = {
-    pins,
-  }
-
-  for (const name in pins) {
-    latch[name] = pins[name]
-  }
-
-  return latch
+  return chip
 }

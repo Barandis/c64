@@ -14,10 +14,11 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new7408() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Gate 1 inputs and output
     newPin(1, "A1", INPUT),
     newPin(2, "B1", INPUT),
@@ -48,37 +49,29 @@ export function new7408() {
   }
 
   function setGate1() {
-    setOutput(pins.A1, pins.B1, pins.Y1)
+    setOutput(chip.A1, chip.B1, chip.Y1)
   }
 
   function setGate2() {
-    setOutput(pins.A2, pins.B2, pins.Y2)
+    setOutput(chip.A2, chip.B2, chip.Y2)
   }
 
   function setGate3() {
-    setOutput(pins.A3, pins.B3, pins.Y3)
+    setOutput(chip.A3, chip.B3, chip.Y3)
   }
 
   function setGate4() {
-    setOutput(pins.A4, pins.B4, pins.Y4)
+    setOutput(chip.A4, chip.B4, chip.Y4)
   }
 
-  pins.A1.addListener(setGate1)
-  pins.B1.addListener(setGate1)
-  pins.A2.addListener(setGate2)
-  pins.B2.addListener(setGate2)
-  pins.A3.addListener(setGate3)
-  pins.B3.addListener(setGate3)
-  pins.A4.addListener(setGate4)
-  pins.B4.addListener(setGate4)
+  chip.A1.addListener(setGate1)
+  chip.B1.addListener(setGate1)
+  chip.A2.addListener(setGate2)
+  chip.B2.addListener(setGate2)
+  chip.A3.addListener(setGate3)
+  chip.B3.addListener(setGate3)
+  chip.A4.addListener(setGate4)
+  chip.B4.addListener(setGate4)
 
-  const gates = {
-    pins,
-  }
-
-  for (const name in pins) {
-    gates[name] = pins[name]
-  }
-
-  return gates
+  return chip
 }

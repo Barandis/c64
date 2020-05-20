@@ -18,7 +18,8 @@
 //
 // On the C64 schematic, a 74LS139 can be found as U15.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new74139() {
   // A typical naming scheme for these pins (Fairchild, Texas Instruments) has the outputs as 1Y0,
@@ -27,7 +28,7 @@ export function new74139() {
   // number after the letter. (There are other schemes as well - an ON Semiconductor datasheet lists
   // them as Ea, A0a, A1a, O0a, O1a, etc., but A, B, and Y is closer to what is written on the
   // schematic.)
-  const pins = newPinArray(
+  const chip = newChip(
     // Demultiplexer 1
     newPin(2, "A1", INPUT),
     newPin(3, "B1", INPUT),
@@ -59,27 +60,19 @@ export function new74139() {
   }
 
   function setDemux1() {
-    setOutput(pins._G1, pins.A1, pins.B1, pins._Y10, pins._Y11, pins._Y12, pins._Y13)
+    setOutput(chip._G1, chip.A1, chip.B1, chip._Y10, chip._Y11, chip._Y12, chip._Y13)
   }
 
   function setDemux2() {
-    setOutput(pins._G2, pins.A2, pins.B2, pins._Y20, pins._Y21, pins._Y22, pins._Y23)
+    setOutput(chip._G2, chip.A2, chip.B2, chip._Y20, chip._Y21, chip._Y22, chip._Y23)
   }
 
-  pins._G1.addListener(setDemux1)
-  pins.A1.addListener(setDemux1)
-  pins.B1.addListener(setDemux1)
-  pins._G2.addListener(setDemux2)
-  pins.A2.addListener(setDemux2)
-  pins.B2.addListener(setDemux2)
+  chip._G1.addListener(setDemux1)
+  chip.A1.addListener(setDemux1)
+  chip.B1.addListener(setDemux1)
+  chip._G2.addListener(setDemux2)
+  chip.A2.addListener(setDemux2)
+  chip.B2.addListener(setDemux2)
 
-  const demux = {
-    pins,
-  }
-
-  for (const name in pins) {
-    demux[name] = pins[name]
-  }
-
-  return demux
+  return chip
 }

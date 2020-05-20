@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new6581() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Address pins to access internal registers
     newPin(9, "A0", INPUT),
     newPin(10, "A1", INPUT),
@@ -64,13 +65,5 @@ export function new6581() {
     newPin(14, "GND", UNCONNECTED),
   )
 
-  const sid = {
-    pins,
-  }
-
-  for (const name in pins) {
-    sid[name] = pins[name]
-  }
-
-  return sid
+  return chip
 }

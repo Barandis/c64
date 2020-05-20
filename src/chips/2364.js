@@ -25,10 +25,11 @@
 //
 // On the C64 schematic, the BASIC ROM is U3 and the KERNAL ROM is U4.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new2364(buffer) {
-  const pins = newPinArray(
+  const chip = newChip(
     // Address pins A0...A12
     newPin(8, "A0", INPUT),
     newPin(7, "A1", INPUT),
@@ -68,19 +69,19 @@ export function new2364(buffer) {
   // Translates the values of the 13 address pins into an 13-bit integer.
   function address() {
     return (
-      pins.A0.value |
-      (pins.A1.value << 1) |
-      (pins.A2.value << 2) |
-      (pins.A3.value << 3) |
-      (pins.A4.value << 4) |
-      (pins.A5.value << 5) |
-      (pins.A6.value << 6) |
-      (pins.A7.value << 7) |
-      (pins.A8.value << 8) |
-      (pins.A9.value << 9) |
-      (pins.A10.value << 10) |
-      (pins.A11.value << 11) |
-      (pins.A12.value << 12)
+      chip.A0.value |
+      (chip.A1.value << 1) |
+      (chip.A2.value << 2) |
+      (chip.A3.value << 3) |
+      (chip.A4.value << 4) |
+      (chip.A5.value << 5) |
+      (chip.A6.value << 6) |
+      (chip.A7.value << 7) |
+      (chip.A8.value << 8) |
+      (chip.A9.value << 9) |
+      (chip.A10.value << 10) |
+      (chip.A11.value << 11) |
+      (chip.A12.value << 12)
     )
   }
 
@@ -88,38 +89,30 @@ export function new2364(buffer) {
   // data pins.
   function read() {
     const value = memory[address()]
-    pins.D0.value = (value & 0b00000001) >> 0
-    pins.D1.value = (value & 0b00000010) >> 1
-    pins.D2.value = (value & 0b00000100) >> 2
-    pins.D3.value = (value & 0b00001000) >> 3
-    pins.D4.value = (value & 0b00010000) >> 4
-    pins.D5.value = (value & 0b00100000) >> 5
-    pins.D6.value = (value & 0b01000000) >> 6
-    pins.D7.value = (value & 0b10000000) >> 7
+    chip.D0.value = (value & 0b00000001) >> 0
+    chip.D1.value = (value & 0b00000010) >> 1
+    chip.D2.value = (value & 0b00000100) >> 2
+    chip.D3.value = (value & 0b00001000) >> 3
+    chip.D4.value = (value & 0b00010000) >> 4
+    chip.D5.value = (value & 0b00100000) >> 5
+    chip.D6.value = (value & 0b01000000) >> 6
+    chip.D7.value = (value & 0b10000000) >> 7
   }
 
-  pins._CS.addListener(_cs => {
+  chip._CS.addListener(_cs => {
     if (_cs.high) {
-      pins.D0.value = null
-      pins.D1.value = null
-      pins.D2.value = null
-      pins.D3.value = null
-      pins.D4.value = null
-      pins.D5.value = null
-      pins.D6.value = null
-      pins.D7.value = null
+      chip.D0.value = null
+      chip.D1.value = null
+      chip.D2.value = null
+      chip.D3.value = null
+      chip.D4.value = null
+      chip.D5.value = null
+      chip.D6.value = null
+      chip.D7.value = null
     } else {
       read()
     }
   })
 
-  const rom = {
-    pins,
-  }
-
-  for (const name in pins) {
-    rom[name] = pins[name]
-  }
-
-  return rom
+  return chip
 }

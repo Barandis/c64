@@ -23,10 +23,11 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { newPin, INPUT, BIDIRECTIONAL, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new2114() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Address pins A0...A9
     newPin(5, "A0", INPUT),
     newPin(6, "A1", INPUT),
@@ -62,16 +63,16 @@ export function new2114() {
   // Translates the values of the 10 address pins into an 10-bit integer.
   function address() {
     return (
-      pins.A0.value |
-      (pins.A1.value << 1) |
-      (pins.A2.value << 2) |
-      (pins.A3.value << 3) |
-      (pins.A4.value << 4) |
-      (pins.A5.value << 5) |
-      (pins.A6.value << 6) |
-      (pins.A7.value << 7) |
-      (pins.A8.value << 8) |
-      (pins.A9.value << 9)
+      chip.A0.value |
+      (chip.A1.value << 1) |
+      (chip.A2.value << 2) |
+      (chip.A3.value << 3) |
+      (chip.A4.value << 4) |
+      (chip.A5.value << 5) |
+      (chip.A6.value << 6) |
+      (chip.A7.value << 7) |
+      (chip.A8.value << 8) |
+      (chip.A9.value << 9)
     )
   }
 
@@ -91,41 +92,33 @@ export function new2114() {
   function read() {
     const [index, shift] = resolve()
     const value = (memory[index] & (0b1111 << shift)) >> shift
-    pins.D0.value = (value & 0b0001) >> 0
-    pins.D1.value = (value & 0b0010) >> 1
-    pins.D2.value = (value & 0b0100) >> 2
-    pins.D3.value = (value & 0b1000) >> 3
+    chip.D0.value = (value & 0b0001) >> 0
+    chip.D1.value = (value & 0b0010) >> 1
+    chip.D2.value = (value & 0b0100) >> 2
+    chip.D3.value = (value & 0b1000) >> 3
   }
 
   // Writes the 4-bit value currently on the data pins to the location indicated by the address
   // pins.
   function write() {
-    const value = pins.D0.value | (pins.D1.value << 1) | (pins.D2.value << 2) | (pins.D3.value << 3)
+    const value = chip.D0.value | (chip.D1.value << 1) | (chip.D2.value << 2) | (chip.D3.value << 3)
     const [index, shift] = resolve()
     const current = memory[index] & ~(0b1111 << shift)
     memory[index] = current | (value << shift)
   }
 
-  pins._CE.addListener(_ce => {
+  chip._CE.addListener(_ce => {
     if (_ce.high) {
-      pins.D0.value = null
-      pins.D1.value = null
-      pins.D2.value = null
-      pins.D3.value = null
-    } else if (pins._WE.low) {
+      chip.D0.value = null
+      chip.D1.value = null
+      chip.D2.value = null
+      chip.D3.value = null
+    } else if (chip._WE.low) {
       write()
     } else {
       read()
     }
   })
 
-  const ram = {
-    pins,
-  }
-
-  for (const name in pins) {
-    ram[name] = pins[name]
-  }
-
-  return ram
+  return chip
 }

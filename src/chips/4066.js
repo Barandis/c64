@@ -26,10 +26,11 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { newPin, INPUT, BIDIRECTIONAL, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new4066() {
-  const pins = newPinArray(
+  const chip = newChip(
     // I/O and control pins for switch 1
     newPin(1, "X1", BIDIRECTIONAL),
     newPin(2, "Y1", BIDIRECTIONAL),
@@ -58,9 +59,9 @@ export function new4066() {
   const last = [null, null, null, null]
 
   function setControl(num) {
-    const apin = pins[`A${num}`]
-    const xpin = pins[`X${num}`]
-    const ypin = pins[`Y${num}`]
+    const apin = chip[`A${num}`]
+    const xpin = chip[`X${num}`]
+    const ypin = chip[`Y${num}`]
 
     if (apin.high) {
       xpin.mode = INPUT
@@ -82,9 +83,9 @@ export function new4066() {
   }
 
   function setDataX(num) {
-    const apin = pins[`A${num}`]
-    const xpin = pins[`X${num}`]
-    const ypin = pins[`Y${num}`]
+    const apin = chip[`A${num}`]
+    const xpin = chip[`X${num}`]
+    const ypin = chip[`Y${num}`]
 
     last[num - 1] = xpin
     if (apin.low) {
@@ -93,9 +94,9 @@ export function new4066() {
   }
 
   function setDataY(num) {
-    const apin = pins[`A${num}`]
-    const xpin = pins[`X${num}`]
-    const ypin = pins[`Y${num}`]
+    const apin = chip[`A${num}`]
+    const xpin = chip[`X${num}`]
+    const ypin = chip[`Y${num}`]
 
     last[num - 1] = ypin
     if (apin.low) {
@@ -103,26 +104,18 @@ export function new4066() {
     }
   }
 
-  pins.A1.addListener(() => setControl(1))
-  pins.X1.addListener(() => setDataX(1))
-  pins.Y1.addListener(() => setDataY(1))
-  pins.A2.addListener(() => setControl(2))
-  pins.X2.addListener(() => setDataX(2))
-  pins.Y2.addListener(() => setDataY(2))
-  pins.A3.addListener(() => setControl(3))
-  pins.X3.addListener(() => setDataX(3))
-  pins.Y3.addListener(() => setDataY(3))
-  pins.A4.addListener(() => setControl(4))
-  pins.X4.addListener(() => setDataX(4))
-  pins.Y4.addListener(() => setDataY(4))
+  chip.A1.addListener(() => setControl(1))
+  chip.X1.addListener(() => setDataX(1))
+  chip.Y1.addListener(() => setDataY(1))
+  chip.A2.addListener(() => setControl(2))
+  chip.X2.addListener(() => setDataX(2))
+  chip.Y2.addListener(() => setDataY(2))
+  chip.A3.addListener(() => setControl(3))
+  chip.X3.addListener(() => setDataX(3))
+  chip.Y3.addListener(() => setDataY(3))
+  chip.A4.addListener(() => setControl(4))
+  chip.X4.addListener(() => setDataX(4))
+  chip.Y4.addListener(() => setDataY(4))
 
-  const switches = {
-    pins,
-  }
-
-  for (const name in pins) {
-    switches[name] = pins[name]
-  }
-
-  return switches
+  return chip
 }

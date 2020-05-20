@@ -39,10 +39,11 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order, were U21, U9, U22, U10, U23,
 // U11, U24, and U12.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new4164() {
-  const pins = newPinArray(
+  const chip = newChip(
     // The row address strobe. Setting this low latches the values of A0-A7, saving them to be part
     // of the address used to access the memory array.
     newPin(4, "_RAS", INPUT),
@@ -98,14 +99,14 @@ export function new4164() {
   // Translates the values of the 8 address pins into an 8-bit integer.
   function address() {
     return (
-      pins.A0.value |
-      (pins.A1.value << 1) |
-      (pins.A2.value << 2) |
-      (pins.A3.value << 3) |
-      (pins.A4.value << 4) |
-      (pins.A5.value << 5) |
-      (pins.A6.value << 6) |
-      (pins.A7.value << 7)
+      chip.A0.value |
+      (chip.A1.value << 1) |
+      (chip.A2.value << 2) |
+      (chip.A3.value << 3) |
+      (chip.A4.value << 4) |
+      (chip.A5.value << 5) |
+      (chip.A6.value << 6) |
+      (chip.A7.value << 7)
     )
   }
 
@@ -126,7 +127,7 @@ export function new4164() {
   function read() {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    pins.Q.value = value
+    chip.Q.value = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array. If the Q pin is also
@@ -139,8 +140,8 @@ export function new4164() {
     } else {
       memory[index] &= ~(1 << bit)
     }
-    if (!pins.Q.hiZ) {
-      pins.Q.value = data
+    if (!chip.Q.hiZ) {
+      chip.Q.value = data
     }
   }
 
@@ -173,14 +174,14 @@ export function new4164() {
   function casLatch(_cas) {
     if (_cas.low) {
       col = address()
-      if (pins._W.low) {
-        data = pins.D.value
+      if (chip._W.low) {
+        data = chip.D.value
         write()
       } else {
         read()
       }
     } else {
-      pins.Q.state = null
+      chip.Q.state = null
       col = null
       data = null
     }
@@ -202,29 +203,21 @@ export function new4164() {
   // but nothing is available to be read).
   function writeLatch(_w) {
     if (_w.low) {
-      pins.D.state = false
-      if (pins._CAS.low) {
-        data = pins.D.value
+      chip.D.state = false
+      if (chip._CAS.low) {
+        data = chip.D.value
         write()
       } else {
-        pins.Q.state = null
+        chip.Q.state = null
       }
     } else {
       data = null
     }
   }
 
-  pins._RAS.addListener(rasLatch)
-  pins._CAS.addListener(casLatch)
-  pins._W.addListener(writeLatch)
+  chip._RAS.addListener(rasLatch)
+  chip._CAS.addListener(casLatch)
+  chip._W.addListener(writeLatch)
 
-  const dram = {
-    pins,
-  }
-
-  for (const name in pins) {
-    dram[name] = pins[name]
-  }
-
-  return dram
+  return chip
 }

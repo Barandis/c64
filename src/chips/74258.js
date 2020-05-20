@@ -26,10 +26,11 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new74258() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Select. When this is low, the Y output pins will take on the same value as their A input
     // pins. When this is high, the Y output pins will instead take on the value of their B input
     // pins.
@@ -67,9 +68,9 @@ export function new74258() {
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
   function setOutput(apin, bpin, ypin) {
-    if (pins._OE.high) {
+    if (chip._OE.high) {
       ypin.state = null
-    } else if (pins.SEL.low) {
+    } else if (chip.SEL.low) {
       ypin.state = !apin.state
     } else {
       ypin.state = !bpin.state
@@ -78,33 +79,33 @@ export function new74258() {
 
   // Sets Y1 based on A1, B1, SEL, and _OE.
   function setGroup1() {
-    setOutput(pins.A1, pins.B1, pins._Y1)
+    setOutput(chip.A1, chip.B1, chip._Y1)
   }
 
   // Sets Y2 based on A2, B2, SEL, and _OE.
   function setGroup2() {
-    setOutput(pins.A2, pins.B2, pins._Y2)
+    setOutput(chip.A2, chip.B2, chip._Y2)
   }
 
   // Sets Y3 based on A3, B3, SEL, and _OE.
   function setGroup3() {
-    setOutput(pins.A3, pins.B3, pins._Y3)
+    setOutput(chip.A3, chip.B3, chip._Y3)
   }
 
   // Sets Y4 based on A4, B4, SEL, and _OE.
   function setGroup4() {
-    setOutput(pins.A4, pins.B4, pins._Y4)
+    setOutput(chip.A4, chip.B4, chip._Y4)
   }
 
   // Fires when the value of SEL changes. This recalculates the values of all Y pins.
-  pins.SEL.addListener(() => {
+  chip.SEL.addListener(() => {
     setGroup1()
     setGroup2()
     setGroup3()
     setGroup4()
   })
   // Fires when the value of _OE changes. This recalculates the values of all Y pins.
-  pins._OE.addListener(() => {
+  chip._OE.addListener(() => {
     setGroup1()
     setGroup2()
     setGroup3()
@@ -112,22 +113,14 @@ export function new74258() {
   })
   // Fired when the values of A or B pins change. They recalculate the value of the same group's
   // Y pin only.
-  pins.A1.addListener(() => setGroup1())
-  pins.B1.addListener(() => setGroup1())
-  pins.A2.addListener(() => setGroup2())
-  pins.B2.addListener(() => setGroup2())
-  pins.A3.addListener(() => setGroup3())
-  pins.B3.addListener(() => setGroup3())
-  pins.A4.addListener(() => setGroup4())
-  pins.B4.addListener(() => setGroup4())
+  chip.A1.addListener(() => setGroup1())
+  chip.B1.addListener(() => setGroup1())
+  chip.A2.addListener(() => setGroup2())
+  chip.B2.addListener(() => setGroup2())
+  chip.A3.addListener(() => setGroup3())
+  chip.B3.addListener(() => setGroup3())
+  chip.A4.addListener(() => setGroup4())
+  chip.B4.addListener(() => setGroup4())
 
-  const mux = {
-    pins,
-  }
-
-  for (const name in pins) {
-    mux[name] = pins[name]
-  }
-
-  return mux
+  return chip
 }

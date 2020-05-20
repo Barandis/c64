@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new6567() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Address pins. The VIC can address 16k of memory, though the lower and upper 6 bits of the
     // address bus are multiplexed. There are duplicates here; A8, for example, is multiplexed with
     // A0 on pin 24, but it's also available on its own on pin 32.
@@ -99,13 +100,5 @@ export function new6567() {
     newPin(20, "GND", UNCONNECTED),
   )
 
-  const vic = {
-    pins,
-  }
-
-  for (const name in pins) {
-    vic[name] = pins[name]
-  }
-
-  return vic
+  return chip
 }

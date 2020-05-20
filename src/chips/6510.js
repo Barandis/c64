@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, newPinArray, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new6510() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Address bus pins A0...A15.
     newPin(7, "A0", OUTPUT, 0),
     newPin(8, "A1", OUTPUT, 0),
@@ -79,13 +80,5 @@ export function new6510() {
     newPin(21, "GND", UNCONNECTED),
   )
 
-  const cpu = {
-    pins,
-  }
-
-  for (const name in pins) {
-    cpu[name] = pins[name]
-  }
-
-  return cpu
+  return chip
 }

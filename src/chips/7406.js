@@ -14,10 +14,11 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
 
 export function new7406() {
-  const pins = newPinArray(
+  const chip = newChip(
     // Input pins. In the TI data sheet, these are named "1A", "2A", etc., and the C64 schematic
     // does not suggest named for them. Since these names are not legal JS variable names, I've
     // switched the letter and number.
@@ -41,21 +42,12 @@ export function new7406() {
     newPin(7, "GND", UNCONNECTED),
   )
 
-  function inputChanged(apin, ypin) {
-    ypin.state = apin.low
-  }
+  chip.A1.addListener(pin => (chip.Y1.state = pin.low))
+  chip.A2.addListener(pin => (chip.Y2.state = pin.low))
+  chip.A3.addListener(pin => (chip.Y3.state = pin.low))
+  chip.A4.addListener(pin => (chip.Y4.state = pin.low))
+  chip.A5.addListener(pin => (chip.Y5.state = pin.low))
+  chip.A6.addListener(pin => (chip.Y6.state = pin.low))
 
-  for (let i = 1; i <= 6; i++) {
-    pins[`A${i}`].addListener(() => inputChanged(pins[`A${i}`], pins[`Y${i}`]))
-  }
-
-  const inverter = {
-    pins,
-  }
-
-  for (const name in pins) {
-    inverter[name] = pins[name]
-  }
-
-  return inverter
+  return chip
 }
