@@ -5,7 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, BIDIRECTIONAL, INPUT, newPinArray, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPort } from "components/port"
 
 export const A = 23
 export const B = 24
@@ -31,7 +32,7 @@ export const Y = 43
 export const Z = 44
 
 export function newExpansionPort() {
-  const pins = newPinArray(
+  return newPort(
     newPin(Y, "A0", INPUT),
     newPin(X, "A1", INPUT),
     newPin(W, "A2", INPUT),
@@ -85,14 +86,4 @@ export function newExpansionPort() {
     newPin(A, "GND3", UNCONNECTED),
     newPin(Z, "GND4", UNCONNECTED),
   )
-
-  const port = {
-    pins,
-  }
-
-  for (const name in pins) {
-    port[name] = pins[name]
-  }
-
-  return port
 }

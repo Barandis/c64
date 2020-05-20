@@ -5,11 +5,12 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, INPUT, newPinArray, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPort } from "components/port"
 
 export function newKeyboardPort() {
   // There is no pin 2; it is used for alignment.
-  const pins = newPinArray(
+  return newPort(
     newPin(12, "ROW0", OUTPUT, null),
     newPin(11, "ROW1", OUTPUT, null),
     newPin(10, "ROW2", OUTPUT, null),
@@ -34,14 +35,4 @@ export function newKeyboardPort() {
     newPin(3, "VCC", UNCONNECTED),
     newPin(1, "GND", UNCONNECTED),
   )
-
-  const port = {
-    pins,
-  }
-
-  for (const name in pins) {
-    port[name] = pins[name]
-  }
-
-  return port
 }

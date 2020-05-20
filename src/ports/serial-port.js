@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, BIDIRECTIONAL, INPUT, newPinArray, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newPort } from "components/port"
 
 export function newSerialPort() {
-  const pins = newPinArray(
+  return newPort(
     newPin(5, "DATA", BIDIRECTIONAL, null),
     newPin(4, "CLK", BIDIRECTIONAL, null),
     newPin(3, "ATN", INPUT),
@@ -17,14 +18,4 @@ export function newSerialPort() {
 
     newPin(2, "GND", UNCONNECTED),
   )
-
-  const port = {
-    pins,
-  }
-
-  for (const name in pins) {
-    port[name] = pins[name]
-  }
-
-  return port
 }

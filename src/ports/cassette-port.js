@@ -5,10 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPin, INPUT, newPinArray, UNCONNECTED, OUTPUT } from "components/pin"
+import { newPin, INPUT, UNCONNECTED, OUTPUT } from "components/pin"
+import { newPort } from "components/port"
 
 export function newCassettePort() {
-  const pins = newPinArray(
+  return newPort(
     newPin(4, "READ", OUTPUT, null),
     newPin(5, "WRITE", INPUT),
     newPin(6, "SENSE", OUTPUT, null),
@@ -17,14 +18,4 @@ export function newCassettePort() {
     newPin(2, "VCC", UNCONNECTED),
     newPin(1, "GND", UNCONNECTED),
   )
-
-  const port = {
-    pins,
-  }
-
-  for (const name in pins) {
-    port[name] = pins[name]
-  }
-
-  return port
 }

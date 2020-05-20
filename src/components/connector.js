@@ -49,3 +49,17 @@ export function newConnector(pin) {
     },
   }
 }
+
+export function newConnectorArray(pinArray) {
+  const array = []
+
+  for (const pin of pinArray) {
+    if (pin) {
+      const connector = newConnector(pin)
+      array[pin.num] = connector
+      array[pin.name] = connector
+    }
+  }
+
+  return array
+}
