@@ -8,7 +8,7 @@
 import { expect, setupTraces, DEBUG, hex } from "test/helper"
 
 import { create2364 } from "chips/2364"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 import { kernal } from "data/kernal"
 import { basic } from "data/basic"
 
@@ -21,8 +21,8 @@ describe("2364 8k x 8-bit ROM", () => {
     before(() => {
       chip = create2364(kernal)
       setupTraces(traces, chip)
-      traces.VCC = createTrace(chip.VCC, PULL_UP)
-      traces.GND = createTrace(chip.GND, PULL_DOWN)
+      traces.VCC = connect(chip.VCC, PULL_UP)
+      traces.GND = connect(chip.GND, PULL_DOWN)
 
       traces._CS.value = 1
     })
@@ -93,8 +93,8 @@ describe("2364 8k x 8-bit ROM", () => {
     before(() => {
       chip = create2364(basic)
       setupTraces(traces, chip)
-      traces.VCC = createTrace(chip.VCC, PULL_UP)
-      traces.GND = createTrace(chip.GND, PULL_DOWN)
+      traces.VCC = connect(chip.VCC, PULL_UP)
+      traces.GND = connect(chip.GND, PULL_DOWN)
 
       traces._CS.value = 1
     })

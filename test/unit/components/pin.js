@@ -9,7 +9,7 @@ import { expect } from "test/helper"
 import sinon from "sinon"
 
 import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
-import { createTrace } from "components/trace"
+import { connect } from "components/trace"
 import { LOW, HIGH, HI_Z } from "components/state"
 
 describe("Pin", () => {
@@ -21,8 +21,8 @@ describe("Pin", () => {
 
   it("will only be attached to the first trace that refers to it", () => {
     const pin = createPin(1, "A", INPUT)
-    const trace1 = createTrace(pin)
-    const trace2 = createTrace(pin)
+    const trace1 = connect(pin)
+    const trace2 = connect(pin)
 
     trace1.value = HIGH
     trace2.value = LOW
@@ -142,7 +142,7 @@ describe("Pin", () => {
 
     it("sets input pin's value to trace's value", () => {
       const pin = createPin(2, "RDY", INPUT)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
 
       trace.value = HIGH
       pin.value = LOW
@@ -154,7 +154,7 @@ describe("Pin", () => {
 
     it("sets bidirectional pin's value to its trace's value when it changes", () => {
       const pin = createPin(37, "D0", BIDIRECTIONAL)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
 
       trace.value = HIGH
       expect(pin.value).to.equal(HIGH)
@@ -162,7 +162,7 @@ describe("Pin", () => {
 
     it("sets its trace's value if it is an bidirectional pin set directly", () => {
       const pin = createPin(38, "RW", BIDIRECTIONAL)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
 
       pin.value = HIGH
       expect(trace.value).to.equal(HIGH)
@@ -170,7 +170,7 @@ describe("Pin", () => {
 
     it("sets its trace's value if it is an output pin", () => {
       const pin = createPin(38, "RW", OUTPUT)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
 
       pin.value = HIGH
       expect(trace.value).to.equal(HIGH)
@@ -178,7 +178,7 @@ describe("Pin", () => {
 
     it("can be changed from HI_Z by a trace's value change", () => {
       const pin = createPin(2, "RDY", BIDIRECTIONAL, HI_Z)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
 
       trace.value = HIGH
       expect(pin.value).to.equal(HIGH)
@@ -252,7 +252,7 @@ describe("Pin", () => {
 
     it("retains the same value when switching modes", () => {
       const pin = createPin(1, "A", BIDIRECTIONAL)
-      const trace = createTrace(pin)
+      const trace = connect(pin)
       trace.value = HIGH
 
       expect(pin.value).to.equal(HIGH)
@@ -268,7 +268,7 @@ describe("Pin", () => {
     it("sets the trace to the value of the pin if it's not an input pin", () => {
       const pin1 = createPin(1, "A", OUTPUT, LOW)
       const pin2 = createPin(2, "B", BIDIRECTIONAL, HIGH)
-      const trace = createTrace(pin1, pin2)
+      const trace = connect(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
       pin1.reset()
       expect(trace.value).to.equal(LOW)
@@ -277,7 +277,7 @@ describe("Pin", () => {
     it("forces the trace to recalculate its value if the pin is an input pin", () => {
       const pin1 = createPin(1, "A", OUTPUT, LOW)
       const pin2 = createPin(2, "B", BIDIRECTIONAL, HIGH)
-      const trace = createTrace(pin1, pin2)
+      const trace = connect(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
       pin2.mode = INPUT
       pin2.reset()
@@ -315,7 +315,7 @@ describe("Pin", () => {
     })
 
     it("fires on input pins if their trace's value is set", () => {
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       trace.value = HIGH
       expect(spy1).to.be.called
       expect(spy2).to.be.called
@@ -323,7 +323,7 @@ describe("Pin", () => {
     })
 
     it("does not fire if the trace's value is set to what it was", () => {
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       trace.value = LOW
       expect(spy1).not.to.be.called
       expect(spy2).not.to.be.called
@@ -331,7 +331,7 @@ describe("Pin", () => {
     })
 
     it("fires only once even if the pin has been connected to the trace more than once", () => {
-      const trace = createTrace(pin1, pin2, pin3, pin1)
+      const trace = connect(pin1, pin2, pin3, pin1)
       trace.value = HIGH
       expect(spy1).to.be.calledOnce
       expect(spy2).to.be.calledOnce
@@ -339,7 +339,7 @@ describe("Pin", () => {
     })
 
     it("fires only once even if the same listener has been added more than once", () => {
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       pin1.addListener(spy1)
       trace.value = HIGH
       expect(spy1).to.be.calledOnce
@@ -348,7 +348,7 @@ describe("Pin", () => {
     })
 
     it("ceases to fire after the listener has been removed", () => {
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       trace.value = HIGH
       expect(spy1).to.be.calledOnce
 
@@ -358,7 +358,7 @@ describe("Pin", () => {
     })
 
     it("will ignore calls to remove listeners that have not been added", () => {
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       pin1.removeListener(spy2)
       trace.value = HIGH
       expect(spy1).to.be.calledOnce

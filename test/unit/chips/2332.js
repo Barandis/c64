@@ -8,7 +8,7 @@
 import { expect, setupTraces, DEBUG, hex } from "test/helper"
 
 import { create2332 } from "chips/2332"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 import { character } from "data/character"
 
 describe("2332 4k x 8-bit ROM", () => {
@@ -20,8 +20,8 @@ describe("2332 4k x 8-bit ROM", () => {
     before(() => {
       chip = create2332(character)
       setupTraces(traces, chip)
-      traces.VCC = createTrace(chip.VCC, PULL_UP)
-      traces.GND = createTrace(chip.GND, PULL_DOWN)
+      traces.VCC = connect(chip.VCC, PULL_UP)
+      traces.GND = connect(chip.GND, PULL_DOWN)
 
       traces._CS2.value = 0
       traces._CS1.value = 1

@@ -8,7 +8,7 @@
 import { expect, bin, setupTraces } from "test/helper"
 
 import { create82S100 } from "chips/82S100"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 import { HIGH, LOW, HI_Z } from "components/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
@@ -149,8 +149,8 @@ describe("82S100 Programmable Logic Array", () => {
   const traces = {}
 
   setupTraces(traces, chip)
-  traces.VCC = createTrace(chip.VCC, PULL_UP)
-  traces.GND = createTrace(chip.GND, PULL_DOWN)
+  traces.VCC = connect(chip.VCC, PULL_UP)
+  traces.GND = connect(chip.GND, PULL_DOWN)
 
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 

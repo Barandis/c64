@@ -10,7 +10,7 @@ import { expect, DEBUG, chipState } from "test/helper"
 import { create4164 } from "chips/4164"
 import { create74257 } from "chips/74257"
 
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 import { LOW, HIGH } from "components/state"
 
 function createMemory() {
@@ -27,47 +27,47 @@ function createMemory() {
   const mux1 = create74257()
 
   // Internal connections between the multiplexers and the DRAM
-  createTrace(mux0.Y1, ram0.A3, ram1.A3, ram2.A3, ram3.A3, ram4.A3, ram5.A3, ram6.A3, ram7.A3)
-  createTrace(mux0.Y2, ram0.A2, ram1.A2, ram2.A2, ram3.A2, ram4.A2, ram5.A2, ram6.A2, ram7.A2)
-  createTrace(mux0.Y3, ram0.A1, ram1.A1, ram2.A1, ram3.A1, ram4.A1, ram5.A1, ram6.A1, ram7.A1)
-  createTrace(mux0.Y4, ram0.A0, ram1.A0, ram2.A0, ram3.A0, ram4.A0, ram5.A0, ram6.A0, ram7.A0)
-  createTrace(mux1.Y1, ram0.A6, ram1.A6, ram2.A6, ram3.A6, ram4.A6, ram5.A6, ram6.A6, ram7.A6)
-  createTrace(mux1.Y2, ram0.A5, ram1.A5, ram2.A5, ram3.A5, ram4.A5, ram5.A5, ram6.A5, ram7.A5)
-  createTrace(mux1.Y3, ram0.A7, ram1.A7, ram2.A7, ram3.A7, ram4.A7, ram5.A7, ram6.A7, ram7.A7)
-  createTrace(mux1.Y4, ram0.A4, ram1.A4, ram2.A4, ram3.A4, ram4.A4, ram5.A4, ram6.A4, ram7.A4)
+  connect(mux0.Y1, ram0.A3, ram1.A3, ram2.A3, ram3.A3, ram4.A3, ram5.A3, ram6.A3, ram7.A3)
+  connect(mux0.Y2, ram0.A2, ram1.A2, ram2.A2, ram3.A2, ram4.A2, ram5.A2, ram6.A2, ram7.A2)
+  connect(mux0.Y3, ram0.A1, ram1.A1, ram2.A1, ram3.A1, ram4.A1, ram5.A1, ram6.A1, ram7.A1)
+  connect(mux0.Y4, ram0.A0, ram1.A0, ram2.A0, ram3.A0, ram4.A0, ram5.A0, ram6.A0, ram7.A0)
+  connect(mux1.Y1, ram0.A6, ram1.A6, ram2.A6, ram3.A6, ram4.A6, ram5.A6, ram6.A6, ram7.A6)
+  connect(mux1.Y2, ram0.A5, ram1.A5, ram2.A5, ram3.A5, ram4.A5, ram5.A5, ram6.A5, ram7.A5)
+  connect(mux1.Y3, ram0.A7, ram1.A7, ram2.A7, ram3.A7, ram4.A7, ram5.A7, ram6.A7, ram7.A7)
+  connect(mux1.Y4, ram0.A4, ram1.A4, ram2.A4, ram3.A4, ram4.A4, ram5.A4, ram6.A4, ram7.A4)
 
   // Address bus
-  const a0 = createTrace(mux0.B4)
-  const a1 = createTrace(mux0.B3)
-  const a2 = createTrace(mux0.B2)
-  const a3 = createTrace(mux0.B1)
-  const a4 = createTrace(mux1.B4)
-  const a5 = createTrace(mux1.B2)
-  const a6 = createTrace(mux1.B1)
-  const a7 = createTrace(mux1.B3)
-  const a8 = createTrace(mux0.A4)
-  const a9 = createTrace(mux0.A3)
-  const a10 = createTrace(mux0.A2)
-  const a11 = createTrace(mux0.A1)
-  const a12 = createTrace(mux1.A4)
-  const a13 = createTrace(mux1.A2)
-  const a14 = createTrace(mux1.A1)
-  const a15 = createTrace(mux1.A3)
+  const a0 = connect(mux0.B4)
+  const a1 = connect(mux0.B3)
+  const a2 = connect(mux0.B2)
+  const a3 = connect(mux0.B1)
+  const a4 = connect(mux1.B4)
+  const a5 = connect(mux1.B2)
+  const a6 = connect(mux1.B1)
+  const a7 = connect(mux1.B3)
+  const a8 = connect(mux0.A4)
+  const a9 = connect(mux0.A3)
+  const a10 = connect(mux0.A2)
+  const a11 = connect(mux0.A1)
+  const a12 = connect(mux1.A4)
+  const a13 = connect(mux1.A2)
+  const a14 = connect(mux1.A1)
+  const a15 = connect(mux1.A3)
 
   // Data bus
-  const d0 = createTrace(ram0.D, ram0.Q)
-  const d1 = createTrace(ram1.D, ram1.Q)
-  const d2 = createTrace(ram2.D, ram2.Q)
-  const d3 = createTrace(ram3.D, ram3.Q)
-  const d4 = createTrace(ram4.D, ram4.Q)
-  const d5 = createTrace(ram5.D, ram5.Q)
-  const d6 = createTrace(ram6.D, ram6.Q)
-  const d7 = createTrace(ram7.D, ram7.Q)
+  const d0 = connect(ram0.D, ram0.Q)
+  const d1 = connect(ram1.D, ram1.Q)
+  const d2 = connect(ram2.D, ram2.Q)
+  const d3 = connect(ram3.D, ram3.Q)
+  const d4 = connect(ram4.D, ram4.Q)
+  const d5 = connect(ram5.D, ram5.Q)
+  const d6 = connect(ram6.D, ram6.Q)
+  const d7 = connect(ram7.D, ram7.Q)
 
   // External control signals
-  const _aec = createTrace(mux0._OE, mux1._OE)
-  const _cas = createTrace(mux0.SEL, mux1.SEL)
-  const _casram = createTrace(
+  const _aec = connect(mux0._OE, mux1._OE)
+  const _cas = connect(mux0.SEL, mux1.SEL)
+  const _casram = connect(
     ram0._CAS,
     ram1._CAS,
     ram2._CAS,
@@ -77,8 +77,8 @@ function createMemory() {
     ram6._CAS,
     ram7._CAS,
   )
-  const _rw = createTrace(ram0._W, ram1._W, ram2._W, ram3._W, ram4._W, ram5._W, ram6._W, ram7._W)
-  const _ras = createTrace(
+  const _rw = connect(ram0._W, ram1._W, ram2._W, ram3._W, ram4._W, ram5._W, ram6._W, ram7._W)
+  const _ras = connect(
     ram0._RAS,
     ram1._RAS,
     ram2._RAS,
@@ -90,13 +90,13 @@ function createMemory() {
   )
 
   // Power supply and ground traces (not necessary, but for completeness)
-  createTrace(ram0.VCC, ram1.VCC, ram2.VCC, ram3.VCC, PULL_UP)
-  createTrace(ram4.VCC, ram5.VCC, ram6.VCC, ram7.VCC, PULL_UP)
-  createTrace(mux0.VCC, mux1.VCC, PULL_UP)
+  connect(ram0.VCC, ram1.VCC, ram2.VCC, ram3.VCC, PULL_UP)
+  connect(ram4.VCC, ram5.VCC, ram6.VCC, ram7.VCC, PULL_UP)
+  connect(mux0.VCC, mux1.VCC, PULL_UP)
 
-  createTrace(ram0.VSS, ram1.VSS, ram2.VSS, ram3.VSS, PULL_DOWN)
-  createTrace(ram4.VSS, ram5.VSS, ram6.VSS, ram7.VSS, PULL_DOWN)
-  createTrace(mux0.GND, mux1.GND, PULL_DOWN)
+  connect(ram0.VSS, ram1.VSS, ram2.VSS, ram3.VSS, PULL_DOWN)
+  connect(ram4.VSS, ram5.VSS, ram6.VSS, ram7.VSS, PULL_DOWN)
+  connect(mux0.GND, mux1.GND, PULL_DOWN)
 
   _aec.state = HIGH
   _cas.state = HIGH

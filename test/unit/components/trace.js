@@ -7,7 +7,7 @@
 
 import { expect } from "test/helper"
 
-import { createTrace, PULL_DOWN, PULL_UP } from "components/trace"
+import { connect, PULL_DOWN, PULL_UP } from "components/trace"
 import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
 import { LOW, HIGH, HI_Z } from "components/state"
 
@@ -15,21 +15,21 @@ describe("Trace", () => {
   describe("initial value", () => {
     it("is low with no output pins", () => {
       const pin = createPin(1, "A")
-      const trace = createTrace(pin)
+      const trace = connect(pin)
       expect(trace.value).to.equal(LOW)
     })
 
     it("is high if any connnected output pin is high", () => {
       const pin1 = createPin(1, "A", OUTPUT, LOW)
       const pin2 = createPin(2, "B", OUTPUT, HIGH)
-      const trace = createTrace(pin1, pin2)
+      const trace = connect(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
     })
 
     it("is low if any connected output pin is low and none are high", () => {
       const pin1 = createPin(1, "A", OUTPUT, HI_Z)
       const pin2 = createPin(2, "B", OUTPUT, LOW)
-      const trace = createTrace(pin1, pin2)
+      const trace = connect(pin1, pin2)
       expect(trace.value).to.equal(LOW)
     })
 
@@ -37,7 +37,7 @@ describe("Trace", () => {
       const pin1 = createPin(1, "A", OUTPUT, HI_Z)
       const pin2 = createPin(2, "B", OUTPUT, HI_Z)
       const pin3 = createPin(3, "C", INPUT)
-      const trace = createTrace(pin1, pin2, pin3)
+      const trace = connect(pin1, pin2, pin3)
       expect(trace.hiZ).to.be.true
     })
 
@@ -45,7 +45,7 @@ describe("Trace", () => {
       const pin1 = createPin(1, "A", OUTPUT, HI_Z)
       const pin2 = createPin(2, "B", OUTPUT, HI_Z)
       const pin3 = createPin(3, "C", INPUT)
-      const trace = createTrace(pin1, pin2, pin3, PULL_DOWN)
+      const trace = connect(pin1, pin2, pin3, PULL_DOWN)
       expect(trace.low).to.be.true
     })
 
@@ -53,7 +53,7 @@ describe("Trace", () => {
       const pin1 = createPin(1, "A", OUTPUT, HI_Z)
       const pin2 = createPin(2, "B", OUTPUT, HI_Z)
       const pin3 = createPin(3, "C", INPUT)
-      const trace = createTrace(pin1, pin2, pin3, PULL_UP)
+      const trace = connect(pin1, pin2, pin3, PULL_UP)
       expect(trace.high).to.be.true
     })
   })
@@ -68,7 +68,7 @@ describe("Trace", () => {
       pin1 = createPin(1, "A", INPUT)
       pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
-      trace = createTrace(pin1, pin2, pin3)
+      trace = connect(pin1, pin2, pin3)
     })
 
     it("can be set to low or high, in turn setting its connected input pins", () => {
@@ -153,7 +153,7 @@ describe("Trace", () => {
       pin1 = createPin(1, "A", INPUT)
       pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
-      trace = createTrace(pin1, pin2, pin3, PULL_UP)
+      trace = connect(pin1, pin2, pin3, PULL_UP)
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)
@@ -172,7 +172,7 @@ describe("Trace", () => {
       pin1 = createPin(1, "A", INPUT)
       pin2 = createPin(2, "B", BIDIRECTIONAL)
       pin3 = createPin(3, "C", OUTPUT)
-      trace = createTrace(pin1, pin2, pin3, PULL_DOWN)
+      trace = connect(pin1, pin2, pin3, PULL_DOWN)
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)

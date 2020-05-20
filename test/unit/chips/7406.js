@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create7406 } from "chips/7406"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("7406 hex inverter", () => {
   let chip
@@ -17,8 +17,8 @@ describe("7406 hex inverter", () => {
   beforeEach(() => {
     chip = create7406()
     setupTraces(traces, chip)
-    traces.VCC = createTrace(chip.VCC, PULL_UP)
-    traces.GND = createTrace(chip.GND, PULL_DOWN)
+    traces.VCC = connect(chip.VCC, PULL_UP)
+    traces.GND = connect(chip.GND, PULL_DOWN)
   })
 
   it("sets output to false when the input is true", () => {

@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create2114 } from "chips/2114"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("2114 1024 x 4-bit static RAM", () => {
   let chip
@@ -17,8 +17,8 @@ describe("2114 1024 x 4-bit static RAM", () => {
   beforeEach(() => {
     chip = create2114()
     setupTraces(traces, chip)
-    traces.VCC = createTrace(chip.VCC, PULL_UP)
-    traces.GND = createTrace(chip.GND, PULL_DOWN)
+    traces.VCC = connect(chip.VCC, PULL_UP)
+    traces.GND = connect(chip.GND, PULL_DOWN)
 
     traces._CE.state = true
     traces._WE.state = true

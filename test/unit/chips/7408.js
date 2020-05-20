@@ -6,7 +6,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create7408 } from "chips/7408"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("7408 quad 2-input AND gate", () => {
   let chip
@@ -15,8 +15,8 @@ describe("7408 quad 2-input AND gate", () => {
   beforeEach(() => {
     chip = create7408()
     setupTraces(traces, chip)
-    traces.VCC = createTrace(chip.VCC, PULL_UP)
-    traces.GND = createTrace(chip.GND, PULL_DOWN)
+    traces.VCC = connect(chip.VCC, PULL_UP)
+    traces.GND = connect(chip.GND, PULL_DOWN)
   })
 
   it("properly ANDs on gate 1", () => {

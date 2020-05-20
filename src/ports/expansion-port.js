@@ -73,7 +73,7 @@ export function createExpansionPort() {
     createPin(D, "_NMI", BIDIRECTIONAL),
 
     createPin(6, "DOT", BIDIRECTIONAL),
-    createPin(E, "PHI2", BIDIRECTIONAL),
+    createPin(E, "O2", BIDIRECTIONAL),
 
     createPin(C, "_RESET", BIDIRECTIONAL),
 

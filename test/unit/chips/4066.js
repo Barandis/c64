@@ -8,7 +8,7 @@
 import { expect, setupTraces } from "test/helper"
 
 import { create4066 } from "chips/4066"
-import { createTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { connect, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("4066 quad bilateral switch", () => {
   let chip
@@ -17,8 +17,8 @@ describe("4066 quad bilateral switch", () => {
   beforeEach(() => {
     chip = create4066()
     setupTraces(traces, chip)
-    traces.VDD = createTrace(chip.VDD, PULL_UP)
-    traces.GND = createTrace(chip.GND, PULL_DOWN)
+    traces.VDD = connect(chip.VDD, PULL_UP)
+    traces.GND = connect(chip.GND, PULL_DOWN)
   })
 
   it("passes signals from X to Y", () => {
