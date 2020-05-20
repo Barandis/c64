@@ -200,5 +200,40 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
 
       traces._RAS.state = true
     })
+
+    it("updates the output pin on write in RMW mode", () => {
+      const row = 0x2f
+      setAddressPins(row)
+      traces._RAS.value = 0
+
+      for (let col = 0; col < 256; col++) {
+        setAddressPins(col)
+        traces._CAS.value = 0
+        expect(traces.Q.value).to.equal(0)
+        traces.D.value = 1
+        traces._W.value = 0
+        expect(traces.Q.value).to.equal(1)
+        traces._W.value = 1
+        traces._CAS.value = 1
+      }
+      traces._RAS.value = 1
+    })
+
+    it("does not update the output pin on write in write mode", () => {
+      const row = 0x2f
+      setAddressPins(row)
+      traces._RAS.value = 0
+
+      for (let col = 0; col < 256; col++) {
+        setAddressPins(col)
+        traces.D.value = 1
+        traces._W.value = 0
+        traces._CAS.value = 0
+        expect(traces.Q.value).to.be.null
+        traces._W.value = 1
+        traces._CAS.value = 1
+      }
+      traces._RAS.value = 1
+    })
   })
 })

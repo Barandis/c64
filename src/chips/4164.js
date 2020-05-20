@@ -129,13 +129,18 @@ export function create4164() {
     pins.Q.value = value
   }
 
-  // Writes the value of the D pin to a single bit in the memory array.
+  // Writes the value of the D pin to a single bit in the memory array. If the Q pin is also
+  // connected, the value is also sent to it; this happens only in RMW mode and keeps the input and
+  // output data pins synched.
   function write() {
     const [index, bit] = resolve()
     if (data === 1) {
       memory[index] |= 1 << bit
     } else {
       memory[index] &= ~(1 << bit)
+    }
+    if (!pins.Q.hiZ) {
+      pins.Q.value = data
     }
   }
 
