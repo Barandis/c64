@@ -40,7 +40,7 @@ export const INPUT = 0b01
 export const OUTPUT = 0b10
 export const BIDIRECTIONAL = 0b11
 
-export function createPin(num, name, direction, init = 0) {
+export function newPin(num, name, direction, init = 0) {
   const listeners = []
   let trace = null
   let mode = UNCONNECTED
@@ -210,7 +210,7 @@ export function createPin(num, name, direction, init = 0) {
   }
 }
 
-export function createPinArray(...pins) {
+export function newPinArray(...pins) {
   const array = []
 
   for (const pin of pins) {

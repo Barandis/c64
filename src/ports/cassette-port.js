@@ -5,17 +5,17 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, INPUT, createPinArray, UNCONNECTED, OUTPUT } from "components/pin"
+import { newPin, INPUT, newPinArray, UNCONNECTED, OUTPUT } from "components/pin"
 
-export function createCassettePort() {
-  const pins = createPinArray(
-    createPin(4, "READ", OUTPUT, null),
-    createPin(5, "WRITE", INPUT),
-    createPin(6, "SENSE", OUTPUT, null),
-    createPin(3, "MOTOR", INPUT),
+export function newCassettePort() {
+  const pins = newPinArray(
+    newPin(4, "READ", OUTPUT, null),
+    newPin(5, "WRITE", INPUT),
+    newPin(6, "SENSE", OUTPUT, null),
+    newPin(3, "MOTOR", INPUT),
 
-    createPin(2, "VCC", UNCONNECTED),
-    createPin(1, "GND", UNCONNECTED),
+    newPin(2, "VCC", UNCONNECTED),
+    newPin(1, "GND", UNCONNECTED),
   )
 
   const port = {

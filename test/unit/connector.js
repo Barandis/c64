@@ -7,43 +7,43 @@
 
 import { expect } from "test/helper"
 
-import { createConnector } from "components/connector"
-import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
-import { connect, PULL_DOWN } from "components/trace"
+import { newConnector } from "components/connector"
+import { newPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
+import { newTrace, PULL_DOWN } from "components/trace"
 
 describe("Connector", () => {
   it("sets an output pin's value to an input's when connecting to it", () => {
-    const pin1 = createPin(1, "A", INPUT, 1)
-    const pin2 = createPin(1, "B", OUTPUT, 0)
+    const pin1 = newPin(1, "A", INPUT, 1)
+    const pin2 = newPin(1, "B", OUTPUT, 0)
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con2.connect(con1)
     expect(pin2.value).to.equal(1)
   })
 
   it("sets an input pin's value to an output's when it connects", () => {
-    const pin1 = createPin(1, "A", INPUT, 1)
-    const pin2 = createPin(1, "B", OUTPUT, 0)
+    const pin1 = newPin(1, "A", INPUT, 1)
+    const pin2 = newPin(1, "B", OUTPUT, 0)
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
     expect(pin2.value).to.equal(1)
   })
 
   it("passes value changes from input to output", () => {
-    const pin1 = createPin(1, "A", INPUT)
-    const pin2 = createPin(1, "B", OUTPUT, 0)
+    const pin1 = newPin(1, "A", INPUT)
+    const pin2 = newPin(1, "B", OUTPUT, 0)
 
-    const trace1 = connect(pin1)
+    const trace1 = newTrace(pin1)
     trace1.value = 1
-    const trace2 = connect(pin2)
+    const trace2 = newTrace(pin2)
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
     expect(trace2.value).to.equal(1)
@@ -53,14 +53,14 @@ describe("Connector", () => {
   })
 
   it("reverts the output pin's value to null after disconnect", () => {
-    const pin1 = createPin(1, "A", INPUT)
-    const pin2 = createPin(1, "B", OUTPUT, 0)
+    const pin1 = newPin(1, "A", INPUT)
+    const pin2 = newPin(1, "B", OUTPUT, 0)
 
-    const trace1 = connect(pin1)
-    const trace2 = connect(pin2, PULL_DOWN)
+    const trace1 = newTrace(pin1)
+    const trace2 = newTrace(pin2, PULL_DOWN)
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
 
@@ -75,16 +75,16 @@ describe("Connector", () => {
   })
 
   it("doesn't do anything if two input pins with traces connect", () => {
-    const pin1 = createPin(1, "A", INPUT)
-    const pin2 = createPin(1, "A", INPUT)
+    const pin1 = newPin(1, "A", INPUT)
+    const pin2 = newPin(1, "A", INPUT)
 
-    const trace1 = connect(pin1)
+    const trace1 = newTrace(pin1)
     trace1.value = 1
-    const trace2 = connect(pin2)
+    const trace2 = newTrace(pin2)
     trace2.value = 0
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
 
@@ -99,14 +99,14 @@ describe("Connector", () => {
   })
 
   it("doesn't do anything if two output pins with traces connect", () => {
-    const pin1 = createPin(1, "A", OUTPUT, 1)
-    const pin2 = createPin(1, "A", OUTPUT, 0)
+    const pin1 = newPin(1, "A", OUTPUT, 1)
+    const pin2 = newPin(1, "A", OUTPUT, 0)
 
-    const trace1 = connect(pin1)
-    const trace2 = connect(pin2)
+    const trace1 = newTrace(pin1)
+    const trace2 = newTrace(pin2)
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
 
@@ -121,16 +121,16 @@ describe("Connector", () => {
   })
 
   it("favors the value of the connecting pin when two bidirectional pins connect", () => {
-    const pin1 = createPin(1, "A", BIDIRECTIONAL)
-    const pin2 = createPin(1, "A", BIDIRECTIONAL)
+    const pin1 = newPin(1, "A", BIDIRECTIONAL)
+    const pin2 = newPin(1, "A", BIDIRECTIONAL)
 
-    const trace1 = connect(pin1)
+    const trace1 = newTrace(pin1)
     trace1.value = 1
-    const trace2 = connect(pin2)
+    const trace2 = newTrace(pin2)
     trace2.value = 0
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
 
@@ -147,16 +147,16 @@ describe("Connector", () => {
   })
 
   it("passes data both ways with two connected bidirectional pins", () => {
-    const pin1 = createPin(1, "A", BIDIRECTIONAL)
-    const pin2 = createPin(1, "A", BIDIRECTIONAL)
+    const pin1 = newPin(1, "A", BIDIRECTIONAL)
+    const pin2 = newPin(1, "A", BIDIRECTIONAL)
 
-    const trace1 = connect(pin1)
+    const trace1 = newTrace(pin1)
     trace1.value = 0
-    const trace2 = connect(pin2)
+    const trace2 = newTrace(pin2)
     trace2.value = 0
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
 
     con1.connect(con2)
 
@@ -168,20 +168,20 @@ describe("Connector", () => {
   })
 
   it("cannot connect to more than one other connector", () => {
-    const pin1 = createPin(1, "A", BIDIRECTIONAL)
-    const pin2 = createPin(1, "A", BIDIRECTIONAL)
-    const pin3 = createPin(1, "A", BIDIRECTIONAL)
+    const pin1 = newPin(1, "A", BIDIRECTIONAL)
+    const pin2 = newPin(1, "A", BIDIRECTIONAL)
+    const pin3 = newPin(1, "A", BIDIRECTIONAL)
 
-    const trace1 = connect(pin1)
+    const trace1 = newTrace(pin1)
     trace1.value = 0
-    const trace2 = connect(pin2)
+    const trace2 = newTrace(pin2)
     trace2.value = 0
-    const trace3 = connect(pin3)
+    const trace3 = newTrace(pin3)
     trace3.value = 0
 
-    const con1 = createConnector(pin1)
-    const con2 = createConnector(pin2)
-    const con3 = createConnector(pin3)
+    const con1 = newConnector(pin1)
+    const con2 = newConnector(pin2)
+    const con3 = newConnector(pin3)
 
     con1.connect(con2)
     con1.connect(con3)

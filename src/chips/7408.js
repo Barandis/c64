@@ -14,33 +14,33 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create7408() {
-  const pins = createPinArray(
+export function new7408() {
+  const pins = newPinArray(
     // Gate 1 inputs and output
-    createPin(1, "A1", INPUT),
-    createPin(2, "B1", INPUT),
-    createPin(3, "Y1", OUTPUT, 0),
+    newPin(1, "A1", INPUT),
+    newPin(2, "B1", INPUT),
+    newPin(3, "Y1", OUTPUT, 0),
 
     // Gate 2 inputs and output
-    createPin(4, "A2", INPUT),
-    createPin(5, "B2", INPUT),
-    createPin(6, "Y2", OUTPUT, 0),
+    newPin(4, "A2", INPUT),
+    newPin(5, "B2", INPUT),
+    newPin(6, "Y2", OUTPUT, 0),
 
     // Gate 3 inputs and output
-    createPin(9, "A3", INPUT),
-    createPin(10, "B3", INPUT),
-    createPin(8, "Y3", OUTPUT, 0),
+    newPin(9, "A3", INPUT),
+    newPin(10, "B3", INPUT),
+    newPin(8, "Y3", OUTPUT, 0),
 
     // Gate 4 inputs and output
-    createPin(12, "A4", INPUT),
-    createPin(13, "B4", INPUT),
-    createPin(11, "Y4", OUTPUT, 0),
+    newPin(12, "A4", INPUT),
+    newPin(13, "B4", INPUT),
+    newPin(11, "Y4", OUTPUT, 0),
 
     // Power supply and ground pins, not emulated
-    createPin(14, "VCC", UNCONNECTED),
-    createPin(7, "GND", UNCONNECTED),
+    newPin(14, "VCC", UNCONNECTED),
+    newPin(7, "GND", UNCONNECTED),
   )
 
   function setOutput(apin, bpin, ypin) {

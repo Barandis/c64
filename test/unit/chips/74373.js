@@ -7,19 +7,19 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74373 } from "chips/74373"
+import { new74373 } from "chips/74373"
 
-import { connect, PULL_UP, PULL_DOWN } from "components/trace"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74373 Octal tri-state transparent latch", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74373()
+    chip = new74373()
     setupTraces(traces, chip)
-    traces.VCC = connect(chip.VCC, PULL_UP)
-    traces.GND = connect(chip.GND, PULL_DOWN)
+    traces.VCC = newTrace(chip.VCC, PULL_UP)
+    traces.GND = newTrace(chip.GND, PULL_DOWN)
   })
 
   it("alfalses data to pass through when LE is true", () => {

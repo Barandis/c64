@@ -7,53 +7,53 @@
 
 import { expect } from "test/helper"
 
-import { connect, PULL_DOWN, PULL_UP } from "components/trace"
-import { createPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
+import { newTrace, PULL_DOWN, PULL_UP } from "components/trace"
+import { newPin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
 import { LOW, HIGH, HI_Z } from "components/state"
 
 describe("Trace", () => {
   describe("initial value", () => {
     it("is low with no output pins", () => {
-      const pin = createPin(1, "A")
-      const trace = connect(pin)
+      const pin = newPin(1, "A")
+      const trace = newTrace(pin)
       expect(trace.value).to.equal(LOW)
     })
 
     it("is high if any connnected output pin is high", () => {
-      const pin1 = createPin(1, "A", OUTPUT, LOW)
-      const pin2 = createPin(2, "B", OUTPUT, HIGH)
-      const trace = connect(pin1, pin2)
+      const pin1 = newPin(1, "A", OUTPUT, LOW)
+      const pin2 = newPin(2, "B", OUTPUT, HIGH)
+      const trace = newTrace(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
     })
 
     it("is low if any connected output pin is low and none are high", () => {
-      const pin1 = createPin(1, "A", OUTPUT, HI_Z)
-      const pin2 = createPin(2, "B", OUTPUT, LOW)
-      const trace = connect(pin1, pin2)
+      const pin1 = newPin(1, "A", OUTPUT, HI_Z)
+      const pin2 = newPin(2, "B", OUTPUT, LOW)
+      const trace = newTrace(pin1, pin2)
       expect(trace.value).to.equal(LOW)
     })
 
     it("is hi-z from FLOAT if all connected output pins are hi-z", () => {
-      const pin1 = createPin(1, "A", OUTPUT, HI_Z)
-      const pin2 = createPin(2, "B", OUTPUT, HI_Z)
-      const pin3 = createPin(3, "C", INPUT)
-      const trace = connect(pin1, pin2, pin3)
+      const pin1 = newPin(1, "A", OUTPUT, HI_Z)
+      const pin2 = newPin(2, "B", OUTPUT, HI_Z)
+      const pin3 = newPin(3, "C", INPUT)
+      const trace = newTrace(pin1, pin2, pin3)
       expect(trace.hiZ).to.be.true
     })
 
     it("is low if PULL_DOWN is specified and all connected output pins are hi-z", () => {
-      const pin1 = createPin(1, "A", OUTPUT, HI_Z)
-      const pin2 = createPin(2, "B", OUTPUT, HI_Z)
-      const pin3 = createPin(3, "C", INPUT)
-      const trace = connect(pin1, pin2, pin3, PULL_DOWN)
+      const pin1 = newPin(1, "A", OUTPUT, HI_Z)
+      const pin2 = newPin(2, "B", OUTPUT, HI_Z)
+      const pin3 = newPin(3, "C", INPUT)
+      const trace = newTrace(pin1, pin2, pin3, PULL_DOWN)
       expect(trace.low).to.be.true
     })
 
     it("is high if PULL_UP is specified and all connected output pins are hi-z", () => {
-      const pin1 = createPin(1, "A", OUTPUT, HI_Z)
-      const pin2 = createPin(2, "B", OUTPUT, HI_Z)
-      const pin3 = createPin(3, "C", INPUT)
-      const trace = connect(pin1, pin2, pin3, PULL_UP)
+      const pin1 = newPin(1, "A", OUTPUT, HI_Z)
+      const pin2 = newPin(2, "B", OUTPUT, HI_Z)
+      const pin3 = newPin(3, "C", INPUT)
+      const trace = newTrace(pin1, pin2, pin3, PULL_UP)
       expect(trace.high).to.be.true
     })
   })
@@ -65,10 +65,10 @@ describe("Trace", () => {
     let trace
 
     beforeEach(() => {
-      pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", BIDIRECTIONAL)
-      pin3 = createPin(3, "C", OUTPUT)
-      trace = connect(pin1, pin2, pin3)
+      pin1 = newPin(1, "A", INPUT)
+      pin2 = newPin(2, "B", BIDIRECTIONAL)
+      pin3 = newPin(3, "C", OUTPUT)
+      trace = newTrace(pin1, pin2, pin3)
     })
 
     it("can be set to low or high, in turn setting its connected input pins", () => {
@@ -150,10 +150,10 @@ describe("Trace", () => {
     })
 
     it("can be configured to become high when all output pins are hi-z", () => {
-      pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", BIDIRECTIONAL)
-      pin3 = createPin(3, "C", OUTPUT)
-      trace = connect(pin1, pin2, pin3, PULL_UP)
+      pin1 = newPin(1, "A", INPUT)
+      pin2 = newPin(2, "B", BIDIRECTIONAL)
+      pin3 = newPin(3, "C", OUTPUT)
+      trace = newTrace(pin1, pin2, pin3, PULL_UP)
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)
@@ -169,10 +169,10 @@ describe("Trace", () => {
     })
 
     it("can be configured to become low when all output pins are hi-z", () => {
-      pin1 = createPin(1, "A", INPUT)
-      pin2 = createPin(2, "B", BIDIRECTIONAL)
-      pin3 = createPin(3, "C", OUTPUT)
-      trace = connect(pin1, pin2, pin3, PULL_DOWN)
+      pin1 = newPin(1, "A", INPUT)
+      pin2 = newPin(2, "B", BIDIRECTIONAL)
+      pin3 = newPin(3, "C", OUTPUT)
+      trace = newTrace(pin1, pin2, pin3, PULL_DOWN)
 
       pin3.value = HI_Z // Actually set to LOW because the other output pin is LOW
       expect(trace.value).to.equal(LOW)

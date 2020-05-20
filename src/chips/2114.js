@@ -23,38 +23,38 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { createPin, INPUT, BIDIRECTIONAL, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, BIDIRECTIONAL, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create2114() {
-  const pins = createPinArray(
+export function new2114() {
+  const pins = newPinArray(
     // Address pins A0...A9
-    createPin(5, "A0", INPUT),
-    createPin(6, "A1", INPUT),
-    createPin(7, "A2", INPUT),
-    createPin(4, "A3", INPUT),
-    createPin(3, "A4", INPUT),
-    createPin(2, "A5", INPUT),
-    createPin(1, "A6", INPUT),
-    createPin(17, "A7", INPUT),
-    createPin(16, "A8", INPUT),
-    createPin(15, "A9", INPUT),
+    newPin(5, "A0", INPUT),
+    newPin(6, "A1", INPUT),
+    newPin(7, "A2", INPUT),
+    newPin(4, "A3", INPUT),
+    newPin(3, "A4", INPUT),
+    newPin(2, "A5", INPUT),
+    newPin(1, "A6", INPUT),
+    newPin(17, "A7", INPUT),
+    newPin(16, "A8", INPUT),
+    newPin(15, "A9", INPUT),
 
     // Data pins D0...D3
-    createPin(14, "D0", BIDIRECTIONAL, 0),
-    createPin(13, "D1", BIDIRECTIONAL, 0),
-    createPin(12, "D2", BIDIRECTIONAL, 0),
-    createPin(11, "D3", BIDIRECTIONAL, 0),
+    newPin(14, "D0", BIDIRECTIONAL, 0),
+    newPin(13, "D1", BIDIRECTIONAL, 0),
+    newPin(12, "D2", BIDIRECTIONAL, 0),
+    newPin(11, "D3", BIDIRECTIONAL, 0),
 
     // Chip enable pin. Setting this to low is what begins a read or write cycle.
-    createPin(8, "_CE", INPUT),
+    newPin(8, "_CE", INPUT),
 
     // Write enable pin. If this is low when _CE goes low, then the cycle is a write cycle,
     // otherwise it's a read cycle.
-    createPin(10, "_WE", INPUT),
+    newPin(10, "_WE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(18, "VCC", UNCONNECTED),
-    createPin(9, "GND", UNCONNECTED),
+    newPin(18, "VCC", UNCONNECTED),
+    newPin(9, "GND", UNCONNECTED),
   )
 
   const memory = new Uint32Array(128)

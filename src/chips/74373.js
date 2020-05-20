@@ -24,42 +24,42 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create74373() {
-  const pins = createPinArray(
+export function new74373() {
+  const pins = newPinArray(
     // Input pins.
-    createPin(3, "D0", INPUT),
-    createPin(4, "D1", INPUT),
-    createPin(7, "D2", INPUT),
-    createPin(8, "D3", INPUT),
-    createPin(13, "D4", INPUT),
-    createPin(14, "D5", INPUT),
-    createPin(17, "D6", INPUT),
-    createPin(18, "D7", INPUT),
+    newPin(3, "D0", INPUT),
+    newPin(4, "D1", INPUT),
+    newPin(7, "D2", INPUT),
+    newPin(8, "D3", INPUT),
+    newPin(13, "D4", INPUT),
+    newPin(14, "D5", INPUT),
+    newPin(17, "D6", INPUT),
+    newPin(18, "D7", INPUT),
 
     // Output pins.
-    createPin(2, "O0", OUTPUT, false),
-    createPin(5, "O1", OUTPUT, false),
-    createPin(6, "O2", OUTPUT, false),
-    createPin(9, "O3", OUTPUT, false),
-    createPin(12, "O4", OUTPUT, false),
-    createPin(15, "O5", OUTPUT, false),
-    createPin(16, "O6", OUTPUT, false),
-    createPin(19, "O7", OUTPUT, false),
+    newPin(2, "O0", OUTPUT, false),
+    newPin(5, "O1", OUTPUT, false),
+    newPin(6, "O2", OUTPUT, false),
+    newPin(9, "O3", OUTPUT, false),
+    newPin(12, "O4", OUTPUT, false),
+    newPin(15, "O5", OUTPUT, false),
+    newPin(16, "O6", OUTPUT, false),
+    newPin(19, "O7", OUTPUT, false),
 
     // Output enable. When this is high, the outputs function normally according to their inputs
     // and LE. When this is low, the outputs are all hi-Z.
-    createPin(1, "_OE", INPUT),
+    newPin(1, "_OE", INPUT),
 
     // Latch enable. When set high, data flows transparently through the device, with output pins
     // matching their input pins. When it goes low, the output pins remain in their current state
     // for as long as LE is low, no matter what the inputs do.
-    createPin(11, "LE", INPUT),
+    newPin(11, "LE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(10, "GND", UNCONNECTED),
-    createPin(20, "VCC", UNCONNECTED),
+    newPin(10, "GND", UNCONNECTED),
+    newPin(20, "VCC", UNCONNECTED),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is low, these values will

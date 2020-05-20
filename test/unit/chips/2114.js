@@ -7,18 +7,18 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create2114 } from "chips/2114"
-import { connect, PULL_UP, PULL_DOWN } from "components/trace"
+import { new2114 } from "chips/2114"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("2114 1024 x 4-bit static RAM", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create2114()
+    chip = new2114()
     setupTraces(traces, chip)
-    traces.VCC = connect(chip.VCC, PULL_UP)
-    traces.GND = connect(chip.GND, PULL_DOWN)
+    traces.VCC = newTrace(chip.VCC, PULL_UP)
+    traces.GND = newTrace(chip.GND, PULL_DOWN)
 
     traces._CE.state = true
     traces._WE.state = true

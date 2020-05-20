@@ -7,8 +7,8 @@
 
 import { expect, bin, setupTraces } from "test/helper"
 
-import { create82S100 } from "chips/82S100"
-import { connect, PULL_UP, PULL_DOWN } from "components/trace"
+import { new82S100 } from "chips/82S100"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 import { HIGH, LOW, HI_Z } from "components/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
@@ -145,12 +145,12 @@ function getExpected(input) {
 /* eslint-enable complexity, camelcase */
 
 describe("82S100 Programmable Logic Array", () => {
-  const chip = create82S100()
+  const chip = new82S100()
   const traces = {}
 
   setupTraces(traces, chip)
-  traces.VCC = connect(chip.VCC, PULL_UP)
-  traces.GND = connect(chip.GND, PULL_DOWN)
+  traces.VCC = newTrace(chip.VCC, PULL_UP)
+  traces.GND = newTrace(chip.GND, PULL_DOWN)
 
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 

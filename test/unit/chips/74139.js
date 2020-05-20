@@ -7,18 +7,18 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74139 } from "chips/74139"
-import { connect, PULL_UP, PULL_DOWN } from "components/trace"
+import { new74139 } from "chips/74139"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74139 dual 2-line to 4-line demultiplexer", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74139()
+    chip = new74139()
     setupTraces(traces, chip)
-    traces.VCC = connect(chip.VCC, PULL_UP)
-    traces.GND = connect(chip.GND, PULL_DOWN)
+    traces.VCC = newTrace(chip.VCC, PULL_UP)
+    traces.GND = newTrace(chip.GND, PULL_DOWN)
   })
 
   it("pulls all demux 1 outputs high when _G1 is high", () => {

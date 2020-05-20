@@ -5,24 +5,17 @@
  * https://opensource.org/licenses/MIT
  */
 
-import {
-  createPin,
-  BIDIRECTIONAL,
-  INPUT,
-  createPinArray,
-  OUTPUT,
-  UNCONNECTED,
-} from "components/pin"
+import { newPin, BIDIRECTIONAL, INPUT, newPinArray, OUTPUT, UNCONNECTED } from "components/pin"
 
-export function createSerialPort() {
-  const pins = createPinArray(
-    createPin(5, "DATA", BIDIRECTIONAL, null),
-    createPin(4, "CLK", BIDIRECTIONAL, null),
-    createPin(3, "ATN", INPUT),
-    createPin(1, "_SRQ", OUTPUT, null),
-    createPin(6, "_RESET", BIDIRECTIONAL, null),
+export function newSerialPort() {
+  const pins = newPinArray(
+    newPin(5, "DATA", BIDIRECTIONAL, null),
+    newPin(4, "CLK", BIDIRECTIONAL, null),
+    newPin(3, "ATN", INPUT),
+    newPin(1, "_SRQ", OUTPUT, null),
+    newPin(6, "_RESET", BIDIRECTIONAL, null),
 
-    createPin(2, "GND", UNCONNECTED),
+    newPin(2, "GND", UNCONNECTED),
   )
 
   const port = {

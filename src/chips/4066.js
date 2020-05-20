@@ -26,33 +26,33 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { createPin, INPUT, BIDIRECTIONAL, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, BIDIRECTIONAL, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create4066() {
-  const pins = createPinArray(
+export function new4066() {
+  const pins = newPinArray(
     // I/O and control pins for switch 1
-    createPin(1, "X1", BIDIRECTIONAL),
-    createPin(2, "Y1", BIDIRECTIONAL),
-    createPin(13, "A1", INPUT),
+    newPin(1, "X1", BIDIRECTIONAL),
+    newPin(2, "Y1", BIDIRECTIONAL),
+    newPin(13, "A1", INPUT),
 
     // I/O and control pins for switch 2
-    createPin(3, "X2", BIDIRECTIONAL),
-    createPin(4, "Y2", BIDIRECTIONAL),
-    createPin(5, "A2", INPUT),
+    newPin(3, "X2", BIDIRECTIONAL),
+    newPin(4, "Y2", BIDIRECTIONAL),
+    newPin(5, "A2", INPUT),
 
     // I/O and control pins for switch 3
-    createPin(9, "X3", BIDIRECTIONAL),
-    createPin(8, "Y3", BIDIRECTIONAL),
-    createPin(6, "A3", INPUT),
+    newPin(9, "X3", BIDIRECTIONAL),
+    newPin(8, "Y3", BIDIRECTIONAL),
+    newPin(6, "A3", INPUT),
 
     // I/O and control pins for switch 4
-    createPin(11, "X4", BIDIRECTIONAL),
-    createPin(10, "Y4", BIDIRECTIONAL),
-    createPin(12, "A4", INPUT),
+    newPin(11, "X4", BIDIRECTIONAL),
+    newPin(10, "Y4", BIDIRECTIONAL),
+    newPin(12, "A4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(14, "VDD", UNCONNECTED),
-    createPin(7, "GND", UNCONNECTED),
+    newPin(14, "VDD", UNCONNECTED),
+    newPin(7, "GND", UNCONNECTED),
   )
 
   const last = [null, null, null, null]

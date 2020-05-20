@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-export function createConnector(pin) {
+export function newConnector(pin) {
   let other = null
 
   pin.addListener(p => {

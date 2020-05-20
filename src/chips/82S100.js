@@ -62,7 +62,7 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { createPin, INPUT, OUTPUT, UNCONNECTED, createPinArray } from "components/pin"
+import { newPin, INPUT, OUTPUT, UNCONNECTED, newPinArray } from "components/pin"
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each pin in
 // the Commodore 64. They can be used to access the same pins with a different naming convention.
@@ -95,46 +95,46 @@ export const F5 = "_IO"
 export const F6 = "_ROML"
 export const F7 = "_ROMH"
 
-export function create82S100() {
-  const pins = createPinArray(
+export function new82S100() {
+  const pins = newPinArray(
     // Input pins. In the 82S100, these were generically named I0 through I15, since each pin could
     // serve any function depending on the programming applies.
-    createPin(9, "I0", INPUT),
-    createPin(8, "I1", INPUT),
-    createPin(7, "I2", INPUT),
-    createPin(6, "I3", INPUT),
-    createPin(5, "I4", INPUT),
-    createPin(4, "I5", INPUT),
-    createPin(3, "I6", INPUT),
-    createPin(2, "I7", INPUT),
-    createPin(27, "I8", INPUT),
-    createPin(26, "I9", INPUT),
-    createPin(25, "I10", INPUT),
-    createPin(24, "I11", INPUT),
-    createPin(23, "I12", INPUT),
-    createPin(22, "I13", INPUT),
-    createPin(21, "I14", INPUT),
-    createPin(20, "I15", INPUT),
+    newPin(9, "I0", INPUT),
+    newPin(8, "I1", INPUT),
+    newPin(7, "I2", INPUT),
+    newPin(6, "I3", INPUT),
+    newPin(5, "I4", INPUT),
+    newPin(4, "I5", INPUT),
+    newPin(3, "I6", INPUT),
+    newPin(2, "I7", INPUT),
+    newPin(27, "I8", INPUT),
+    newPin(26, "I9", INPUT),
+    newPin(25, "I10", INPUT),
+    newPin(24, "I11", INPUT),
+    newPin(23, "I12", INPUT),
+    newPin(22, "I13", INPUT),
+    newPin(21, "I14", INPUT),
+    newPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    createPin(18, "F0", OUTPUT, false),
-    createPin(17, "F1", OUTPUT, true),
-    createPin(16, "F2", OUTPUT, true),
-    createPin(15, "F3", OUTPUT, true),
-    createPin(13, "F4", OUTPUT, true),
-    createPin(12, "F5", OUTPUT, true),
-    createPin(11, "F6", OUTPUT, true),
-    createPin(10, "F7", OUTPUT, true),
+    newPin(18, "F0", OUTPUT, false),
+    newPin(17, "F1", OUTPUT, true),
+    newPin(16, "F2", OUTPUT, true),
+    newPin(15, "F3", OUTPUT, true),
+    newPin(13, "F4", OUTPUT, true),
+    newPin(12, "F5", OUTPUT, true),
+    newPin(11, "F6", OUTPUT, true),
+    newPin(10, "F7", OUTPUT, true),
 
     // Output enable, disables all outputs when set HIGH
-    createPin(19, "_OE", INPUT),
+    newPin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not emulated
-    createPin(1, "FE", UNCONNECTED),
+    newPin(1, "FE", UNCONNECTED),
 
     // Power supply pins, not emulated
-    createPin(28, "VCC", UNCONNECTED),
-    createPin(14, "GND", UNCONNECTED),
+    newPin(28, "VCC", UNCONNECTED),
+    newPin(14, "GND", UNCONNECTED),
   )
 
   // One listener to rule them all

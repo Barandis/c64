@@ -26,42 +26,42 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create74258() {
-  const pins = createPinArray(
+export function new74258() {
+  const pins = newPinArray(
     // Select. When this is low, the Y output pins will take on the same value as their A input
     // pins. When this is high, the Y output pins will instead take on the value of their B input
     // pins.
-    createPin(1, "SEL", INPUT),
+    newPin(1, "SEL", INPUT),
 
     // Output enable. When this is high, all of the Y output pins will be forced into hi-z, whatever
     // the values of their input pins.
-    createPin(15, "_OE", INPUT),
+    newPin(15, "_OE", INPUT),
 
     // Group 1 inputs and output
-    createPin(2, "A1", INPUT),
-    createPin(3, "B1", INPUT),
-    createPin(4, "_Y1", OUTPUT, true),
+    newPin(2, "A1", INPUT),
+    newPin(3, "B1", INPUT),
+    newPin(4, "_Y1", OUTPUT, true),
 
     // Group 2 input and output
-    createPin(5, "A2", INPUT),
-    createPin(6, "B2", INPUT),
-    createPin(7, "_Y2", OUTPUT, true),
+    newPin(5, "A2", INPUT),
+    newPin(6, "B2", INPUT),
+    newPin(7, "_Y2", OUTPUT, true),
 
     // Group 3 inputs and output
-    createPin(11, "A3", INPUT),
-    createPin(10, "B3", INPUT),
-    createPin(9, "_Y3", OUTPUT, true),
+    newPin(11, "A3", INPUT),
+    newPin(10, "B3", INPUT),
+    newPin(9, "_Y3", OUTPUT, true),
 
     // Group 4 inputs and output
-    createPin(14, "A4", INPUT),
-    createPin(13, "B4", INPUT),
-    createPin(12, "_Y4", OUTPUT, true),
+    newPin(14, "A4", INPUT),
+    newPin(13, "B4", INPUT),
+    newPin(12, "_Y4", OUTPUT, true),
 
     // Power supply pins. These are not emulated.
-    createPin(8, "GND", UNCONNECTED),
-    createPin(16, "VCC", UNCONNECTED),
+    newPin(8, "GND", UNCONNECTED),
+    newPin(16, "VCC", UNCONNECTED),
   )
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the

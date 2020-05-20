@@ -5,14 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import {
-  createPin,
-  BIDIRECTIONAL,
-  INPUT,
-  createPinArray,
-  OUTPUT,
-  UNCONNECTED,
-} from "components/pin"
+import { newPin, BIDIRECTIONAL, INPUT, newPinArray, OUTPUT, UNCONNECTED } from "components/pin"
 
 export const A = 23
 export const B = 24
@@ -37,60 +30,60 @@ export const X = 42
 export const Y = 43
 export const Z = 44
 
-export function createExpansionPort() {
-  const pins = createPinArray(
-    createPin(Y, "A0", INPUT),
-    createPin(X, "A1", INPUT),
-    createPin(W, "A2", INPUT),
-    createPin(V, "A3", INPUT),
-    createPin(U, "A4", INPUT),
-    createPin(T, "A5", INPUT),
-    createPin(S, "A6", INPUT),
-    createPin(R, "A7", INPUT),
-    createPin(P, "A8", INPUT),
-    createPin(N, "A9", INPUT),
-    createPin(M, "A10", INPUT),
-    createPin(L, "A11", INPUT),
-    createPin(K, "A12", INPUT),
-    createPin(J, "A13", INPUT),
-    createPin(H, "A14", INPUT),
-    createPin(F, "A15", INPUT),
+export function newExpansionPort() {
+  const pins = newPinArray(
+    newPin(Y, "A0", INPUT),
+    newPin(X, "A1", INPUT),
+    newPin(W, "A2", INPUT),
+    newPin(V, "A3", INPUT),
+    newPin(U, "A4", INPUT),
+    newPin(T, "A5", INPUT),
+    newPin(S, "A6", INPUT),
+    newPin(R, "A7", INPUT),
+    newPin(P, "A8", INPUT),
+    newPin(N, "A9", INPUT),
+    newPin(M, "A10", INPUT),
+    newPin(L, "A11", INPUT),
+    newPin(K, "A12", INPUT),
+    newPin(J, "A13", INPUT),
+    newPin(H, "A14", INPUT),
+    newPin(F, "A15", INPUT),
 
-    createPin(21, "D0", BIDIRECTIONAL, null),
-    createPin(20, "D1", BIDIRECTIONAL, null),
-    createPin(19, "D2", BIDIRECTIONAL, null),
-    createPin(18, "D3", BIDIRECTIONAL, null),
-    createPin(17, "D4", BIDIRECTIONAL, null),
-    createPin(16, "D5", BIDIRECTIONAL, null),
-    createPin(15, "D6", BIDIRECTIONAL, null),
-    createPin(14, "D7", BIDIRECTIONAL, null),
+    newPin(21, "D0", BIDIRECTIONAL, null),
+    newPin(20, "D1", BIDIRECTIONAL, null),
+    newPin(19, "D2", BIDIRECTIONAL, null),
+    newPin(18, "D3", BIDIRECTIONAL, null),
+    newPin(17, "D4", BIDIRECTIONAL, null),
+    newPin(16, "D5", BIDIRECTIONAL, null),
+    newPin(15, "D6", BIDIRECTIONAL, null),
+    newPin(14, "D7", BIDIRECTIONAL, null),
 
-    createPin(5, "R__W", INPUT),
-    createPin(8, "_GAME", OUTPUT, null),
-    createPin(9, "_EXROM", OUTPUT, null),
-    createPin(12, "BA", INPUT),
-    createPin(13, "_DMA", OUTPUT, null),
+    newPin(5, "R__W", INPUT),
+    newPin(8, "_GAME", OUTPUT, null),
+    newPin(9, "_EXROM", OUTPUT, null),
+    newPin(12, "BA", INPUT),
+    newPin(13, "_DMA", OUTPUT, null),
 
-    createPin(7, "_IO1", INPUT),
-    createPin(10, "_IO2", INPUT),
-    createPin(11, "_ROML", INPUT),
-    createPin(B, "_ROMH", INPUT),
+    newPin(7, "_IO1", INPUT),
+    newPin(10, "_IO2", INPUT),
+    newPin(11, "_ROML", INPUT),
+    newPin(B, "_ROMH", INPUT),
 
-    createPin(4, "_IRQ", OUTPUT, null),
-    createPin(D, "_NMI", OUTPUT, null),
+    newPin(4, "_IRQ", OUTPUT, null),
+    newPin(D, "_NMI", OUTPUT, null),
 
-    createPin(6, "DOT", INPUT),
-    createPin(E, "O2", INPUT),
+    newPin(6, "DOT", INPUT),
+    newPin(E, "O2", INPUT),
 
-    createPin(C, "_RESET", OUTPUT, null),
+    newPin(C, "_RESET", OUTPUT, null),
 
-    createPin(2, "VCC1", UNCONNECTED),
-    createPin(3, "VCC2", UNCONNECTED),
+    newPin(2, "VCC1", UNCONNECTED),
+    newPin(3, "VCC2", UNCONNECTED),
 
-    createPin(1, "GND1", UNCONNECTED),
-    createPin(22, "GND2", UNCONNECTED),
-    createPin(A, "GND3", UNCONNECTED),
-    createPin(Z, "GND4", UNCONNECTED),
+    newPin(1, "GND1", UNCONNECTED),
+    newPin(22, "GND2", UNCONNECTED),
+    newPin(A, "GND3", UNCONNECTED),
+    newPin(Z, "GND4", UNCONNECTED),
   )
 
   const port = {

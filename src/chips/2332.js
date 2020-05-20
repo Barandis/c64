@@ -27,42 +27,42 @@
 //
 // On the C64 schematic, the CHARACTER ROM is U5.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create2332(buffer) {
-  const pins = createPinArray(
+export function new2332(buffer) {
+  const pins = newPinArray(
     // Address pins A0...A11
-    createPin(8, "A0", INPUT),
-    createPin(7, "A1", INPUT),
-    createPin(6, "A2", INPUT),
-    createPin(5, "A3", INPUT),
-    createPin(4, "A4", INPUT),
-    createPin(3, "A5", INPUT),
-    createPin(2, "A6", INPUT),
-    createPin(1, "A7", INPUT),
-    createPin(23, "A8", INPUT),
-    createPin(22, "A9", INPUT),
-    createPin(18, "A10", INPUT),
-    createPin(19, "A11", INPUT),
+    newPin(8, "A0", INPUT),
+    newPin(7, "A1", INPUT),
+    newPin(6, "A2", INPUT),
+    newPin(5, "A3", INPUT),
+    newPin(4, "A4", INPUT),
+    newPin(3, "A5", INPUT),
+    newPin(2, "A6", INPUT),
+    newPin(1, "A7", INPUT),
+    newPin(23, "A8", INPUT),
+    newPin(22, "A9", INPUT),
+    newPin(18, "A10", INPUT),
+    newPin(19, "A11", INPUT),
 
     // Data pins D0...D7
-    createPin(9, "D0", OUTPUT, 0),
-    createPin(10, "D1", OUTPUT, 0),
-    createPin(11, "D2", OUTPUT, 0),
-    createPin(13, "D3", OUTPUT, 0),
-    createPin(14, "D4", OUTPUT, 0),
-    createPin(15, "D5", OUTPUT, 0),
-    createPin(16, "D6", OUTPUT, 0),
-    createPin(17, "D7", OUTPUT, 0),
+    newPin(9, "D0", OUTPUT, 0),
+    newPin(10, "D1", OUTPUT, 0),
+    newPin(11, "D2", OUTPUT, 0),
+    newPin(13, "D3", OUTPUT, 0),
+    newPin(14, "D4", OUTPUT, 0),
+    newPin(15, "D5", OUTPUT, 0),
+    newPin(16, "D6", OUTPUT, 0),
+    newPin(17, "D7", OUTPUT, 0),
 
     // Chip select pins. When these are both low, a read cycle is executed based on the address on
     // pins A0...A11. When they're high, the data pins are put into hi-Z.
-    createPin(20, "_CS1", INPUT),
-    createPin(21, "_CS2", INPUT),
+    newPin(20, "_CS1", INPUT),
+    newPin(21, "_CS2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    createPin(24, "VCC", UNCONNECTED),
-    createPin(12, "GND", UNCONNECTED),
+    newPin(24, "VCC", UNCONNECTED),
+    newPin(12, "GND", UNCONNECTED),
   )
 
   const memory = new Uint8Array(buffer)

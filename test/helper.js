@@ -8,7 +8,7 @@
 import chai from "chai"
 import sinonChai from "sinon-chai"
 
-import { connect } from "components/trace"
+import { newTrace } from "components/trace"
 
 chai.use(sinonChai)
 
@@ -46,7 +46,7 @@ export function chipState(chip, name) {
 export function setupTraces(traces, chip) {
   for (const pin of chip.pins) {
     if (pin && (pin.input || pin.output)) {
-      traces[pin.name] = connect(pin)
+      traces[pin.name] = newTrace(pin)
     }
   }
 }

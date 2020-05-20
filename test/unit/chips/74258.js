@@ -7,18 +7,18 @@
 
 import { expect, setupTraces } from "test/helper"
 
-import { create74258 } from "chips/74258"
-import { connect, PULL_UP, PULL_DOWN } from "components/trace"
+import { new74258 } from "chips/74258"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 describe("74258 3-State Quad 2-Data Multiplexers", () => {
   let chip
   const traces = {}
 
   beforeEach(() => {
-    chip = create74258()
+    chip = new74258()
     setupTraces(traces, chip)
-    traces.VCC = connect(chip.pins.VCC, PULL_UP)
-    traces.GND = connect(chip.pins.GND, PULL_DOWN)
+    traces.VCC = newTrace(chip.pins.VCC, PULL_UP)
+    traces.GND = newTrace(chip.pins.GND, PULL_DOWN)
   })
 
   describe("group 1", () => {

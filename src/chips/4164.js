@@ -39,45 +39,45 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order, were U21, U9, U22, U10, U23,
 // U11, U24, and U12.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create4164() {
-  const pins = createPinArray(
+export function new4164() {
+  const pins = newPinArray(
     // The row address strobe. Setting this low latches the values of A0-A7, saving them to be part
     // of the address used to access the memory array.
-    createPin(4, "_RAS", INPUT),
+    newPin(4, "_RAS", INPUT),
 
     // The column address strobe. Setting this low latches A0-A7 into the second part of the memory
     // address. It also initiates read or write mode, depending on the value of _W.
-    createPin(15, "_CAS", INPUT),
+    newPin(15, "_CAS", INPUT),
 
     // The write-enable pin. If this is high, the chip is in read mode; if it and _CAS are low, the
     // chip is in either write or read-modify-write mode, depending on which pin went low first.
-    createPin(3, "_W", INPUT),
+    newPin(3, "_W", INPUT),
 
     // Address pins 0-7
-    createPin(5, "A0", INPUT),
-    createPin(7, "A1", INPUT),
-    createPin(6, "A2", INPUT),
-    createPin(12, "A3", INPUT),
-    createPin(11, "A4", INPUT),
-    createPin(10, "A5", INPUT),
-    createPin(13, "A6", INPUT),
-    createPin(9, "A7", INPUT),
+    newPin(5, "A0", INPUT),
+    newPin(7, "A1", INPUT),
+    newPin(6, "A2", INPUT),
+    newPin(12, "A3", INPUT),
+    newPin(11, "A4", INPUT),
+    newPin(10, "A5", INPUT),
+    newPin(13, "A6", INPUT),
+    newPin(9, "A7", INPUT),
 
     // The data input pin. When the chip is in write or read-modify-write mode, the value of this
     // pin will be written to the appropriate bit in the memory array. In read mode, it will be
     // hi-z.
-    createPin(2, "D", INPUT),
+    newPin(2, "D", INPUT),
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
     // the bit at the address latched by _RAS and _CAS. In write mode, it is hi-z.
-    createPin(14, "Q", OUTPUT, null),
+    newPin(14, "Q", OUTPUT, null),
 
     // Power supply and no-contact pins. These are not emulated.
-    createPin(1, "NC", UNCONNECTED),
-    createPin(8, "VCC", UNCONNECTED),
-    createPin(16, "VSS", UNCONNECTED),
+    newPin(1, "NC", UNCONNECTED),
+    newPin(8, "VCC", UNCONNECTED),
+    newPin(16, "VSS", UNCONNECTED),
   )
 
   // 2048 32-bit unsigned integers is 65,536 bits.

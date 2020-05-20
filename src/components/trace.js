@@ -41,7 +41,7 @@ export const PULL_DOWN = Symbol("PULL_DOWN")
 
 // Creates a trace. The values passed to it are pins, optionally with a value of FLOAT (the
 // default), PULLUP, or PULLDOWN at the end.
-export function connect(...connectedPins) {
+export function newTrace(...connectedPins) {
   let floating = FLOAT
   const pins = []
 

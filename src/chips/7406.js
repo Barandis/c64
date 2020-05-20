@@ -14,31 +14,31 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { createPin, INPUT, OUTPUT, createPinArray, UNCONNECTED } from "components/pin"
+import { newPin, INPUT, OUTPUT, newPinArray, UNCONNECTED } from "components/pin"
 
-export function create7406() {
-  const pins = createPinArray(
+export function new7406() {
+  const pins = newPinArray(
     // Input pins. In the TI data sheet, these are named "1A", "2A", etc., and the C64 schematic
     // does not suggest named for them. Since these names are not legal JS variable names, I've
     // switched the letter and number.
-    createPin(1, "A1", INPUT),
-    createPin(3, "A2", INPUT),
-    createPin(5, "A3", INPUT),
-    createPin(9, "A4", INPUT),
-    createPin(11, "A5", INPUT),
-    createPin(13, "A6", INPUT),
+    newPin(1, "A1", INPUT),
+    newPin(3, "A2", INPUT),
+    newPin(5, "A3", INPUT),
+    newPin(9, "A4", INPUT),
+    newPin(11, "A5", INPUT),
+    newPin(13, "A6", INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as "1Y", "2Y", etc.
-    createPin(2, "Y1", OUTPUT, true),
-    createPin(4, "Y2", OUTPUT, true),
-    createPin(6, "Y3", OUTPUT, true),
-    createPin(8, "Y4", OUTPUT, true),
-    createPin(10, "Y5", OUTPUT, true),
-    createPin(12, "Y6", OUTPUT, true),
+    newPin(2, "Y1", OUTPUT, true),
+    newPin(4, "Y2", OUTPUT, true),
+    newPin(6, "Y3", OUTPUT, true),
+    newPin(8, "Y4", OUTPUT, true),
+    newPin(10, "Y5", OUTPUT, true),
+    newPin(12, "Y6", OUTPUT, true),
 
     // Power supply and ground pins, not emulated
-    createPin(14, "VCC", UNCONNECTED),
-    createPin(7, "GND", UNCONNECTED),
+    newPin(14, "VCC", UNCONNECTED),
+    newPin(7, "GND", UNCONNECTED),
   )
 
   function inputChanged(apin, ypin) {
