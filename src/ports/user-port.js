@@ -5,7 +5,14 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, BIDIRECTIONAL, INPUT, createPinArray } from "components/pin"
+import {
+  createPin,
+  BIDIRECTIONAL,
+  INPUT,
+  createPinArray,
+  OUTPUT,
+  UNCONNECTED,
+} from "components/pin"
 
 export const A = 13
 export const B = 14
@@ -22,34 +29,34 @@ export const N = 24
 
 export function createUserPort() {
   const pins = createPinArray(
-    createPin(M, "PA2", BIDIRECTIONAL),
+    createPin(M, "PA2", BIDIRECTIONAL, null),
 
-    createPin(C, "PB0", BIDIRECTIONAL),
-    createPin(D, "PB1", BIDIRECTIONAL),
-    createPin(E, "PB2", BIDIRECTIONAL),
-    createPin(F, "PB3", BIDIRECTIONAL),
-    createPin(H, "PB4", BIDIRECTIONAL),
-    createPin(J, "PB5", BIDIRECTIONAL),
-    createPin(K, "PB6", BIDIRECTIONAL),
-    createPin(L, "PB7", BIDIRECTIONAL),
+    createPin(C, "PB0", BIDIRECTIONAL, null),
+    createPin(D, "PB1", BIDIRECTIONAL, null),
+    createPin(E, "PB2", BIDIRECTIONAL, null),
+    createPin(F, "PB3", BIDIRECTIONAL, null),
+    createPin(H, "PB4", BIDIRECTIONAL, null),
+    createPin(J, "PB5", BIDIRECTIONAL, null),
+    createPin(K, "PB6", BIDIRECTIONAL, null),
+    createPin(L, "PB7", BIDIRECTIONAL, null),
 
-    createPin(5, "SP1", BIDIRECTIONAL),
-    createPin(7, "SP2", BIDIRECTIONAL),
+    createPin(5, "SP1", BIDIRECTIONAL, null),
+    createPin(7, "SP2", BIDIRECTIONAL, null),
 
-    createPin(4, "CNT1", BIDIRECTIONAL),
-    createPin(6, "CNT2", BIDIRECTIONAL),
-    createPin(9, "ATN", BIDIRECTIONAL),
-    createPin(8, "_PC2", BIDIRECTIONAL),
-    createPin(B, "_FLAG2", BIDIRECTIONAL),
-    createPin(3, "_RESET", BIDIRECTIONAL),
+    createPin(4, "CNT1", BIDIRECTIONAL, null),
+    createPin(6, "CNT2", BIDIRECTIONAL, null),
+    createPin(9, "ATN", OUTPUT, null),
+    createPin(8, "_PC2", INPUT),
+    createPin(B, "_FLAG2", OUTPUT, null),
+    createPin(3, "_RESET", BIDIRECTIONAL, null),
 
-    createPin(2, "VCC", INPUT, null),
-    createPin(10, "VAC1", INPUT, null),
-    createPin(11, "VAC22", INPUT, null),
-    createPin(1, "GND1", INPUT, null),
-    createPin(12, "GND2", INPUT, null),
-    createPin(A, "GND3", INPUT, null),
-    createPin(N, "GND4", INPUT, null),
+    createPin(2, "VCC", UNCONNECTED),
+    createPin(10, "VAC1", UNCONNECTED),
+    createPin(11, "VAC22", UNCONNECTED),
+    createPin(1, "GND1", UNCONNECTED),
+    createPin(12, "GND2", UNCONNECTED),
+    createPin(A, "GND3", UNCONNECTED),
+    createPin(N, "GND4", UNCONNECTED),
   )
 
   const port = {
