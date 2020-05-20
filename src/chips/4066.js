@@ -26,34 +26,34 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { createPin, INPUT, BIDIRECTIONAL } from "components/pin"
+import { createPin, INPUT, BIDIRECTIONAL, createPinArray } from "components/pin"
 
 export function create4066() {
-  const pins = {
+  const pins = createPinArray(
     // I/O and control pins for switch 1
-    X1: createPin(1, "X1", BIDIRECTIONAL),
-    Y1: createPin(2, "Y1", BIDIRECTIONAL),
-    A1: createPin(13, "A1", INPUT),
+    createPin(1, "X1", BIDIRECTIONAL),
+    createPin(2, "Y1", BIDIRECTIONAL),
+    createPin(13, "A1", INPUT),
 
     // I/O and control pins for switch 2
-    X2: createPin(3, "X2", BIDIRECTIONAL),
-    Y2: createPin(4, "Y2", BIDIRECTIONAL),
-    A2: createPin(5, "A2", INPUT),
+    createPin(3, "X2", BIDIRECTIONAL),
+    createPin(4, "Y2", BIDIRECTIONAL),
+    createPin(5, "A2", INPUT),
 
     // I/O and control pins for switch 3
-    X3: createPin(9, "X3", BIDIRECTIONAL),
-    Y3: createPin(8, "Y3", BIDIRECTIONAL),
-    A3: createPin(6, "A3", INPUT),
+    createPin(9, "X3", BIDIRECTIONAL),
+    createPin(8, "Y3", BIDIRECTIONAL),
+    createPin(6, "A3", INPUT),
 
     // I/O and control pins for switch 4
-    X4: createPin(11, "X4", BIDIRECTIONAL),
-    Y4: createPin(10, "Y4", BIDIRECTIONAL),
-    A4: createPin(12, "A4", INPUT),
+    createPin(11, "X4", BIDIRECTIONAL),
+    createPin(10, "Y4", BIDIRECTIONAL),
+    createPin(12, "A4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    VDD: createPin(14, "VDD", "INPUT", null),
-    GND: createPin(7, "GND", INPUT, null),
-  }
+    createPin(14, "VDD", "INPUT", null),
+    createPin(7, "GND", INPUT, null),
+  )
 
   const last = [null, null, null, null]
 
@@ -116,13 +116,12 @@ export function create4066() {
   pins.X4.addListener(() => setDataX(4))
   pins.Y4.addListener(() => setDataY(4))
 
-  const switches = []
-  switches.pins = pins
+  const switches = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    switches[name] = pin
-    switches[pin.num] = pin
+    switches[name] = pins[name]
   }
 
   return switches

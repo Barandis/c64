@@ -39,46 +39,46 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order, were U21, U9, U22, U10, U23,
 // U11, U24, and U12.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 export function create4164() {
-  const pins = {
+  const pins = createPinArray(
     // The row address strobe. Setting this low latches the values of A0-A7, saving them to be part
     // of the address used to access the memory array.
-    _RAS: createPin(4, "_RAS", INPUT),
+    createPin(4, "_RAS", INPUT),
 
     // The column address strobe. Setting this low latches A0-A7 into the second part of the memory
     // address. It also initiates read or write mode, depending on the value of _W.
-    _CAS: createPin(15, "_CAS", INPUT),
+    createPin(15, "_CAS", INPUT),
 
     // The write-enable pin. If this is high, the chip is in read mode; if it and _CAS are low, the
     // chip is in either write or read-modify-write mode, depending on which pin went low first.
-    _W: createPin(3, "_W", INPUT),
+    createPin(3, "_W", INPUT),
 
     // Address pins 0-7
-    A0: createPin(5, "A0", INPUT),
-    A1: createPin(7, "A1", INPUT),
-    A2: createPin(6, "A2", INPUT),
-    A3: createPin(12, "A3", INPUT),
-    A4: createPin(11, "A4", INPUT),
-    A5: createPin(10, "A5", INPUT),
-    A6: createPin(13, "A6", INPUT),
-    A7: createPin(9, "A7", INPUT),
+    createPin(5, "A0", INPUT),
+    createPin(7, "A1", INPUT),
+    createPin(6, "A2", INPUT),
+    createPin(12, "A3", INPUT),
+    createPin(11, "A4", INPUT),
+    createPin(10, "A5", INPUT),
+    createPin(13, "A6", INPUT),
+    createPin(9, "A7", INPUT),
 
     // The data input pin. When the chip is in write or read-modify-write mode, the value of this
     // pin will be written to the appropriate bit in the memory array. In read mode, it will be
     // hi-z.
-    D: createPin(2, "D", INPUT),
+    createPin(2, "D", INPUT),
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
     // the bit at the address latched by _RAS and _CAS. In write mode, it is hi-z.
-    Q: createPin(14, "Q", OUTPUT, null),
+    createPin(14, "Q", OUTPUT, null),
 
     // Power supply and no-contact pins. These are not emulated.
-    NC: createPin(1, "NC", INPUT, null),
-    VCC: createPin(8, "VCC", INPUT, null),
-    VSS: createPin(16, "VSS", INPUT, null),
-  }
+    createPin(1, "NC", INPUT, null),
+    createPin(8, "VCC", INPUT, null),
+    createPin(16, "VSS", INPUT, null),
+  )
 
   // 2048 32-bit unsigned integers is 65,536 bits.
   const memory = new Uint32Array(2048)
@@ -213,14 +213,13 @@ export function create4164() {
   pins._CAS.addListener(casLatch)
   pins._W.addListener(writeLatch)
 
-  const ram = []
-  ram.pins = pins
-
-  for (const name in pins) {
-    const pin = pins[name]
-    ram[name] = pin
-    ram[pin.num] = pin
+  const dram = {
+    pins,
   }
 
-  return ram
+  for (const name in pins) {
+    dram[name] = pins[name]
+  }
+
+  return dram
 }

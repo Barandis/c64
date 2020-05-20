@@ -26,43 +26,43 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 export function create74258() {
-  const pins = {
+  const pins = createPinArray(
     // Select. When this is low, the Y output pins will take on the same value as their A input
     // pins. When this is high, the Y output pins will instead take on the value of their B input
     // pins.
-    SEL: createPin(1, "SEL", INPUT),
+    createPin(1, "SEL", INPUT),
 
     // Output enable. When this is high, all of the Y output pins will be forced into hi-z, whatever
     // the values of their input pins.
-    _OE: createPin(15, "_OE", INPUT),
+    createPin(15, "_OE", INPUT),
 
     // Group 1 inputs and output
-    A1: createPin(2, "A1", INPUT),
-    B1: createPin(3, "B1", INPUT),
-    _Y1: createPin(4, "_Y1", OUTPUT, true),
+    createPin(2, "A1", INPUT),
+    createPin(3, "B1", INPUT),
+    createPin(4, "_Y1", OUTPUT, true),
 
     // Group 2 input and output
-    A2: createPin(5, "A2", INPUT),
-    B2: createPin(6, "B2", INPUT),
-    _Y2: createPin(7, "_Y2", OUTPUT, true),
+    createPin(5, "A2", INPUT),
+    createPin(6, "B2", INPUT),
+    createPin(7, "_Y2", OUTPUT, true),
 
     // Group 3 inputs and output
-    A3: createPin(11, "A3", INPUT),
-    B3: createPin(10, "B3", INPUT),
-    _Y3: createPin(9, "_Y3", OUTPUT, true),
+    createPin(11, "A3", INPUT),
+    createPin(10, "B3", INPUT),
+    createPin(9, "_Y3", OUTPUT, true),
 
     // Group 4 inputs and output
-    A4: createPin(14, "A4", INPUT),
-    B4: createPin(13, "B4", INPUT),
-    _Y4: createPin(12, "_Y4", OUTPUT, true),
+    createPin(14, "A4", INPUT),
+    createPin(13, "B4", INPUT),
+    createPin(12, "_Y4", OUTPUT, true),
 
     // Power supply pins. These are not emulated.
-    GND: createPin(8, "GND", INPUT, null),
-    VCC: createPin(16, "VCC", INPUT, null),
-  }
+    createPin(8, "GND", INPUT, null),
+    createPin(16, "VCC", INPUT, null),
+  )
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
@@ -121,13 +121,12 @@ export function create74258() {
   pins.A4.addListener(() => setGroup4())
   pins.B4.addListener(() => setGroup4())
 
-  const mux = []
-  mux.pins = pins
+  const mux = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    mux[name] = pin
-    mux[pin.num] = pin
+    mux[name] = pins[name]
   }
 
   return mux

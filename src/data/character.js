@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { decode } from "./base64"
+import { decode } from "utils"
 
 const base64 =
   "PGZubmBiPAAYPGZ+ZmZmAHxmZnxmZnwAPGZgYGBmPAB4bGZmZmx4AH5gYHhgYH4AfmBgeGBgYAA8ZmBuZmY8AGZmZn5mZ" +

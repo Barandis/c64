@@ -5,29 +5,28 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, BIDIRECTIONAL, INPUT } from "components/pin"
+import { createPin, BIDIRECTIONAL, INPUT, createPinArray } from "components/pin"
 
 export function createControl2Port() {
-  const pins = {
-    JOYB0: createPin(1, "JOYB0", BIDIRECTIONAL),
-    JOYB1: createPin(2, "JOYB1", BIDIRECTIONAL),
-    JOYB2: createPin(3, "JOYB2", BIDIRECTIONAL),
-    JOYB3: createPin(4, "JOYB3", BIDIRECTIONAL),
-    POTBX: createPin(9, "POTBX", BIDIRECTIONAL),
-    POTBY: createPin(5, "POTBY", BIDIRECTIONAL),
-    BUTTONB: createPin(6, "BUTTONB", BIDIRECTIONAL),
+  const pins = createPinArray(
+    createPin(1, "JOYB0", BIDIRECTIONAL),
+    createPin(2, "JOYB1", BIDIRECTIONAL),
+    createPin(3, "JOYB2", BIDIRECTIONAL),
+    createPin(4, "JOYB3", BIDIRECTIONAL),
+    createPin(9, "POTBX", BIDIRECTIONAL),
+    createPin(5, "POTBY", BIDIRECTIONAL),
+    createPin(6, "BUTTONB", BIDIRECTIONAL),
 
-    VCC: createPin(7, "VCC", INPUT, null),
-    GND: createPin(8, "GND", INPUT, null),
+    createPin(7, "VCC", INPUT, null),
+    createPin(8, "GND", INPUT, null),
+  )
+
+  const port = {
+    pins,
   }
 
-  const port = []
-  port.pins = pins
-
   for (const name in pins) {
-    const pin = pins[name]
-    port[name] = pin
-    port[pin.num] = pin
+    port[name] = pins[name]
   }
 
   return port

@@ -44,7 +44,7 @@ export function chipState(chip, name) {
 }
 
 export function setupTraces(traces, chip) {
-  for (const pin of chip) {
+  for (const pin of chip.pins) {
     if (pin && !(pin.hiZ && pin.input)) {
       traces[pin.name] = createTrace(pin)
     }

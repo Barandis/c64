@@ -5,26 +5,25 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, INPUT, BIDIRECTIONAL } from "components/pin"
+import { createPin, INPUT, BIDIRECTIONAL, createPinArray } from "components/pin"
 
 export function createCassettePort() {
-  const pins = {
-    READ: createPin(4, "READ", BIDIRECTIONAL),
-    WRITE: createPin(5, "WRITE", BIDIRECTIONAL),
-    SENSE: createPin(6, "SENSE", BIDIRECTIONAL),
-    MOTOR: createPin(3, "MOTOR", BIDIRECTIONAL),
+  const pins = createPinArray(
+    createPin(4, "READ", BIDIRECTIONAL),
+    createPin(5, "WRITE", BIDIRECTIONAL),
+    createPin(6, "SENSE", BIDIRECTIONAL),
+    createPin(3, "MOTOR", BIDIRECTIONAL),
 
-    VCC: createPin(2, "VCC", INPUT, null),
-    GND: createPin(1, "GND", INPUT, null),
+    createPin(2, "VCC", INPUT, null),
+    createPin(1, "GND", INPUT, null),
+  )
+
+  const port = {
+    pins,
   }
 
-  const port = []
-  port.pins = pins
-
   for (const name in pins) {
-    const pin = pins[name]
-    port[name] = pin
-    port[pin.num] = pin
+    port[name] = pins[name]
   }
 
   return port

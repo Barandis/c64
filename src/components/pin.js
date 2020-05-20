@@ -208,3 +208,14 @@ export function createPin(num, name, direction, init = 0) {
     removeListener,
   }
 }
+
+export function createPinArray(...pins) {
+  const array = []
+
+  for (const pin of pins) {
+    array[pin.num] = pin
+    array[pin.name] = pin
+  }
+
+  return array
+}

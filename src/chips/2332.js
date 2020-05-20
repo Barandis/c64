@@ -27,43 +27,43 @@
 //
 // On the C64 schematic, the CHARACTER ROM is U5.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 export function create2332(buffer) {
-  const pins = {
+  const pins = createPinArray(
     // Address pins A0...A11
-    A0: createPin(8, "A0", INPUT),
-    A1: createPin(7, "A1", INPUT),
-    A2: createPin(6, "A2", INPUT),
-    A3: createPin(5, "A3", INPUT),
-    A4: createPin(4, "A4", INPUT),
-    A5: createPin(3, "A5", INPUT),
-    A6: createPin(2, "A6", INPUT),
-    A7: createPin(1, "A7", INPUT),
-    A8: createPin(23, "A8", INPUT),
-    A9: createPin(22, "A9", INPUT),
-    A10: createPin(18, "A10", INPUT),
-    A11: createPin(19, "A11", INPUT),
+    createPin(8, "A0", INPUT),
+    createPin(7, "A1", INPUT),
+    createPin(6, "A2", INPUT),
+    createPin(5, "A3", INPUT),
+    createPin(4, "A4", INPUT),
+    createPin(3, "A5", INPUT),
+    createPin(2, "A6", INPUT),
+    createPin(1, "A7", INPUT),
+    createPin(23, "A8", INPUT),
+    createPin(22, "A9", INPUT),
+    createPin(18, "A10", INPUT),
+    createPin(19, "A11", INPUT),
 
     // Data pins D0...D7
-    D0: createPin(9, "D0", OUTPUT, 0),
-    D1: createPin(10, "D1", OUTPUT, 0),
-    D2: createPin(11, "D2", OUTPUT, 0),
-    D3: createPin(13, "D3", OUTPUT, 0),
-    D4: createPin(14, "D4", OUTPUT, 0),
-    D5: createPin(15, "D5", OUTPUT, 0),
-    D6: createPin(16, "D6", OUTPUT, 0),
-    D7: createPin(17, "D7", OUTPUT, 0),
+    createPin(9, "D0", OUTPUT, 0),
+    createPin(10, "D1", OUTPUT, 0),
+    createPin(11, "D2", OUTPUT, 0),
+    createPin(13, "D3", OUTPUT, 0),
+    createPin(14, "D4", OUTPUT, 0),
+    createPin(15, "D5", OUTPUT, 0),
+    createPin(16, "D6", OUTPUT, 0),
+    createPin(17, "D7", OUTPUT, 0),
 
     // Chip select pins. When these are both low, a read cycle is executed based on the address on
     // pins A0...A11. When they're high, the data pins are put into hi-Z.
-    _CS1: createPin(20, "_CS1", INPUT),
-    _CS2: createPin(21, "_CS2", INPUT),
+    createPin(20, "_CS1", INPUT),
+    createPin(21, "_CS2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    VCC: createPin(24, "VCC", INPUT, null),
-    GND: createPin(12, "GND", INPUT, null),
-  }
+    createPin(24, "VCC", INPUT, null),
+    createPin(12, "GND", INPUT, null),
+  )
 
   const memory = new Uint8Array(buffer)
 
@@ -117,13 +117,12 @@ export function create2332(buffer) {
   pins._CS1.addListener(chipEnable)
   pins._CS2.addListener(chipEnable)
 
-  const rom = []
-  rom.pins = pins
+  const rom = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    rom[name] = pin
-    rom[pin.num] = pin
+    rom[name] = pins[name]
   }
 
   return rom

@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { createPin, BIDIRECTIONAL, INPUT } from "components/pin"
+import { createPin, BIDIRECTIONAL, INPUT, createPinArray } from "components/pin"
 
 export const A = 13
 export const B = 14
@@ -21,44 +21,43 @@ export const M = 23
 export const N = 24
 
 export function createUserPort() {
-  const pins = {
-    PA2: createPin(M, "PA2", BIDIRECTIONAL),
+  const pins = createPinArray(
+    createPin(M, "PA2", BIDIRECTIONAL),
 
-    PB0: createPin(C, "PB0", BIDIRECTIONAL),
-    PB1: createPin(D, "PB1", BIDIRECTIONAL),
-    PB2: createPin(E, "PB2", BIDIRECTIONAL),
-    PB3: createPin(F, "PB3", BIDIRECTIONAL),
-    PB4: createPin(H, "PB4", BIDIRECTIONAL),
-    PB5: createPin(J, "PB5", BIDIRECTIONAL),
-    PB6: createPin(K, "PB6", BIDIRECTIONAL),
-    PB7: createPin(L, "PB7", BIDIRECTIONAL),
+    createPin(C, "PB0", BIDIRECTIONAL),
+    createPin(D, "PB1", BIDIRECTIONAL),
+    createPin(E, "PB2", BIDIRECTIONAL),
+    createPin(F, "PB3", BIDIRECTIONAL),
+    createPin(H, "PB4", BIDIRECTIONAL),
+    createPin(J, "PB5", BIDIRECTIONAL),
+    createPin(K, "PB6", BIDIRECTIONAL),
+    createPin(L, "PB7", BIDIRECTIONAL),
 
-    SP1: createPin(5, "SP1", BIDIRECTIONAL),
-    SP2: createPin(7, "SP2", BIDIRECTIONAL),
+    createPin(5, "SP1", BIDIRECTIONAL),
+    createPin(7, "SP2", BIDIRECTIONAL),
 
-    CNT1: createPin(4, "CNT1", BIDIRECTIONAL),
-    CNT2: createPin(6, "CNT2", BIDIRECTIONAL),
-    ATN: createPin(9, "ATN", BIDIRECTIONAL),
-    _PC2: createPin(8, "_PC2", BIDIRECTIONAL),
-    _FLAG2: createPin(B, "_FLAG2", BIDIRECTIONAL),
-    _RESET: createPin(3, "_RESET", BIDIRECTIONAL),
+    createPin(4, "CNT1", BIDIRECTIONAL),
+    createPin(6, "CNT2", BIDIRECTIONAL),
+    createPin(9, "ATN", BIDIRECTIONAL),
+    createPin(8, "_PC2", BIDIRECTIONAL),
+    createPin(B, "_FLAG2", BIDIRECTIONAL),
+    createPin(3, "_RESET", BIDIRECTIONAL),
 
-    VCC: createPin(2, "VCC", INPUT, null),
-    VAC1: createPin(10, "VAC", INPUT, null),
-    VAC2: createPin(11, "VAC", INPUT, null),
-    GND1: createPin(1, "GND", INPUT, null),
-    GND2: createPin(12, "GND", INPUT, null),
-    GND3: createPin(A, "GND", INPUT, null),
-    GND4: createPin(N, "GND", INPUT, null),
+    createPin(2, "VCC", INPUT, null),
+    createPin(10, "VAC1", INPUT, null),
+    createPin(11, "VAC22", INPUT, null),
+    createPin(1, "GND1", INPUT, null),
+    createPin(12, "GND2", INPUT, null),
+    createPin(A, "GND3", INPUT, null),
+    createPin(N, "GND4", INPUT, null),
+  )
+
+  const port = {
+    pins,
   }
 
-  const port = []
-  port.pins = pins
-
   for (const name in pins) {
-    const pin = pins[name]
-    port[name] = pin
-    port[pin.num] = pin
+    port[name] = pins[name]
   }
 
   return port

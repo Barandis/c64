@@ -23,39 +23,39 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { createPin, INPUT, BIDIRECTIONAL } from "components/pin"
+import { createPin, INPUT, BIDIRECTIONAL, createPinArray } from "components/pin"
 
 export function create2114() {
-  const pins = {
+  const pins = createPinArray(
     // Address pins A0...A9
-    A0: createPin(5, "A0", INPUT),
-    A1: createPin(6, "A1", INPUT),
-    A2: createPin(7, "A2", INPUT),
-    A3: createPin(4, "A3", INPUT),
-    A4: createPin(3, "A4", INPUT),
-    A5: createPin(2, "A5", INPUT),
-    A6: createPin(1, "A6", INPUT),
-    A7: createPin(17, "A7", INPUT),
-    A8: createPin(16, "A8", INPUT),
-    A9: createPin(15, "A9", INPUT),
+    createPin(5, "A0", INPUT),
+    createPin(6, "A1", INPUT),
+    createPin(7, "A2", INPUT),
+    createPin(4, "A3", INPUT),
+    createPin(3, "A4", INPUT),
+    createPin(2, "A5", INPUT),
+    createPin(1, "A6", INPUT),
+    createPin(17, "A7", INPUT),
+    createPin(16, "A8", INPUT),
+    createPin(15, "A9", INPUT),
 
     // Data pins D0...D3
-    D0: createPin(14, "D0", BIDIRECTIONAL, 0),
-    D1: createPin(13, "D1", BIDIRECTIONAL, 0),
-    D2: createPin(12, "D2", BIDIRECTIONAL, 0),
-    D3: createPin(11, "D3", BIDIRECTIONAL, 0),
+    createPin(14, "D0", BIDIRECTIONAL, 0),
+    createPin(13, "D1", BIDIRECTIONAL, 0),
+    createPin(12, "D2", BIDIRECTIONAL, 0),
+    createPin(11, "D3", BIDIRECTIONAL, 0),
 
     // Chip enable pin. Setting this to low is what begins a read or write cycle.
-    _CE: createPin(8, "_CE", INPUT),
+    createPin(8, "_CE", INPUT),
 
     // Write enable pin. If this is low when _CE goes low, then the cycle is a write cycle,
     // otherwise it's a read cycle.
-    _WE: createPin(10, "_WE", INPUT),
+    createPin(10, "_WE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    VCC: createPin(18, "VCC", INPUT, null),
-    GND: createPin(9, "GND", INPUT, null),
-  }
+    createPin(18, "VCC", INPUT, null),
+    createPin(9, "GND", INPUT, null),
+  )
 
   const memory = new Uint32Array(128)
 
@@ -119,13 +119,12 @@ export function create2114() {
     }
   })
 
-  const ram = []
-  ram.pins = pins
+  const ram = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    ram[name] = pin
-    ram[pin.num] = pin
+    ram[name] = pins[name]
   }
 
   return ram

@@ -62,7 +62,7 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each pin in
 // the Commodore 64. They can be used to access the same pins with a different naming convention.
@@ -96,46 +96,46 @@ export const F6 = "_ROML"
 export const F7 = "_ROMH"
 
 export function create82S100() {
-  const pins = {
+  const pins = createPinArray(
     // Input pins. In the 82S100, these were generically named I0 through I15, since each pin could
     // serve any function depending on the programming applies.
-    I0: createPin(9, "I0", INPUT),
-    I1: createPin(8, "I1", INPUT),
-    I2: createPin(7, "I2", INPUT),
-    I3: createPin(6, "I3", INPUT),
-    I4: createPin(5, "I4", INPUT),
-    I5: createPin(4, "I5", INPUT),
-    I6: createPin(3, "I6", INPUT),
-    I7: createPin(2, "I7", INPUT),
-    I8: createPin(27, "I8", INPUT),
-    I9: createPin(26, "I9", INPUT),
-    I10: createPin(25, "I10", INPUT),
-    I11: createPin(24, "I11", INPUT),
-    I12: createPin(23, "I12", INPUT),
-    I13: createPin(22, "I13", INPUT),
-    I14: createPin(21, "I14", INPUT),
-    I15: createPin(20, "I15", INPUT),
+    createPin(9, "I0", INPUT),
+    createPin(8, "I1", INPUT),
+    createPin(7, "I2", INPUT),
+    createPin(6, "I3", INPUT),
+    createPin(5, "I4", INPUT),
+    createPin(4, "I5", INPUT),
+    createPin(3, "I6", INPUT),
+    createPin(2, "I7", INPUT),
+    createPin(27, "I8", INPUT),
+    createPin(26, "I9", INPUT),
+    createPin(25, "I10", INPUT),
+    createPin(24, "I11", INPUT),
+    createPin(23, "I12", INPUT),
+    createPin(22, "I13", INPUT),
+    createPin(21, "I14", INPUT),
+    createPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    F0: createPin(18, "F0", OUTPUT, false),
-    F1: createPin(17, "F1", OUTPUT, true),
-    F2: createPin(16, "F2", OUTPUT, true),
-    F3: createPin(15, "F3", OUTPUT, true),
-    F4: createPin(13, "F4", OUTPUT, true),
-    F5: createPin(12, "F5", OUTPUT, true),
-    F6: createPin(11, "F6", OUTPUT, true),
-    F7: createPin(10, "F7", OUTPUT, true),
+    createPin(18, "F0", OUTPUT, false),
+    createPin(17, "F1", OUTPUT, true),
+    createPin(16, "F2", OUTPUT, true),
+    createPin(15, "F3", OUTPUT, true),
+    createPin(13, "F4", OUTPUT, true),
+    createPin(12, "F5", OUTPUT, true),
+    createPin(11, "F6", OUTPUT, true),
+    createPin(10, "F7", OUTPUT, true),
 
     // Output enable, disables all outputs when set HIGH
-    _OE: createPin(19, "_OE", INPUT),
+    createPin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not emulated
-    FE: createPin(1, "FE", INPUT, null),
+    createPin(1, "FE", INPUT, null),
 
     // Power supply pins, not emulated
-    VCC: createPin(28, "VCC", INPUT, null),
-    GND: createPin(14, "GND", INPUT, null),
-  }
+    createPin(28, "VCC", INPUT, null),
+    createPin(14, "GND", INPUT, null),
+  )
 
   // One listener to rule them all
   //
@@ -264,13 +264,12 @@ export function create82S100() {
   pins.I14.addListener(oneListener)
   pins.I15.addListener(oneListener)
 
-  const pla = []
-  pla.pins = pins
+  const pla = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    pla[name] = pin
-    pla[pin.num] = pin
+    pla[name] = pins[name]
   }
 
   return pla

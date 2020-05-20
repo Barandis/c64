@@ -24,43 +24,43 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 export function create74373() {
-  const pins = {
+  const pins = createPinArray(
     // Input pins.
-    D0: createPin(3, "D0", INPUT),
-    D1: createPin(4, "D1", INPUT),
-    D2: createPin(7, "D2", INPUT),
-    D3: createPin(8, "D3", INPUT),
-    D4: createPin(13, "D4", INPUT),
-    D5: createPin(14, "D5", INPUT),
-    D6: createPin(17, "D6", INPUT),
-    D7: createPin(18, "D7", INPUT),
+    createPin(3, "D0", INPUT),
+    createPin(4, "D1", INPUT),
+    createPin(7, "D2", INPUT),
+    createPin(8, "D3", INPUT),
+    createPin(13, "D4", INPUT),
+    createPin(14, "D5", INPUT),
+    createPin(17, "D6", INPUT),
+    createPin(18, "D7", INPUT),
 
     // Output pins.
-    O0: createPin(2, "O0", OUTPUT, false),
-    O1: createPin(5, "O1", OUTPUT, false),
-    O2: createPin(6, "O2", OUTPUT, false),
-    O3: createPin(9, "O3", OUTPUT, false),
-    O4: createPin(12, "O4", OUTPUT, false),
-    O5: createPin(15, "O5", OUTPUT, false),
-    O6: createPin(16, "O6", OUTPUT, false),
-    O7: createPin(19, "O7", OUTPUT, false),
+    createPin(2, "O0", OUTPUT, false),
+    createPin(5, "O1", OUTPUT, false),
+    createPin(6, "O2", OUTPUT, false),
+    createPin(9, "O3", OUTPUT, false),
+    createPin(12, "O4", OUTPUT, false),
+    createPin(15, "O5", OUTPUT, false),
+    createPin(16, "O6", OUTPUT, false),
+    createPin(19, "O7", OUTPUT, false),
 
     // Output enable. When this is high, the outputs function normally according to their inputs
     // and LE. When this is low, the outputs are all hi-Z.
-    _OE: createPin(1, "_OE", INPUT),
+    createPin(1, "_OE", INPUT),
 
     // Latch enable. When set high, data flows transparently through the device, with output pins
     // matching their input pins. When it goes low, the output pins remain in their current state
     // for as long as LE is low, no matter what the inputs do.
-    LE: createPin(11, "LE", INPUT),
+    createPin(11, "LE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    GND: createPin(10, "GND", INPUT, null),
-    VCC: createPin(20, "VCC", INPUT, null),
-  }
+    createPin(10, "GND", INPUT, null),
+    createPin(20, "VCC", INPUT, null),
+  )
 
   // "Memory" for the latched values. When _OE returns high while LE is low, these values will
   // be put onto the output pins. (Otherwise, if LE is high, the output pins just get the values
@@ -105,13 +105,12 @@ export function create74373() {
   pins.LE.addListener(latchChanged)
   pins._OE.addListener(enableChanged)
 
-  const latch = []
-  latch.pins = pins
+  const latch = {
+    pins,
+  }
 
   for (const name in pins) {
-    const pin = pins[name]
-    latch[name] = pin
-    latch[pin.num] = pin
+    latch[name] = pins[name]
   }
 
   return latch

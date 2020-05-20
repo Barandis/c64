@@ -14,32 +14,32 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { createPin, INPUT, OUTPUT } from "components/pin"
+import { createPin, INPUT, OUTPUT, createPinArray } from "components/pin"
 
 export function create7406() {
-  const pins = {
+  const pins = createPinArray(
     // Input pins. In the TI data sheet, these are named "1A", "2A", etc., and the C64 schematic
     // does not suggest named for them. Since these names are not legal JS variable names, I've
     // switched the letter and number.
-    A1: createPin(1, "A1", INPUT),
-    A2: createPin(3, "A2", INPUT),
-    A3: createPin(5, "A3", INPUT),
-    A4: createPin(9, "A4", INPUT),
-    A5: createPin(11, "A5", INPUT),
-    A6: createPin(13, "A6", INPUT),
+    createPin(1, "A1", INPUT),
+    createPin(3, "A2", INPUT),
+    createPin(5, "A3", INPUT),
+    createPin(9, "A4", INPUT),
+    createPin(11, "A5", INPUT),
+    createPin(13, "A6", INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as "1Y", "2Y", etc.
-    Y1: createPin(2, "Y1", OUTPUT, true),
-    Y2: createPin(4, "Y2", OUTPUT, true),
-    Y3: createPin(6, "Y3", OUTPUT, true),
-    Y4: createPin(8, "Y4", OUTPUT, true),
-    Y5: createPin(10, "Y5", OUTPUT, true),
-    Y6: createPin(12, "Y6", OUTPUT, true),
+    createPin(2, "Y1", OUTPUT, true),
+    createPin(4, "Y2", OUTPUT, true),
+    createPin(6, "Y3", OUTPUT, true),
+    createPin(8, "Y4", OUTPUT, true),
+    createPin(10, "Y5", OUTPUT, true),
+    createPin(12, "Y6", OUTPUT, true),
 
     // Power supply and ground pins, not emulated
-    VCC: createPin(14, "VCC", INPUT, null),
-    GND: createPin(7, "GND", INPUT, null),
-  }
+    createPin(14, "VCC", INPUT, null),
+    createPin(7, "GND", INPUT, null),
+  )
 
   function inputChanged(apin, ypin) {
     ypin.state = apin.low
@@ -49,14 +49,13 @@ export function create7406() {
     pins[`A${i}`].addListener(() => inputChanged(pins[`A${i}`], pins[`Y${i}`]))
   }
 
-  const inverters = []
-  inverters.pins = pins
-
-  for (const name in pins) {
-    const pin = pins[name]
-    inverters[name] = pin
-    inverters[pin.num] = pin
+  const inverter = {
+    pins,
   }
 
-  return inverters
+  for (const name in pins) {
+    inverter[name] = pins[name]
+  }
+
+  return inverter
 }

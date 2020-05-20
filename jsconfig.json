@@ -4,8 +4,9 @@
     "target": "esnext",
     "baseUrl": "./",
     "paths": {
-      "components/*": ["src/components/*"],
+      "utils": ["src/utils"],
       "chips/*": ["src/chips/*"],
+      "components/*": ["src/components/*"],
       "data/*": ["src/data/*"],
       "ports/*": ["src/ports/*"],
       "test/*": ["test/*"],
