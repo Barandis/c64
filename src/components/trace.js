@@ -22,9 +22,10 @@
 // series of possibilities before settling on `null` for itself. If there is another output pin that
 // is not `null`, then it will set the value of the trace (even if its value hasn't changed). If all
 // output pins are `null` at the same time, then the value of the trace will be determined by the
-// `floating` value passed optionally as the last parameter to the creation function. This parameter
-// can represent a pull-up (PULL_UP) or pull-down (PULL_DOWN) resistor in a circuit, setting the
-// value of a trace to 1 or 0 respectively in the same way that real circuits connect a trace to the
+// `floating` value passed optionally as any of the parameters to the creation function. (If more
+// than one of these values are passed, the last one will override the others.) This parameter can
+// represent a pull-up (PULL_UP) or pull-down (PULL_DOWN) resistor in a circuit, setting the value
+// of a trace to 1 or 0 respectively in the same way that real circuits connect a trace to the
 // supply voltage or the ground to force the trace to a particular state when no output pin is
 // driving it. Only if all connected output pins are `null`, and either no `floating` value was
 // passed or it was passed as FLOAT, will a trace be set to `null`.
@@ -40,19 +41,8 @@ export const PULL_DOWN = Symbol("PULL_DOWN")
 
 // Creates a trace. The values passed to it are pins, optionally with a value of FLOAT (the
 // default), PULLUP, or PULLDOWN at the end.
-export function connect(...args) {
-  let connectedPins
-  let floating
-
-  const last = args.slice(-1)[0]
-  if (last === FLOAT || last === PULL_UP || last === PULL_DOWN) {
-    connectedPins = args.slice(0, -1)
-    floating = last
-  } else {
-    connectedPins = args
-    floating = FLOAT
-  }
-
+export function connect(...connectedPins) {
+  let floating = FLOAT
   const pins = []
 
   let traceValue
@@ -137,7 +127,9 @@ export function connect(...args) {
   }
 
   for (const pin of connectedPins) {
-    if (!pins.includes(pin)) {
+    if ([FLOAT, PULL_DOWN, PULL_UP].includes(pin)) {
+      floating = pin
+    } else if (!pins.includes(pin)) {
       pins.push(pin)
       pin.setTrace(trace)
     }
