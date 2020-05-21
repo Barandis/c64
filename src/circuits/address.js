@@ -86,10 +86,10 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   // U4: 2364 8k x 8 ROM (KERNAL) (A0...A12)
   // U5: 2332 4k x 8 ROM (CHAROM) (A0...A11)
   // U6: 2114 1k x 4 SRAM (Color RAM) (A0...A9)
-  // U13: 74LS257 Quad 2-1 Mux (multiplexes A4...A7 and A12...A15 to DRAM address lines 4...7)
+  // U13: 74LS257 Quad 2-1 Mux (multiplexes A4...A7 and A12...A15 to mux bus lines 4...7)
   // U15: 74LS139 Dual 2-4 Demux (selects CS lines based on A8...A11)
   // U19: 82S100 PLA (A12...A15)
-  // U25: 74LS257 Quad 2-1 Mux (multiplexes A0...A3 and A8...A11 to DRAM address lines 0...3)
+  // U25: 74LS257 Quad 2-1 Mux (multiplexes A0...A3 and A8...A11 to mux bus lines 0...3)
   A0.addPins(U3.A0, U4.A0, U5.A0, U6.A0, U25.B4)
   A1.addPins(U3.A1, U4.A1, U5.A1, U6.A1, U25.B3)
   A2.addPins(U3.A2, U4.A2, U5.A2, U6.A2, U25.B2)
@@ -109,7 +109,7 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
 
   // Wire to external circuits
 
-  // U26: 74LS373 Octal Latch (connects A0...A7 to multiplexed address bus)
+  // U26: 74LS373 Octal Latch (connects mux bus to A0...A7)
   // CN6: Expansion port (A0...A15)
   A0.addPins(U26.O2, CN6.A0)
   A1.addPins(U26.O4, CN6.A1)
@@ -131,7 +131,6 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   return { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15 }
 }
 
-// The multiplexed address bus is 16 lines multiplexed into 8.
 function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U24, U25, U26 }) {
   // Wire to multiplexers and latches
 
@@ -179,11 +178,11 @@ function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, 
   // U23: 4164 64k x 1-bit dynamic RAM (bit 4)
   // U24: 4164 64k x 1-bit dynamic RAM (bit 6)
 
-  // When the CPU is active, the U19 address lines are hi-Z, the U26 latch and U14 high-VA
-  // multiplexer are disabled, and the U13 and U25 address bus multiplexers are active, connecting
-  // the CPU address bus to the mux bus and giving it control over the DRAM. When the VIC is active,
-  // U19, U26, and U14 become active again, generating the mux bus as U13 and U25 become inactive
-  // and cut the full bus off, giving the VIC control of the DRAM.
+  // When the CPU is active, the U19 VIC address lines are hi-Z, the U26 latch and U14 high-VA
+  // multiplexer are disabled, and the U13 and U25 full bus multiplexers are active, connecting the
+  // full bus to the mux bus and giving it control over the DRAM. When the VIC is active, U19, U26,
+  // and U14 become active again, generating the mux bus as U13 and U25 become inactive and cut the
+  // full bus off, giving the VIC control of the DRAM.
   VA0_VA8.addPins(U9.A0, U10.A0, U11.A0, U12.A0, U21.A0, U22.A0, U23.A0, U24.A0)
   VA1_VA9.addPins(U9.A1, U10.A1, U11.A1, U12.A1, U21.A1, U22.A1, U23.A1, U24.A1)
   VA2_VA10.addPins(U9.A2, U10.A2, U11.A2, U12.A2, U21.A2, U22.A2, U23.A2, U24.A2)
