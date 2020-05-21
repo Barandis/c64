@@ -7,8 +7,8 @@
       "utils": ["src/utils"],
       "chips/*": ["src/chips/*"],
       "components/*": ["src/components/*"],
-      "data/*": ["src/data/*"],
       "ports/*": ["src/ports/*"],
+      "data/*": ["src/rom/*"],
       "test/*": ["test/*"],
     }
   },

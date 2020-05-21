@@ -7,8 +7,8 @@
 
 import { expect, deviceTraces, DEBUG, hex } from "test/helper"
 import { new2364 } from "chips/2364"
-import { kernal } from "data/kernal"
-import { basic } from "data/basic"
+import { kernal } from "rom/kernal"
+import { basic } from "rom/basic"
 
 describe("2364 8k x 8-bit ROM", () => {
   describe("KERNAL ROM", () => {

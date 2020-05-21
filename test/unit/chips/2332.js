@@ -7,7 +7,7 @@
 
 import { expect, deviceTraces, DEBUG, hex } from "test/helper"
 import { new2332 } from "chips/2332"
-import { character } from "data/character"
+import { character } from "rom/character"
 
 describe("2332 4k x 8-bit ROM", () => {
   describe("Character ROM", () => {
