@@ -13,8 +13,8 @@ export function newSerialPort() {
     newPin(5, "DATA", BIDIRECTIONAL, null),
     newPin(4, "CLK", BIDIRECTIONAL, null),
     newPin(3, "ATN", INPUT),
-    newPin(1, "_SRQ", OUTPUT, null),
-    newPin(6, "_RESET", BIDIRECTIONAL, null),
+    newPin(1, "SRQ", OUTPUT, null),
+    newPin(6, "RESET", BIDIRECTIONAL, null),
 
     newPin(2, "GND", UNCONNECTED),
   )

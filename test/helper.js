@@ -46,11 +46,13 @@ export function chipState(chip, name) {
 }
 
 export function deviceTraces(device) {
-  const traces = {}
+  const traces = []
 
   for (const pin of device.pins) {
-    if (pin && (pin.input || pin.output)) {
-      traces[pin.name] = newTrace(pin)
+    if (pin) {
+      const trace = newTrace(pin)
+      traces[pin.num] = trace
+      traces[pin.name] = trace
     }
   }
 

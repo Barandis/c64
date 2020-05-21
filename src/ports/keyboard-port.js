@@ -31,8 +31,7 @@ export function newKeyboardPort() {
 
     newPin(3, "_RESTORE", OUTPUT),
 
-    newPin(2, "KEY", UNCONNECTED),
-    newPin(3, "VCC", UNCONNECTED),
+    newPin(4, "VCC", UNCONNECTED),
     newPin(1, "GND", UNCONNECTED),
   )
 }
