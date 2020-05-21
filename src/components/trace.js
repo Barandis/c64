@@ -96,6 +96,24 @@ export function newTrace(...connectedPins) {
     }
   }
 
+  // Connects one or more pins to the trace. This works the same as adding it in the factory
+  // function (except that a floating value cannot be added here). This is essentially a
+  // convenience; some particularly well-connected traces can otherwise have factory function
+  // invocations so long as to be uncomfortable, and this allows them to be broken into multiple
+  // statements.
+  function addPins(...connectedPins) {
+    for (const pin of connectedPins) {
+      addPin(pin)
+    }
+  }
+
+  function addPin(pin) {
+    if (!pin.connected) {
+      pins.push(pin)
+      pin.setTrace(trace)
+    }
+  }
+
   const trace = {
     get high() {
       return traceValue >= 0.5
@@ -124,14 +142,15 @@ export function newTrace(...connectedPins) {
     reset() {
       traceValue = recalculate()
     },
+
+    addPins,
   }
 
   for (const pin of connectedPins) {
     if ([FLOAT, PULL_DOWN, PULL_UP].includes(pin)) {
       floating = pin
-    } else if (!pins.includes(pin)) {
-      pins.push(pin)
-      pin.setTrace(trace)
+    } else if (!pin.connected) {
+      addPin(pin)
     }
   }
 

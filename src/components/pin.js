@@ -163,6 +163,9 @@ export function newPin(num, name, direction, init = 0) {
     get name() {
       return name
     },
+    get connected() {
+      return trace !== null
+    },
     get input() {
       return (mode & INPUT) > 0
     },

@@ -58,6 +58,34 @@ describe("Trace", () => {
     })
   })
 
+  describe("addPin", () => {
+    it("adds pins to the trace outside of a constructor", () => {
+      const pin1 = newPin(1, "A", INPUT)
+      const pin2 = newPin(2, "B", BIDIRECTIONAL)
+      const pin3 = newPin(3, "C", OUTPUT)
+      const trace = newTrace()
+      trace.addPins(pin1, pin2, pin3)
+
+      pin3.value = 1
+      expect(pin1.value).to.equal(1)
+      expect(pin2.value).to.equal(1)
+    })
+
+    it("cannot be used to add a pin already added to a trace", () => {
+      const pin1 = newPin(1, "A", INPUT)
+      const trace1 = newTrace()
+      const trace2 = newTrace()
+      trace1.addPins(pin1)
+      trace2.addPins(pin1)
+
+      trace2.value = 1
+      expect(pin1.value).to.equal(0)
+
+      trace1.value = 1
+      expect(pin1.value).to.equal(1)
+    })
+  })
+
   describe("setting value directly", () => {
     let pin1
     let pin2
