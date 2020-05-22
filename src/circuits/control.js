@@ -64,7 +64,7 @@ export function newControlBus(
   // CN6: Expansion port (source of _EXROM, _GAME)
 
   // This is essentially everything into and out of the PLA and its associated demultiplexer, which
-  // uses programmed logic to take 20 inputs and determines which addressable chips/expansion port
+  // uses programmed logic to take 20 inputs and determine which addressable chips/expansion port
   // pins should be enabled. A8...A11 are connected to U15 and A12...A15, VA12...VA13, and _VA14 are
   // already connected U17 in the address bus definitions.
   const _CAS = newTrace(U19._CAS, U17.I0)
