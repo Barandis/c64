@@ -7,7 +7,7 @@
 
 import { newTrace } from "components/trace"
 
-export function newDataBus(
+export function newDataCircuit(
   { U1, U2, U3, U4, U5, U6, U7, U9, U10, U11, U12, U16, U18, U19, U21, U22, U23, U24 },
   { CN6 },
 ) {

@@ -164,8 +164,10 @@ function newMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U
   // the CIA parallel ports are active-low, they match the polarity of the newly-created _VA6 and
   // _VA7. They are multiplexed with the other two channels on U14, and since the outputs are
   // inverted, combine _VA6 and _VA14 into VA6_VA14, and _VA7 and _VA15 into VA7_VA15.
-  const _VA14 = newTrace(U2.PA0, U14.A1)
-  const _VA15 = newTrace(U2.PA1, U14.A2)
+  //
+  // NOTE: CIA port pins are all pulled up internally. This is reflected in the traces here.
+  const _VA14 = newTrace(PULL_UP, U2.PA0, U14.A1)
+  const _VA15 = newTrace(PULL_UP, U2.PA1, U14.A2)
   const VA6 = newTrace(U19.A6, U14.A4, U14.B4)
   const VA7 = newTrace(U19.A7, U14.A3, U14.B3)
   const _VA6 = newTrace(U14._Y4, U14.B1)
@@ -227,6 +229,6 @@ function newMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U
   }
 }
 
-export function newAddressBus(chips, ports) {
+export function newAddressCircuit(chips, ports) {
   return { ...newFullBus(chips, ports), ...newMuxBus(chips, ports) }
 }

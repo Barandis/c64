@@ -7,7 +7,7 @@
 
 import { newTrace, PULL_UP } from "components/trace"
 
-export function newControlBus(
+export function newControlCircuit(
   {
     U1,
     U2,
