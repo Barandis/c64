@@ -40,7 +40,9 @@ import { newExpansionPort } from "ports/expansion-port"
 import { newKeyboardPort } from "ports/keyboard-port"
 import { newSerialPort } from "ports/serial-port"
 import { newUserPort } from "ports/user-port"
-import { wireAddressBus } from "./address"
+import { newAddressBus } from "./address"
+import { newDataBus } from "./data"
+import { newControlBus } from "./control"
 
 export function newBoard() {
   const chips = {
@@ -83,7 +85,9 @@ export function newBoard() {
     CN9: newControl2Port(),
   }
 
-  const addressLines = wireAddressBus(chips, ports)
+  const addressBus = newAddressBus(chips, ports)
+  const dataBus = newDataBus(chips, ports)
+  const controlBus = newControlBus(chips, ports)
 
-  return { ...addressLines }
+  return { ...chips, ...ports, ...addressBus, ...dataBus, ...controlBus }
 }

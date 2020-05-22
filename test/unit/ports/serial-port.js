@@ -23,12 +23,12 @@ describe("Serial port", () => {
     port = newSerialPort()
 
     connector = newPort(
-      newPin(1, "SRQ", INPUT),
+      newPin(1, "_SRQ", INPUT),
       newPin(2, "GND", UNCONNECTED),
       newPin(3, "ATN", OUTPUT),
       newPin(4, "CLK", BIDIRECTIONAL),
       newPin(5, "DATA", BIDIRECTIONAL),
-      newPin(6, "RESET", BIDIRECTIONAL),
+      newPin(6, "_RESET", BIDIRECTIONAL),
     )
 
     p = deviceTraces(port)
@@ -54,10 +54,10 @@ describe("Serial port", () => {
   it("allows data to pass through unidirectional ports in the correct direction", () => {
     connector.connect(port)
 
-    c.SRQ.value = 1
-    expect(p.SRQ.value).to.equal(1)
-    p.SRQ.value = 0
-    expect(c.SRQ.value).to.equal(1)
+    c._SRQ.value = 1
+    expect(p._SRQ.value).to.equal(1)
+    p._SRQ.value = 0
+    expect(c._SRQ.value).to.equal(1)
 
     p.ATN.value = 1
     expect(c.ATN.value).to.equal(1)
@@ -78,10 +78,10 @@ describe("Serial port", () => {
     p.DATA.value = 0
     expect(c.DATA.value).to.equal(0)
 
-    c.RESET.value = 1
-    expect(p.RESET.value).to.equal(1)
-    p.RESET.value = 0
-    expect(c.RESET.value).to.equal(0)
+    c._RESET.value = 1
+    expect(p._RESET.value).to.equal(1)
+    p._RESET.value = 0
+    expect(c._RESET.value).to.equal(0)
   })
 
   it("stops passing data when the port is disconnected", () => {
@@ -91,8 +91,8 @@ describe("Serial port", () => {
     p.GND.value = 1
     expect(c.GND.value).to.equal(0)
 
-    c.SRQ.value = 1
-    expect(p.SRQ.value).to.be.null
+    c._SRQ.value = 1
+    expect(p._SRQ.value).to.be.null
 
     p.ATN.value = 1
     expect(c.ATN.value).to.be.null
@@ -103,7 +103,7 @@ describe("Serial port", () => {
     c.DATA.value = 1
     expect(p.DATA.value).to.be.null
 
-    c.RESET.value = 1
-    expect(p.RESET.value).to.be.null
+    c._RESET.value = 1
+    expect(p._RESET.value).to.be.null
   })
 })

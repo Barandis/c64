@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newTrace } from "components/trace"
+import { newTrace, PULL_UP } from "components/trace"
 
 // The address bus in the Commodore 64 is written two by only two chips: the CPU and the VIC. Only
 // one can write to the address bus at a time, and which is active is determined by the phase of the
@@ -55,14 +55,18 @@ import { newTrace } from "components/trace"
 // with _VA14 and _VA15 from CIA2. Putting them through the inverting mux once more produces the
 // active high multiplexed VA6_VA14 and VA7_VA15.
 
-function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 }, { CN6 }) {
-  // Wire to processor chips
+function newFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U17, U18, U19, U25, U26 }, { CN6 }) {
+  // Full bus to processor chips
 
   // U1: 6526 CIA1 (A0...A3 to control 16 registers)
   // U2: 6526 CIA2 (A0...A3 to control 16 registers)
   // U7: 6510 CPU (A0...A15, source of address bus)
   // U18: 6581 SID (A0...A4 to control 32 registers)
   // U19: 6567 VIC (A8...A11, other address lines are connected through latch U25)
+
+  // A12...A15 are pulled up because the VIC has no connection to the full bus's A12...A15. Thus,
+  // when the VIC is active and the CPU is not connected to the bus, there is nothing driving those
+  // four lines.
   const A0 = newTrace(U7.A0, U1.PS0, U2.PS0, U18.A0)
   const A1 = newTrace(U7.A1, U1.PS1, U2.PS1, U18.A1)
   const A2 = newTrace(U7.A2, U1.PS2, U2.PS2, U18.A2)
@@ -75,12 +79,12 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   const A9 = newTrace(U7.A9, U19.A9)
   const A10 = newTrace(U7.A10, U19.A10)
   const A11 = newTrace(U7.A11, U19.A11)
-  const A12 = newTrace(U7.A12)
-  const A13 = newTrace(U7.A13)
-  const A14 = newTrace(U7.A14)
-  const A15 = newTrace(U7.A15)
+  const A12 = newTrace(PULL_UP, U7.A12)
+  const A13 = newTrace(PULL_UP, U7.A13)
+  const A14 = newTrace(PULL_UP, U7.A14)
+  const A15 = newTrace(PULL_UP, U7.A15)
 
-  // Wire to memory address and memory control
+  // Full bus to memory address and memory control
 
   // U3: 2364 8k x 8 ROM (BASIC) (A0...A12)
   // U4: 2364 8k x 8 ROM (KERNAL) (A0...A12)
@@ -88,7 +92,7 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   // U6: 2114 1k x 4 SRAM (Color RAM) (A0...A9)
   // U13: 74LS257 Quad 2-1 Mux (multiplexes A4...A7 and A12...A15 to mux bus lines 4...7)
   // U15: 74LS139 Dual 2-4 Demux (selects CS lines based on A8...A11)
-  // U19: 82S100 PLA (A12...A15)
+  // U17: 82S100 PLA (A12...A15)
   // U25: 74LS257 Quad 2-1 Mux (multiplexes A0...A3 and A8...A11 to mux bus lines 0...3)
   A0.addPins(U3.A0, U4.A0, U5.A0, U6.A0, U25.B4)
   A1.addPins(U3.A1, U4.A1, U5.A1, U6.A1, U25.B3)
@@ -102,12 +106,12 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   A9.addPins(U3.A9, U4.A9, U5.A9, U6.A9, U25.A3, U15.B2)
   A10.addPins(U3.A10, U4.A10, U5.A10, U25.A2, U15.A1)
   A11.addPins(U3.A11, U4.A11, U5.A11.U25.A1, U15.A2)
-  A12.addPins(U3.A12, U4.A12, U13.A4, U19.I8)
-  A13.addPins(U13.A2, U19.I7)
-  A14.addPins(U13.A1, U19.I6)
-  A15.addPins(U13.A3, U19.I5)
+  A12.addPins(U3.A12, U4.A12, U13.A4, U17.I8)
+  A13.addPins(U13.A2, U17.I7)
+  A14.addPins(U13.A1, U17.I6)
+  A15.addPins(U13.A3, U17.I5)
 
-  // Wire to external circuits
+  // Full bus to other circuits
 
   // U26: 74LS373 Octal Latch (connects mux bus to A0...A7)
   // CN6: Expansion port (A0...A15)
@@ -131,8 +135,8 @@ function wireFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U18, U19, U25, U26 
   return { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15 }
 }
 
-function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U24, U25, U26 }) {
-  // Wire to multiplexers and latches
+function newMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U24, U25, U26 }) {
+  // Multiplexers and latches
 
   // U13: 74LS257 Quad 2-1 Mux (connects VA4...VA7, VA12...VA15 to full bus when CPU active)
   // U14: 74LS258 Quad 2-1 Mux (source of VA6_VA14...VA7_VA15)
@@ -148,7 +152,7 @@ function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, 
   const VA6_VA14 = newTrace(U14._Y1, U26.D1, U13.Y1)
   const VA7_VA15 = newTrace(U14._Y2, U26.D0, U13.Y3)
 
-  // Wire connections to create VA6_VA14 and VA7_VA15
+  // Connections to create VA6_VA14 and VA7_VA15
 
   // U2: 6526 CIA2 (source of _VA14..._VA15)
   // U14: 74LS258 Quad 2-1 Mux (multiplexes VA6...VA7 with _VA14..._VA15 from CIA2)
@@ -167,7 +171,7 @@ function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, 
   const _VA6 = newTrace(U14._Y4, U14.B1)
   const _VA7 = newTrace(U14._Y3, U14.B2)
 
-  // Wire to DRAM
+  // Mux bus to DRAM
 
   // U9: 4164 64k x 1-bit dynamic RAM (bit 1)
   // U10: 4164 64k x 1-bit dynamic RAM (bit 3)
@@ -192,7 +196,7 @@ function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, 
   VA6_VA14.addPins(U9.A6, U10.A6, U11.A6, U12.A6, U21.A6, U22.A6, U23.A6, U24.A6)
   VA7_VA15.addPins(U9.A7, U10.A7, U11.A7, U12.A7, U21.A7, U22.A7, U23.A7, U24.A7)
 
-  // Wire to memory control.
+  // Mux bus to memory control
 
   // U17: 82S100 PLA (VA12...VA13, _VA14)
 
@@ -223,6 +227,6 @@ function wireMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, 
   }
 }
 
-export function wireAddressBus(chips, ports) {
-  return { ...wireFullBus(chips, ports), ...wireMuxBus(chips, ports) }
+export function newAddressBus(chips, ports) {
+  return { ...newFullBus(chips, ports), ...newMuxBus(chips, ports) }
 }
