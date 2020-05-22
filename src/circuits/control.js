@@ -162,8 +162,7 @@ export function newControlBus(
   // Some of these don't really come from anywhere because we are not emulating the generation of
   // clock pulses. So there is no source for OCOLOR, ODOT, or TOD; the software will provide those
   // clock signals. (In fact, since we're also not emulating VIC output RF signals, there's no
-  // *purpose* for OCOLOR and the only potential purpose for ODOT is dividing it by 8 for O0 and
-  // providing it to the expantion port.)
+  // *purpose* for OCOLOR and the only purpose for ODOT is providing it to the expansion port.)
   const OCOLOR = newTrace(U19.OCOLOR)
   const ODOT = newTrace(U19.OIN, CN6.DOT)
   const O0 = newTrace(U19.O0, U7.O0)
