@@ -81,7 +81,7 @@ export function newControlCircuit(
   const _BASIC = newTrace(U17.F1, U3._CS)
   const _KERNAL = newTrace(U17.F2, U4._CS)
   const _CHAROM = newTrace(U17.F3, U5._CS1)
-  newTrace(PULL_UP, U5._CS2) // _CS2 always high, _CS1 controls enable
+  const _CHAROM2 = newTrace(PULL_UP, U5._CS2) // _CS2 always high, _CS1 controls enable
   const GR__W = newTrace(U17.F4, U6._WE)
   const _IO = newTrace(U17.F5, U15._G1)
   const _ROML = newTrace(U17.F6, CN6._ROML)
@@ -182,6 +182,7 @@ export function newControlCircuit(
     _BASIC,
     _KERNAL,
     _CHAROM,
+    _CHAROM2,
     GR__W,
     _IO,
     _ROML,

@@ -25,6 +25,7 @@
 
 import { newPin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
 import { newChip } from "components/chip"
+import { toValue, toPins } from "utils"
 
 export function new2114() {
   const chip = newChip(
@@ -58,30 +59,27 @@ export function new2114() {
     newPin(9, "GND", UNCONNECTED),
   )
 
+  const addressPins = [
+    chip.A0,
+    chip.A1,
+    chip.A2,
+    chip.A3,
+    chip.A4,
+    chip.A5,
+    chip.A6,
+    chip.A7,
+    chip.A8,
+    chip.A9,
+  ]
+  const dataPins = [chip.D0, chip.D1, chip.D2, chip.D3]
   const memory = new Uint32Array(128)
-
-  // Translates the values of the 10 address pins into an 10-bit integer.
-  function address() {
-    return (
-      chip.A0.value |
-      (chip.A1.value << 1) |
-      (chip.A2.value << 2) |
-      (chip.A3.value << 3) |
-      (chip.A4.value << 4) |
-      (chip.A5.value << 5) |
-      (chip.A6.value << 6) |
-      (chip.A7.value << 7) |
-      (chip.A8.value << 8) |
-      (chip.A9.value << 9)
-    )
-  }
 
   // Turns the address currently on the address pins into an index and shift amount for the internal
   // memory array. The index is the array index for that location in the memory array, while the
   // shift amount is the number of bits that a 4-bit value would have to be shifted to be in the
   // right position to write those bits in that array index.
   function resolve() {
-    const addr = address()
+    const addr = toValue(...addressPins)
     const arrayIndex = addr >> 3
     const bitIndex = addr & 0x07
     return [arrayIndex, bitIndex * 4]
@@ -92,10 +90,7 @@ export function new2114() {
   function read() {
     const [index, shift] = resolve()
     const value = (memory[index] & (0b1111 << shift)) >> shift
-    chip.D0.value = (value & 0b0001) >> 0
-    chip.D1.value = (value & 0b0010) >> 1
-    chip.D2.value = (value & 0b0100) >> 2
-    chip.D3.value = (value & 0b1000) >> 3
+    toPins(value, ...dataPins)
   }
 
   // Writes the 4-bit value currently on the data pins to the location indicated by the address
@@ -109,10 +104,7 @@ export function new2114() {
 
   chip._CE.addListener(_ce => {
     if (_ce.high) {
-      chip.D0.value = null
-      chip.D1.value = null
-      chip.D2.value = null
-      chip.D3.value = null
+      toPins(null, ...dataPins)
     } else if (chip._WE.low) {
       write()
     } else {

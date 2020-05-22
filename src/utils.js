@@ -44,3 +44,17 @@ export function decode(base64) {
 
   return buffer
 }
+
+export function toPins(value, ...pins) {
+  for (let i = 0; i < pins.length; i++) {
+    pins[i].value = value === null ? null : (value >> i) & 1
+  }
+}
+
+export function toValue(...pins) {
+  let value = 0
+  for (let i = 0; i < pins.length; i++) {
+    value |= pins[i].value << i
+  }
+  return value
+}

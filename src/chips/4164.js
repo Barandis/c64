@@ -41,6 +41,7 @@
 
 import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { newChip } from "components/chip"
+import { toValue } from "utils"
 
 export function new4164() {
   const chip = newChip(
@@ -81,6 +82,8 @@ export function new4164() {
     newPin(16, "VSS", UNCONNECTED),
   )
 
+  const addressPins = [chip.A0, chip.A1, chip.A2, chip.A3, chip.A4, chip.A5, chip.A6, chip.A7]
+
   // 2048 32-bit unsigned integers is 65,536 bits.
   const memory = new Uint32Array(2048)
 
@@ -95,20 +98,6 @@ export function new4164() {
   // The single bit of input data. This is set (latched) when the second of the _CAS and _W pins
   // goes low. It is cleared when _W goes back high.
   let data = null
-
-  // Translates the values of the 8 address pins into an 8-bit integer.
-  function address() {
-    return (
-      chip.A0.value |
-      (chip.A1.value << 1) |
-      (chip.A2.value << 2) |
-      (chip.A3.value << 3) |
-      (chip.A4.value << 4) |
-      (chip.A5.value << 5) |
-      (chip.A6.value << 6) |
-      (chip.A7.value << 7)
-    )
-  }
 
   // Reads the row and col and calculates the specific bit in the memory array to which this row/col
   // combination refers. The first element of the return value is the index of the 32-bit number in
@@ -154,7 +143,7 @@ export function new4164() {
   // and writes.
   function rasLatch(_ras) {
     if (_ras.low) {
-      row = address()
+      row = toValue(...addressPins)
     } else {
       row = null
     }
@@ -173,7 +162,7 @@ export function new4164() {
   // one) values are cleared.
   function casLatch(_cas) {
     if (_cas.low) {
-      col = address()
+      col = toValue(...addressPins)
       if (chip._W.low) {
         data = chip.D.value
         write()
