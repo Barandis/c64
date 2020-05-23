@@ -99,6 +99,10 @@ export function newPin(num, name, direction, init = 0) {
   function setMode(value) {
     if ([UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL].includes(value)) {
       mode = value
+
+      if (mode & INPUT && trace !== null) {
+        pinValue = trace.value
+      }
     }
   }
 
@@ -202,6 +206,13 @@ export function newPin(num, name, direction, init = 0) {
     },
     set state(value) {
       set(value === null ? null : !!value)
+    },
+
+    set() {
+      set(1)
+    },
+    clear() {
+      set(0)
     },
 
     setFromTrace,

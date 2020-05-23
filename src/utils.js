@@ -45,16 +45,46 @@ export function decode(base64) {
   return buffer
 }
 
-export function toPins(value, ...pins) {
+export function valueToPins(value, ...pins) {
   for (let i = 0; i < pins.length; i++) {
     pins[i].value = value === null ? null : (value >> i) & 1
   }
 }
 
-export function toValue(...pins) {
+export function pinsToValue(...pins) {
   let value = 0
   for (let i = 0; i < pins.length; i++) {
     value |= pins[i].value << i
   }
   return value
+}
+
+export function setMode(mode, ...pins) {
+  for (const pin of pins) {
+    pin.mode = mode
+  }
+}
+
+export function readBit(value, bit) {
+  return (value >> bit) & 1
+}
+
+export function bitSet(value, bit) {
+  return (value & (1 << bit)) > 0
+}
+
+export function bitClear(value, bit) {
+  return (value & (1 << bit)) === 0
+}
+
+export function setBit(value, bit) {
+  return value | (1 << bit)
+}
+
+export function clearBit(value, bit) {
+  return value & ~(1 << bit)
+}
+
+export function toggleBit(value, bit) {
+  return value ^ (1 << bit)
 }

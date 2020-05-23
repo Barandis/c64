@@ -41,7 +41,7 @@
 
 import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { newChip } from "components/chip"
-import { toValue } from "utils"
+import { pinsToValue } from "utils"
 
 export function new4164() {
   const chip = newChip(
@@ -143,7 +143,7 @@ export function new4164() {
   // and writes.
   function rasLatch(_ras) {
     if (_ras.low) {
-      row = toValue(...addressPins)
+      row = pinsToValue(...addressPins)
     } else {
       row = null
     }
@@ -162,7 +162,7 @@ export function new4164() {
   // one) values are cleared.
   function casLatch(_cas) {
     if (_cas.low) {
-      col = toValue(...addressPins)
+      col = pinsToValue(...addressPins)
       if (chip._W.low) {
         data = chip.D.value
         write()

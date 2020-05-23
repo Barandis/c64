@@ -29,23 +29,23 @@ export function new6510() {
     newPin(23, "A15", OUTPUT, 0),
 
     // Data bus pins D0...D7. These are bidirectional, the direction depending on the R__W pin.
-    newPin(37, "D0", INPUT),
-    newPin(36, "D1", INPUT),
-    newPin(35, "D2", INPUT),
-    newPin(34, "D3", INPUT),
-    newPin(33, "D4", INPUT),
-    newPin(32, "D5", INPUT),
-    newPin(31, "D6", INPUT),
-    newPin(30, "D7", INPUT),
+    newPin(37, "D0", OUTPUT, null),
+    newPin(36, "D1", OUTPUT, null),
+    newPin(35, "D2", OUTPUT, null),
+    newPin(34, "D3", OUTPUT, null),
+    newPin(33, "D4", OUTPUT, null),
+    newPin(32, "D5", OUTPUT, null),
+    newPin(31, "D6", OUTPUT, null),
+    newPin(30, "D7", OUTPUT, null),
 
     // I/O Port pins P0...P5. These are bidrectional, the direction depending on the settings in
     // the virtual registers in memory addresses 0x0000 and 0x0001.
-    newPin(29, "P0", INPUT),
-    newPin(28, "P1", INPUT),
-    newPin(27, "P2", INPUT),
-    newPin(26, "P3", INPUT),
-    newPin(25, "P4", INPUT),
-    newPin(24, "P5", INPUT),
+    newPin(29, "P0", OUTPUT, 1),
+    newPin(28, "P1", OUTPUT, 1),
+    newPin(27, "P2", OUTPUT, 1),
+    newPin(26, "P3", OUTPUT, 1),
+    newPin(25, "P4", OUTPUT, 1),
+    newPin(24, "P5", OUTPUT, 1),
 
     // Clock pins. One is an input (φ0) and one an output (φ2); the signal on the input is merely
     // forwarded to the output as a clock reference for other chips on the board. The names use "O"

@@ -25,7 +25,7 @@
 
 import { newPin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
 import { newChip } from "components/chip"
-import { toValue, toPins } from "utils"
+import { pinsToValue, valueToPins } from "utils"
 
 export function new2114() {
   const chip = newChip(
@@ -79,7 +79,7 @@ export function new2114() {
   // shift amount is the number of bits that a 4-bit value would have to be shifted to be in the
   // right position to write those bits in that array index.
   function resolve() {
-    const addr = toValue(...addressPins)
+    const addr = pinsToValue(...addressPins)
     const arrayIndex = addr >> 3
     const bitIndex = addr & 0x07
     return [arrayIndex, bitIndex * 4]
@@ -90,7 +90,7 @@ export function new2114() {
   function read() {
     const [index, shift] = resolve()
     const value = (memory[index] & (0b1111 << shift)) >> shift
-    toPins(value, ...dataPins)
+    valueToPins(value, ...dataPins)
   }
 
   // Writes the 4-bit value currently on the data pins to the location indicated by the address
@@ -104,7 +104,7 @@ export function new2114() {
 
   chip._CE.addListener(_ce => {
     if (_ce.high) {
-      toPins(null, ...dataPins)
+      valueToPins(null, ...dataPins)
     } else if (chip._WE.low) {
       write()
     } else {

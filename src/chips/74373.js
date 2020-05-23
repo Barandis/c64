@@ -40,14 +40,14 @@ export function new74373() {
     newPin(18, "D7", INPUT),
 
     // Output pins.
-    newPin(2, "O0", OUTPUT, false),
-    newPin(5, "O1", OUTPUT, false),
-    newPin(6, "O2", OUTPUT, false),
-    newPin(9, "O3", OUTPUT, false),
-    newPin(12, "O4", OUTPUT, false),
-    newPin(15, "O5", OUTPUT, false),
-    newPin(16, "O6", OUTPUT, false),
-    newPin(19, "O7", OUTPUT, false),
+    newPin(2, "O0", OUTPUT, null),
+    newPin(5, "O1", OUTPUT, null),
+    newPin(6, "O2", OUTPUT, null),
+    newPin(9, "O3", OUTPUT, null),
+    newPin(12, "O4", OUTPUT, null),
+    newPin(15, "O5", OUTPUT, null),
+    newPin(16, "O6", OUTPUT, null),
+    newPin(19, "O7", OUTPUT, null),
 
     // Output enable. When this is high, the outputs function normally according to their inputs
     // and LE. When this is low, the outputs are all hi-Z.

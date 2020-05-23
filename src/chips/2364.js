@@ -27,7 +27,7 @@
 
 import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { newChip } from "components/chip"
-import { toValue, toPins } from "utils"
+import { pinsToValue, valueToPins } from "utils"
 
 export function new2364(buffer) {
   const chip = newChip(
@@ -86,13 +86,13 @@ export function new2364(buffer) {
   // Reads the 8-bit value at the location indicated by the address pins and puts that value on the
   // data pins.
   function read() {
-    const value = memory[toValue(...addressPins)]
-    toPins(value, ...dataPins)
+    const value = memory[pinsToValue(...addressPins)]
+    valueToPins(value, ...dataPins)
   }
 
   chip._CS.addListener(_cs => {
     if (_cs.high) {
-      toPins(null, ...dataPins)
+      valueToPins(null, ...dataPins)
     } else {
       read()
     }

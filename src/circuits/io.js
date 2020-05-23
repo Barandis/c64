@@ -76,7 +76,7 @@ export function newIoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3,
   const PB5 = newTrace(PULL_UP, U2.PB5, CN2.PB5)
   const PB6 = newTrace(PULL_UP, U2.PB6, CN2.PB6)
   const PB7 = newTrace(PULL_UP, U2.PB7, CN2.PB7)
-  const _PC2 = newTrace(U2._PC, CN2.PC2) // not pulled up on the schematic?
+  const _PC2 = newTrace(U2._PC, CN2._PC2) // not pulled up on the schematic?
   const _FLAG2 = newTrace(PULL_UP, U2._FLAG, CN2._FLAG2)
   const SP2 = newTrace(PULL_UP, U2.SP, CN2.SP2)
   const CNT2 = newTrace(PULL_UP, U2.CNT, CN2.CNT2)

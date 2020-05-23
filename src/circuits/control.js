@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newTrace, PULL_UP } from "components/trace"
+import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
 
 export function newControlCircuit(
   {
@@ -89,12 +89,13 @@ export function newControlCircuit(
   const _VIC = newTrace(U15._Y10, U19._CS)
   const _SID = newTrace(U15._Y11, U18._CS)
   const _COLOR = newTrace(U15._Y12, U27.A3)
-  const _SRAM = newTrace(U27.Y3, U6._CS)
+  const _SRAM = newTrace(U27.Y3, U6._CE)
   const _CIAS = newTrace(U15._Y13, U15._G2)
   const _CIA1 = newTrace(U15._Y20, U1._CS)
   const _CIA2 = newTrace(U15._Y21, U2._CS)
   const _IO1 = newTrace(U15._Y22, CN6._IO1)
   const _IO2 = newTrace(U15._Y23, CN6._IO2)
+  const _PLA = newTrace(PULL_DOWN, U17._OE) // PLA outputs always enabled
 
   // Non-PLA-based chip control
 
@@ -129,7 +130,8 @@ export function newControlCircuit(
   R__W.addPins(U9._W, U10._W, U11._W, U12._W, U21._W, U22._W, U23._W, U24._W)
   const _RAS = newTrace(U19._RAS, U26.LE, U9._RAS, U10._RAS, U11._RAS, U12._RAS)
   _RAS.addPins(U21._RAS, U22._RAS, U23._RAS)
-  const AEC = newTrace(U19.AEC, U16.A1, U16.A2, U16.A3, U16.A4, U27.B3, U14._OE, U8.A5, U27.A2)
+  const AEC = newTrace(U19.AEC, U16.A1, U16.A2, U16.A3, U16.A4)
+  AEC.addPins(U27.B3, U26._OE, U14._OE, U8.A5, U27.A2)
   const _DMA = newTrace(PULL_UP, CN6._DMA, U27.B1, U27.B2)
   const RDY = newTrace(U27.Y1, U7.RDY)
   const CAEC = newTrace(U27.Y2, U7.AEC)
@@ -196,6 +198,7 @@ export function newControlCircuit(
     _CIA2,
     _IO1,
     _IO2,
+    _PLA,
     _RAS,
     AEC,
     _DMA,

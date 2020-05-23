@@ -19,18 +19,18 @@ export function new6567() {
     // that reason the bottom 6 address lines are bidirectional (there are 48 registers, so 6 bits
     // is required to address them). The direction of A0...A5 therefore is controlled by the _CS,
     // AEC, and R__W pins.
-    newPin(24, "A0_A8", OUTPUT, 0),
-    newPin(25, "A1_A9", OUTPUT, 0),
-    newPin(26, "A2_A10", OUTPUT, 0),
-    newPin(27, "A3_A11", OUTPUT, 0),
-    newPin(28, "A4_A12", OUTPUT, 0),
-    newPin(29, "A5_A13", OUTPUT, 0),
-    newPin(30, "A6", OUTPUT, 0),
-    newPin(31, "A7", OUTPUT, 0),
-    newPin(32, "A8", OUTPUT, 0),
-    newPin(33, "A9", OUTPUT, 0),
-    newPin(34, "A10", OUTPUT, 0),
-    newPin(23, "A11", OUTPUT, 0),
+    newPin(24, "A0_A8", OUTPUT, null),
+    newPin(25, "A1_A9", OUTPUT, null),
+    newPin(26, "A2_A10", OUTPUT, null),
+    newPin(27, "A3_A11", OUTPUT, null),
+    newPin(28, "A4_A12", OUTPUT, null),
+    newPin(29, "A5_A13", OUTPUT, null),
+    newPin(30, "A6", OUTPUT, null),
+    newPin(31, "A7", OUTPUT, null),
+    newPin(32, "A8", OUTPUT, null),
+    newPin(33, "A9", OUTPUT, null),
+    newPin(34, "A10", OUTPUT, null),
+    newPin(23, "A11", OUTPUT, null),
 
     // Data bus pins. There are 12 of these because the upper 4 are used to access the 4-bit-wide
     // color RAM. This means that, since the VIC does not write to memory and since only D0...D7
@@ -78,7 +78,7 @@ export function new6567() {
     // Address Enable Control. When this is high, thye CPU has control of the address and data
     // busses. When it is low, the VIC does instead. It normally follows the φ0 output except when
     // using it along with BA.
-    newPin(16, OUTPUT, 0),
+    newPin(16, "AEC", OUTPUT, 0),
 
     // Interrupt request. The VIC can request interrupts for four reasons: the end of a raster line,
     // a lightpen activation, a sprite-to-sprite collision, or a sprite-to-background collision.

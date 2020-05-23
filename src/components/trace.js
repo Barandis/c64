@@ -139,6 +139,13 @@ export function newTrace(...connectedPins) {
       set(value === null ? null : !!value)
     },
 
+    set() {
+      set(1)
+    },
+    clear() {
+      set(0)
+    },
+
     reset() {
       traceValue = recalculate()
     },
