@@ -59,6 +59,16 @@ export function pinsToValue(...pins) {
   return value
 }
 
+export function pulse(pin) {
+  if (pin.high) {
+    pin.value = 0
+    pin.value = 1
+  } else if (pin.low) {
+    pin.value = 1
+    pin.value = 0
+  }
+}
+
 export function setMode(mode, ...pins) {
   for (const pin of pins) {
     pin.mode = mode

@@ -123,17 +123,17 @@ export function newPin(num, name, direction, init = 0) {
     }
   }
 
-  // Resets the value of the pin's trace. If this is a bidirectional or output pin, it just sets the
-  // trace to the same value as the pin. If it's an input pin, it forces the trace to check the
+  // Updates the value of the pin's trace. If this is a bidirectional or output pin, it just sets
+  // the trace to the same value as the pin. If it's an input pin, it forces the trace to check the
   // value of all of its output pins to choose an appropriate level.
   //
   // This is primarily useful for when pins switch modes and the new mode would leave the trace in
   // an inconsistent state.
-  function reset() {
+  function update() {
     if (mode & OUTPUT) {
       trace.value = pinValue
     } else {
-      trace.reset()
+      trace.update()
     }
   }
 
@@ -214,11 +214,14 @@ export function newPin(num, name, direction, init = 0) {
     clear() {
       set(0)
     },
+    reset() {
+      set(null)
+    },
 
     setFromTrace,
     toggle,
     setTrace,
-    reset,
+    update,
     addListener,
     removeListener,
   }

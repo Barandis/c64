@@ -82,8 +82,8 @@ export function newTrace(...connectedPins) {
   }
 
   // Sets the trace's value to the supplied value. If that value is `null`, the process laid out in
-  // `hiZValue` will be followed. Changing the trace value will also set the value of any input pins
-  // connected to it, and it will invoke any listeners added to those pins.
+  // `recalculate` will be followed. Changing the trace value will also set the value of any input
+  // pins connected to it, and it will invoke any listeners added to those pins.
   function set(value) {
     const tValue = translate(value)
     if (traceValue !== tValue) {
@@ -145,8 +145,11 @@ export function newTrace(...connectedPins) {
     clear() {
       set(0)
     },
-
     reset() {
+      set(null)
+    },
+
+    update() {
       traceValue = recalculate()
     },
 

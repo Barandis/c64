@@ -66,8 +66,8 @@ export function new4066() {
     if (apin.high) {
       xpin.mode = INPUT
       ypin.mode = INPUT
-      xpin.reset()
-      ypin.reset()
+      xpin.update()
+      ypin.update()
     } else {
       xpin.mode = BIDIRECTIONAL
       ypin.mode = BIDIRECTIONAL

@@ -264,13 +264,13 @@ describe("Pin", () => {
     })
   })
 
-  describe("reset", () => {
+  describe("update", () => {
     it("sets the trace to the value of the pin if it's not an input pin", () => {
       const pin1 = newPin(1, "A", OUTPUT, LOW)
       const pin2 = newPin(2, "B", BIDIRECTIONAL, HIGH)
       const trace = newTrace(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
-      pin1.reset()
+      pin1.update()
       expect(trace.value).to.equal(LOW)
     })
 
@@ -280,7 +280,7 @@ describe("Pin", () => {
       const trace = newTrace(pin1, pin2)
       expect(trace.value).to.equal(HIGH)
       pin2.mode = INPUT
-      pin2.reset()
+      pin2.update()
       expect(trace.value).to.equal(LOW) // because pin2 is no longer output and pin1 is low
     })
   })
