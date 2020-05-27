@@ -24,11 +24,6 @@ describe("6526 CIA", () => {
     dataTraces = [tr.D0, tr.D1, tr.D2, tr.D3, tr.D4, tr.D5, tr.D6, tr.D7]
     paTraces = [tr.PA0, tr.PA1, tr.PA2, tr.PA3, tr.PA4, tr.PA5, tr.PA6, tr.PA7]
     pbTraces = [tr.PB0, tr.PB1, tr.PB2, tr.PB3, tr.PB4, tr.PB5, tr.PB6, tr.PB7]
-
-    tr._CS.set()
-    tr.R__W.set()
-    tr._FLAG.set()
-    chip._IRQ.float()
   })
 
   function writeRegister(register, value) {
