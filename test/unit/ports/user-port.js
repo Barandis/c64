@@ -53,94 +53,94 @@ describe("User port", () => {
       if (i === 2) {
         continue
       }
-      p[i].value = 0
-      c[i].value = 0
+      p[i].lower()
+      c[i].lower()
     }
 
     connector.connect(port)
   })
 
   it("writes to 1 pin", () => {
-    p._PC2.value = 1
-    expect(c._PC2.value).to.equal(1)
+    p._PC2.level = 1
+    expect(c._PC2.level).to.equal(1)
   })
 
   it("reads from 2 pins", () => {
-    c.ATN.value = 1
-    c._FLAG2.value = 2
-    expect(p.ATN.value).to.equal(1)
-    expect(p._FLAG2.value).to.equal(2)
+    c.ATN.level = 1
+    c._FLAG2.level = 2
+    expect(p.ATN.level).to.equal(1)
+    expect(p._FLAG2.level).to.equal(2)
   })
 
   it("both reads and writes to 14 pins", () => {
-    p._RESET.value = 1
-    expect(c._RESET.value).to.equal(1)
-    c._RESET.value = 0
-    expect(p._RESET.value).to.equal(0)
+    p._RESET.level = 1
+    expect(c._RESET.level).to.equal(1)
+    c._RESET.level = 0
+    expect(p._RESET.level).to.equal(0)
 
-    p.CNT1.value = 1
-    expect(c.CNT1.value).to.equal(1)
-    c.CNT1.value = 0
-    expect(p.CNT1.value).to.equal(0)
+    p.CNT1.level = 1
+    expect(c.CNT1.level).to.equal(1)
+    c.CNT1.level = 0
+    expect(p.CNT1.level).to.equal(0)
 
-    p.SP1.value = 1
-    expect(c.SP1.value).to.equal(1)
-    c.SP1.value = 0
-    expect(p.SP1.value).to.equal(0)
+    p.SP1.level = 1
+    expect(c.SP1.level).to.equal(1)
+    c.SP1.level = 0
+    expect(p.SP1.level).to.equal(0)
 
-    p.CNT2.value = 1
-    expect(c.CNT2.value).to.equal(1)
-    c.CNT2.value = 0
-    expect(p.CNT2.value).to.equal(0)
+    p.CNT2.level = 1
+    expect(c.CNT2.level).to.equal(1)
+    c.CNT2.level = 0
+    expect(p.CNT2.level).to.equal(0)
 
-    p.SP2.value = 1
-    expect(c.SP2.value).to.equal(1)
-    c.SP2.value = 0
-    expect(p.SP2.value).to.equal(0)
+    p.SP2.level = 1
+    expect(c.SP2.level).to.equal(1)
+    c.SP2.level = 0
+    expect(p.SP2.level).to.equal(0)
 
-    p.PB0.value = 1
-    expect(c.PB0.value).to.equal(1)
-    c.PB0.value = 0
-    expect(p.PB0.value).to.equal(0)
+    p.PB0.level = 1
+    expect(c.PB0.level).to.equal(1)
+    c.PB0.level = 0
+    expect(p.PB0.level).to.equal(0)
 
-    p.PB1.value = 1
-    expect(c.PB1.value).to.equal(1)
-    c.PB1.value = 0
-    expect(p.PB1.value).to.equal(0)
+    p.PB1.level = 1
+    expect(c.PB1.level).to.equal(1)
+    c.PB1.level = 0
+    expect(p.PB1.level).to.equal(0)
 
-    p.PB2.value = 1
-    expect(c.PB2.value).to.equal(1)
-    c.PB2.value = 0
-    expect(p.PB2.value).to.equal(0)
+    p.PB2.level = 1
+    expect(c.PB2.level).to.equal(1)
+    c.PB2.level = 0
+    expect(p.PB2.level).to.equal(0)
 
-    p.PB3.value = 1
-    expect(c.PB3.value).to.equal(1)
-    c.PB3.value = 0
-    expect(p.PB3.value).to.equal(0)
+    p.PB3.level = 1
+    expect(c.PB3.level).to.equal(1)
+    c.PB3.level = 0
+    expect(p.PB3.level).to.equal(0)
 
-    p.PB4.value = 1
-    expect(c.PB4.value).to.equal(1)
-    c.PB4.value = 0
-    expect(p.PB4.value).to.equal(0)
+    p.PB4.level = 1
+    expect(c.PB4.level).to.equal(1)
+    c.PB4.level = 0
+    expect(p.PB4.level).to.equal(0)
 
-    p.PB5.value = 1
-    expect(c.PB5.value).to.equal(1)
-    c.PB5.value = 0
-    expect(p.PB5.value).to.equal(0)
+    p.PB5.level = 1
+    expect(c.PB5.level).to.equal(1)
+    c.PB5.level = 0
+    expect(p.PB5.level).to.equal(0)
 
-    p.PB6.value = 1
-    expect(c.PB6.value).to.equal(1)
-    c.PB6.value = 0
-    expect(p.PB6.value).to.equal(0)
+    p.PB6.level = 1
+    expect(c.PB6.level).to.equal(1)
+    c.PB6.level = 0
+    expect(p.PB6.level).to.equal(0)
 
-    p.PB7.value = 1
-    expect(c.PB7.value).to.equal(1)
-    c.PB7.value = 0
-    expect(p.PB7.value).to.equal(0)
+    p.PB7.level = 1
+    expect(c.PB7.level).to.equal(1)
+    c.PB7.level = 0
+    expect(p.PB7.level).to.equal(0)
 
-    p.PA2.value = 1
-    expect(c.PA2.value).to.equal(1)
-    c.PA2.value = 0
-    expect(p.PA2.value).to.equal(0)
+    p.PA2.level = 1
+    expect(c.PA2.level).to.equal(1)
+    c.PA2.level = 0
+    expect(p.PA2.level).to.equal(0)
   })
 })

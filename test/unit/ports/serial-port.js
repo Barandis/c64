@@ -35,75 +35,75 @@ describe("Serial port", () => {
     c = deviceTraces(connector)
 
     for (let i = 1; i <= 6; i++) {
-      p[i].value = 0
-      c[i].value = 0
+      p[i].lower()
+      c[i].lower()
     }
   })
 
   it("does not pass data through unconnected pins", () => {
     connector.connect(port)
 
-    p.GND.value = 1
-    expect(c.GND.value).to.equal(0)
+    p.GND.level = 1
+    expect(c.GND.level).to.equal(0)
 
-    p.GND.value = 0
-    c.GND.value = 1
-    expect(p.GND.value).to.equal(0)
+    p.GND.level = 0
+    c.GND.level = 1
+    expect(p.GND.level).to.equal(0)
   })
 
   it("allows data to pass through unidirectional ports in the correct direction", () => {
     connector.connect(port)
 
-    c._SRQ.value = 1
-    expect(p._SRQ.value).to.equal(1)
-    p._SRQ.value = 0
-    expect(c._SRQ.value).to.equal(1)
+    c._SRQ.level = 1
+    expect(p._SRQ.level).to.equal(1)
+    p._SRQ.level = 0
+    expect(c._SRQ.level).to.equal(1)
 
-    p.ATN.value = 1
-    expect(c.ATN.value).to.equal(1)
-    c.ATN.value = 0
-    expect(p.ATN.value).to.equal(1)
+    p.ATN.level = 1
+    expect(c.ATN.level).to.equal(1)
+    c.ATN.level = 0
+    expect(p.ATN.level).to.equal(1)
   })
 
   it("allows data to pass both ways through a bidirectional port", () => {
     connector.connect(port)
 
-    c.CLK.value = 1
-    expect(p.CLK.value).to.equal(1)
-    p.CLK.value = 0
-    expect(c.CLK.value).to.equal(0)
+    c.CLK.level = 1
+    expect(p.CLK.level).to.equal(1)
+    p.CLK.level = 0
+    expect(c.CLK.level).to.equal(0)
 
-    c.DATA.value = 1
-    expect(p.DATA.value).to.equal(1)
-    p.DATA.value = 0
-    expect(c.DATA.value).to.equal(0)
+    c.DATA.level = 1
+    expect(p.DATA.level).to.equal(1)
+    p.DATA.level = 0
+    expect(c.DATA.level).to.equal(0)
 
-    c._RESET.value = 1
-    expect(p._RESET.value).to.equal(1)
-    p._RESET.value = 0
-    expect(c._RESET.value).to.equal(0)
+    c._RESET.level = 1
+    expect(p._RESET.level).to.equal(1)
+    p._RESET.level = 0
+    expect(c._RESET.level).to.equal(0)
   })
 
   it("stops passing data when the port is disconnected", () => {
     connector.connect(port)
     connector.disconnect()
 
-    p.GND.value = 1
-    expect(c.GND.value).to.equal(0)
+    p.GND.level = 1
+    expect(c.GND.level).to.equal(0)
 
-    c._SRQ.value = 1
-    expect(p._SRQ.value).to.be.null
+    c._SRQ.level = 1
+    expect(p._SRQ.level).to.be.null
 
-    p.ATN.value = 1
-    expect(c.ATN.value).to.be.null
+    p.ATN.level = 1
+    expect(c.ATN.level).to.be.null
 
-    c.CLK.value = 1
-    expect(p.CLK.value).to.be.null
+    c.CLK.level = 1
+    expect(p.CLK.level).to.be.null
 
-    c.DATA.value = 1
-    expect(p.DATA.value).to.be.null
+    c.DATA.level = 1
+    expect(p.DATA.level).to.be.null
 
-    c._RESET.value = 1
-    expect(p._RESET.value).to.be.null
+    c._RESET.level = 1
+    expect(p._RESET.level).to.be.null
   })
 })

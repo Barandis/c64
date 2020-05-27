@@ -19,18 +19,18 @@ export function new6567() {
     // that reason the bottom 6 address lines are bidirectional (there are 48 registers, so 6 bits
     // is required to address them). The direction of A0...A5 therefore is controlled by the _CS,
     // AEC, and R__W pins.
-    newPin(24, "A0_A8", OUTPUT, null),
-    newPin(25, "A1_A9", OUTPUT, null),
-    newPin(26, "A2_A10", OUTPUT, null),
-    newPin(27, "A3_A11", OUTPUT, null),
-    newPin(28, "A4_A12", OUTPUT, null),
-    newPin(29, "A5_A13", OUTPUT, null),
-    newPin(30, "A6", OUTPUT, null),
-    newPin(31, "A7", OUTPUT, null),
-    newPin(32, "A8", OUTPUT, null),
-    newPin(33, "A9", OUTPUT, null),
-    newPin(34, "A10", OUTPUT, null),
-    newPin(23, "A11", OUTPUT, null),
+    newPin(24, "A0_A8", OUTPUT),
+    newPin(25, "A1_A9", OUTPUT),
+    newPin(26, "A2_A10", OUTPUT),
+    newPin(27, "A3_A11", OUTPUT),
+    newPin(28, "A4_A12", OUTPUT),
+    newPin(29, "A5_A13", OUTPUT),
+    newPin(30, "A6", OUTPUT),
+    newPin(31, "A7", OUTPUT),
+    newPin(32, "A8", OUTPUT),
+    newPin(33, "A9", OUTPUT),
+    newPin(34, "A10", OUTPUT),
+    newPin(23, "A11", OUTPUT),
 
     // Data bus pins. There are 12 of these because the upper 4 are used to access the 4-bit-wide
     // color RAM. This means that, since the VIC does not write to memory and since only D0...D7
@@ -50,20 +50,20 @@ export function new6567() {
     newPin(35, "D11", INPUT),
 
     // Video outputs. These are analog signals, one for sync/luminance and one for color.
-    newPin(15, "S_LUM", OUTPUT, 0),
-    newPin(14, "COLOR", OUTPUT, 0),
+    newPin(15, "S_LUM", OUTPUT),
+    newPin(14, "COLOR", OUTPUT),
 
     // DRAM control pins. These control the multiplexing of address bus lines into rows (Row Address
     // Strobe) and columns (Column Address Strobe).
-    newPin(18, "_RAS", OUTPUT, 1),
-    newPin(19, "_CAS", OUTPUT, 1),
+    newPin(18, "_RAS", OUTPUT),
+    newPin(19, "_CAS", OUTPUT),
 
     // Clock signal pins. Two clocks are inputs - the color clock (φcolor) at 14.31818 MHz and the
     // dot clock (φin) at 8.18 MHz -  and the latter is divided by 8 to create the system clock (φ0)
     // output that drives the CPU. The names here use "O" in place of "φ" for ease of typing.
     newPin(21, "OCOLOR", INPUT),
     newPin(22, "OIN", INPUT),
-    newPin(17, "O0", OUTPUT, 0),
+    newPin(17, "O0", OUTPUT),
 
     // Light pen pin. A transition to low on this pin indicates that a light pen is connected and
     // has activated.
@@ -73,17 +73,17 @@ export function new6567() {
     // access to the address and data bus to perform tasks that take more time than it normally has
     // with the φ2 low cycle. After three clock cycles, the AEC pin can then be held low to take
     // bus control.
-    newPin(12, "BA", OUTPUT, 1),
+    newPin(12, "BA", OUTPUT),
 
     // Address Enable Control. When this is high, thye CPU has control of the address and data
     // busses. When it is low, the VIC does instead. It normally follows the φ0 output except when
     // using it along with BA.
-    newPin(16, "AEC", OUTPUT, 0),
+    newPin(16, "AEC", OUTPUT),
 
     // Interrupt request. The VIC can request interrupts for four reasons: the end of a raster line,
     // a lightpen activation, a sprite-to-sprite collision, or a sprite-to-background collision.
     // When these events occur this pin will go low.
-    newPin(8, "_IRQ", OUTPUT, 1),
+    newPin(8, "_IRQ", OUTPUT),
 
     // Chip select. A low signal on this indicates that the VIC should be available for reading and
     // writing of its registers. This pin has no effect during the φ2 low cycle (when the VIC has
@@ -99,6 +99,11 @@ export function new6567() {
     newPin(13, "VDD", UNCONNECTED),
     newPin(20, "GND", UNCONNECTED),
   )
+
+  chip._RAS.raise()
+  chip._CAS.raise()
+  chip.BA.raise()
+  chip.AEC.lower()
 
   return chip
 }

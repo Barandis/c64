@@ -4,25 +4,25 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { newTrace } from "components/new-trace"
-import { newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL } from "components/new-pin"
+import { newTrace } from "components/trace"
+import { newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL } from "components/pin"
 
 export function levelDirectUnconnected() {
   const t = newTrace()
   t.raise()
   expect(t.high).to.be.true
   expect(t.low).to.be.false
-  expect(t.none).to.be.false
+  expect(t.null).to.be.false
 
   t.lower()
   expect(t.high).to.be.false
   expect(t.low).to.be.true
-  expect(t.none).to.be.false
+  expect(t.null).to.be.false
 
   t.reset()
   expect(t.high).to.be.false
   expect(t.low).to.be.false
-  expect(t.none).to.be.true
+  expect(t.null).to.be.true
 
   t.level = -0.35
   expect(t.level).to.equal(-0.35)

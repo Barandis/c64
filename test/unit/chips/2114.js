@@ -16,56 +16,56 @@ describe("2114 1024 x 4-bit static RAM", () => {
     chip = new2114()
     traces = deviceTraces(chip)
 
-    traces._CE.state = true
-    traces._WE.state = true
+    traces._CE.raise()
+    traces._WE.raise()
   })
 
   function setAddressPins(addr) {
-    traces.A0.value = (addr & 0b0000000001) >> 0
-    traces.A1.value = (addr & 0b0000000010) >> 1
-    traces.A2.value = (addr & 0b0000000100) >> 2
-    traces.A3.value = (addr & 0b0000001000) >> 3
-    traces.A4.value = (addr & 0b0000010000) >> 4
-    traces.A5.value = (addr & 0b0000100000) >> 5
-    traces.A6.value = (addr & 0b0001000000) >> 6
-    traces.A7.value = (addr & 0b0010000000) >> 7
-    traces.A8.value = (addr & 0b0100000000) >> 8
-    traces.A9.value = (addr & 0b1000000000) >> 9
+    traces.A0.level = (addr & 0b0000000001) >> 0
+    traces.A1.level = (addr & 0b0000000010) >> 1
+    traces.A2.level = (addr & 0b0000000100) >> 2
+    traces.A3.level = (addr & 0b0000001000) >> 3
+    traces.A4.level = (addr & 0b0000010000) >> 4
+    traces.A5.level = (addr & 0b0000100000) >> 5
+    traces.A6.level = (addr & 0b0001000000) >> 6
+    traces.A7.level = (addr & 0b0010000000) >> 7
+    traces.A8.level = (addr & 0b0100000000) >> 8
+    traces.A9.level = (addr & 0b1000000000) >> 9
   }
 
   function setDataPins(value) {
-    traces.D0.value = (value & 0b0001) >> 0
-    traces.D1.value = (value & 0b0010) >> 1
-    traces.D2.value = (value & 0b0100) >> 2
-    traces.D3.value = (value & 0b1000) >> 3
+    traces.D0.level = (value & 0b0001) >> 0
+    traces.D1.level = (value & 0b0010) >> 1
+    traces.D2.level = (value & 0b0100) >> 2
+    traces.D3.level = (value & 0b1000) >> 3
   }
 
   function readDataPins() {
     return (
-      (traces.D0.value << 0) |
-      (traces.D1.value << 1) |
-      (traces.D2.value << 2) |
-      (traces.D3.value << 3)
+      (traces.D0.level << 0) |
+      (traces.D1.level << 1) |
+      (traces.D2.level << 2) |
+      (traces.D3.level << 3)
     )
   }
 
-  it("reads and writes all of the correct values from 0x000 to 0x3ff", () => {
+  it("reads and writes all of the correct levels from 0x000 to 0x3ff", () => {
     for (let addr = 0x000; addr < 0x400; addr++) {
-      const value = addr & 0xf
+      const level = addr & 0xf
       setAddressPins(addr)
-      setDataPins(value)
-      traces._WE.value = 0
-      traces._CE.value = 0
-      traces._CE.value = 1
-      traces._WE.value = 1
+      setDataPins(level)
+      traces._WE.lower()
+      traces._CE.lower()
+      traces._CE.raise()
+      traces._WE.raise()
     }
 
     for (let addr = 0x000; addr < 0x400; addr++) {
-      const value = addr & 0xf
+      const level = addr & 0xf
       setAddressPins(addr)
-      traces._CE.value = 0
-      expect(readDataPins()).to.equal(value)
-      traces._CE.value = 1
+      traces._CE.lower()
+      expect(readDataPins()).to.equal(level)
+      traces._CE.raise()
     }
   })
 })

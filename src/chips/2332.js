@@ -48,14 +48,14 @@ export function new2332(buffer) {
     newPin(19, "A11", INPUT),
 
     // Data pins D0...D7
-    newPin(9, "D0", OUTPUT, 0),
-    newPin(10, "D1", OUTPUT, 0),
-    newPin(11, "D2", OUTPUT, 0),
-    newPin(13, "D3", OUTPUT, 0),
-    newPin(14, "D4", OUTPUT, 0),
-    newPin(15, "D5", OUTPUT, 0),
-    newPin(16, "D6", OUTPUT, 0),
-    newPin(17, "D7", OUTPUT, 0),
+    newPin(9, "D0", OUTPUT),
+    newPin(10, "D1", OUTPUT),
+    newPin(11, "D2", OUTPUT),
+    newPin(13, "D3", OUTPUT),
+    newPin(14, "D4", OUTPUT),
+    newPin(15, "D5", OUTPUT),
+    newPin(16, "D6", OUTPUT),
+    newPin(17, "D7", OUTPUT),
 
     // Chip select pins. When these are both low, a read cycle is executed based on the address on
     // pins A0...A11. When they're high, the data pins are put into hi-Z.

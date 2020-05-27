@@ -19,15 +19,15 @@ describe("7406 hex inverter", () => {
 
   it("sets output to false when the input is true", () => {
     for (let i = 1; i <= 6; i++) {
-      traces[`A${i}`].state = true
-      expect(traces[`Y${i}`].state).to.be.false
+      traces[`A${i}`].raise()
+      expect(traces[`Y${i}`].low).to.be.true
     }
   })
 
   it("sets output to true when the input is false", () => {
     for (let i = 1; i <= 6; i++) {
-      traces[`A${i}`].state = false
-      expect(traces[`Y${i}`].state).to.be.true
+      traces[`A${i}`].lower()
+      expect(traces[`Y${i}`].high).to.be.true
     }
   })
 })

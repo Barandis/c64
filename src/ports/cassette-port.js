@@ -10,9 +10,9 @@ import { newPort } from "components/port"
 
 export function newCassettePort() {
   return newPort(
-    newPin(4, "READ", OUTPUT, null),
+    newPin(4, "READ", OUTPUT),
     newPin(5, "WRITE", INPUT),
-    newPin(6, "SENSE", OUTPUT, null),
+    newPin(6, "SENSE", OUTPUT),
     newPin(3, "MOTOR", INPUT),
 
     newPin(2, "VCC", UNCONNECTED),

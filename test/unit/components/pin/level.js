@@ -4,33 +4,33 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { newPin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL } from "components/new-pin"
-import { newTrace } from "components/new-trace"
+import { newPin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL } from "components/pin"
+import { newTrace } from "components/trace"
 
 export function levelNoTrace() {
   const p = newPin(1, "A", INPUT)
   expect(p.level).to.be.null
   expect(p.high).to.be.false
   expect(p.low).to.be.false
-  expect(p.none).to.be.true
+  expect(p.null).to.be.true
 
   p.level = 1
   expect(p.level).to.equal(1)
   expect(p.high).to.be.true
   expect(p.low).to.be.false
-  expect(p.none).to.be.false
+  expect(p.null).to.be.false
 
   p.level = 0
   expect(p.level).to.equal(0)
   expect(p.high).to.be.false
   expect(p.low).to.be.true
-  expect(p.none).to.be.false
+  expect(p.null).to.be.false
 
   p.level = -0.35
   expect(p.level).to.equal(-0.35)
   expect(p.high).to.be.false
   expect(p.low).to.be.true
-  expect(p.none).to.be.false
+  expect(p.null).to.be.false
 }
 
 export function levelUpdateNoTrace() {

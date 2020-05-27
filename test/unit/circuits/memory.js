@@ -18,12 +18,12 @@ describe("Memory reading/writing", () => {
 
     // Set normal values for PLA inputs
     const { U7, U19 } = board
-    U19._CAS.value = 1
-    U7.P0.value = 1
-    U7.P1.value = 1
-    U7.P2.value = 1
-    U19.BA.value = 1
-    U19.AEC.value = 1
+    U19._CAS.raise()
+    U7.P0.raise()
+    U7.P1.raise()
+    U7.P2.raise()
+    U19.BA.raise()
+    U19.AEC.raise()
   })
 
   describe("CIA 1, address $DC00...$DCFF", () => {
@@ -37,12 +37,12 @@ describe("Memory reading/writing", () => {
       // manually load the CIA 1 DDRA register with a value to read
       valueToPins(0x2f, ...dataPins)
       valueToPins(0x2, A0, A1, A2, A3)
-      R__W.clear()
-      board.U15._Y20.clear()
+      R__W.lower()
+      board.U15._Y20.lower()
 
       // Value is written, reset everything
-      board.U15._Y20.set()
-      R__W.set()
+      board.U15._Y20.raise()
+      R__W.raise()
       valueToPins(0, A0, A1, A2, A3)
       valueToPins(0, ...dataPins)
 

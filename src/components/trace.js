@@ -1,170 +1,139 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
-
-// A representation of a connection between one or more pins. The name 'trace' is used for the
-// copper paths connecting components on a printed circuit board and so is used here. 'Wire' would
-// have also been a decent choice, but since wires typically only connect two pins, 'trace' is more
-// accurate.
+// Copyright (c) 2020 Thomas J. Otterson
 //
-// The value of a trace affects and is affected by the pins connected to it. Specifically, output
-// pins (created with OUTPUT or with INPUT_OUTPUT and in OUTPUT mode) change the value of the trace
-// when their own value changes, while input pins (created with INPUT or with INPUT_OUTPUT and in
-// INPUT mode) will have their value set to the trace's value when it changes. The value of a trace
-// can also be set manually through the `value` property; this can be used to represent external
-// connections to whatever circuit is being modeled.
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+import { OUTPUT } from "components/pin"
+
+// When a trace's level is set directly, its actual value is chosen according to the following
+// rules:
 //
-// Trace values are typically a number (1 or 0 for digital circuits, or any number for analong
-// circuits). If an output pin's value changes to `null` (hi-Z state), the trace will go through a
-// series of possibilities before settling on `null` for itself. If there is another output pin that
-// is not `null`, then it will set the value of the trace (even if its value hasn't changed). If all
-// output pins are `null` at the same time, then the value of the trace will be determined by the
-// `floating` value passed optionally as any of the parameters to the creation function. (If more
-// than one of these values are passed, the last one will override the others.) This parameter can
-// represent a pull-up (PULL_UP) or pull-down (PULL_DOWN) resistor in a circuit, setting the value
-// of a trace to 1 or 0 respectively in the same way that real circuits connect a trace to the
-// supply voltage or the ground to force the trace to a particular state when no output pin is
-// driving it. Only if all connected output pins are `null`, and either no `floating` value was
-// passed or it was passed as FLOAT, will a trace be set to `null`.
+// 1. If the trace has an output pin connected to it that is high, the trace takes on that pin's
+//    value.
+// 2. If the trace has an output pin connected to it that is low, the trace takes on that pin's
+//    value.
+// 3. If the value being set is `null`:
+//    a. If the trace has been pulled up, its value is 1.
+//    b. If the trace has been pulled down, its value is 0.
+//    c. Its value is `null`.
+// 4. The trace takes on the set value.
 //
-// Note that this trace object handles competing output pins by choosing whichever value was set on
-// one of those pins most recently. This is not how it works in real life, but in real life such a
-// situation is typcially met with short circuits or indeterminate states, so it's typically a
-// sitation to be avoided entirely anyway.
+// If a trace is set by a pin (either by an output pin changing values or by an unconnected pin
+// mode-changing into an output pin), then the value is simply set *unless* the value it's being set
+// to is `null`. In that case the same rules as direct setting apply.
 
-export const FLOAT = Symbol("FLOAT")
-export const PULL_UP = Symbol("PULL_UP")
-export const PULL_DOWN = Symbol("PULL_DOWN")
-
-// Creates a trace. The values passed to it are pins, optionally with a value of FLOAT (the
-// default), PULLUP, or PULLDOWN at the end.
-export function newTrace(...connectedPins) {
-  let floating = FLOAT
-  const pins = []
-
-  let traceValue
-
-  // Sets the value of the trace based on the values of output pins connected to it. This function
-  // is called at creation time and also at any time when an attempt is made to set the trace value
-  // to `null` (hi-Z).
-  //
-  // If any connected output pin is high, then the trace's value will be set to that value. If no
-  // connected output pins are high but at least one is low, the trace will be set to that avlue. If
-  // there are no connected output pins at all, then the value will be set to 0. If all connected
-  // output pins are `null`, then the trace's value will be set to `null`, but only if no floating
-  // parameter was specified at creation (or if FLOAT was selected). Otherwise the trace's value
-  // will be 1 if PULL_UP was selected or 0 if PULL_DOWN was selected.
-  function recalculate() {
-    if (pins.filter(pin => pin.output).length === 0) {
-      return 0
-    }
-    const hi = pins.find(pin => pin.output && pin.high)
-    if (hi) {
-      return hi.value
-    }
-    const lo = pins.find(pin => pin.output && pin.low)
-    if (lo) {
-      return lo.value
-    }
-    return floating === PULL_UP ? 1 : floating === PULL_DOWN ? 0 : null
-  }
-
-  // Normalizes a value so that it's either `null` or a number. This translates `true` to `1` and
-  // `false` to `0`.
-  function translate(value) {
-    if (value === null) {
-      return null
-    }
-    return Number(value)
-  }
-
-  // Sets the trace's value to the supplied value. If that value is `null`, the process laid out in
-  // `recalculate` will be followed. Changing the trace value will also set the value of any input
-  // pins connected to it, and it will invoke any listeners added to those pins.
-  function set(value) {
-    const tValue = translate(value)
-    if (traceValue !== tValue) {
-      if (tValue === null) {
-        traceValue = recalculate()
-      } else {
-        traceValue = tValue
-      }
-      pins.forEach(pin => pin.setFromTrace())
-    }
-  }
-
-  // Connects one or more pins to the trace. This works the same as adding it in the factory
-  // function (except that a floating value cannot be added here). This is essentially a
-  // convenience; some particularly well-connected traces can otherwise have factory function
-  // invocations so long as to be uncomfortable, and this allows them to be broken into multiple
-  // statements.
-  function addPins(...connectedPins) {
-    for (const pin of connectedPins) {
-      addPin(pin)
-    }
-  }
+export function newTrace(...pins) {
+  const _pins = []
+  let _float = null
+  let _level = null
 
   function addPin(pin) {
     if (!pin.connected) {
-      pins.push(pin)
+      _pins.push(pin)
       pin.setTrace(trace)
     }
   }
 
+  function addPins(...pins) {
+    for (const p of pins) {
+      addPin(p)
+    }
+    return trace
+  }
+
+  function normalize(level) {
+    return level === null ? null : Number(level)
+  }
+
+  function calculateLevel(level) {
+    const hi = _pins.find(p => p.mode === OUTPUT && p.high)
+    if (hi) {
+      return hi.level
+    }
+
+    const lo = _pins.find(p => p.mode === OUTPUT && p.low)
+    if (lo) {
+      return lo.level
+    }
+
+    if (level === null) {
+      return _float
+    }
+
+    return level
+  }
+
+  // This is called by the trace's output pins changing values or by unconnected pins becoming
+  // output or bidirectional pins.
+  function updateLevel(level) {
+    const normalized = normalize(level)
+    if (normalized !== null) {
+      _level = normalized
+    } else {
+      _level = calculateLevel(null)
+    }
+    _pins.forEach(p => p.updateLevel())
+  }
+
+  // This is called from outside the trace and its pins.
+  function setLevel(level) {
+    _level = calculateLevel(normalize(level))
+    _pins.forEach(p => p.updateLevel())
+  }
+
+  function pullUp() {
+    _float = 1
+    setLevel(_level)
+    return trace
+  }
+
+  function pullDown() {
+    _float = 0
+    setLevel(_level)
+    return trace
+  }
+
+  function float() {
+    _float = null
+    setLevel(_level)
+    return trace
+  }
+
   const trace = {
     get high() {
-      return traceValue >= 0.5
+      return _level >= 0.5
     },
     get low() {
-      return traceValue < 0.5
+      return _level < 0.5 && _level !== null
     },
-    get hiZ() {
-      return traceValue === null
+    get null() {
+      return _level === null
     },
-
-    get value() {
-      return traceValue
+    get level() {
+      return _level
     },
-    set value(value) {
-      set(value)
-    },
-
-    get state() {
-      return traceValue === null ? null : traceValue >= 0.5
-    },
-    set state(value) {
-      set(value === null ? null : !!value)
+    set level(level) {
+      setLevel(level)
     },
 
-    set() {
-      set(1)
+    raise() {
+      setLevel(1)
     },
-    clear() {
-      set(0)
+    lower() {
+      setLevel(0)
     },
     reset() {
-      set(null)
+      setLevel(null)
     },
 
-    update() {
-      traceValue = recalculate()
-    },
-
+    pullUp,
+    pullDown,
+    float,
+    updateLevel,
     addPins,
   }
 
-  for (const pin of connectedPins) {
-    if ([FLOAT, PULL_DOWN, PULL_UP].includes(pin)) {
-      floating = pin
-    } else if (!pin.connected) {
-      addPin(pin)
-    }
-  }
-
-  trace.value = recalculate()
-
+  trace.addPins(...pins)
+  trace.updateLevel(null)
   return trace
 }

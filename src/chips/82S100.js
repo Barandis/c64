@@ -118,14 +118,14 @@ export function new82S100() {
     newPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    newPin(18, "F0", OUTPUT, false),
-    newPin(17, "F1", OUTPUT, true),
-    newPin(16, "F2", OUTPUT, true),
-    newPin(15, "F3", OUTPUT, true),
-    newPin(13, "F4", OUTPUT, true),
-    newPin(12, "F5", OUTPUT, true),
-    newPin(11, "F6", OUTPUT, true),
-    newPin(10, "F7", OUTPUT, true),
+    newPin(18, "F0", OUTPUT),
+    newPin(17, "F1", OUTPUT),
+    newPin(16, "F2", OUTPUT),
+    newPin(15, "F3", OUTPUT),
+    newPin(13, "F4", OUTPUT),
+    newPin(12, "F5", OUTPUT),
+    newPin(11, "F6", OUTPUT),
+    newPin(10, "F7", OUTPUT),
 
     // Output enable, disables all outputs when set HIGH
     newPin(19, "_OE", INPUT),
@@ -137,6 +137,15 @@ export function new82S100() {
     newPin(28, "VCC", UNCONNECTED),
     newPin(14, "GND", UNCONNECTED),
   )
+
+  chip.F0.lower()
+  chip.F1.raise()
+  chip.F2.raise()
+  chip.F3.raise()
+  chip.F4.raise()
+  chip.F5.raise()
+  chip.F6.raise()
+  chip.F7.raise()
 
   // One listener to rule them all
   //
@@ -157,14 +166,14 @@ export function new82S100() {
   /* eslint-disable complexity */
   function oneListener() {
     if (chip._OE.high) {
-      chip.F0.state = null
-      chip.F1.state = null
-      chip.F2.state = null
-      chip.F3.state = null
-      chip.F4.state = null
-      chip.F5.state = null
-      chip.F6.state = null
-      chip.F7.state = null
+      chip.F0.reset()
+      chip.F1.reset()
+      chip.F2.reset()
+      chip.F3.reset()
+      chip.F4.reset()
+      chip.F5.reset()
+      chip.F6.reset()
+      chip.F7.reset()
 
       return
     }
@@ -484,14 +493,14 @@ export function new82S100() {
     // in the state assignment below.
     const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27 || p28 || p30
 
-    chip.F0.state = s0
-    chip.F1.state = !s1
-    chip.F2.state = !s2
-    chip.F3.state = !s3
-    chip.F4.state = !s7
-    chip.F5.state = !s4
-    chip.F6.state = !s5
-    chip.F7.state = !s6
+    chip.F0.level = s0
+    chip.F1.level = !s1
+    chip.F2.level = !s2
+    chip.F3.level = !s3
+    chip.F4.level = !s7
+    chip.F5.level = !s4
+    chip.F6.level = !s5
+    chip.F7.level = !s6
   }
   /* eslint-enable complexity */
 

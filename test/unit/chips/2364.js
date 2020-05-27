@@ -19,42 +19,42 @@ describe("2364 8k x 8-bit ROM", () => {
     before(() => {
       chip = new2364(kernal)
       traces = deviceTraces(chip)
-      traces._CS.value = 1
+      traces._CS.raise()
     })
 
     function setAddressPins(addr) {
-      traces.A0.value = (addr & 0b0000000000001) >> 0
-      traces.A1.value = (addr & 0b0000000000010) >> 1
-      traces.A2.value = (addr & 0b0000000000100) >> 2
-      traces.A3.value = (addr & 0b0000000001000) >> 3
-      traces.A4.value = (addr & 0b0000000010000) >> 4
-      traces.A5.value = (addr & 0b0000000100000) >> 5
-      traces.A6.value = (addr & 0b0000001000000) >> 6
-      traces.A7.value = (addr & 0b0000010000000) >> 7
-      traces.A8.value = (addr & 0b0000100000000) >> 8
-      traces.A9.value = (addr & 0b0001000000000) >> 9
-      traces.A10.value = (addr & 0b0010000000000) >> 10
-      traces.A11.value = (addr & 0b0100000000000) >> 11
-      traces.A12.value = (addr & 0b1000000000000) >> 12
+      traces.A0.level = (addr & 0b0000000000001) >> 0
+      traces.A1.level = (addr & 0b0000000000010) >> 1
+      traces.A2.level = (addr & 0b0000000000100) >> 2
+      traces.A3.level = (addr & 0b0000000001000) >> 3
+      traces.A4.level = (addr & 0b0000000010000) >> 4
+      traces.A5.level = (addr & 0b0000000100000) >> 5
+      traces.A6.level = (addr & 0b0000001000000) >> 6
+      traces.A7.level = (addr & 0b0000010000000) >> 7
+      traces.A8.level = (addr & 0b0000100000000) >> 8
+      traces.A9.level = (addr & 0b0001000000000) >> 9
+      traces.A10.level = (addr & 0b0010000000000) >> 10
+      traces.A11.level = (addr & 0b0100000000000) >> 11
+      traces.A12.level = (addr & 0b1000000000000) >> 12
     }
 
     function readDataPins() {
       return (
-        (traces.D0.value << 0) |
-        (traces.D1.value << 1) |
-        (traces.D2.value << 2) |
-        (traces.D3.value << 3) |
-        (traces.D4.value << 4) |
-        (traces.D5.value << 5) |
-        (traces.D6.value << 6) |
-        (traces.D7.value << 7)
+        (traces.D0.level << 0) |
+        (traces.D1.level << 1) |
+        (traces.D2.level << 2) |
+        (traces.D3.level << 3) |
+        (traces.D4.level << 4) |
+        (traces.D5.level << 5) |
+        (traces.D6.level << 6) |
+        (traces.D7.level << 7)
       )
     }
 
     function runTests(lo, hi) {
       for (let addr = lo; addr < hi; addr++) {
         setAddressPins(addr)
-        traces._CS.value = 0
+        traces._CS.lower()
         const data = readDataPins()
 
         if (DEBUG) {
@@ -67,15 +67,15 @@ describe("2364 8k x 8-bit ROM", () => {
         }
 
         expect(data).to.equal(expected[addr])
-        traces._CS.value = 1
+        traces._CS.raise()
       }
     }
 
-    it("reads all of the correct values in 0x0000 - 0x0fff", () => {
+    it("reads all of the correct levels in 0x0000 - 0x0fff", () => {
       runTests(0x0000, 0x1000)
     })
 
-    it("reads all of the correct values in 0x1000 - 0x1fff", () => {
+    it("reads all of the correct levels in 0x1000 - 0x1fff", () => {
       runTests(0x1000, 0x2000)
     })
   })
@@ -89,42 +89,42 @@ describe("2364 8k x 8-bit ROM", () => {
       chip = new2364(basic)
       traces = deviceTraces(chip)
 
-      traces._CS.value = 1
+      traces._CS.raise()
     })
 
     function setAddressPins(addr) {
-      traces.A0.value = (addr & 0b0000000000001) >> 0
-      traces.A1.value = (addr & 0b0000000000010) >> 1
-      traces.A2.value = (addr & 0b0000000000100) >> 2
-      traces.A3.value = (addr & 0b0000000001000) >> 3
-      traces.A4.value = (addr & 0b0000000010000) >> 4
-      traces.A5.value = (addr & 0b0000000100000) >> 5
-      traces.A6.value = (addr & 0b0000001000000) >> 6
-      traces.A7.value = (addr & 0b0000010000000) >> 7
-      traces.A8.value = (addr & 0b0000100000000) >> 8
-      traces.A9.value = (addr & 0b0001000000000) >> 9
-      traces.A10.value = (addr & 0b0010000000000) >> 10
-      traces.A11.value = (addr & 0b0100000000000) >> 11
-      traces.A12.value = (addr & 0b1000000000000) >> 12
+      traces.A0.level = (addr & 0b0000000000001) >> 0
+      traces.A1.level = (addr & 0b0000000000010) >> 1
+      traces.A2.level = (addr & 0b0000000000100) >> 2
+      traces.A3.level = (addr & 0b0000000001000) >> 3
+      traces.A4.level = (addr & 0b0000000010000) >> 4
+      traces.A5.level = (addr & 0b0000000100000) >> 5
+      traces.A6.level = (addr & 0b0000001000000) >> 6
+      traces.A7.level = (addr & 0b0000010000000) >> 7
+      traces.A8.level = (addr & 0b0000100000000) >> 8
+      traces.A9.level = (addr & 0b0001000000000) >> 9
+      traces.A10.level = (addr & 0b0010000000000) >> 10
+      traces.A11.level = (addr & 0b0100000000000) >> 11
+      traces.A12.level = (addr & 0b1000000000000) >> 12
     }
 
     function readDataPins() {
       return (
-        (traces.D0.value << 0) |
-        (traces.D1.value << 1) |
-        (traces.D2.value << 2) |
-        (traces.D3.value << 3) |
-        (traces.D4.value << 4) |
-        (traces.D5.value << 5) |
-        (traces.D6.value << 6) |
-        (traces.D7.value << 7)
+        (traces.D0.level << 0) |
+        (traces.D1.level << 1) |
+        (traces.D2.level << 2) |
+        (traces.D3.level << 3) |
+        (traces.D4.level << 4) |
+        (traces.D5.level << 5) |
+        (traces.D6.level << 6) |
+        (traces.D7.level << 7)
       )
     }
 
     function runTests(lo, hi) {
       for (let addr = lo; addr < hi; addr++) {
         setAddressPins(addr)
-        traces._CS.value = 0
+        traces._CS.lower()
         const data = readDataPins()
 
         if (DEBUG) {
@@ -137,15 +137,15 @@ describe("2364 8k x 8-bit ROM", () => {
         }
 
         expect(data).to.equal(expected[addr])
-        traces._CS.value = 1
+        traces._CS.raise()
       }
     }
 
-    it("reads all of the correct values in 0x0000 - 0x0fff", () => {
+    it("reads all of the correct levels in 0x0000 - 0x0fff", () => {
       runTests(0x0000, 0x1000)
     })
 
-    it("reads all of the correct values in 0x1000 - 0x1fff", () => {
+    it("reads all of the correct levels in 0x1000 - 0x1fff", () => {
       runTests(0x1000, 0x2000)
     })
   })

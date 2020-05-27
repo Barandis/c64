@@ -5,8 +5,8 @@
 
 import { expect } from "test/helper"
 import Sinon from "sinon"
-import { newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL } from "components/new-pin"
-import { newTrace } from "components/new-trace"
+import { newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL } from "components/pin"
+import { newTrace } from "components/trace"
 
 export function listenerUnconnected() {
   const p = newPin(1, "A", UNCONNECTED)
@@ -90,7 +90,7 @@ export function listenerNonexistent() {
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
-  
+
   p.addListener(spy2)
 
   t.raise()

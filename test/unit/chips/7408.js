@@ -16,74 +16,74 @@ describe("7408 quad 2-input AND gate", () => {
   })
 
   it("properly ANDs on gate 1", () => {
-    traces.A1.state = false
-    traces.B1.state = false
-    expect(traces.Y1.state).to.be.false
+    traces.A1.lower()
+    traces.B1.lower()
+    expect(traces.Y1.low).to.be.true
 
-    traces.A1.state = false
-    traces.B1.state = true
-    expect(traces.Y1.state).to.be.false
+    traces.A1.lower()
+    traces.B1.raise()
+    expect(traces.Y1.low).to.be.true
 
-    traces.A1.state = true
-    traces.B1.state = false
-    expect(traces.Y1.state).to.be.false
+    traces.A1.raise()
+    traces.B1.lower()
+    expect(traces.Y1.low).to.be.true
 
-    traces.A1.state = true
-    traces.B1.state = true
-    expect(traces.Y1.state).to.be.true
+    traces.A1.raise()
+    traces.B1.raise()
+    expect(traces.Y1.high).to.be.true
   })
 
   it("properly ANDs on gate 2", () => {
-    traces.A2.state = false
-    traces.B2.state = false
-    expect(traces.Y2.state).to.be.false
+    traces.A2.lower()
+    traces.B2.lower()
+    expect(traces.Y2.low).to.be.true
 
-    traces.A2.state = false
-    traces.B2.state = true
-    expect(traces.Y2.state).to.be.false
+    traces.A2.lower()
+    traces.B2.raise()
+    expect(traces.Y2.low).to.be.true
 
-    traces.A2.state = true
-    traces.B2.state = false
-    expect(traces.Y2.state).to.be.false
+    traces.A2.raise()
+    traces.B2.lower()
+    expect(traces.Y2.low).to.be.true
 
-    traces.A2.state = true
-    traces.B2.state = true
-    expect(traces.Y2.state).to.be.true
+    traces.A2.raise()
+    traces.B2.raise()
+    expect(traces.Y2.high).to.be.true
   })
 
   it("properly ANDs on gate 3", () => {
-    traces.A3.state = false
-    traces.B3.state = false
-    expect(traces.Y3.state).to.be.false
+    traces.A3.lower()
+    traces.B3.lower()
+    expect(traces.Y3.low).to.be.true
 
-    traces.A3.state = false
-    traces.B3.state = true
-    expect(traces.Y3.state).to.be.false
+    traces.A3.lower()
+    traces.B3.raise()
+    expect(traces.Y3.low).to.be.true
 
-    traces.A3.state = true
-    traces.B3.state = false
-    expect(traces.Y3.state).to.be.false
+    traces.A3.raise()
+    traces.B3.lower()
+    expect(traces.Y3.low).to.be.true
 
-    traces.A3.state = true
-    traces.B3.state = true
-    expect(traces.Y3.state).to.be.true
+    traces.A3.raise()
+    traces.B3.raise()
+    expect(traces.Y3.high).to.be.true
   })
 
   it("properly ANDs on gate 4", () => {
-    traces.A4.state = false
-    traces.B4.state = false
-    expect(traces.Y4.state).to.be.false
+    traces.A4.lower()
+    traces.B4.lower()
+    expect(traces.Y4.low).to.be.true
 
-    traces.A4.state = false
-    traces.B4.state = true
-    expect(traces.Y4.state).to.be.false
+    traces.A4.lower()
+    traces.B4.raise()
+    expect(traces.Y4.low).to.be.true
 
-    traces.A4.state = true
-    traces.B4.state = false
-    expect(traces.Y4.state).to.be.false
+    traces.A4.raise()
+    traces.B4.lower()
+    expect(traces.Y4.low).to.be.true
 
-    traces.A4.state = true
-    traces.B4.state = true
-    expect(traces.Y4.state).to.be.true
+    traces.A4.raise()
+    traces.B4.raise()
+    expect(traces.Y4.high).to.be.true
   })
 })

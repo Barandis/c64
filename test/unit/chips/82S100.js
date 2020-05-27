@@ -7,7 +7,6 @@
 
 import { expect, bin, deviceTraces } from "test/helper"
 import { new82S100 } from "chips/82S100"
-import { HIGH, LOW, HI_Z } from "components/state"
 
 // This program was adapted from a C program that provides a 64k table of outputs for PLA based on
 // all of the possible inputs. The original is located at
@@ -149,48 +148,48 @@ describe("82S100 Programmable Logic Array", () => {
   const bitValue = (input, bit) => (input & (1 << bit)) >> bit
 
   function applyInputs(input) {
-    traces.I0.state = bitValue(input, 0)
-    traces.I1.state = bitValue(input, 1)
-    traces.I2.state = bitValue(input, 2)
-    traces.I3.state = bitValue(input, 3)
-    traces.I4.state = bitValue(input, 4)
-    traces.I5.state = bitValue(input, 5)
-    traces.I6.state = bitValue(input, 6)
-    traces.I7.state = bitValue(input, 7)
-    traces.I8.state = bitValue(input, 8)
-    traces.I9.state = bitValue(input, 9)
-    traces.I10.state = bitValue(input, 10)
-    traces.I11.state = bitValue(input, 11)
-    traces.I12.state = bitValue(input, 12)
-    traces.I13.state = bitValue(input, 13)
-    traces.I14.state = bitValue(input, 14)
-    traces.I15.state = bitValue(input, 15)
+    traces.I0.level = bitValue(input, 0)
+    traces.I1.level = bitValue(input, 1)
+    traces.I2.level = bitValue(input, 2)
+    traces.I3.level = bitValue(input, 3)
+    traces.I4.level = bitValue(input, 4)
+    traces.I5.level = bitValue(input, 5)
+    traces.I6.level = bitValue(input, 6)
+    traces.I7.level = bitValue(input, 7)
+    traces.I8.level = bitValue(input, 8)
+    traces.I9.level = bitValue(input, 9)
+    traces.I10.level = bitValue(input, 10)
+    traces.I11.level = bitValue(input, 11)
+    traces.I12.level = bitValue(input, 12)
+    traces.I13.level = bitValue(input, 13)
+    traces.I14.level = bitValue(input, 14)
+    traces.I15.level = bitValue(input, 15)
   }
 
   function outputValue() {
     let output = 0
-    output |= traces.F0.value << 0
-    output |= traces.F1.value << 1
-    output |= traces.F2.value << 2
-    output |= traces.F3.value << 3
-    output |= traces.F4.value << 4
-    output |= traces.F5.value << 5
-    output |= traces.F6.value << 6
-    output |= traces.F7.value << 7
+    output |= traces.F0.level << 0
+    output |= traces.F1.level << 1
+    output |= traces.F2.level << 2
+    output |= traces.F3.level << 3
+    output |= traces.F4.level << 4
+    output |= traces.F5.level << 5
+    output |= traces.F6.level << 6
+    output |= traces.F7.level << 7
     return output
   }
 
   it("disables all outputs if _OE is set high", () => {
-    traces._OE.state = HIGH
-    expect(traces.F0.state).to.equal(HI_Z)
-    expect(traces.F1.state).to.equal(HI_Z)
-    expect(traces.F2.state).to.equal(HI_Z)
-    expect(traces.F3.state).to.equal(HI_Z)
-    expect(traces.F4.state).to.equal(HI_Z)
-    expect(traces.F5.state).to.equal(HI_Z)
-    expect(traces.F6.state).to.equal(HI_Z)
-    expect(traces.F7.state).to.equal(HI_Z)
-    traces._OE.state = LOW
+    traces._OE.raise()
+    expect(traces.F0.null).to.be.true
+    expect(traces.F1.null).to.be.true
+    expect(traces.F2.null).to.be.true
+    expect(traces.F3.null).to.be.true
+    expect(traces.F4.null).to.be.true
+    expect(traces.F5.null).to.be.true
+    expect(traces.F6.null).to.be.true
+    expect(traces.F7.null).to.be.true
+    traces._OE.lower()
   })
 
   function runTest(lo, hi) {

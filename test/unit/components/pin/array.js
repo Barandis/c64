@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { newPin, newPinArray } from "components/new-pin"
+import { newPin, newPinArray } from "components/pin"
 
 export function arrayContains() {
   const p1 = newPin(1, "A")

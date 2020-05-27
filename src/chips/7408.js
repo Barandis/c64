@@ -22,30 +22,35 @@ export function new7408() {
     // Gate 1 inputs and output
     newPin(1, "A1", INPUT),
     newPin(2, "B1", INPUT),
-    newPin(3, "Y1", OUTPUT, 0),
+    newPin(3, "Y1", OUTPUT),
 
     // Gate 2 inputs and output
     newPin(4, "A2", INPUT),
     newPin(5, "B2", INPUT),
-    newPin(6, "Y2", OUTPUT, 0),
+    newPin(6, "Y2", OUTPUT),
 
     // Gate 3 inputs and output
     newPin(9, "A3", INPUT),
     newPin(10, "B3", INPUT),
-    newPin(8, "Y3", OUTPUT, 0),
+    newPin(8, "Y3", OUTPUT),
 
     // Gate 4 inputs and output
     newPin(12, "A4", INPUT),
     newPin(13, "B4", INPUT),
-    newPin(11, "Y4", OUTPUT, 0),
+    newPin(11, "Y4", OUTPUT),
 
     // Power supply and ground pins, not emulated
     newPin(14, "VCC", UNCONNECTED),
     newPin(7, "GND", UNCONNECTED),
   )
 
+  chip.Y1.lower()
+  chip.Y2.lower()
+  chip.Y3.lower()
+  chip.Y4.lower()
+
   function setOutput(apin, bpin, ypin) {
-    ypin.state = apin.state && bpin.state
+    ypin.level = apin.high && bpin.high
   }
 
   function setGate1() {

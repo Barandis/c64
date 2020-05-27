@@ -43,37 +43,42 @@ export function new74258() {
     // Group 1 inputs and output
     newPin(2, "A1", INPUT),
     newPin(3, "B1", INPUT),
-    newPin(4, "_Y1", OUTPUT, true),
+    newPin(4, "_Y1", OUTPUT),
 
     // Group 2 input and output
     newPin(5, "A2", INPUT),
     newPin(6, "B2", INPUT),
-    newPin(7, "_Y2", OUTPUT, true),
+    newPin(7, "_Y2", OUTPUT),
 
     // Group 3 inputs and output
     newPin(11, "A3", INPUT),
     newPin(10, "B3", INPUT),
-    newPin(9, "_Y3", OUTPUT, true),
+    newPin(9, "_Y3", OUTPUT),
 
     // Group 4 inputs and output
     newPin(14, "A4", INPUT),
     newPin(13, "B4", INPUT),
-    newPin(12, "_Y4", OUTPUT, true),
+    newPin(12, "_Y4", OUTPUT),
 
     // Power supply pins. These are not emulated.
     newPin(8, "GND", UNCONNECTED),
     newPin(16, "VCC", UNCONNECTED),
   )
 
+  chip._Y1.raise()
+  chip._Y2.raise()
+  chip._Y3.raise()
+  chip._Y4.raise()
+
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
   function setOutput(apin, bpin, ypin) {
     if (chip._OE.high) {
-      ypin.state = null
+      ypin.reset()
     } else if (chip.SEL.low) {
-      ypin.state = !apin.state
+      ypin.level = !apin.level
     } else {
-      ypin.state = !bpin.state
+      ypin.level = !bpin.level
     }
   }
 

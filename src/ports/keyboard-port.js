@@ -11,14 +11,14 @@ import { newPort } from "components/port"
 export function newKeyboardPort() {
   // There is no pin 2; it is used for alignment.
   return newPort(
-    newPin(12, "ROW0", OUTPUT, null),
-    newPin(11, "ROW1", OUTPUT, null),
-    newPin(10, "ROW2", OUTPUT, null),
-    newPin(5, "ROW3", OUTPUT, null),
-    newPin(8, "ROW4", OUTPUT, null),
-    newPin(7, "ROW5", OUTPUT, null),
-    newPin(6, "ROW6", OUTPUT, null),
-    newPin(9, "ROW7", OUTPUT, null),
+    newPin(12, "ROW0", OUTPUT),
+    newPin(11, "ROW1", OUTPUT),
+    newPin(10, "ROW2", OUTPUT),
+    newPin(5, "ROW3", OUTPUT),
+    newPin(8, "ROW4", OUTPUT),
+    newPin(7, "ROW5", OUTPUT),
+    newPin(6, "ROW6", OUTPUT),
+    newPin(9, "ROW7", OUTPUT),
 
     newPin(13, "COL0", INPUT),
     newPin(19, "COL1", INPUT),

@@ -35,28 +35,28 @@ describe("Control port 1", () => {
     c = deviceTraces(connector)
 
     for (let i = 1; i <= 9; i++) {
-      p[i].value = 0
-      c[i].value = 0
+      p[i].lower()
+      c[i].lower()
     }
 
     connector.connect(port)
   })
 
   it("reads data from 7 pins", () => {
-    c.JOYB0.value = 0.9
-    c.JOYB1.value = 0.8
-    c.JOYB2.value = 0.7
-    c.JOYB3.value = 0.6
-    c.POTBY.value = 0.5
-    c.BTNB.value = 1
-    c.POTBX.value = 0.4
+    c.JOYB0.level = 0.9
+    c.JOYB1.level = 0.8
+    c.JOYB2.level = 0.7
+    c.JOYB3.level = 0.6
+    c.POTBY.level = 0.5
+    c.BTNB.level = 1
+    c.POTBX.level = 0.4
 
-    expect(p.JOYB0.value).to.equal(0.9)
-    expect(p.JOYB1.value).to.equal(0.8)
-    expect(p.JOYB2.value).to.equal(0.7)
-    expect(p.JOYB3.value).to.equal(0.6)
-    expect(p.POTBY.value).to.equal(0.5)
-    expect(p.BTNB.value).to.equal(1)
-    expect(p.POTBX.value).to.equal(0.4)
+    expect(p.JOYB0.level).to.equal(0.9)
+    expect(p.JOYB1.level).to.equal(0.8)
+    expect(p.JOYB2.level).to.equal(0.7)
+    expect(p.JOYB3.level).to.equal(0.6)
+    expect(p.POTBY.level).to.equal(0.5)
+    expect(p.BTNB.level).to.equal(1)
+    expect(p.POTBX.level).to.equal(0.4)
   })
 })

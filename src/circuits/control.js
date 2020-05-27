@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newTrace, PULL_UP, PULL_DOWN } from "components/trace"
+import { newTrace } from "components/trace"
 
 export function newControlCircuit(
   {
@@ -68,20 +68,20 @@ export function newControlCircuit(
   // pins should be enabled. A8...A11 are connected to U15 and A12...A15, VA12...VA13, and _VA14 are
   // already connected U17 in the address bus definitions.
   const _CAS = newTrace(U19._CAS, U17.I0)
-  const _LORAM = newTrace(PULL_UP, U7.P0, U17.I1)
-  const _HIRAM = newTrace(PULL_UP, U7.P1, U17.I2)
-  const _CHAREN = newTrace(PULL_UP, U7.P2, U17.I3)
+  const _LORAM = newTrace(U7.P0, U17.I1).pullUp()
+  const _HIRAM = newTrace(U7.P1, U17.I2).pullUp()
+  const _CHAREN = newTrace(U7.P2, U17.I3).pullUp()
   const BA = newTrace(U19.BA, U17.I9)
   const _AEC = newTrace(U8.Y5, U17.I10)
-  const R__W = newTrace(PULL_UP, U7.R__W, U17.I11)
-  const _EXROM = newTrace(PULL_UP, CN6._EXROM, U17.I12)
-  const _GAME = newTrace(PULL_UP, CN6._GAME, U17.I13)
+  const R__W = newTrace(U7.R__W, U17.I11).pullUp()
+  const _EXROM = newTrace(CN6._EXROM, U17.I12).pullUp()
+  const _GAME = newTrace(CN6._GAME, U17.I13).pullUp()
   const _CASRAM = newTrace(U17.F0, U9._CAS, U10._CAS, U11._CAS, U12._CAS)
   _CASRAM.addPins(U21._CAS, U22._CAS, U23._CAS, U24._CAS)
   const _BASIC = newTrace(U17.F1, U3._CS)
   const _KERNAL = newTrace(U17.F2, U4._CS)
   const _CHAROM = newTrace(U17.F3, U5._CS1)
-  const _CHAROM2 = newTrace(PULL_UP, U5._CS2) // _CS2 always high, _CS1 controls enable
+  const _CHAROM2 = newTrace(U5._CS2).pullUp() // _CS2 always high, _CS1 controls enable
   const GR__W = newTrace(U17.F4, U6._WE)
   const _IO = newTrace(U17.F5, U15._G1)
   const _ROML = newTrace(U17.F6, CN6._ROML)
@@ -95,7 +95,7 @@ export function newControlCircuit(
   const _CIA2 = newTrace(U15._Y21, U2._CS)
   const _IO1 = newTrace(U15._Y22, CN6._IO1)
   const _IO2 = newTrace(U15._Y23, CN6._IO2)
-  const _PLA = newTrace(PULL_DOWN, U17._OE) // PLA outputs always enabled
+  const _PLA = newTrace(U17._OE).pullDown() // PLA outputs always enabled
 
   // Non-PLA-based chip control
 
@@ -132,7 +132,7 @@ export function newControlCircuit(
   _RAS.addPins(U21._RAS, U22._RAS, U23._RAS)
   const AEC = newTrace(U19.AEC, U16.A1, U16.A2, U16.A3, U16.A4)
   AEC.addPins(U27.B3, U26._OE, U14._OE, U8.A5, U27.A2)
-  const _DMA = newTrace(PULL_UP, CN6._DMA, U27.B1, U27.B2)
+  const _DMA = newTrace(CN6._DMA, U27.B1, U27.B2).pullUp()
   const RDY = newTrace(U27.Y1, U7.RDY)
   const CAEC = newTrace(U27.Y2, U7.AEC)
 
@@ -147,10 +147,10 @@ export function newControlCircuit(
   // CN2: User port (provides _RES)
   // CN4: Serial port (provides _RES)
   // CN6: Expansion port (receives _RES, provides _NMI, _IRQ)
-  const _RES = newTrace(PULL_UP, CN2._RESET, CN4._RESET)
+  const _RES = newTrace(CN2._RESET, CN4._RESET).pullUp()
   _RES.addPins(U7._RES, U1._RES, U2._RES, U18._RES, CN6._RESET)
-  const _NMI = newTrace(PULL_UP, U2._IRQ, CN1._RESTORE, CN6._NMI, U7._NMI)
-  const _IRQ = newTrace(PULL_UP, U1._IRQ, U19._IRQ, CN6._IRQ, U7._IRQ)
+  const _NMI = newTrace(U2._IRQ, CN1._RESTORE, CN6._NMI, U7._NMI).pullUp()
+  const _IRQ = newTrace(U1._IRQ, U19._IRQ, CN6._IRQ, U7._IRQ).pullUp()
 
   // Clocks
 

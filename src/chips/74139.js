@@ -32,19 +32,19 @@ export function new74139() {
     // Demultiplexer 1
     newPin(2, "A1", INPUT),
     newPin(3, "B1", INPUT),
-    newPin(4, "_Y10", OUTPUT, false),
-    newPin(5, "_Y11", OUTPUT, true),
-    newPin(6, "_Y12", OUTPUT, true),
-    newPin(7, "_Y13", OUTPUT, true),
+    newPin(4, "_Y10", OUTPUT),
+    newPin(5, "_Y11", OUTPUT),
+    newPin(6, "_Y12", OUTPUT),
+    newPin(7, "_Y13", OUTPUT),
     newPin(1, "_G1", INPUT),
 
     // Demultiplexer 2
     newPin(14, "A2", INPUT),
     newPin(13, "B2", INPUT),
-    newPin(12, "_Y20", OUTPUT, false),
-    newPin(11, "_Y21", OUTPUT, true),
-    newPin(10, "_Y22", OUTPUT, true),
-    newPin(9, "_Y23", OUTPUT, true),
+    newPin(12, "_Y20", OUTPUT),
+    newPin(11, "_Y21", OUTPUT),
+    newPin(10, "_Y22", OUTPUT),
+    newPin(9, "_Y23", OUTPUT),
     newPin(15, "_G2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
@@ -52,11 +52,20 @@ export function new74139() {
     newPin(8, "GND", UNCONNECTED),
   )
 
+  chip._Y10.lower()
+  chip._Y11.raise()
+  chip._Y12.raise()
+  chip._Y13.raise()
+  chip._Y20.lower()
+  chip._Y21.raise()
+  chip._Y22.raise()
+  chip._Y23.raise()
+
   function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {
-    y0pin.state = !(gpin.low && apin.low && bpin.low)
-    y1pin.state = !(gpin.low && apin.high && bpin.low)
-    y2pin.state = !(gpin.low && apin.low && bpin.high)
-    y3pin.state = !(gpin.low && apin.high && bpin.high)
+    y0pin.level = !(gpin.low && apin.low && bpin.low)
+    y1pin.level = !(gpin.low && apin.high && bpin.low)
+    y2pin.level = !(gpin.low && apin.low && bpin.high)
+    y3pin.level = !(gpin.low && apin.high && bpin.high)
   }
 
   function setDemux1() {

@@ -73,120 +73,120 @@ describe("Expansion port", () => {
       if (i === 2) {
         continue
       }
-      p[i].value = 0
-      c[i].value = 0
+      p[i].lower()
+      c[i].lower()
     }
 
     connector.connect(port)
   })
 
   it("writes to 24 pins", () => {
-    p.R__W.value = 1
-    p.DOT.value = 2
-    p._IO1.value = 3
-    p._IO2.value = 4
-    p._ROML.value = 5
-    p.BA.value = 6
-    p._ROMH.value = 7
-    p.O2.value = 8
-    p.A15.value = 9
-    p.A14.value = 10
-    p.A13.value = 11
-    p.A12.value = 12
-    p.A11.value = 13
-    p.A10.value = 14
-    p.A9.value = 15
-    p.A8.value = 16
-    p.A7.value = 17
-    p.A6.value = 18
-    p.A5.value = 19
-    p.A4.value = 20
-    p.A3.value = 21
-    p.A2.value = 22
-    p.A1.value = 23
-    p.A0.value = 24
+    p.R__W.level = 1
+    p.DOT.level = 2
+    p._IO1.level = 3
+    p._IO2.level = 4
+    p._ROML.level = 5
+    p.BA.level = 6
+    p._ROMH.level = 7
+    p.O2.level = 8
+    p.A15.level = 9
+    p.A14.level = 10
+    p.A13.level = 11
+    p.A12.level = 12
+    p.A11.level = 13
+    p.A10.level = 14
+    p.A9.level = 15
+    p.A8.level = 16
+    p.A7.level = 17
+    p.A6.level = 18
+    p.A5.level = 19
+    p.A4.level = 20
+    p.A3.level = 21
+    p.A2.level = 22
+    p.A1.level = 23
+    p.A0.level = 24
 
-    expect(c.R__W.value).to.equal(1)
-    expect(c.DOT.value).to.equal(2)
-    expect(c._IO1.value).to.equal(3)
-    expect(c._IO2.value).to.equal(4)
-    expect(c._ROML.value).to.equal(5)
-    expect(c.BA.value).to.equal(6)
-    expect(c._ROMH.value).to.equal(7)
-    expect(c.O2.value).to.equal(8)
-    expect(c.A15.value).to.equal(9)
-    expect(c.A14.value).to.equal(10)
-    expect(c.A13.value).to.equal(11)
-    expect(c.A12.value).to.equal(12)
-    expect(c.A11.value).to.equal(13)
-    expect(c.A10.value).to.equal(14)
-    expect(c.A9.value).to.equal(15)
-    expect(c.A8.value).to.equal(16)
-    expect(c.A7.value).to.equal(17)
-    expect(c.A6.value).to.equal(18)
-    expect(c.A5.value).to.equal(19)
-    expect(c.A4.value).to.equal(20)
-    expect(c.A3.value).to.equal(21)
-    expect(c.A2.value).to.equal(22)
-    expect(c.A1.value).to.equal(23)
-    expect(c.A0.value).to.equal(24)
+    expect(c.R__W.level).to.equal(1)
+    expect(c.DOT.level).to.equal(2)
+    expect(c._IO1.level).to.equal(3)
+    expect(c._IO2.level).to.equal(4)
+    expect(c._ROML.level).to.equal(5)
+    expect(c.BA.level).to.equal(6)
+    expect(c._ROMH.level).to.equal(7)
+    expect(c.O2.level).to.equal(8)
+    expect(c.A15.level).to.equal(9)
+    expect(c.A14.level).to.equal(10)
+    expect(c.A13.level).to.equal(11)
+    expect(c.A12.level).to.equal(12)
+    expect(c.A11.level).to.equal(13)
+    expect(c.A10.level).to.equal(14)
+    expect(c.A9.level).to.equal(15)
+    expect(c.A8.level).to.equal(16)
+    expect(c.A7.level).to.equal(17)
+    expect(c.A6.level).to.equal(18)
+    expect(c.A5.level).to.equal(19)
+    expect(c.A4.level).to.equal(20)
+    expect(c.A3.level).to.equal(21)
+    expect(c.A2.level).to.equal(22)
+    expect(c.A1.level).to.equal(23)
+    expect(c.A0.level).to.equal(24)
   })
 
   it("reads from 6 pins", () => {
-    c._IRQ.value = 1
-    c._EXROM.value = 2
-    c._GAME.value = 3
-    c._DMA.value = 4
-    c._RESET.value = 5
-    c._NMI.value = 6
+    c._IRQ.level = 1
+    c._EXROM.level = 2
+    c._GAME.level = 3
+    c._DMA.level = 4
+    c._RESET.level = 5
+    c._NMI.level = 6
 
-    expect(p._IRQ.value).to.equal(1)
-    expect(p._EXROM.value).to.equal(2)
-    expect(p._GAME.value).to.equal(3)
-    expect(p._DMA.value).to.equal(4)
-    expect(p._RESET.value).to.equal(5)
-    expect(p._NMI.value).to.equal(6)
+    expect(p._IRQ.level).to.equal(1)
+    expect(p._EXROM.level).to.equal(2)
+    expect(p._GAME.level).to.equal(3)
+    expect(p._DMA.level).to.equal(4)
+    expect(p._RESET.level).to.equal(5)
+    expect(p._NMI.level).to.equal(6)
   })
 
   it("both reads and writes to 8 pins", () => {
-    p.D7.value = 1
-    expect(c.D7.value).to.equal(1)
-    c.D7.value = 0
-    expect(p.D7.value).to.equal(0)
+    p.D7.level = 1
+    expect(c.D7.level).to.equal(1)
+    c.D7.level = 0
+    expect(p.D7.level).to.equal(0)
 
-    p.D6.value = 1
-    expect(c.D6.value).to.equal(1)
-    c.D6.value = 0
-    expect(p.D6.value).to.equal(0)
+    p.D6.level = 1
+    expect(c.D6.level).to.equal(1)
+    c.D6.level = 0
+    expect(p.D6.level).to.equal(0)
 
-    p.D5.value = 1
-    expect(c.D5.value).to.equal(1)
-    c.D5.value = 0
-    expect(p.D5.value).to.equal(0)
+    p.D5.level = 1
+    expect(c.D5.level).to.equal(1)
+    c.D5.level = 0
+    expect(p.D5.level).to.equal(0)
 
-    p.D4.value = 1
-    expect(c.D4.value).to.equal(1)
-    c.D4.value = 0
-    expect(p.D4.value).to.equal(0)
+    p.D4.level = 1
+    expect(c.D4.level).to.equal(1)
+    c.D4.level = 0
+    expect(p.D4.level).to.equal(0)
 
-    p.D3.value = 1
-    expect(c.D3.value).to.equal(1)
-    c.D3.value = 0
-    expect(p.D3.value).to.equal(0)
+    p.D3.level = 1
+    expect(c.D3.level).to.equal(1)
+    c.D3.level = 0
+    expect(p.D3.level).to.equal(0)
 
-    p.D2.value = 1
-    expect(c.D2.value).to.equal(1)
-    c.D2.value = 0
-    expect(p.D2.value).to.equal(0)
+    p.D2.level = 1
+    expect(c.D2.level).to.equal(1)
+    c.D2.level = 0
+    expect(p.D2.level).to.equal(0)
 
-    p.D1.value = 1
-    expect(c.D1.value).to.equal(1)
-    c.D1.value = 0
-    expect(p.D1.value).to.equal(0)
+    p.D1.level = 1
+    expect(c.D1.level).to.equal(1)
+    c.D1.level = 0
+    expect(p.D1.level).to.equal(0)
 
-    p.D0.value = 1
-    expect(c.D0.value).to.equal(1)
-    c.D0.value = 0
-    expect(p.D0.value).to.equal(0)
+    p.D0.level = 1
+    expect(c.D0.level).to.equal(1)
+    c.D0.level = 0
+    expect(p.D0.level).to.equal(0)
   })
 })

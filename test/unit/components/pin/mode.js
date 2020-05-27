@@ -4,8 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, newPin } from "components/new-pin"
-import { newTrace } from "components/new-trace"
+import { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, newPin } from "components/pin"
+import { newTrace } from "components/trace"
 
 export function modeInitial() {
   const p1 = newPin(1, "A", UNCONNECTED)

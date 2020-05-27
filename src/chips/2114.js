@@ -42,10 +42,10 @@ export function new2114() {
     newPin(15, "A9", INPUT),
 
     // Data pins D0...D3
-    newPin(14, "D0", BIDIRECTIONAL, 0),
-    newPin(13, "D1", BIDIRECTIONAL, 0),
-    newPin(12, "D2", BIDIRECTIONAL, 0),
-    newPin(11, "D3", BIDIRECTIONAL, 0),
+    newPin(14, "D0", BIDIRECTIONAL),
+    newPin(13, "D1", BIDIRECTIONAL),
+    newPin(12, "D2", BIDIRECTIONAL),
+    newPin(11, "D3", BIDIRECTIONAL),
 
     // Chip enable pin. Setting this to low is what begins a read or write cycle.
     newPin(8, "_CE", INPUT),
@@ -96,7 +96,7 @@ export function new2114() {
   // Writes the 4-bit value currently on the data pins to the location indicated by the address
   // pins.
   function write() {
-    const value = chip.D0.value | (chip.D1.value << 1) | (chip.D2.value << 2) | (chip.D3.value << 3)
+    const value = chip.D0.level | (chip.D1.level << 1) | (chip.D2.level << 2) | (chip.D3.level << 3)
     const [index, shift] = resolve()
     const current = memory[index] & ~(0b1111 << shift)
     memory[index] = current | (value << shift)

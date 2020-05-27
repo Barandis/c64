@@ -40,14 +40,14 @@ export function new74373() {
     newPin(18, "D7", INPUT),
 
     // Output pins.
-    newPin(2, "O0", OUTPUT, null),
-    newPin(5, "O1", OUTPUT, null),
-    newPin(6, "O2", OUTPUT, null),
-    newPin(9, "O3", OUTPUT, null),
-    newPin(12, "O4", OUTPUT, null),
-    newPin(15, "O5", OUTPUT, null),
-    newPin(16, "O6", OUTPUT, null),
-    newPin(19, "O7", OUTPUT, null),
+    newPin(2, "O0", OUTPUT),
+    newPin(5, "O1", OUTPUT),
+    newPin(6, "O2", OUTPUT),
+    newPin(9, "O3", OUTPUT),
+    newPin(12, "O4", OUTPUT),
+    newPin(15, "O5", OUTPUT),
+    newPin(16, "O6", OUTPUT),
+    newPin(19, "O7", OUTPUT),
 
     // Output enable. When this is high, the outputs function normally according to their inputs
     // and LE. When this is low, the outputs are all hi-Z.
@@ -70,18 +70,18 @@ export function new74373() {
 
   function inputChanged(dpin, opin) {
     if (chip.LE.high && chip._OE.low) {
-      opin.state = dpin.state
+      opin.level = dpin.level
     }
   }
 
   function latchChanged(le) {
     if (le.low) {
       for (let i = 0; i < 8; i++) {
-        latches[i] = chip[`D${i}`].state
+        latches[i] = !!chip[`D${i}`].level
       }
     } else {
       for (let i = 0; i < 8; i++) {
-        chip[`O${i}`].state = chip[`D${i}`].state
+        chip[`O${i}`].level = chip[`D${i}`].level
         latches[i] = null
       }
     }
@@ -90,12 +90,12 @@ export function new74373() {
   function enableChanged(_oe) {
     if (_oe.high) {
       for (let i = 0; i < 8; i++) {
-        chip[`O${i}`].state = null
+        chip[`O${i}`].reset()
       }
     } else {
       const le = chip.LE.low
       for (let i = 0; i < 8; i++) {
-        chip[`O${i}`].state = le ? latches[i] : chip[`D${i}`].state
+        chip[`O${i}`].level = le ? latches[i] : chip[`D${i}`].level
       }
     }
   }

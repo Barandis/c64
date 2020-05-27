@@ -4,8 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { newTrace } from "components/new-trace"
-import { newPin, OUTPUT, INPUT } from "components/new-pin"
+import { newTrace } from "components/trace"
+import { newPin, OUTPUT, INPUT } from "components/pin"
 
 export function puInitial() {
   const t = newTrace().pullUp()

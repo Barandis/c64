@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newTrace, PULL_UP } from "components/trace"
+import { newTrace } from "components/trace"
 
 // The address bus in the Commodore 64 is written two by only two chips: the CPU and the VIC. Only
 // one can write to the address bus at a time, and which is active is determined by the phase of the
@@ -79,10 +79,10 @@ function newFullBus({ U1, U2, U3, U4, U5, U6, U7, U13, U15, U17, U18, U19, U25, 
   const A9 = newTrace(U7.A9, U19.A9)
   const A10 = newTrace(U7.A10, U19.A10)
   const A11 = newTrace(U7.A11, U19.A11)
-  const A12 = newTrace(PULL_UP, U7.A12)
-  const A13 = newTrace(PULL_UP, U7.A13)
-  const A14 = newTrace(PULL_UP, U7.A14)
-  const A15 = newTrace(PULL_UP, U7.A15)
+  const A12 = newTrace(U7.A12).pullUp()
+  const A13 = newTrace(U7.A13).pullUp()
+  const A14 = newTrace(U7.A14).pullUp()
+  const A15 = newTrace(U7.A15).pullUp()
 
   // Full bus to memory address and memory control
 
@@ -166,8 +166,8 @@ function newMuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U
   // inverted, combine _VA6 and _VA14 into VA6_VA14, and _VA7 and _VA15 into VA7_VA15.
   //
   // NOTE: CIA port pins are all pulled up internally. This is reflected in the traces here.
-  const _VA14 = newTrace(PULL_UP, U2.PA0, U14.A1)
-  const _VA15 = newTrace(PULL_UP, U2.PA1, U14.A2)
+  const _VA14 = newTrace(U2.PA0, U14.A1).pullUp()
+  const _VA15 = newTrace(U2.PA1, U14.A2).pullUp()
   const VA6 = newTrace(U19.A6, U14.A4, U14.B4)
   const VA7 = newTrace(U19.A7, U14.A3, U14.B3)
   const _VA6 = newTrace(U14._Y4, U14.B1)

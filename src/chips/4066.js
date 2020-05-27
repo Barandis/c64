@@ -66,18 +66,16 @@ export function new4066() {
     if (apin.high) {
       xpin.mode = INPUT
       ypin.mode = INPUT
-      xpin.update()
-      ypin.update()
     } else {
       xpin.mode = BIDIRECTIONAL
       ypin.mode = BIDIRECTIONAL
       if (last[num - 1] === xpin) {
-        ypin.value = xpin.value
+        ypin.level = xpin.level
       } else if (last[num - 1] === ypin) {
-        xpin.value = ypin.value
+        xpin.level = ypin.level
       } else {
-        xpin.value = 0
-        ypin.value = 0
+        xpin.lower()
+        ypin.lower()
       }
     }
   }
@@ -89,7 +87,7 @@ export function new4066() {
 
     last[num - 1] = xpin
     if (apin.low) {
-      ypin.value = xpin.value
+      ypin.level = xpin.level
     }
   }
 
@@ -100,7 +98,7 @@ export function new4066() {
 
     last[num - 1] = ypin
     if (apin.low) {
-      xpin.value = ypin.value
+      xpin.level = ypin.level
     }
   }
 

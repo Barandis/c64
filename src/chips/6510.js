@@ -11,51 +11,51 @@ import { newChip } from "components/chip"
 export function new6510() {
   const chip = newChip(
     // Address bus pins A0...A15.
-    newPin(7, "A0", OUTPUT, 0),
-    newPin(8, "A1", OUTPUT, 0),
-    newPin(9, "A2", OUTPUT, 0),
-    newPin(10, "A3", OUTPUT, 0),
-    newPin(11, "A4", OUTPUT, 0),
-    newPin(12, "A5", OUTPUT, 0),
-    newPin(13, "A6", OUTPUT, 0),
-    newPin(14, "A7", OUTPUT, 0),
-    newPin(15, "A8", OUTPUT, 0),
-    newPin(16, "A9", OUTPUT, 0),
-    newPin(17, "A10", OUTPUT, 0),
-    newPin(18, "A11", OUTPUT, 0),
-    newPin(19, "A12", OUTPUT, 0),
-    newPin(20, "A13", OUTPUT, 0),
-    newPin(22, "A14", OUTPUT, 0),
-    newPin(23, "A15", OUTPUT, 0),
+    newPin(7, "A0", OUTPUT),
+    newPin(8, "A1", OUTPUT),
+    newPin(9, "A2", OUTPUT),
+    newPin(10, "A3", OUTPUT),
+    newPin(11, "A4", OUTPUT),
+    newPin(12, "A5", OUTPUT),
+    newPin(13, "A6", OUTPUT),
+    newPin(14, "A7", OUTPUT),
+    newPin(15, "A8", OUTPUT),
+    newPin(16, "A9", OUTPUT),
+    newPin(17, "A10", OUTPUT),
+    newPin(18, "A11", OUTPUT),
+    newPin(19, "A12", OUTPUT),
+    newPin(20, "A13", OUTPUT),
+    newPin(22, "A14", OUTPUT),
+    newPin(23, "A15", OUTPUT),
 
     // Data bus pins D0...D7. These are bidirectional, the direction depending on the R__W pin.
-    newPin(37, "D0", OUTPUT, null),
-    newPin(36, "D1", OUTPUT, null),
-    newPin(35, "D2", OUTPUT, null),
-    newPin(34, "D3", OUTPUT, null),
-    newPin(33, "D4", OUTPUT, null),
-    newPin(32, "D5", OUTPUT, null),
-    newPin(31, "D6", OUTPUT, null),
-    newPin(30, "D7", OUTPUT, null),
+    newPin(37, "D0", OUTPUT),
+    newPin(36, "D1", OUTPUT),
+    newPin(35, "D2", OUTPUT),
+    newPin(34, "D3", OUTPUT),
+    newPin(33, "D4", OUTPUT),
+    newPin(32, "D5", OUTPUT),
+    newPin(31, "D6", OUTPUT),
+    newPin(30, "D7", OUTPUT),
 
     // I/O Port pins P0...P5. These are bidrectional, the direction depending on the settings in
     // the virtual registers in memory addresses 0x0000 and 0x0001.
-    newPin(29, "P0", OUTPUT, 1),
-    newPin(28, "P1", OUTPUT, 1),
-    newPin(27, "P2", OUTPUT, 1),
-    newPin(26, "P3", OUTPUT, 1),
-    newPin(25, "P4", OUTPUT, 1),
-    newPin(24, "P5", OUTPUT, 1),
+    newPin(29, "P0", OUTPUT),
+    newPin(28, "P1", OUTPUT),
+    newPin(27, "P2", OUTPUT),
+    newPin(26, "P3", OUTPUT),
+    newPin(25, "P4", OUTPUT),
+    newPin(24, "P5", OUTPUT),
 
     // Clock pins. One is an input (φ0) and one an output (φ2); the signal on the input is merely
     // forwarded to the output as a clock reference for other chips on the board. The names use "O"
     // instead of "φ" for ease of typing.
     newPin(1, "O0", INPUT),
-    newPin(39, "O2", OUTPUT, 0),
+    newPin(39, "O2", OUTPUT),
 
     // Read/write control. This pin is used to inform memory devices whether the CPU intends to
     // read from them or write to them.
-    newPin(38, "R__W", OUTPUT, 1),
+    newPin(38, "R__W", OUTPUT),
 
     // Address enable control. When this is low, the CPU tri-states its busses to allow other chips
     // to control them.

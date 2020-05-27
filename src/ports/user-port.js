@@ -23,26 +23,26 @@ export const N = 24
 
 export function newUserPort() {
   return newPort(
-    newPin(M, "PA2", BIDIRECTIONAL, null),
+    newPin(M, "PA2", BIDIRECTIONAL),
 
-    newPin(C, "PB0", BIDIRECTIONAL, null),
-    newPin(D, "PB1", BIDIRECTIONAL, null),
-    newPin(E, "PB2", BIDIRECTIONAL, null),
-    newPin(F, "PB3", BIDIRECTIONAL, null),
-    newPin(H, "PB4", BIDIRECTIONAL, null),
-    newPin(J, "PB5", BIDIRECTIONAL, null),
-    newPin(K, "PB6", BIDIRECTIONAL, null),
-    newPin(L, "PB7", BIDIRECTIONAL, null),
+    newPin(C, "PB0", BIDIRECTIONAL),
+    newPin(D, "PB1", BIDIRECTIONAL),
+    newPin(E, "PB2", BIDIRECTIONAL),
+    newPin(F, "PB3", BIDIRECTIONAL),
+    newPin(H, "PB4", BIDIRECTIONAL),
+    newPin(J, "PB5", BIDIRECTIONAL),
+    newPin(K, "PB6", BIDIRECTIONAL),
+    newPin(L, "PB7", BIDIRECTIONAL),
 
-    newPin(5, "SP1", BIDIRECTIONAL, null),
-    newPin(7, "SP2", BIDIRECTIONAL, null),
+    newPin(5, "SP1", BIDIRECTIONAL),
+    newPin(7, "SP2", BIDIRECTIONAL),
 
-    newPin(4, "CNT1", BIDIRECTIONAL, null),
-    newPin(6, "CNT2", BIDIRECTIONAL, null),
-    newPin(9, "ATN", OUTPUT, null),
+    newPin(4, "CNT1", BIDIRECTIONAL),
+    newPin(6, "CNT2", BIDIRECTIONAL),
+    newPin(9, "ATN", OUTPUT),
     newPin(8, "_PC2", INPUT),
-    newPin(B, "_FLAG2", OUTPUT, null),
-    newPin(3, "_RESET", BIDIRECTIONAL, null),
+    newPin(B, "_FLAG2", OUTPUT),
+    newPin(3, "_RESET", BIDIRECTIONAL),
 
     newPin(2, "VCC", UNCONNECTED),
     newPin(10, "VAC1", UNCONNECTED),

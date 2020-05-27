@@ -5,8 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { newPinArray } from "./pin"
-import { newConnectorArray } from "./connector"
+import { newPinArray } from "components/pin"
+import { newConnectorArray } from "components/connector"
 
 // Represents an external port on a computer, consisting of a number of pins to connect to the
 // electronics behind it and a matching number of connectors to allow connection to external

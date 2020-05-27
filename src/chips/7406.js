@@ -30,24 +30,31 @@ export function new7406() {
     newPin(13, "A6", INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as "1Y", "2Y", etc.
-    newPin(2, "Y1", OUTPUT, true),
-    newPin(4, "Y2", OUTPUT, true),
-    newPin(6, "Y3", OUTPUT, true),
-    newPin(8, "Y4", OUTPUT, true),
-    newPin(10, "Y5", OUTPUT, true),
-    newPin(12, "Y6", OUTPUT, true),
+    newPin(2, "Y1", OUTPUT),
+    newPin(4, "Y2", OUTPUT),
+    newPin(6, "Y3", OUTPUT),
+    newPin(8, "Y4", OUTPUT),
+    newPin(10, "Y5", OUTPUT),
+    newPin(12, "Y6", OUTPUT),
 
     // Power supply and ground pins, not emulated
     newPin(14, "VCC", UNCONNECTED),
     newPin(7, "GND", UNCONNECTED),
   )
 
-  chip.A1.addListener(pin => (chip.Y1.state = pin.low))
-  chip.A2.addListener(pin => (chip.Y2.state = pin.low))
-  chip.A3.addListener(pin => (chip.Y3.state = pin.low))
-  chip.A4.addListener(pin => (chip.Y4.state = pin.low))
-  chip.A5.addListener(pin => (chip.Y5.state = pin.low))
-  chip.A6.addListener(pin => (chip.Y6.state = pin.low))
+  chip.Y1.raise()
+  chip.Y2.raise()
+  chip.Y3.raise()
+  chip.Y4.raise()
+  chip.Y5.raise()
+  chip.Y6.raise()
+
+  chip.A1.addListener(pin => (chip.Y1.level = pin.low))
+  chip.A2.addListener(pin => (chip.Y2.level = pin.low))
+  chip.A3.addListener(pin => (chip.Y3.level = pin.low))
+  chip.A4.addListener(pin => (chip.Y4.level = pin.low))
+  chip.A5.addListener(pin => (chip.Y5.level = pin.low))
+  chip.A6.addListener(pin => (chip.Y6.level = pin.low))
 
   return chip
 }

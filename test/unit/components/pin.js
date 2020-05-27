@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { expect } from "test/helper"
-import { newPin } from "components/new-pin"
+import { newPin } from "components/pin"
 import {
   modeInitial,
   modeChange,
@@ -92,7 +92,7 @@ describe("Pin", () => {
     describe("toggle", () => {
       it("changes a low to a high", test(levelToggleHigh))
       it("changes a high to a low", test(levelToggleLow))
-      it("does not change a none", test(levelToggleNone))
+      it("does not change a null", test(levelToggleNone))
     })
 
     describe("pullUp", () => {

@@ -57,14 +57,14 @@ export function new6526() {
     newPin(35, "RS3", INPUT),
 
     // Data bus pins. These are input OR output pins, not both at the same time.
-    newPin(33, "D0", OUTPUT, null),
-    newPin(32, "D1", OUTPUT, null),
-    newPin(31, "D2", OUTPUT, null),
-    newPin(30, "D3", OUTPUT, null),
-    newPin(29, "D4", OUTPUT, null),
-    newPin(28, "D5", OUTPUT, null),
-    newPin(27, "D6", OUTPUT, null),
-    newPin(26, "D7", OUTPUT, null),
+    newPin(33, "D0", OUTPUT),
+    newPin(32, "D1", OUTPUT),
+    newPin(31, "D2", OUTPUT),
+    newPin(30, "D3", OUTPUT),
+    newPin(29, "D4", OUTPUT),
+    newPin(28, "D5", OUTPUT),
+    newPin(27, "D6", OUTPUT),
+    newPin(26, "D7", OUTPUT),
 
     // Parallel Port A pins. These are bidirectional but the direction is switchable via register.
     newPin(2, "PA0", INPUT),
@@ -87,7 +87,7 @@ export function new6526() {
     newPin(17, "PB7", INPUT),
 
     // Port control pin. Pulses low after a read or write on port B, can be used for handshaking.
-    newPin(18, "_PC", OUTPUT, 1),
+    newPin(18, "_PC", OUTPUT),
 
     // IRQ input, maskable to fire hardware interrupt. Often used for handshaking.
     newPin(24, "_FLAG", INPUT),
@@ -99,7 +99,7 @@ export function new6526() {
     // several sources of interrupts connected to the same CPU, so this pin will be set to `null` if
     // there is no interrupt and `0` if there is. Setting the trace that connects these interrupts
     // to PULL_UP will cause the trace to be high unless one or more IRQ pins lower it.
-    newPin(21, "_IRQ", OUTPUT, null),
+    newPin(21, "_IRQ", OUTPUT),
 
     // Serial port. This is bidirectional but the direction is chosen by a control bit.
     newPin(39, "SP", INPUT),
@@ -127,6 +127,8 @@ export function new6526() {
     newPin(20, "VCC", UNCONNECTED),
     newPin(1, "VSS", UNCONNECTED),
   )
+
+  chip._PC.raise()
 
   const addressPins = [chip.RS0, chip.RS1, chip.RS2, chip.RS3]
   const dataPins = [chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7]
@@ -257,7 +259,7 @@ export function new6526() {
       setBit(registers[CIAICR], ICR_FLG)
       if (bitSet(latches[CIAICR], ICR_FLG)) {
         setBit(registers[CIAICR], ICR_IR)
-        chip._IRQ.clear()
+        chip._IRQ.lower()
       }
     }
   })

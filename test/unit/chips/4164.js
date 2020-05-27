@@ -15,66 +15,67 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   beforeEach(() => {
     chip = new4164()
     traces = deviceTraces(chip)
-    traces._W.state = true
-    traces._RAS.state = true
-    traces._CAS.state = true
+    traces._W.raise()
+    traces._RAS.raise()
+    traces._CAS.raise()
   })
 
   describe("idle state", () => {
     it("has Q set to hi-z", () => {
-      expect(traces.Q.state).to.be.null
+      expect(traces.Q.null).to.be.true
     })
   })
 
   describe("read mode", () => {
     it("enables Q", () => {
-      traces._RAS.state = false
-      traces._CAS.state = false
-      expect(traces.Q.state).to.be.false // data at 0x0000
+      traces._RAS.lower()
+      traces._CAS.lower()
+      expect(traces.Q.low).to.be.true // data at 0x0000
 
-      traces._RAS.state = true
-      traces._CAS.state = true
-      expect(traces.Q.state).to.be.null
+      traces._RAS.raise()
+      traces._CAS.raise()
+      expect(traces.Q.null).to.be.true
     })
   })
 
   describe("write mode", () => {
     it("disables Q", () => {
-      traces._RAS.state = false
-      traces._W.state = false
-      traces._CAS.state = false
-      expect(traces.Q.state).to.be.null
+      traces._RAS.lower()
+      traces._W.lower()
+      traces._CAS.lower()
+      expect(traces.Q.null).to.be.true
 
-      traces._RAS.state = true
-      traces._W.state = true
-      traces._CAS.state = true
-      expect(traces.Q.state).to.be.null
+      traces._RAS.raise()
+      traces._W.raise()
+      traces._CAS.raise()
+      expect(traces.Q.null).to.be.true
     })
   })
 
   describe("read-modify-write mode", () => {
     it("enables Q", () => {
-      traces._RAS.state = false
-      traces._CAS.state = false
-      traces._W.state = false
-      expect(traces.Q.state).to.be.false
+      traces.D.lower()
+      traces._RAS.lower()
+      traces._CAS.lower()
+      traces._W.lower()
+      expect(traces.Q.low).to.be.true
 
-      traces._RAS.state = true
-      traces._CAS.state = true
-      traces._W.state = true
-      expect(traces.Q.state).to.be.null
+      traces._RAS.raise()
+      traces._CAS.raise()
+      traces._W.raise()
+      expect(traces.Q.null).to.be.true
     })
   })
 
   function setAddressPins(value) {
-    traces.A0.value = (value & 0b00000001) >> 0
-    traces.A1.value = (value & 0b00000010) >> 1
-    traces.A2.value = (value & 0b00000100) >> 2
-    traces.A3.value = (value & 0b00001000) >> 3
-    traces.A4.value = (value & 0b00010000) >> 4
-    traces.A5.value = (value & 0b00100000) >> 5
-    traces.A6.value = (value & 0b01000000) >> 6
-    traces.A7.value = (value & 0b10000000) >> 7
+    traces.A0.level = (value & 0b00000001) >> 0
+    traces.A1.level = (value & 0b00000010) >> 1
+    traces.A2.level = (value & 0b00000100) >> 2
+    traces.A3.level = (value & 0b00001000) >> 3
+    traces.A4.level = (value & 0b00010000) >> 4
+    traces.A5.level = (value & 0b00100000) >> 5
+    traces.A6.level = (value & 0b01000000) >> 6
+    traces.A7.level = (value & 0b10000000) >> 7
   }
 
   function bitValue(row, col) {
@@ -88,17 +89,17 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.state = false
+      traces._RAS.lower()
 
       setAddressPins(col)
-      traces._CAS.state = false
+      traces._CAS.lower()
 
-      traces.D.state = bitValue(row, col)
-      traces._W.state = false
+      traces.D.level = bitValue(row, col)
+      traces._W.lower()
 
-      traces._RAS.state = true
-      traces._CAS.state = true
-      traces._W.state = true
+      traces._RAS.raise()
+      traces._CAS.raise()
+      traces._W.raise()
     }
 
     for (let addr = lo; addr < hi; addr++) {
@@ -106,15 +107,15 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.state = false
+      traces._RAS.lower()
 
       setAddressPins(col)
-      traces._CAS.state = false
+      traces._CAS.lower()
 
-      expect(traces.Q.value).to.equal(bitValue(row, col))
+      expect(traces.Q.level).to.equal(bitValue(row, col))
 
-      traces._RAS.state = true
-      traces._CAS.state = true
+      traces._RAS.raise()
+      traces._CAS.raise()
     }
   }
 
@@ -171,64 +172,65 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
     it("reads and writes within the same page without resetting row addresses", () => {
       const row = 0x2f // arbitrary
       setAddressPins(row)
-      traces._RAS.state = false
+      traces._RAS.lower()
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.state = false
+        traces._CAS.lower()
 
-        traces.D.state = bitValue(row, col)
-        traces._W.state = false
+        traces.D.level = bitValue(row, col)
+        traces._W.lower()
 
-        traces._CAS.state = true
-        traces._W.state = true
+        traces._CAS.raise()
+        traces._W.raise()
       }
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.state = false
+        traces._CAS.lower()
 
-        expect(traces.Q.value).to.equal(bitValue(row, col))
+        expect(traces.Q.level).to.equal(bitValue(row, col))
 
-        traces._CAS.state = true
+        traces._CAS.raise()
       }
 
-      traces._RAS.state = true
+      traces._RAS.raise()
     })
 
     it("updates the output pin on write in RMW mode", () => {
       const row = 0x2f
       setAddressPins(row)
-      traces._RAS.value = 0
+      traces._RAS.lower()
 
       for (let col = 0; col < 256; col++) {
+        traces.D.lower()
         setAddressPins(col)
-        traces._CAS.value = 0
-        expect(traces.Q.value).to.equal(0)
-        traces.D.value = 1
-        traces._W.value = 0
-        expect(traces.Q.value).to.equal(1)
-        traces._W.value = 1
-        traces._CAS.value = 1
+        traces._CAS.lower()
+        expect(traces.Q.level).to.equal(0)
+        traces.D.raise()
+        traces._W.lower()
+        expect(traces.Q.level).to.equal(1)
+        traces._W.raise()
+        traces._CAS.raise()
       }
-      traces._RAS.value = 1
+      traces._RAS.raise()
     })
 
     it("does not update the output pin on write in write mode", () => {
       const row = 0x2f
       setAddressPins(row)
-      traces._RAS.value = 0
+      traces._RAS.lower()
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces.D.value = 1
-        traces._W.value = 0
-        traces._CAS.value = 0
-        expect(traces.Q.value).to.be.null
-        traces._W.value = 1
-        traces._CAS.value = 1
+        traces.D.raise()
+        traces._W.lower()
+        traces._CAS.lower()
+        expect(traces.Q.level).to.be.null
+        traces._W.raise()
+        traces._CAS.raise()
       }
-      traces._RAS.value = 1
+      traces._RAS.raise()
     })
   })
 })

@@ -9,8 +9,8 @@
 // essentially a single pin in a connector and that is its intention - to be a part of one of the
 // C64's external ports.
 //
-// When a connector connects to another connector, the values of their pins are equalized. If one is
-// an input pin and one is an output pin, then the output pin will take on the value from the input
+// When a connector connects to another connector, the levels of their pins are equalized. If one is
+// an input pin and one is an output pin, then the output pin will take on the level from the input
 // pin, transfering whatever signal was in the input pin's side instantaneously. If two
 // bidirectional pins connect, then whichever one is in the connector that actually called `connect`
 // will be the one whose signal takes precedence.
@@ -19,7 +19,7 @@ export function newConnector(pin) {
 
   pin.addListener(p => {
     if (other !== null) {
-      other.pin.value = p.value
+      other.pin.level = p.level
     }
   })
 
@@ -37,9 +37,9 @@ export function newConnector(pin) {
           other.connect(this, true)
 
           if (pin.input && other.pin.output) {
-            other.pin.value = pin.value
+            other.pin.level = pin.level
           } else if (pin.output && other.pin.input) {
-            pin.value = other.pin.value
+            pin.level = other.pin.level
           }
         }
       }
@@ -56,8 +56,8 @@ export function newConnector(pin) {
         if (!_skip) {
           connector.disconnect(true)
 
-          pin.value = null
-          connector.pin.value = null
+          pin.reset()
+          connector.pin.reset()
         }
       }
     },
@@ -70,7 +70,7 @@ export function newConnectorArray(pinArray) {
   for (const pin of pinArray) {
     if (pin) {
       const connector = newConnector(pin)
-      array[pin.num] = connector
+      array[pin.number] = connector
       array[pin.name] = connector
     }
   }

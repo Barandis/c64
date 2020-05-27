@@ -34,7 +34,7 @@ export function new6581() {
     // Audio input and output. These are obviously analog and are mostly given names that have
     // spaces in them such as "AUDIO OUT" and "EXT IN"; since that is more difficult to work with
     // the names here are without spaces.
-    newPin(27, "AUDIO", OUTPUT, 0),
+    newPin(27, "AUDIO", OUTPUT),
     newPin(26, "EXT", INPUT),
 
     // Clock input. This is typcially called "φ2" but that's difficult to type.

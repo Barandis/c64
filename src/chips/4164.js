@@ -74,7 +74,7 @@ export function new4164() {
 
     // The data output pin. This is active in read and read-modify-write mode, set to the value of
     // the bit at the address latched by _RAS and _CAS. In write mode, it is hi-z.
-    newPin(14, "Q", OUTPUT, null),
+    newPin(14, "Q", OUTPUT),
 
     // Power supply and no-contact pins. These are not emulated.
     newPin(1, "NC", UNCONNECTED),
@@ -116,7 +116,7 @@ export function new4164() {
   function read() {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    chip.Q.value = value
+    chip.Q.level = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array. If the Q pin is also
@@ -129,8 +129,8 @@ export function new4164() {
     } else {
       memory[index] &= ~(1 << bit)
     }
-    if (!chip.Q.hiZ) {
-      chip.Q.value = data
+    if (!chip.Q.null) {
+      chip.Q.level = data
     }
   }
 
@@ -164,13 +164,13 @@ export function new4164() {
     if (_cas.low) {
       col = pinsToValue(...addressPins)
       if (chip._W.low) {
-        data = chip.D.value
+        data = chip.D.level
         write()
       } else {
         read()
       }
     } else {
-      chip.Q.state = null
+      chip.Q.reset()
       col = null
       data = null
     }
@@ -192,12 +192,12 @@ export function new4164() {
   // but nothing is available to be read).
   function writeLatch(_w) {
     if (_w.low) {
-      chip.D.state = false
+      chip.D.lower()
       if (chip._CAS.low) {
-        data = chip.D.value
+        data = chip.D.level
         write()
       } else {
-        chip.Q.state = null
+        chip.Q.reset()
       }
     } else {
       data = null

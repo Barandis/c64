@@ -5,8 +5,8 @@
 
 import { expect } from "test/helper"
 import Sinon from "sinon"
-import { newPin, INPUT } from "components/new-pin"
-import { newTrace } from "components/new-trace"
+import { newPin, INPUT } from "components/pin"
+import { newTrace } from "components/trace"
 import {
   levelDirectUnconnected,
   levelDirectInput,

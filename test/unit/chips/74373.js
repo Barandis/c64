@@ -15,100 +15,101 @@ describe("74373 Octal tri-state transparent latch", () => {
   beforeEach(() => {
     chip = new74373()
     traces = deviceTraces(chip)
+    traces._OE.lower()
   })
 
-  it("alfalses data to pass through when LE is true", () => {
-    traces.LE.state = true
+  it("allows data to pass through when LE is true", () => {
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].state = true
-      expect(traces["O" + i].state).to.be.true
+      traces["D" + i].raise()
+      expect(traces["O" + i].high).to.be.true
     }
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].state = false
-      expect(traces["O" + i].state).to.be.false
+      traces["D" + i].lower()
+      expect(traces["O" + i].low).to.be.true
     }
   })
 
   it("latches the data when LE goes false", () => {
-    traces.LE.state = true
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = true
+      traces[`D${i}`].raise()
     }
 
-    traces.LE.state = false
+    traces.LE.lower()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = true
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
+      traces[`D${i}`].raise()
+      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = false
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
+      traces[`D${i}`].lower()
+      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
   })
 
-  it("returns to transparent data ffalse when LE returns to true", () => {
-    traces.LE.state = true
+  it("returns to transparent data if false when LE returns to true", () => {
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = true
+      traces[`D${i}`].raise()
     }
 
-    traces.LE.state = false
+    traces.LE.lower()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = true
-      expect(traces[`O${i}`].state).to.equal(i % 2 === 0)
+      traces[`D${i}`].raise()
+      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
 
-    traces.LE.state = true
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.be.true
+      expect(traces[`O${i}`].high).to.be.true
     }
   })
 
   it("sets all outputs to null when _OE is true", () => {
-    traces.LE.state = true
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = true
+      traces[`D${i}`].raise()
     }
 
-    traces._OE.state = true
+    traces._OE.raise()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.be.null
+      expect(traces[`O${i}`].level).to.be.null
     }
 
-    traces._OE.state = false
+    traces._OE.lower()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.be.true
+      expect(traces[`O${i}`].level).to.equal(1)
     }
   })
 
-  it("remembers latched states, returning them to the output pins after _OE goes false", () => {
-    traces.LE.state = true
+  it("remembers latched levels, returning them to the output pins after _OE goes false", () => {
+    traces.LE.raise()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].state = true
+      traces[`D${i}`].raise()
     }
 
-    traces._OE.state = true
+    traces._OE.raise()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].state = false
+      traces[`D${i}`].lower()
     }
-    traces.LE.state = false
+    traces.LE.lower()
 
-    traces._OE.state = false
+    traces._OE.lower()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].state).to.equal(i % 2 !== 0)
+      expect(!!traces[`O${i}`].level).to.equal(i % 2 !== 0)
     }
   })
 })

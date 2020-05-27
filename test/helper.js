@@ -40,7 +40,7 @@ export function bin(value, digits) {
 export function chipState(chip, name) {
   const terms = []
   for (const pin of Object.values(chip.pins).sort((a, b) => a.num - b.num)) {
-    terms.push(`${pin.name}: ${pin.value === null ? "z" : pin.value}`)
+    terms.push(`${pin.name}: ${pin.level === null ? "z" : pin.level}`)
   }
   return `${name}: [${terms.join(", ")}]`
 }
@@ -51,7 +51,7 @@ export function deviceTraces(device) {
   for (const pin of device.pins) {
     if (pin) {
       const trace = newTrace(pin)
-      traces[pin.num] = trace
+      traces[pin.number] = trace
       traces[pin.name] = trace
     }
   }
