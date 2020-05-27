@@ -67,11 +67,12 @@ export function control(chip, registers, latches) {
 
   function writeCra(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CIACRA] = value & ~CRA_LOAD
+    registers[CIACRA] = value & ~(1 << CRA_LOAD)
 
     // If bit 1 is set, PB6 becomes an output for Timer A, otherwise bit 6 of the DDR controls it
     if (bitSet(value, CRA_PBON)) {
       chip.PB6.mode = OUTPUT
+      chip.PB6.level = 0
     } else {
       chip.PB6.mode = bitSet(registers[CIDDRA], 6) ? OUTPUT : INPUT
     }
@@ -96,11 +97,12 @@ export function control(chip, registers, latches) {
 
   function writeCrb(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CIACRB] = value & ~CRB_LOAD
+    registers[CIACRB] = value & ~(1 << CRB_LOAD)
 
     // If bit 1 is set, PB7 becomes an output for Timer B, otherwise bit 6 of the DDR controls it
     if (bitSet(value, CRB_PBON)) {
       chip.PB7.mode = OUTPUT
+      chip.PB7.level = 0
     } else {
       chip.PB7.mode = bitSet(registers[CIDDRB], 7) ? OUTPUT : INPUT
     }

@@ -93,3 +93,48 @@ export function pdrSend({ writeRegister, paTraces, pbTraces }) {
   writeRegister(CIAPRB, pbValue)
   expect(pinsToValue(...pbTraces)).to.equal(pbValue)
 }
+
+export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
+  const paMask = rand(256)
+  const paIn = rand(256)
+  const paOut = rand(256)
+  const paExp = (paMask & paOut) | (~paMask & paIn)
+
+  writeRegister(CIDDRA, paMask)
+  valueToPins(paIn, ...paTraces)
+  writeRegister(CIAPRA, paOut)
+  const paReg = readRegister(CIAPRA)
+  const paPins = pinsToValue(...paTraces)
+
+  expect(paReg).to.equal(paExp)
+  expect(paPins).to.equal(paExp)
+
+  const pbMask = rand(256)
+  const pbIn = rand(256)
+  const pbOut = rand(256)
+  const pbExp = (pbMask & pbOut) | (~pbMask & pbIn)
+
+  writeRegister(CIDDRB, pbMask)
+  valueToPins(pbIn, ...pbTraces)
+  writeRegister(CIAPRB, pbOut)
+  const pbReg = readRegister(CIAPRB)
+  const pbPins = pinsToValue(...pbTraces)
+
+  expect(pbReg).to.equal(pbExp)
+  expect(pbPins).to.equal(pbExp)
+}
+
+export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
+  // Set all pins to output, write a 0 on all of them
+  writeRegister(CIDDRB, 0xff)
+  writeRegister(CIAPRB, 0)
+
+  // Turn on PBON for both timers
+  writeRegister(CIACRA, 0b00000010)
+  writeRegister(CIACRB, 0b00000010)
+
+  // Write all 1's; PB6 and PB7 shouldn't respond
+  writeRegister(CIAPRB, 0b11111111)
+  expect(readRegister(CIAPRB)).to.equal(0b00111111)
+  expect(pinsToValue(...pbTraces)).to.equal(0b00111111)
+}

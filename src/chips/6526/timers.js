@@ -49,15 +49,6 @@ export function timers(chip, registers, latches) {
       const cra = registers[CIACRA]
       const crb = registers[CIACRB]
 
-      // Decrement Timer A if its input is clock pulses and timer is started
-      if (bitSet(cra, CRA_START) && bitClear(cra, CRA_IN)) {
-        decrementTimerA()
-      }
-      // Decrement Timer B if its input is clock pulses and timer is started
-      if (bitSet(crb, CRB_START) && bitClear(crb, CRB_IN0) && bitClear(crb, CRB_IN1)) {
-        decrementTimerB()
-      }
-
       // Reset PB6 if on and output mode = pulse
       if (bitSet(cra, CRA_PBON) && bitClear(cra, CRA_OUT)) {
         chip.PB6.clear()
@@ -65,6 +56,15 @@ export function timers(chip, registers, latches) {
       // Reset PB7 if on and output mode = pulse
       if (bitSet(crb, CRB_PBON) && bitClear(crb, CRB_OUT)) {
         chip.PB7.clear()
+      }
+
+      // Decrement Timer A if its input is clock pulses and timer is started
+      if (bitSet(cra, CRA_START) && bitClear(cra, CRA_IN)) {
+        decrementTimerA()
+      }
+      // Decrement Timer B if its input is clock pulses and timer is started
+      if (bitSet(crb, CRB_START) && bitClear(crb, CRB_IN0) && bitClear(crb, CRB_IN1)) {
+        decrementTimerB()
       }
     }
   })
@@ -87,21 +87,19 @@ export function timers(chip, registers, latches) {
 
   function decrementTimerA() {
     registers[TIMALO]--
-    if (registers[TIMALO] === 0) {
+    if (registers[TIMALO] === 0 && registers[TIMAHI] === 0) {
+      underflowTimerA()
+    } else if (registers[TIMALO] === 255) {
       registers[TIMAHI]--
-      if (registers[TIMAHI] === 0) {
-        underflowTimerA()
-      }
     }
   }
 
   function decrementTimerB() {
     registers[TIMBLO]--
-    if (registers[TIMBLO] === 0) {
+    if (registers[TIMBLO] === 0 && registers[TIMBHI] === 0) {
+      underflowTimerB()
+    } else if (registers[TIMBLO] === 255) {
       registers[TIMBHI]--
-      if (registers[TIMBHI] === 0) {
-        underflowTimerB()
-      }
     }
   }
 
@@ -109,18 +107,18 @@ export function timers(chip, registers, latches) {
     const cra = registers[CIACRA]
     const crb = registers[CIACRB]
 
-    // Set PB6 to appropriate value if on
+    // Set PB6 to appropriate level if on
     if (bitSet(cra, CRA_PBON)) {
       if (bitSet(cra, CRA_OUT)) {
-        chip.PB6.value = !chip.PB6.value
+        chip.PB6.toggle()
       } else {
         chip.PB6.set()
       }
     }
 
     // Decrement Timer B if CRB says so
-    if (bitSet(crb, CRB_IN0)) {
-      if (bitSet(crb, CRB_IN1) ? chip.CNT.high : true) {
+    if (bitSet(crb, CRB_IN1)) {
+      if (bitSet(crb, CRB_IN0) ? chip.CNT.high : true) {
         decrementTimerB()
       }
     }
@@ -132,9 +130,9 @@ export function timers(chip, registers, latches) {
     }
 
     // Set the ICR bit, and fire interrupt if the ICR says so
-    setBit(registers[CIAICR], ICR_TA)
+    registers[CIAICR] = setBit(registers[CIAICR], ICR_TA)
     if (bitSet(latches[CIAICR], ICR_TA)) {
-      setBit(registers[CIAICR], ICR_IR)
+      registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
       chip._IRQ.clear()
     }
 
@@ -144,7 +142,7 @@ export function timers(chip, registers, latches) {
 
     // Clear start bit if in one-shot mode
     if (bitSet(cra, CRA_RUN)) {
-      clearBit(registers[CIACRA], CRA_START)
+      registers[CIACRA] = clearBit(registers[CIACRA], CRA_START)
     }
   }
 
@@ -154,16 +152,16 @@ export function timers(chip, registers, latches) {
     // Set PB7 to appropriate value if on
     if (bitSet(crb, CRB_PBON)) {
       if (bitSet(crb, CRB_OUT)) {
-        chip.PB7.level = !chip.PB7.stlevelate
+        chip.PB7.toggle()
       } else {
         chip.PB7.set()
       }
     }
 
     // Set the interrupt bit, and fire interrupt if the ICR says so
-    setBit(registers[CIAICR], ICR_TB)
+    registers[CIAICR] = setBit(registers[CIAICR], ICR_TB)
     if (bitSet(latches[CIAICR], ICR_TB)) {
-      setBit(registers[CIAICR], ICR_IR)
+      registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
       chip._IRQ.clear()
     }
 
@@ -173,7 +171,7 @@ export function timers(chip, registers, latches) {
 
     // Clear start bit if in one-shot mode
     if (bitSet(crb, CRB_RUN)) {
-      clearBit(registers[CIACRB], CRB_START)
+      registers[CIACRB] = clearBit(registers[CIACRB], CRB_START)
     }
   }
 

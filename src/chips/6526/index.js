@@ -155,12 +155,16 @@ export function new6526() {
   // DDR on CIA 1 is all outputs for port A and all inputs for port B; only in this way can the
   // keyboard be scanned. However, the hardware reset sets both ports to all inputs; the kernal
   // routine starting at $FDA5 actually sets port A to be all outputs.
+  function reset() {
+    for (let i = 0; i < registers.length; i++) {
+      registers[i] = i >= TIMALO && i <= TIMBHI ? 0xff : 0x00
+      latches[i] = i >= TIMALO && i <= TIMBHI ? 0xff : 0x00
+    }
+  }
+
   chip._RES.addListener(_res => {
     if (_res.low) {
-      for (let i = 0; i < registers.length; i++) {
-        registers[i] = 0x00
-        latches[i] = i >= TIMALO && i <= TIMBHI ? 0xff : 0x00
-      }
+      reset()
     }
   })
 
@@ -261,6 +265,8 @@ export function new6526() {
       }
     }
   })
+
+  reset()
 
   return chip
 }

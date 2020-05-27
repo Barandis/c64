@@ -72,14 +72,17 @@ export function ports(chip, registers) {
   // pins designated as input by the DDR or pins designated as timer output pins by the control
   // registers - are not modified one way or the other.
   function writePra(value) {
-    const mask = registers[CIDDRA] & (bitSet(registers[CIACRA], CRA_PBON) ? 0xbf : 0xff)
-    registers[CIAPRA] = (registers[CIAPRA] & ~mask) | value
+    const mask = registers[CIDDRA]
+    registers[CIAPRA] = (registers[CIAPRA] & ~mask) | (value & mask)
     setPortPins(value, mask, paPins)
   }
 
   function writePrb(value) {
-    const mask = registers[CIDDRB] & (bitSet(registers[CIACRB], CRB_PBON) ? 0x7f : 0xff)
-    registers[CIAPRB] = (registers[CIAPRB] & ~mask) | value
+    const mask =
+      registers[CIDDRB] &
+      (bitSet(registers[CIACRB], CRB_PBON) ? 0x7f : 0xff) &
+      (bitSet(registers[CIACRA], CRA_PBON) ? 0xbf : 0xff)
+    registers[CIAPRB] = (registers[CIAPRB] & ~mask) | (value & mask)
     setPortPins(value, mask, pbPins)
     chip._PC.clear()
   }

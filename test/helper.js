@@ -23,14 +23,14 @@ export function rand(min, max = null) {
   return Math.floor(Math.random() * (hi - lo)) + lo
 }
 
-export function hex(value, digits) {
+export function hex(value, digits = 2) {
   if (value === null) {
     return "null"
   }
   return "$" + ("0000000000000000" + value.toString(16).toUpperCase()).substr(-digits)
 }
 
-export function bin(value, digits) {
+export function bin(value, digits = 8) {
   if (value === null) {
     return "null"
   }
