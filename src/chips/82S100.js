@@ -118,14 +118,14 @@ export function new82S100() {
     newPin(20, "I15", INPUT),
 
     // Output pins. Similar to the input pins, these were named generically on the 82S100.
-    newPin(18, "F0", OUTPUT),
-    newPin(17, "F1", OUTPUT),
-    newPin(16, "F2", OUTPUT),
-    newPin(15, "F3", OUTPUT),
-    newPin(13, "F4", OUTPUT),
-    newPin(12, "F5", OUTPUT),
-    newPin(11, "F6", OUTPUT),
-    newPin(10, "F7", OUTPUT),
+    newPin(18, "F0", OUTPUT, 0),
+    newPin(17, "F1", OUTPUT, 1),
+    newPin(16, "F2", OUTPUT, 1),
+    newPin(15, "F3", OUTPUT, 1),
+    newPin(13, "F4", OUTPUT, 1),
+    newPin(12, "F5", OUTPUT, 1),
+    newPin(11, "F6", OUTPUT, 1),
+    newPin(10, "F7", OUTPUT, 1),
 
     // Output enable, disables all outputs when set HIGH
     newPin(19, "_OE", INPUT),
@@ -137,15 +137,6 @@ export function new82S100() {
     newPin(28, "VCC", UNCONNECTED),
     newPin(14, "GND", UNCONNECTED),
   )
-
-  chip.F0.clear()
-  chip.F1.set()
-  chip.F2.set()
-  chip.F3.set()
-  chip.F4.set()
-  chip.F5.set()
-  chip.F6.set()
-  chip.F7.set()
 
   // One listener to rule them all
   //

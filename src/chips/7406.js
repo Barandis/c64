@@ -30,24 +30,17 @@ export function new7406() {
     newPin(13, "A6", INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as "1Y", "2Y", etc.
-    newPin(2, "Y1", OUTPUT),
-    newPin(4, "Y2", OUTPUT),
-    newPin(6, "Y3", OUTPUT),
-    newPin(8, "Y4", OUTPUT),
-    newPin(10, "Y5", OUTPUT),
-    newPin(12, "Y6", OUTPUT),
+    newPin(2, "Y1", OUTPUT, 1),
+    newPin(4, "Y2", OUTPUT, 1),
+    newPin(6, "Y3", OUTPUT, 1),
+    newPin(8, "Y4", OUTPUT, 1),
+    newPin(10, "Y5", OUTPUT, 1),
+    newPin(12, "Y6", OUTPUT, 1),
 
     // Power supply and ground pins, not emulated
     newPin(14, "VCC", UNCONNECTED),
     newPin(7, "GND", UNCONNECTED),
   )
-
-  chip.Y1.set()
-  chip.Y2.set()
-  chip.Y3.set()
-  chip.Y4.set()
-  chip.Y5.set()
-  chip.Y6.set()
 
   chip.A1.addListener(pin => (chip.Y1.level = pin.low))
   chip.A2.addListener(pin => (chip.Y2.level = pin.low))

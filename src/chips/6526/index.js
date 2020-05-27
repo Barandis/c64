@@ -87,7 +87,7 @@ export function new6526() {
     newPin(17, "PB7", INPUT),
 
     // Port control pin. Pulses low after a read or write on port B, can be used for handshaking.
-    newPin(18, "_PC", OUTPUT),
+    newPin(18, "_PC", OUTPUT, 1),
 
     // IRQ input, maskable to fire hardware interrupt. Often used for handshaking.
     newPin(24, "_FLAG", INPUT),
@@ -127,8 +127,6 @@ export function new6526() {
     newPin(20, "VCC", UNCONNECTED),
     newPin(1, "VSS", UNCONNECTED),
   )
-
-  chip._PC.set()
 
   const addressPins = [chip.RS0, chip.RS1, chip.RS2, chip.RS3]
   const dataPins = [chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7]

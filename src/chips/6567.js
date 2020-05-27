@@ -55,8 +55,8 @@ export function new6567() {
 
     // DRAM control pins. These control the multiplexing of address bus lines into rows (Row Address
     // Strobe) and columns (Column Address Strobe).
-    newPin(18, "_RAS", OUTPUT),
-    newPin(19, "_CAS", OUTPUT),
+    newPin(18, "_RAS", OUTPUT, 1),
+    newPin(19, "_CAS", OUTPUT, 1),
 
     // Clock signal pins. Two clocks are inputs - the color clock (φcolor) at 14.31818 MHz and the
     // dot clock (φin) at 8.18 MHz -  and the latter is divided by 8 to create the system clock (φ0)
@@ -73,12 +73,12 @@ export function new6567() {
     // access to the address and data bus to perform tasks that take more time than it normally has
     // with the φ2 low cycle. After three clock cycles, the AEC pin can then be held low to take
     // bus control.
-    newPin(12, "BA", OUTPUT),
+    newPin(12, "BA", OUTPUT, 1),
 
     // Address Enable Control. When this is high, thye CPU has control of the address and data
     // busses. When it is low, the VIC does instead. It normally follows the φ0 output except when
     // using it along with BA.
-    newPin(16, "AEC", OUTPUT),
+    newPin(16, "AEC", OUTPUT, 0),
 
     // Interrupt request. The VIC can request interrupts for four reasons: the end of a raster line,
     // a lightpen activation, a sprite-to-sprite collision, or a sprite-to-background collision.

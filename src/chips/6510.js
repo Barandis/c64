@@ -51,11 +51,11 @@ export function new6510() {
     // forwarded to the output as a clock reference for other chips on the board. The names use "O"
     // instead of "φ" for ease of typing.
     newPin(1, "O0", INPUT),
-    newPin(39, "O2", OUTPUT),
+    newPin(39, "O2", OUTPUT, 0),
 
     // Read/write control. This pin is used to inform memory devices whether the CPU intends to
     // read from them or write to them.
-    newPin(38, "R__W", OUTPUT),
+    newPin(38, "R__W", OUTPUT, 1),
 
     // Address enable control. When this is low, the CPU tri-states its busses to allow other chips
     // to control them.

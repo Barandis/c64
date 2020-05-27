@@ -38,13 +38,13 @@ export const INPUT = 0b01
 export const OUTPUT = 0b10
 export const BIDIRECTIONAL = 0b11
 
-export function newPin(number, name, mode) {
+export function newPin(number, name, mode, level = null) {
   const _listeners = []
   let _trace = null
-  let _level = null
+  let _float = null
+  let _level = normalize(level)
   let _mode = UNCONNECTED
   setMode(mode)
-  let _float = null
 
   function setTrace(trace) {
     _trace = trace

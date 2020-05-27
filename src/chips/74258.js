@@ -43,32 +43,27 @@ export function new74258() {
     // Group 1 inputs and output
     newPin(2, "A1", INPUT),
     newPin(3, "B1", INPUT),
-    newPin(4, "_Y1", OUTPUT),
+    newPin(4, "_Y1", OUTPUT, 1),
 
     // Group 2 input and output
     newPin(5, "A2", INPUT),
     newPin(6, "B2", INPUT),
-    newPin(7, "_Y2", OUTPUT),
+    newPin(7, "_Y2", OUTPUT, 1),
 
     // Group 3 inputs and output
     newPin(11, "A3", INPUT),
     newPin(10, "B3", INPUT),
-    newPin(9, "_Y3", OUTPUT),
+    newPin(9, "_Y3", OUTPUT, 1),
 
     // Group 4 inputs and output
     newPin(14, "A4", INPUT),
     newPin(13, "B4", INPUT),
-    newPin(12, "_Y4", OUTPUT),
+    newPin(12, "_Y4", OUTPUT, 1),
 
     // Power supply pins. These are not emulated.
     newPin(8, "GND", UNCONNECTED),
     newPin(16, "VCC", UNCONNECTED),
   )
-
-  chip._Y1.set()
-  chip._Y2.set()
-  chip._Y3.set()
-  chip._Y4.set()
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
