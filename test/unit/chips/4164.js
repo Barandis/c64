@@ -15,9 +15,9 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   beforeEach(() => {
     chip = new4164()
     traces = deviceTraces(chip)
-    traces._W.raise()
-    traces._RAS.raise()
-    traces._CAS.raise()
+    traces._W.set()
+    traces._RAS.set()
+    traces._CAS.set()
   })
 
   describe("idle state", () => {
@@ -28,41 +28,41 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
 
   describe("read mode", () => {
     it("enables Q", () => {
-      traces._RAS.lower()
-      traces._CAS.lower()
+      traces._RAS.clear()
+      traces._CAS.clear()
       expect(traces.Q.low).to.be.true // data at 0x0000
 
-      traces._RAS.raise()
-      traces._CAS.raise()
+      traces._RAS.set()
+      traces._CAS.set()
       expect(traces.Q.null).to.be.true
     })
   })
 
   describe("write mode", () => {
     it("disables Q", () => {
-      traces._RAS.lower()
-      traces._W.lower()
-      traces._CAS.lower()
+      traces._RAS.clear()
+      traces._W.clear()
+      traces._CAS.clear()
       expect(traces.Q.null).to.be.true
 
-      traces._RAS.raise()
-      traces._W.raise()
-      traces._CAS.raise()
+      traces._RAS.set()
+      traces._W.set()
+      traces._CAS.set()
       expect(traces.Q.null).to.be.true
     })
   })
 
   describe("read-modify-write mode", () => {
     it("enables Q", () => {
-      traces.D.lower()
-      traces._RAS.lower()
-      traces._CAS.lower()
-      traces._W.lower()
+      traces.D.clear()
+      traces._RAS.clear()
+      traces._CAS.clear()
+      traces._W.clear()
       expect(traces.Q.low).to.be.true
 
-      traces._RAS.raise()
-      traces._CAS.raise()
-      traces._W.raise()
+      traces._RAS.set()
+      traces._CAS.set()
+      traces._W.set()
       expect(traces.Q.null).to.be.true
     })
   })
@@ -89,17 +89,17 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.lower()
+      traces._RAS.clear()
 
       setAddressPins(col)
-      traces._CAS.lower()
+      traces._CAS.clear()
 
       traces.D.level = bitValue(row, col)
-      traces._W.lower()
+      traces._W.clear()
 
-      traces._RAS.raise()
-      traces._CAS.raise()
-      traces._W.raise()
+      traces._RAS.set()
+      traces._CAS.set()
+      traces._W.set()
     }
 
     for (let addr = lo; addr < hi; addr++) {
@@ -107,15 +107,15 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       const col = addr & 0x00ff
 
       setAddressPins(row)
-      traces._RAS.lower()
+      traces._RAS.clear()
 
       setAddressPins(col)
-      traces._CAS.lower()
+      traces._CAS.clear()
 
       expect(traces.Q.level).to.equal(bitValue(row, col))
 
-      traces._RAS.raise()
-      traces._CAS.raise()
+      traces._RAS.set()
+      traces._CAS.set()
     }
   }
 
@@ -172,65 +172,65 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
     it("reads and writes within the same page without resetting row addresses", () => {
       const row = 0x2f // arbitrary
       setAddressPins(row)
-      traces._RAS.lower()
+      traces._RAS.clear()
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.lower()
+        traces._CAS.clear()
 
         traces.D.level = bitValue(row, col)
-        traces._W.lower()
+        traces._W.clear()
 
-        traces._CAS.raise()
-        traces._W.raise()
+        traces._CAS.set()
+        traces._W.set()
       }
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces._CAS.lower()
+        traces._CAS.clear()
 
         expect(traces.Q.level).to.equal(bitValue(row, col))
 
-        traces._CAS.raise()
+        traces._CAS.set()
       }
 
-      traces._RAS.raise()
+      traces._RAS.set()
     })
 
     it("updates the output pin on write in RMW mode", () => {
       const row = 0x2f
       setAddressPins(row)
-      traces._RAS.lower()
+      traces._RAS.clear()
 
       for (let col = 0; col < 256; col++) {
-        traces.D.lower()
+        traces.D.clear()
         setAddressPins(col)
-        traces._CAS.lower()
+        traces._CAS.clear()
         expect(traces.Q.level).to.equal(0)
-        traces.D.raise()
-        traces._W.lower()
+        traces.D.set()
+        traces._W.clear()
         expect(traces.Q.level).to.equal(1)
-        traces._W.raise()
-        traces._CAS.raise()
+        traces._W.set()
+        traces._CAS.set()
       }
-      traces._RAS.raise()
+      traces._RAS.set()
     })
 
     it("does not update the output pin on write in write mode", () => {
       const row = 0x2f
       setAddressPins(row)
-      traces._RAS.lower()
+      traces._RAS.clear()
 
       for (let col = 0; col < 256; col++) {
         setAddressPins(col)
-        traces.D.raise()
-        traces._W.lower()
-        traces._CAS.lower()
+        traces.D.set()
+        traces._W.clear()
+        traces._CAS.clear()
         expect(traces.Q.level).to.be.null
-        traces._W.raise()
-        traces._CAS.raise()
+        traces._W.set()
+        traces._CAS.set()
       }
-      traces._RAS.raise()
+      traces._RAS.set()
     })
   })
 })

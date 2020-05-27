@@ -74,8 +74,8 @@ export function new4066() {
       } else if (last[num - 1] === ypin) {
         xpin.level = ypin.level
       } else {
-        xpin.lower()
-        ypin.lower()
+        xpin.clear()
+        ypin.clear()
       }
     }
   }

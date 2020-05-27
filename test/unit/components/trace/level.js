@@ -9,17 +9,17 @@ import { newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL } from "components/pi
 
 export function levelDirectUnconnected() {
   const t = newTrace()
-  t.raise()
+  t.set()
   expect(t.high).to.be.true
   expect(t.low).to.be.false
   expect(t.null).to.be.false
 
-  t.lower()
+  t.clear()
   expect(t.high).to.be.false
   expect(t.low).to.be.true
   expect(t.null).to.be.false
 
-  t.reset()
+  t.float()
   expect(t.high).to.be.false
   expect(t.low).to.be.false
   expect(t.null).to.be.true

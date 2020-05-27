@@ -180,7 +180,7 @@ describe("82S100 Programmable Logic Array", () => {
   }
 
   it("disables all outputs if _OE is set high", () => {
-    traces._OE.raise()
+    traces._OE.set()
     expect(traces.F0.null).to.be.true
     expect(traces.F1.null).to.be.true
     expect(traces.F2.null).to.be.true
@@ -189,7 +189,7 @@ describe("82S100 Programmable Logic Array", () => {
     expect(traces.F5.null).to.be.true
     expect(traces.F6.null).to.be.true
     expect(traces.F7.null).to.be.true
-    traces._OE.lower()
+    traces._OE.clear()
   })
 
   function runTest(lo, hi) {

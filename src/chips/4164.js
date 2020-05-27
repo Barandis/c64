@@ -170,7 +170,7 @@ export function new4164() {
         read()
       }
     } else {
-      chip.Q.reset()
+      chip.Q.float()
       col = null
       data = null
     }
@@ -192,12 +192,12 @@ export function new4164() {
   // but nothing is available to be read).
   function writeLatch(_w) {
     if (_w.low) {
-      chip.D.lower()
+      chip.D.clear()
       if (chip._CAS.low) {
         data = chip.D.level
         write()
       } else {
-        chip.Q.reset()
+        chip.Q.float()
       }
     } else {
       data = null

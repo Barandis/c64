@@ -64,16 +64,16 @@ export function new74257() {
     newPin(16, "VCC", UNCONNECTED),
   )
 
-  chip.Y1.lower()
-  chip.Y2.lower()
-  chip.Y3.lower()
-  chip.Y4.lower()
+  chip.Y1.clear()
+  chip.Y2.clear()
+  chip.Y3.clear()
+  chip.Y4.clear()
 
   // Sets the value of the output (Y) pin based on the values of its input pins (A and B) and the
   // select and output enable pins.
   function setOutput(apin, bpin, ypin) {
     if (chip._OE.high) {
-      ypin.reset()
+      ypin.float()
     } else if (chip.SEL.low) {
       ypin.level = apin.level
     } else {

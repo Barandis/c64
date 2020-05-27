@@ -114,7 +114,7 @@ export function timers(chip, registers, latches) {
       if (bitSet(cra, CRA_OUT)) {
         chip.PB6.value = !chip.PB6.value
       } else {
-        chip.PB6.raise()
+        chip.PB6.set()
       }
     }
 
@@ -135,7 +135,7 @@ export function timers(chip, registers, latches) {
     setBit(registers[CIAICR], ICR_TA)
     if (bitSet(latches[CIAICR], ICR_TA)) {
       setBit(registers[CIAICR], ICR_IR)
-      chip._IRQ.lower()
+      chip._IRQ.clear()
     }
 
     // Reset value to that in latch
@@ -156,7 +156,7 @@ export function timers(chip, registers, latches) {
       if (bitSet(crb, CRB_OUT)) {
         chip.PB7.level = !chip.PB7.stlevelate
       } else {
-        chip.PB7.raise()
+        chip.PB7.set()
       }
     }
 
@@ -164,7 +164,7 @@ export function timers(chip, registers, latches) {
     setBit(registers[CIAICR], ICR_TB)
     if (bitSet(latches[CIAICR], ICR_TB)) {
       setBit(registers[CIAICR], ICR_IR)
-      chip._IRQ.lower()
+      chip._IRQ.clear()
     }
 
     // Reset value to that in latch
@@ -228,7 +228,7 @@ export function timers(chip, registers, latches) {
         setBit(registers[CIAICR], ICR_SP)
         if (bitSet(latches[CIAICR], ICR_SP)) {
           setBit(registers[CIAICR], ICR_IR)
-          chip._IRQ.lower()
+          chip._IRQ.clear()
         }
       }
     }
@@ -239,7 +239,7 @@ export function timers(chip, registers, latches) {
       if (skip) {
         // On skipped underflows, CNT is cleared in preparation for setting it on the next undeflow
         // when data goes out the SP pin.
-        chip.CNT.lower()
+        chip.CNT.clear()
       } else {
         if (bit === 0) {
           bit = 8
@@ -248,7 +248,7 @@ export function timers(chip, registers, latches) {
         // Put the next bit of the shift register on the SP pin and set the CNT pin to indicate that
         // new data is available
         chip.SP.level = bitSet(shift, bit)
-        chip.CNT.raise()
+        chip.CNT.set()
 
         // When the shift register has been completely transmitted:
         if (bit === 0) {
@@ -266,7 +266,7 @@ export function timers(chip, registers, latches) {
           setBit(registers[CIAICR], ICR_SP)
           if (bitSet(latches[CIAICR], ICR_SP)) {
             setBit(registers[CIAICR], ICR_IR)
-            chip._IRQ.lower()
+            chip._IRQ.clear()
           }
         }
       }

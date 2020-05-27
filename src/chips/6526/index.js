@@ -128,7 +128,7 @@ export function new6526() {
     newPin(1, "VSS", UNCONNECTED),
   )
 
-  chip._PC.raise()
+  chip._PC.set()
 
   const addressPins = [chip.RS0, chip.RS1, chip.RS2, chip.RS3]
   const dataPins = [chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7]
@@ -259,7 +259,7 @@ export function new6526() {
       setBit(registers[CIAICR], ICR_FLG)
       if (bitSet(latches[CIAICR], ICR_FLG)) {
         setBit(registers[CIAICR], ICR_IR)
-        chip._IRQ.lower()
+        chip._IRQ.clear()
       }
     }
   })

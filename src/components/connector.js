@@ -56,8 +56,8 @@ export function newConnector(pin) {
         if (!_skip) {
           connector.disconnect(true)
 
-          pin.reset()
-          connector.pin.reset()
+          pin.float()
+          connector.pin.float()
         }
       }
     },

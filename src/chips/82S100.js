@@ -138,14 +138,14 @@ export function new82S100() {
     newPin(14, "GND", UNCONNECTED),
   )
 
-  chip.F0.lower()
-  chip.F1.raise()
-  chip.F2.raise()
-  chip.F3.raise()
-  chip.F4.raise()
-  chip.F5.raise()
-  chip.F6.raise()
-  chip.F7.raise()
+  chip.F0.clear()
+  chip.F1.set()
+  chip.F2.set()
+  chip.F3.set()
+  chip.F4.set()
+  chip.F5.set()
+  chip.F6.set()
+  chip.F7.set()
 
   // One listener to rule them all
   //
@@ -166,14 +166,14 @@ export function new82S100() {
   /* eslint-disable complexity */
   function oneListener() {
     if (chip._OE.high) {
-      chip.F0.reset()
-      chip.F1.reset()
-      chip.F2.reset()
-      chip.F3.reset()
-      chip.F4.reset()
-      chip.F5.reset()
-      chip.F6.reset()
-      chip.F7.reset()
+      chip.F0.float()
+      chip.F1.float()
+      chip.F2.float()
+      chip.F3.float()
+      chip.F4.float()
+      chip.F5.float()
+      chip.F6.float()
+      chip.F7.float()
 
       return
     }

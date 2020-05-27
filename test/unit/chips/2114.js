@@ -16,8 +16,8 @@ describe("2114 1024 x 4-bit static RAM", () => {
     chip = new2114()
     traces = deviceTraces(chip)
 
-    traces._CE.raise()
-    traces._WE.raise()
+    traces._CE.set()
+    traces._WE.set()
   })
 
   function setAddressPins(addr) {
@@ -54,18 +54,18 @@ describe("2114 1024 x 4-bit static RAM", () => {
       const level = addr & 0xf
       setAddressPins(addr)
       setDataPins(level)
-      traces._WE.lower()
-      traces._CE.lower()
-      traces._CE.raise()
-      traces._WE.raise()
+      traces._WE.clear()
+      traces._CE.clear()
+      traces._CE.set()
+      traces._WE.set()
     }
 
     for (let addr = 0x000; addr < 0x400; addr++) {
       const level = addr & 0xf
       setAddressPins(addr)
-      traces._CE.lower()
+      traces._CE.clear()
       expect(readDataPins()).to.equal(level)
-      traces._CE.raise()
+      traces._CE.set()
     }
   })
 })

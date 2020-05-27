@@ -46,7 +46,7 @@ export function control(chip, registers, latches) {
   function readIcr() {
     const result = registers[CIAICR]
     registers[CIAICR] = 0
-    chip._IRQ.reset()
+    chip._IRQ.float()
     return result
   }
 

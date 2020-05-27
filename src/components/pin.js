@@ -128,7 +128,7 @@ export function newPin(number, name, mode) {
     return pin
   }
 
-  function float() {
+  function pullNone() {
     _float = null
     _level = normalize(_level)
     return pin
@@ -175,13 +175,13 @@ export function newPin(number, name, mode) {
       return _trace !== null
     },
 
-    raise() {
+    set() {
       setLevel(1)
     },
-    lower() {
+    clear() {
       setLevel(0)
     },
-    reset() {
+    float() {
       setLevel(null)
     },
     toggle() {
@@ -190,7 +190,7 @@ export function newPin(number, name, mode) {
 
     pullUp,
     pullDown,
-    float,
+    pullNone,
     setTrace,
     updateLevel,
     addListener,

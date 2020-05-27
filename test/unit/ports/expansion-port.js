@@ -73,8 +73,8 @@ describe("Expansion port", () => {
       if (i === 2) {
         continue
       }
-      p[i].lower()
-      c[i].lower()
+      p[i].clear()
+      c[i].clear()
     }
 
     connector.connect(port)

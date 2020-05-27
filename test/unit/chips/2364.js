@@ -19,7 +19,7 @@ describe("2364 8k x 8-bit ROM", () => {
     before(() => {
       chip = new2364(kernal)
       traces = deviceTraces(chip)
-      traces._CS.raise()
+      traces._CS.set()
     })
 
     function setAddressPins(addr) {
@@ -54,7 +54,7 @@ describe("2364 8k x 8-bit ROM", () => {
     function runTests(lo, hi) {
       for (let addr = lo; addr < hi; addr++) {
         setAddressPins(addr)
-        traces._CS.lower()
+        traces._CS.clear()
         const data = readDataPins()
 
         if (DEBUG) {
@@ -67,7 +67,7 @@ describe("2364 8k x 8-bit ROM", () => {
         }
 
         expect(data).to.equal(expected[addr])
-        traces._CS.raise()
+        traces._CS.set()
       }
     }
 
@@ -89,7 +89,7 @@ describe("2364 8k x 8-bit ROM", () => {
       chip = new2364(basic)
       traces = deviceTraces(chip)
 
-      traces._CS.raise()
+      traces._CS.set()
     })
 
     function setAddressPins(addr) {
@@ -124,7 +124,7 @@ describe("2364 8k x 8-bit ROM", () => {
     function runTests(lo, hi) {
       for (let addr = lo; addr < hi; addr++) {
         setAddressPins(addr)
-        traces._CS.lower()
+        traces._CS.clear()
         const data = readDataPins()
 
         if (DEBUG) {
@@ -137,7 +137,7 @@ describe("2364 8k x 8-bit ROM", () => {
         }
 
         expect(data).to.equal(expected[addr])
-        traces._CS.raise()
+        traces._CS.set()
       }
     }
 

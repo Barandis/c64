@@ -33,12 +33,12 @@ import {
   pdHiOutputs,
   pdLoOutputs,
   pdNullOutputs,
-  fltInitial,
-  fltModeInput,
-  fltNoOutputs,
-  fltHiOutputs,
-  fltLoOutputs,
-  fltNullOutputs,
+  pnInitial,
+  pnModeInput,
+  pnNoOutputs,
+  pnHiOutputs,
+  pnLoOutputs,
+  pnNullOutputs,
 } from "./trace/float"
 
 describe("Trace", () => {
@@ -90,12 +90,12 @@ describe("Trace", () => {
     })
 
     describe("float", () => {
-      it("sets intitial level to null", test(fltInitial))
-      it("floats when pin mode changes to input", test(fltModeInput))
-      it("floats when no outputs are connected", test(fltNoOutputs))
-      it("does not float with connected high outputs", test(fltHiOutputs))
-      it("does not float with connected low outputs", test(fltLoOutputs))
-      it("floats when all connected outputs are null", test(fltNullOutputs))
+      it("sets intitial level to null", test(pnInitial))
+      it("floats when pin mode changes to input", test(pnModeInput))
+      it("floats when no outputs are connected", test(pnNoOutputs))
+      it("does not float with connected high outputs", test(pnHiOutputs))
+      it("does not float with connected low outputs", test(pnLoOutputs))
+      it("floats when all connected outputs are null", test(pnNullOutputs))
     })
   })
 })

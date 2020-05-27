@@ -15,7 +15,7 @@ export function listenerUnconnected() {
   const spy = Sinon.spy()
   p.addListener(spy)
 
-  t.raise()
+  t.set()
   expect(spy).not.to.be.called
 }
 
@@ -26,7 +26,7 @@ export function listenerInput() {
   const spy = Sinon.spy()
   p.addListener(spy)
 
-  t.raise()
+  t.set()
   expect(spy).to.be.calledOnce
   expect(spy).to.be.calledWith(p)
 }
@@ -38,7 +38,7 @@ export function listenerOutput() {
   const spy = Sinon.spy()
   p.addListener(spy)
 
-  t.raise()
+  t.set()
   expect(spy).not.to.be.called
 }
 
@@ -49,7 +49,7 @@ export function listenerBidirectional() {
   const spy = Sinon.spy()
   p.addListener(spy)
 
-  t.raise()
+  t.set()
   expect(spy).to.be.calledOnce
   expect(spy).to.be.calledWith(p)
 }
@@ -73,13 +73,13 @@ export function listenerRemove() {
   p.addListener(spy1)
   p.addListener(spy2)
 
-  t.raise()
+  t.set()
   expect(spy1).to.be.calledOnce
   expect(spy2).to.be.calledOnce
 
   p.removeListener(spy1)
 
-  t.lower()
+  t.clear()
   expect(spy1).to.be.calledOnce
   expect(spy2).to.be.calledTwice
 }
@@ -93,13 +93,13 @@ export function listenerNonexistent() {
 
   p.addListener(spy2)
 
-  t.raise()
+  t.set()
   expect(spy1).not.to.be.called
   expect(spy2).to.be.calledOnce
 
   p.removeListener(spy1)
 
-  t.lower()
+  t.clear()
   expect(spy1).not.to.be.called
   expect(spy2).to.be.calledTwice
 }
@@ -112,6 +112,6 @@ export function listenerDouble() {
   p.addListener(spy)
   p.addListener(spy)
 
-  t.raise()
+  t.set()
   expect(spy).to.be.calledOnce
 }

@@ -25,26 +25,26 @@ describe("6526 CIA", () => {
     paTraces = [tr.PA0, tr.PA1, tr.PA2, tr.PA3, tr.PA4, tr.PA5, tr.PA6, tr.PA7]
     pbTraces = [tr.PB0, tr.PB1, tr.PB2, tr.PB3, tr.PB4, tr.PB5, tr.PB6, tr.PB7]
 
-    tr._CS.raise()
-    tr.R__W.raise()
-    tr._FLAG.raise()
-    chip._IRQ.reset()
+    tr._CS.set()
+    tr.R__W.set()
+    tr._FLAG.set()
+    chip._IRQ.float()
   })
 
   function writeRegister(register, value) {
     valueToPins(value, ...dataTraces)
     valueToPins(register, ...addrTraces)
-    tr.R__W.lower()
-    tr._CS.lower()
-    tr._CS.raise()
-    tr.R__W.raise()
+    tr.R__W.clear()
+    tr._CS.clear()
+    tr._CS.set()
+    tr.R__W.set()
   }
 
   function readRegister(register) {
     valueToPins(register, ...addrTraces)
-    tr._CS.lower()
+    tr._CS.clear()
     const value = pinsToValue(...dataTraces)
-    tr._CS.raise()
+    tr._CS.set()
     return value
   }
 

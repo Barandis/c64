@@ -35,8 +35,8 @@ describe("Serial port", () => {
     c = deviceTraces(connector)
 
     for (let i = 1; i <= 6; i++) {
-      p[i].lower()
-      c[i].lower()
+      p[i].clear()
+      c[i].clear()
     }
   })
 

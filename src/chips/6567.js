@@ -100,10 +100,10 @@ export function new6567() {
     newPin(20, "GND", UNCONNECTED),
   )
 
-  chip._RAS.raise()
-  chip._CAS.raise()
-  chip.BA.raise()
-  chip.AEC.lower()
+  chip._RAS.set()
+  chip._CAS.set()
+  chip.BA.set()
+  chip.AEC.clear()
 
   return chip
 }

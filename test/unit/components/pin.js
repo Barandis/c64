@@ -40,9 +40,9 @@ import {
   pdOutput,
   pdBidirectional,
   pdAfter,
-  fltInitial,
-  fltPullUp,
-  fltPullDown,
+  pnInitial,
+  pnPullUp,
+  pnPullDown,
 } from "./pin/float"
 import {
   listenerInput,
@@ -114,9 +114,9 @@ describe("Pin", () => {
     })
 
     describe("float", () => {
-      it("sets a pin's initial value to null", test(fltInitial))
-      it("removes a pin's pull up effect", test(fltPullUp))
-      it("removes a pin's pull down effect", test(fltPullDown))
+      it("sets a pin's initial value to null", test(pnInitial))
+      it("removes a pin's pull up effect", test(pnPullUp))
+      it("removes a pin's pull down effect", test(pnPullDown))
     })
   })
 

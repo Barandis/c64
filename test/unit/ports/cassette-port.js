@@ -32,26 +32,26 @@ describe("Cassette port", () => {
     c = deviceTraces(connector)
 
     for (let i = 1; i <= 6; i++) {
-      p[i].lower()
-      c[i].lower()
+      p[i].clear()
+      c[i].clear()
     }
 
     connector.connect(port)
   })
 
   it("writes data to MOTOR and WRITE", () => {
-    p.MOTOR.raise()
+    p.MOTOR.set()
     expect(c.MOTOR.level).to.equal(1)
 
-    p.WRITE.raise()
+    p.WRITE.set()
     expect(c.WRITE.level).to.equal(1)
   })
 
   it("reads data from READ and SENSE", () => {
-    c.READ.raise()
+    c.READ.set()
     expect(p.READ.level).to.equal(1)
 
-    c.SENSE.raise()
+    c.SENSE.set()
     expect(p.SENSE.level).to.equal(1)
   })
 })

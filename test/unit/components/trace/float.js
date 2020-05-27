@@ -103,14 +103,14 @@ export function pdNullOutputs() {
   expect(t.level).to.equal(0)
 }
 
-export function fltInitial() {
-  const t = newTrace().float()
+export function pnInitial() {
+  const t = newTrace().pullNone()
   expect(t.level).to.be.null
 }
 
-export function fltModeInput() {
+export function pnModeInput() {
   const p = newPin(1, "A", OUTPUT)
-  const t = newTrace(p).float()
+  const t = newTrace(p).pullNone()
 
   p.level = 1
   expect(t.level).to.equal(1)
@@ -118,35 +118,35 @@ export function fltModeInput() {
   expect(t.level).to.be.null
 }
 
-export function fltNoOutputs() {
+export function pnNoOutputs() {
   const p = newPin(1, "A", INPUT)
-  const t = newTrace(p).float()
+  const t = newTrace(p).pullNone()
   expect(t.level).to.be.null
 }
 
-export function fltHiOutputs() {
+export function pnHiOutputs() {
   const p1 = newPin(1, "A", OUTPUT)
   const p2 = newPin(2, "B", OUTPUT)
   p1.level = 1
   p2.level = 0
-  const t = newTrace(p1, p2).float()
+  const t = newTrace(p1, p2).pullNone()
   expect(t.level).to.equal(1)
 }
 
-export function fltLoOutputs() {
+export function pnLoOutputs() {
   const p1 = newPin(1, "A", OUTPUT)
   const p2 = newPin(2, "B", OUTPUT)
   p1.level = 0
   p2.level = 0
-  const t = newTrace(p1, p2).float()
+  const t = newTrace(p1, p2).pullNone()
   expect(t.level).to.equal(0)
 }
 
-export function fltNullOutputs() {
+export function pnNullOutputs() {
   const p1 = newPin(1, "A", OUTPUT)
   const p2 = newPin(2, "B", OUTPUT)
   p1.level = null
   p2.level = null
-  const t = newTrace(p1, p2).float()
+  const t = newTrace(p1, p2).pullNone()
   expect(t.level).to.be.null
 }

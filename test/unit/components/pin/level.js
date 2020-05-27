@@ -140,11 +140,11 @@ export function levelOptions() {
   const p = newPin(1, "A", BIDIRECTIONAL)
   const t = newTrace(p)
 
-  t.raise()
+  t.set()
   expect(p.level).to.equal(1)
   expect(t.level).to.equal(1)
 
-  p.lower()
+  p.clear()
   expect(p.level).to.equal(0)
   expect(t.level).to.equal(0)
 
@@ -152,11 +152,11 @@ export function levelOptions() {
   expect(p.level).to.equal(-0.35)
   expect(t.level).to.equal(-0.35)
 
-  p.raise()
+  p.set()
   expect(p.level).to.equal(1)
   expect(t.level).to.equal(1)
 
-  p.reset()
+  p.float()
   expect(p.level).to.equal(null)
   expect(t.level).to.equal(null)
 }

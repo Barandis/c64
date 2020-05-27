@@ -44,10 +44,10 @@ export function new7408() {
     newPin(7, "GND", UNCONNECTED),
   )
 
-  chip.Y1.lower()
-  chip.Y2.lower()
-  chip.Y3.lower()
-  chip.Y4.lower()
+  chip.Y1.clear()
+  chip.Y2.clear()
+  chip.Y3.clear()
+  chip.Y4.clear()
 
   function setOutput(apin, bpin, ypin) {
     ypin.level = apin.high && bpin.high

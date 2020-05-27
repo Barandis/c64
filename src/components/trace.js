@@ -93,7 +93,7 @@ export function newTrace(...pins) {
     return trace
   }
 
-  function float() {
+  function pullNone() {
     _float = null
     setLevel(_level)
     return trace
@@ -116,19 +116,19 @@ export function newTrace(...pins) {
       setLevel(level)
     },
 
-    raise() {
+    set() {
       setLevel(1)
     },
-    lower() {
+    clear() {
       setLevel(0)
     },
-    reset() {
+    float() {
       setLevel(null)
     },
 
     pullUp,
     pullDown,
-    float,
+    pullNone,
     updateLevel,
     addPins,
   }

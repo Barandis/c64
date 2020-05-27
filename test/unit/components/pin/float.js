@@ -101,25 +101,25 @@ export function pdAfter() {
   expect(p.level).to.equal(0)
 }
 
-export function fltInitial() {
-  const p = newPin(1, "A", OUTPUT).float()
+export function pnInitial() {
+  const p = newPin(1, "A", OUTPUT).pullNone()
   expect(p.level).to.be.null
 }
 
-export function fltPullUp() {
+export function pnPullUp() {
   const p = newPin(1, "A", OUTPUT).pullUp()
   p.level = null
   expect(p.level).to.equal(1)
-  p.float()
+  p.pullNone()
   p.level = null
   expect(p.level).to.be.null
 }
 
-export function fltPullDown() {
+export function pnPullDown() {
   const p = newPin(1, "A", OUTPUT).pullDown()
   p.level = null
   expect(p.level).to.equal(0)
-  p.float()
+  p.pullNone()
   p.level = null
   expect(p.level).to.be.null
 }

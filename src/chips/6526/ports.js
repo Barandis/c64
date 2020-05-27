@@ -81,13 +81,13 @@ export function ports(chip, registers) {
     const mask = registers[CIDDRB] & (bitSet(registers[CIACRB], CRB_PBON) ? 0x7f : 0xff)
     registers[CIAPRB] = (registers[CIAPRB] & ~mask) | value
     setPortPins(value, mask, pbPins)
-    chip._PC.lower()
+    chip._PC.clear()
   }
 
   // A read function is only necessary for port B, and only because reading the register lowers the
   // _PC pin for a cycle.
   function readPrb() {
-    chip._PC.lower()
+    chip._PC.clear()
     return registers[CIAPRB]
   }
 
@@ -103,7 +103,7 @@ export function ports(chip, registers) {
   // one cycle
   chip.O2.addListener(pin => {
     if (pin.high) {
-      chip._PC.raise()
+      chip._PC.set()
     }
   })
 

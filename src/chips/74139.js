@@ -52,14 +52,14 @@ export function new74139() {
     newPin(8, "GND", UNCONNECTED),
   )
 
-  chip._Y10.lower()
-  chip._Y11.raise()
-  chip._Y12.raise()
-  chip._Y13.raise()
-  chip._Y20.lower()
-  chip._Y21.raise()
-  chip._Y22.raise()
-  chip._Y23.raise()
+  chip._Y10.clear()
+  chip._Y11.set()
+  chip._Y12.set()
+  chip._Y13.set()
+  chip._Y20.clear()
+  chip._Y21.set()
+  chip._Y22.set()
+  chip._Y23.set()
 
   function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {
     y0pin.level = !(gpin.low && apin.low && bpin.low)

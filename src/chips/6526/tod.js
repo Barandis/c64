@@ -81,7 +81,7 @@ export function tod(chip, registers, latches) {
           bitSet(latches[CIAICR], ICR_ALRM)
         ) {
           setBit(registers[CIAICR], ICR_IR)
-          chip._IRQ.lower()
+          chip._IRQ.clear()
         }
       }
     }

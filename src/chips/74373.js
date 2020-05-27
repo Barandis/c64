@@ -90,7 +90,7 @@ export function new74373() {
   function enableChanged(_oe) {
     if (_oe.high) {
       for (let i = 0; i < 8; i++) {
-        chip[`O${i}`].reset()
+        chip[`O${i}`].float()
       }
     } else {
       const le = chip.LE.low

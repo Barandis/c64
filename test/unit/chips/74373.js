@@ -15,57 +15,57 @@ describe("74373 Octal tri-state transparent latch", () => {
   beforeEach(() => {
     chip = new74373()
     traces = deviceTraces(chip)
-    traces._OE.lower()
+    traces._OE.clear()
   })
 
   it("allows data to pass through when LE is true", () => {
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].raise()
+      traces["D" + i].set()
       expect(traces["O" + i].high).to.be.true
     }
 
     for (let i = 0; i < 8; i++) {
-      traces["D" + i].lower()
+      traces["D" + i].clear()
       expect(traces["O" + i].low).to.be.true
     }
   })
 
   it("latches the data when LE goes false", () => {
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
     }
 
-    traces.LE.lower()
+    traces.LE.clear()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
       expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].lower()
+      traces[`D${i}`].clear()
       expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
   })
 
   it("returns to transparent data if false when LE returns to true", () => {
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
     }
 
-    traces.LE.lower()
+    traces.LE.clear()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
       expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
     }
 
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i++) {
       expect(traces[`O${i}`].high).to.be.true
@@ -73,19 +73,19 @@ describe("74373 Octal tri-state transparent latch", () => {
   })
 
   it("sets all outputs to null when _OE is true", () => {
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
     }
 
-    traces._OE.raise()
+    traces._OE.set()
 
     for (let i = 0; i < 8; i++) {
       expect(traces[`O${i}`].level).to.be.null
     }
 
-    traces._OE.lower()
+    traces._OE.clear()
 
     for (let i = 0; i < 8; i++) {
       expect(traces[`O${i}`].level).to.equal(1)
@@ -93,20 +93,20 @@ describe("74373 Octal tri-state transparent latch", () => {
   })
 
   it("remembers latched levels, returning them to the output pins after _OE goes false", () => {
-    traces.LE.raise()
+    traces.LE.set()
 
     for (let i = 0; i < 8; i++) {
-      traces[`D${i}`].raise()
+      traces[`D${i}`].set()
     }
 
-    traces._OE.raise()
+    traces._OE.set()
 
     for (let i = 0; i < 8; i += 2) {
-      traces[`D${i}`].lower()
+      traces[`D${i}`].clear()
     }
-    traces.LE.lower()
+    traces.LE.clear()
 
-    traces._OE.lower()
+    traces._OE.clear()
 
     for (let i = 0; i < 8; i++) {
       expect(!!traces[`O${i}`].level).to.equal(i % 2 !== 0)

@@ -42,12 +42,12 @@ export function new7406() {
     newPin(7, "GND", UNCONNECTED),
   )
 
-  chip.Y1.raise()
-  chip.Y2.raise()
-  chip.Y3.raise()
-  chip.Y4.raise()
-  chip.Y5.raise()
-  chip.Y6.raise()
+  chip.Y1.set()
+  chip.Y2.set()
+  chip.Y3.set()
+  chip.Y4.set()
+  chip.Y5.set()
+  chip.Y6.set()
 
   chip.A1.addListener(pin => (chip.Y1.level = pin.low))
   chip.A2.addListener(pin => (chip.Y2.level = pin.low))
