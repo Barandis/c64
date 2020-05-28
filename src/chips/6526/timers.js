@@ -203,7 +203,7 @@ export function timers(chip, registers, latches) {
 
   // Indicates whether transmission is finshed. This happens if the shift register has all 8 bits
   // sent out and there is not a new 8 bits waiting in the SDR to be sent out.
-  let done = false
+  let done = true
 
   // Flag to indicate whether the value in the SDR is waiting to be sent out the serial port.
   let ready = false
@@ -216,16 +216,16 @@ export function timers(chip, registers, latches) {
       }
       bit--
       if (chip.SP.high) {
-        setBit(shift, bit)
+        shift = setBit(shift, bit)
       }
       // If the last bit of the byte has been read, push the byte to the SP register and, if the
       // ICR says so, fire off an IRQ
       if (bit === 0) {
         registers[CIASDR] = shift
         shift = 0
-        setBit(registers[CIAICR], ICR_SP)
+        registers[CIAICR] = setBit(registers[CIAICR], ICR_SP)
         if (bitSet(latches[CIAICR], ICR_SP)) {
-          setBit(registers[CIAICR], ICR_IR)
+          registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
           chip._IRQ.clear()
         }
       }
@@ -235,7 +235,7 @@ export function timers(chip, registers, latches) {
   function handleSpOut() {
     if (!done) {
       if (skip) {
-        // On skipped underflows, CNT is cleared in preparation for setting it on the next undeflow
+        // On skipped underflows, CNT is cleared in preparation for setting it on the next underflow
         // when data goes out the SP pin.
         chip.CNT.clear()
       } else {
@@ -255,15 +255,15 @@ export function timers(chip, registers, latches) {
             ready = false
             shift = registers[CIASDR]
           } else {
-            // Otehrwise clear the shift register and record that there is nothing new to send
+            // Otherwise clear the shift register and record that there is nothing new to send
             done = true
             shift = 0
           }
 
           // Set the interrupt bit and then fire off an interrupt if the ICR says to
-          setBit(registers[CIAICR], ICR_SP)
+          registers[CIAICR] = setBit(registers[CIAICR], ICR_SP)
           if (bitSet(latches[CIAICR], ICR_SP)) {
-            setBit(registers[CIAICR], ICR_IR)
+            registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
             chip._IRQ.clear()
           }
         }
@@ -277,11 +277,11 @@ export function timers(chip, registers, latches) {
     // If the serial port is configured to send (i.e., if it's set to output mode and if Timer A is
     // set to continuous mode)
     if (bitSet(registers[CIACRA], CRA_SP) && bitClear(registers[CIACRA], CRA_RUN)) {
-      ready = true
       if (done) {
-        // Restart transmission if it had previously stopped due to lack of data to send
         done = false
-        handleSpOut()
+        shift = value
+      } else {
+        ready = true
       }
     }
   }

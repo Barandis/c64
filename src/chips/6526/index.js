@@ -27,6 +27,9 @@ import {
   CIACRB,
   ICR_FLG,
   ICR_IR,
+  CRA_LOAD,
+  CRB_LOAD,
+  CRB_ALRM,
 } from "./constants"
 import { ports } from "./ports"
 import { timers } from "./timers"
@@ -104,9 +107,11 @@ export function new6526() {
     // Serial port. This is bidirectional but the direction is chosen by a control bit.
     newPin(39, "SP", INPUT),
 
-    // Timed control line. This is used in conjunction with the serial port to control timing of the
-    // bits of data into the port's shift register. It is bidirectional for that reason, though the
-    // direction depends on the operation of the shift register and not directly on a control bit.
+    // Count pin. This is used for a couple of different purposes. As an input (its default state),
+    // it can provide pulses for the interval timers to count, or it can be used to signal that a
+    // new bit is available to receive on the serial port. It can serve as an output as well; in
+    // that case the 6526 uses it to signal to the outside that an outgoing bit is ready on the
+    // serial port pin.
     newPin(40, "CNT", INPUT),
 
     // System clock input. In the 6526 this is expected to be a 1 MHz clock. It's actually typically
@@ -117,7 +122,7 @@ export function new6526() {
     newPin(19, "TOD", INPUT),
 
     // Chip select pin. When this is low, the chip responds to R/W and register select signals.
-    // When it's high, the data pins become hi-Z.
+    // When it's high, the data pins go high impedance.
     newPin(23, "_CS", INPUT),
 
     // Resets the chip on a low signal.
@@ -155,10 +160,45 @@ export function new6526() {
   // DDR on CIA 1 is all outputs for port A and all inputs for port B; only in this way can the
   // keyboard be scanned. However, the hardware reset sets both ports to all inputs; the kernal
   // routine starting at $FDA5 actually sets port A to be all outputs.
+  //
+  // This function does the following:
+  // 1. Sets interval timer registers to max (0xff each)
+  // 2. Clears all other registers (0x00 each) *
+  // 3. Clears the IRQ mask in the ICR latch
+  // 4. Disconnects all data lines
+  // 5. Sets SP and CNT as inputs
+  // 6. Resets _IRQ and _PC outputs to their default values
+  //
+  // * Note that pins PA0...PA7 and PB0...PB7 are pulled up by internal resistors, which is
+  //   emulated, so the PCR registers will read all 1's for unconnected lines on reset.
   function reset() {
-    for (let i = 0; i < registers.length; i++) {
-      registers[i] = i >= TIMALO && i <= TIMBHI ? 0xff : 0x00
-      latches[i] = i >= TIMALO && i <= TIMBHI ? 0xff : 0x00
+    // Backwards order to hit control registers first, so we know we're setting the TOD clock later
+    // and not the TOD alarm, and also to ensure hours gets hit before tenths so we know the clock
+    // hasn't halted
+    for (let i = registers.length; i >= 0; i--) {
+      // Timer latches get all 1's; ICR mask gets all flags reset; all others get all 0's
+      const value = i >= TIMALO && i <= TIMBHI ? 0xff : i === CIAICR ? 0x7f : 0x00
+      writeRegister(i, value)
+    }
+    // Force latched timer values into timer registers
+    writeRegister(CIACRA, 1 << CRA_LOAD)
+    writeRegister(CIACRB, 1 << CRB_LOAD)
+    // Read ICR to clear all IRQ flags and release IRQ line
+    readRegister(CIAICR)
+    // Write zeroes to the TOD alarm
+    writeRegister(CIACRB, 1 << CRB_ALRM)
+    writeRegister(TODHRS, 0)
+    writeRegister(TODMIN, 0)
+    writeRegister(TODSEC, 0)
+    writeRegister(TODTEN, 0)
+    writeRegister(CIACRB, 0)
+
+    chip._PC.set()
+
+    for (let i = 0; i < 8; i++) {
+      const name = `D${i}`
+      chip[name].mode = OUTPUT
+      chip[name].level = null
     }
   }
 
@@ -247,9 +287,6 @@ export function new6526() {
       case CIACRB:
         writeCrb(value)
         break
-      default:
-        registers[index] = value
-        break
     }
   }
 
@@ -258,9 +295,9 @@ export function new6526() {
   // 6526 by receiving its _PC output on this pin.
   chip._FLAG.addListener(pin => {
     if (pin.low) {
-      setBit(registers[CIAICR], ICR_FLG)
+      registers[CIAICR] = setBit(registers[CIAICR], ICR_FLG)
       if (bitSet(latches[CIAICR], ICR_FLG)) {
-        setBit(registers[CIAICR], ICR_IR)
+        registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
         chip._IRQ.clear()
       }
     }

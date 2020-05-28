@@ -18,6 +18,7 @@ import {
   ICR_TA,
   ICR_IR,
   ICR_SC,
+  CIDDRA,
 } from "chips/6526/constants"
 import { OUTPUT } from "components/pin"
 import { bitSet } from "utils"
@@ -162,6 +163,20 @@ export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
     expect(tr.PB6.level).to.equal((j + 1) % 2)
     tr.O2.clear()
   }
+}
+
+export function taPbRemove({ chip, tr, writeRegister }) {
+  writeRegister(TIMALO, 5)
+  writeRegister(TIMAHI, 0)
+  writeRegister(CIACRA, (1 << CRA_LOAD) | (1 << CRA_PBON))
+
+  expect(chip.PB6.mode).to.equal(OUTPUT)
+  expect(tr.PB6.level).to.equal(0)
+
+  writeRegister(CIDDRA, 0xff)
+  // PBON gets reset
+  writeRegister(CIACRA, 1 << CRA_START)
+  expect(chip.PB6.mode).to.equal(OUTPUT)
 }
 
 export function taIrqDefault({ tr, writeRegister, readRegister }) {

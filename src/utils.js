@@ -65,10 +65,6 @@ export function setMode(mode, ...pins) {
   }
 }
 
-export function readBit(value, bit) {
-  return (value >> bit) & 1
-}
-
 export function bitSet(value, bit) {
   return (value & (1 << bit)) > 0
 }

@@ -89,6 +89,8 @@ export function control(chip, registers, latches) {
     if (bitSet(value, CRA_SP)) {
       chip.SP.mode = OUTPUT
       chip.CNT.mode = OUTPUT
+      chip.SP.level = 0
+      chip.CNT.level = 0
     } else {
       chip.SP.mode = INPUT
       chip.CNT.mode = INPUT

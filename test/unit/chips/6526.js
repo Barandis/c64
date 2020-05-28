@@ -29,6 +29,7 @@ import {
   taCntDec,
   taIrqDefault,
   taIrqFlagSet,
+  taPbRemove,
 } from "./6526/timer-a"
 import {
   tbDefault,
@@ -44,6 +45,7 @@ import {
   tbCntUnderDec,
   tbIrqDefault,
   tbIrqFlagSet,
+  tbPbRemove,
 } from "./6526/timer-b"
 import {
   todAdvance,
@@ -61,6 +63,17 @@ import {
   todIrqDefault,
   todIrqFlagSet,
 } from "./6526/tod"
+import {
+  spInput,
+  spOutput,
+  spReady,
+  spIrqRxDefault,
+  spIrqTxDefault,
+  spIrqRxFlagSet,
+  spIrqTxFlagSet,
+  spInputWrite,
+} from "./6526/serial"
+import { reset, flagFlagReset, flagDefault, flagFlagSet } from "./6526/misc"
 
 describe("6526 CIA", () => {
   let chip
@@ -130,6 +143,7 @@ describe("6526 CIA", () => {
       it("does not restart the timer in one-shot mode", test(taOneShot))
       it("pulses output to PB6 when PBON enabled", test(taPbPulse))
       it("can toggle PB6 output", test(taPbToggle))
+      it("can revert PB6 back to port control", test(taPbRemove))
 
       describe("interrupts", () => {
         it("does not fire an IRQ by default", test(taIrqDefault))
@@ -149,6 +163,7 @@ describe("6526 CIA", () => {
       it("does not restart the timer in one-shot mode", test(tbOneShot))
       it("pulses output to PB7 when PBON enabled", test(tbPbPulse))
       it("can toggle PB7 output", test(tbPbToggle))
+      it("can revert PB7 back to port control", test(tbPbRemove))
 
       describe("interrupts", () => {
         it("does not fire an IRQ by default", test(tbIrqDefault))
@@ -174,6 +189,32 @@ describe("6526 CIA", () => {
     describe("alarm", () => {
       it("does not fire an IRQ by default", test(todIrqDefault))
       it("fires an IRQ if the appropriate flag is set", test(todIrqFlagSet))
+    })
+  })
+
+  describe("serial port", () => {
+    it("can read in a byte strobed with CNT", test(spInput))
+    it("ignores values put into SDR during receive", test(spInputWrite))
+    it("can send out a byte strobed by timer A", test(spOutput))
+    it("continues sending if a value is available in time", test(spReady))
+
+    describe("interrupts", () => {
+      it("does not fire an IRQ on receive by default", test(spIrqRxDefault))
+      it("does not fire an IRQ on transmit by default", test(spIrqTxDefault))
+      it("fires an IRQ on receive if the appropriate flag is set", test(spIrqRxFlagSet))
+      it("fires an IRQ on transmit if the appropriate flag is set", test(spIrqTxFlagSet))
+    })
+  })
+
+  describe("miscellaneous pin functions", () => {
+    describe("reset", () => {
+      it("resets all registers, data pins, CNT and _IRQ", test(reset))
+    })
+
+    describe("flag", () => {
+      it("does not fire an IRQ by default when cleared", test(flagDefault))
+      it("does fire an IRQ when cleared when ICR flag set", test(flagFlagSet))
+      it("does not fire an IRQ when cleared when ICR flag reset", test(flagFlagReset))
     })
   })
 })

@@ -24,6 +24,7 @@ import {
   ICR_TB,
   ICR_IR,
   ICR_SC,
+  CIDDRB,
 } from "chips/6526/constants"
 import { OUTPUT } from "components/pin"
 import { bitSet } from "utils"
@@ -211,6 +212,20 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
     expect(tr.PB7.level).to.equal((j + 1) % 2)
     tr.O2.clear()
   }
+}
+
+export function tbPbRemove({ chip, tr, writeRegister }) {
+  writeRegister(TIMBLO, 5)
+  writeRegister(TIMBHI, 0)
+  writeRegister(CIACRB, (1 << CRB_LOAD) | (1 << CRB_PBON))
+
+  expect(chip.PB7.mode).to.equal(OUTPUT)
+  expect(tr.PB7.level).to.equal(0)
+
+  writeRegister(CIDDRB, 0xff)
+  // PBON gets reset
+  writeRegister(CIACRB, 1 << CRB_START)
+  expect(chip.PB7.mode).to.equal(OUTPUT)
 }
 
 export function tbIrqDefault({ tr, writeRegister, readRegister }) {
