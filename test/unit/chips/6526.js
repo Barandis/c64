@@ -15,6 +15,7 @@ import {
   pdrSend,
   pdrCombo,
   pdrTimerOut,
+  pdrTriggerPc,
 } from "./6526/ports"
 import {
   taDefault,
@@ -44,6 +45,22 @@ import {
   tbIrqDefault,
   tbIrqFlagSet,
 } from "./6526/timer-b"
+import {
+  todAdvance,
+  todAdvance50Hz,
+  todSecond,
+  todMinute,
+  todHour,
+  todAmPm,
+  todPmAm,
+  todBcdSec,
+  todBcdMin,
+  todBcdHour,
+  todNoUpdate,
+  todHalt,
+  todIrqDefault,
+  todIrqFlagSet,
+} from "./6526/tod"
 
 describe("6526 CIA", () => {
   let chip
@@ -99,6 +116,7 @@ describe("6526 CIA", () => {
     it("can send data on all 8 pins", test(pdrSend))
     it("can send and receive on different pins", test(pdrCombo))
     it("cannot affect pins being used as timer outputs", test(pdrTimerOut))
+    it("triggers _PC on port B register reads and writes", test(pdrTriggerPc))
   })
 
   describe("interval timers", () => {
@@ -136,6 +154,26 @@ describe("6526 CIA", () => {
         it("does not fire an IRQ by default", test(tbIrqDefault))
         it("fires an IRQ if the appropriate flag is set", test(tbIrqFlagSet))
       })
+    })
+  })
+
+  describe("time-of-day clock", () => {
+    it("advances 1/10 sec every 6 TOD ticks", test(todAdvance))
+    it("advances 1/10 sec every 5 TOD ticks at 50Hz", test(todAdvance50Hz))
+    it("advances seconds every 10 tenths", test(todSecond))
+    it("counts seconds in BCD", test(todBcdSec))
+    it("advances minutes ever 60 seconds", test(todMinute))
+    it("counts minutes in BCD", test(todBcdMin))
+    it("advances hours ever 60 minutes", test(todHour))
+    it("counts hours in BCD", test(todBcdHour))
+    it("goes to PM after 11:59:59.9 AM", test(todAmPm))
+    it("goes to AM after 11:59:59.9 PM", test(todPmAm))
+    it("doesn't update registers after reading hour until tenths read", test(todNoUpdate))
+    it("doesn't run after writing hour until tenths written", test(todHalt))
+
+    describe("alarm", () => {
+      it("does not fire an IRQ by default", test(todIrqDefault))
+      it("fires an IRQ if the appropriate flag is set", test(todIrqFlagSet))
     })
   })
 })

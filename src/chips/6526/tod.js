@@ -61,7 +61,7 @@ export function tod(chip, registers, latches) {
     if (pin.high && !todHalted) {
       pulseCount++
       // runs if 1/10 second has elapsed, counting pulses for that time at either 50Hz or 60Hz
-      if (pulseCount === bitSet(registers[CIACRA], CRA_TOD) ? 5 : 6) {
+      if (pulseCount === (bitSet(registers[CIACRA], CRA_TOD) ? 5 : 6)) {
         pulseCount = 0
         incrementTenths()
         if (!todLatched) {
@@ -72,16 +72,17 @@ export function tod(chip, registers, latches) {
           registers[TODHRS] = hours
         }
         // If time === alarm, fire an interrupt if it's enabled in the ICR
-        setBit(registers[CIAICR], ICR_ALRM)
         if (
           tenths === latches[TODTEN] &&
           seconds === latches[TODSEC] &&
           minutes === latches[TODMIN] &&
-          hours === latches[TODHRS] &&
-          bitSet(latches[CIAICR], ICR_ALRM)
+          hours === latches[TODHRS]
         ) {
-          setBit(registers[CIAICR], ICR_IR)
-          chip._IRQ.clear()
+          registers[CIAICR] = setBit(registers[CIAICR], ICR_ALRM)
+          if (bitSet(latches[CIAICR], ICR_ALRM)) {
+            registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
+            chip._IRQ.clear()
+          }
         }
       }
     }
@@ -113,23 +114,22 @@ export function tod(chip, registers, latches) {
 
   function incrementHours() {
     hours = bcdIncrement(hours)
-    if (bcdGte(hours & 0x7f, 13)) {
+    if ((hours & 0x7f) === 0x12) {
+      hours = toggleBit(hours, 7)
+    } else if (bcdGte(hours & 0x7f, 13)) {
       hours = (hours & 0x80) | 1
-      toggleBit(hours, 7)
     }
   }
 
-  // Adds 1 to a BCD number, accounting for carry. Rolls over to 0 if the prior value was 99.
+  // Adds 1 to a BCD number, accounting for carry. Rolling over the tens digit isn't implemented
+  // because we never have a number over 59 anyway.
   function bcdIncrement(value) {
     let digit0 = (value & 0x0f) + 1
     let digit1 = (value & 0xf0) >> 4
 
-    if (digit0 === 10) {
+    if (digit0 === 0x0a) {
       digit0 = 0
       digit1++
-      if (digit1 === 10) {
-        digit1 = 0
-      }
     }
 
     return (digit1 << 4) | digit0
@@ -152,7 +152,13 @@ export function tod(chip, registers, latches) {
   }
 
   function readTenths() {
-    todLatched = false
+    if (todLatched) {
+      todLatched = false
+      registers[TODTEN] = tenths
+      registers[TODSEC] = seconds
+      registers[TODMIN] = minutes
+      registers[TODHRS] = hours
+    }
     return registers[TODTEN]
   }
 
@@ -167,7 +173,7 @@ export function tod(chip, registers, latches) {
   }
 
   function writeMinutes(value) {
-    const masked = value & 0x0f
+    const masked = value & 0x7f
     if (bitSet(registers[CIACRB], CRB_ALRM)) {
       latches[TODMIN] = masked
     } else {

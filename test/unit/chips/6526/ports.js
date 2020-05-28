@@ -138,3 +138,40 @@ export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
   expect(readRegister(CIAPRB)).to.equal(0b00111111)
   expect(pinsToValue(...pbTraces)).to.equal(0b00111111)
 }
+
+export function pdrTriggerPc({ tr, readRegister, writeRegister, paTraces, pbTraces }) {
+  // Reading port A does not trigger _PC
+  writeRegister(CIDDRA, 0x00)
+  valueToPins(0xff, ...paTraces)
+  expect(readRegister(CIAPRA)).to.equal(0xff)
+  expect(tr._PC.level).to.equal(1)
+
+  // Writing port A does not trigger _PC
+  writeRegister(CIDDRA, 0xff)
+  writeRegister(CIAPRA, 0x2f)
+  expect(pinsToValue(...paTraces)).to.equal(0x2f)
+  expect(tr._PC.level).to.equal(1)
+
+  // Reading port B does trigger _PC
+  writeRegister(CIDDRB, 0x00)
+  valueToPins(0xff, ...pbTraces)
+  expect(tr._PC.level).to.equal(1)
+  expect(readRegister(CIAPRB)).to.equal(0xff)
+  expect(tr._PC.level).to.equal(0)
+
+  // _PC resets on the next clock high
+  tr.O2.set()
+  expect(tr._PC.level).to.equal(1)
+  tr.O2.clear()
+
+  // Writing port B does trigger _PC
+  writeRegister(CIDDRB, 0xff)
+  expect(tr._PC.level).to.equal(1)
+  writeRegister(CIAPRB, 0x2f)
+  expect(pinsToValue(...pbTraces)).to.equal(0x2f)
+  expect(tr._PC.level).to.equal(0)
+
+  tr.O2.set()
+  expect(tr._PC.level).to.equal(1)
+  tr.O2.clear()
+}
