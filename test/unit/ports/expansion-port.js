@@ -25,7 +25,7 @@ describe("Expansion port", () => {
       newPin(3, "VCC2", UNCONNECTED),
       newPin(4, "_IRQ", INPUT),
       newPin(5, "R__W", OUTPUT),
-      newPin(6, "DOT", OUTPUT),
+      newPin(6, "φDOT", OUTPUT),
       newPin(7, "_IO1", OUTPUT),
       newPin(8, "_GAME", INPUT),
       newPin(9, "_EXROM", INPUT),
@@ -46,7 +46,7 @@ describe("Expansion port", () => {
       newPin(24, "_ROMH", OUTPUT),
       newPin(25, "_RESET", INPUT),
       newPin(26, "_NMI", INPUT),
-      newPin(27, "O2", OUTPUT),
+      newPin(27, "φ2", OUTPUT),
       newPin(28, "A15", OUTPUT),
       newPin(29, "A14", OUTPUT),
       newPin(30, "A13", OUTPUT),
@@ -82,13 +82,13 @@ describe("Expansion port", () => {
 
   it("writes to 24 pins", () => {
     p.R__W.level = 1
-    p.DOT.level = 2
+    p.φDOT.level = 2
     p._IO1.level = 3
     p._IO2.level = 4
     p._ROML.level = 5
     p.BA.level = 6
     p._ROMH.level = 7
-    p.O2.level = 8
+    p.φ2.level = 8
     p.A15.level = 9
     p.A14.level = 10
     p.A13.level = 11
@@ -107,13 +107,13 @@ describe("Expansion port", () => {
     p.A0.level = 24
 
     expect(c.R__W.level).to.equal(1)
-    expect(c.DOT.level).to.equal(2)
+    expect(c.φDOT.level).to.equal(2)
     expect(c._IO1.level).to.equal(3)
     expect(c._IO2.level).to.equal(4)
     expect(c._ROML.level).to.equal(5)
     expect(c.BA.level).to.equal(6)
     expect(c._ROMH.level).to.equal(7)
-    expect(c.O2.level).to.equal(8)
+    expect(c.φ2.level).to.equal(8)
     expect(c.A15.level).to.equal(9)
     expect(c.A14.level).to.equal(10)
     expect(c.A13.level).to.equal(11)

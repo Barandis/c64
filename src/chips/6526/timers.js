@@ -44,7 +44,7 @@ export function timers(chip, registers, latches) {
   // registers are written to, the contents of the register don't actually change; the value gets
   // latched and becomes the new value that the timer resets itself to after completion.
 
-  chip.O2.addListener(pin => {
+  chip.φ2.addListener(pin => {
     if (pin.high) {
       const cra = registers[CIACRA]
       const crb = registers[CIACRB]

@@ -32,10 +32,10 @@ export function taClockDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_START)
 
   for (let i = 1; i <= 10; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMAHI)).to.equal(0xff)
     expect(readRegister(TIMALO)).to.equal(0xff - i)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -61,29 +61,29 @@ export function taRegRollover({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_START)
 
   // One clock pulse
-  tr.O2.set()
+  tr.φ2.set()
   expect(readRegister(TIMALO)).to.equal(0xff)
   expect(readRegister(TIMAHI)).to.equal(0xfe)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function taStop({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_START)
 
   for (let i = 1; i <= 5; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMAHI)).to.equal(0xff)
     expect(readRegister(TIMALO)).to.equal(0xff - i)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 
   writeRegister(CIACRA, 0)
 
   for (let i = 1; i <= 5; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMAHI)).to.equal(0xff)
     expect(readRegister(TIMALO)).to.equal(0xfa)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -93,10 +93,10 @@ export function taContinue({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, (1 << CRA_LOAD) | (1 << CRA_START))
 
   for (let i = 0; i < 4; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMALO)).to.equal((i % 2) + 1)
     expect(readRegister(TIMAHI)).to.equal(0)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -105,20 +105,20 @@ export function taOneShot({ tr, writeRegister, readRegister }) {
   writeRegister(TIMAHI, 0)
   writeRegister(CIACRA, (1 << CRA_LOAD) | (1 << CRA_RUN) | (1 << CRA_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   expect(readRegister(TIMALO)).to.equal(1)
   expect(readRegister(TIMAHI)).to.equal(0)
-  tr.O2.clear()
-  tr.O2.set()
+  tr.φ2.clear()
+  tr.φ2.set()
   expect(readRegister(TIMALO)).to.equal(2)
   expect(readRegister(TIMAHI)).to.equal(0)
   // START bit has been cleared
   expect(readRegister(CIACRA)).to.equal(1 << CRA_RUN)
-  tr.O2.clear()
-  tr.O2.set()
+  tr.φ2.clear()
+  tr.φ2.set()
   expect(readRegister(TIMALO)).to.equal(2)
   expect(readRegister(TIMAHI)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
@@ -133,13 +133,13 @@ export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
-      tr.O2.set()
+      tr.φ2.set()
       expect(tr.PB6.level).to.equal(0)
-      tr.O2.clear()
+      tr.φ2.clear()
     }
-    tr.O2.set()
+    tr.φ2.set()
     expect(tr.PB6.level).to.equal(1)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -155,13 +155,13 @@ export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
-      tr.O2.set()
+      tr.φ2.set()
       expect(tr.PB6.level).to.equal(j % 2)
-      tr.O2.clear()
+      tr.φ2.clear()
     }
-    tr.O2.set()
+    tr.φ2.set()
     expect(tr.PB6.level).to.equal((j + 1) % 2)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -184,7 +184,7 @@ export function taIrqDefault({ tr, writeRegister, readRegister }) {
   writeRegister(TIMAHI, 0)
   writeRegister(CIACRA, (1 << CRA_LOAD) | (1 << CRA_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   // IRQ line to CPU; low indicates a request, no request made here
   expect(tr._IRQ.low).to.be.false
   // Have to read this once, as the read clears it
@@ -195,7 +195,7 @@ export function taIrqDefault({ tr, writeRegister, readRegister }) {
   expect(bitSet(icr, ICR_IR)).to.be.false
   // Expect the ICR to be clear since it was read above
   expect(readRegister(CIAICR)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function taIrqFlagSet({ tr, writeRegister, readRegister }) {
@@ -204,7 +204,7 @@ export function taIrqFlagSet({ tr, writeRegister, readRegister }) {
   writeRegister(TIMAHI, 0)
   writeRegister(CIACRA, (1 << CRA_LOAD) | (1 << CRA_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   // Line low, interrupt requested
   expect(tr._IRQ.low).to.be.true
   const icr = readRegister(CIAICR)
@@ -214,5 +214,5 @@ export function taIrqFlagSet({ tr, writeRegister, readRegister }) {
   // _IRQ signal is cleared by reading the ICR register
   expect(tr._IRQ.low).to.be.false
   expect(readRegister(CIAICR)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }

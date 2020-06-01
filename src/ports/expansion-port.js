@@ -73,8 +73,8 @@ export function newExpansionPort() {
     newPin(4, "_IRQ", OUTPUT),
     newPin(D, "_NMI", OUTPUT),
 
-    newPin(6, "DOT", INPUT),
-    newPin(E, "O2", INPUT),
+    newPin(6, "φDOT", INPUT),
+    newPin(E, "φ2", INPUT),
 
     newPin(C, "_RESET", OUTPUT),
 

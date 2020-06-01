@@ -48,10 +48,9 @@ export function new6510() {
     newPin(24, "P5", OUTPUT),
 
     // Clock pins. One is an input (φ0) and one an output (φ2); the signal on the input is merely
-    // forwarded to the output as a clock reference for other chips on the board. The names use "O"
-    // instead of "φ" for ease of typing.
-    newPin(1, "O0", INPUT),
-    newPin(39, "O2", OUTPUT, 0),
+    // forwarded to the output as a clock reference for other chips on the board.
+    newPin(1, "φ0", INPUT),
+    newPin(39, "φ2", OUTPUT, 0),
 
     // Read/write control. This pin is used to inform memory devices whether the CPU intends to
     // read from them or write to them.

@@ -104,7 +104,7 @@ export function ports(chip, registers) {
 
   // Raises the _PC pin every cycle, as reading or writing the PB register sets that pin low for
   // one cycle
-  chip.O2.addListener(pin => {
+  chip.φ2.addListener(pin => {
     if (pin.high) {
       chip._PC.set()
     }

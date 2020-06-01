@@ -38,10 +38,10 @@ export function tbClockDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_START)
 
   for (let i = 1; i <= 10; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMBHI)).to.equal(0xff)
     expect(readRegister(TIMBLO)).to.equal(0xff - i)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -64,8 +64,8 @@ export function tbUnderDec({ tr, writeRegister, readRegister }) {
 
   for (let j = 1; j <= 10; j++) {
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
     }
     expect(readRegister(TIMBLO)).to.equal(0xff - j)
     expect(readRegister(TIMBHI)).to.equal(0xff)
@@ -81,8 +81,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
   tr.CNT.level = 0
   for (let j = 1; j <= 5; j++) {
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
     }
     expect(readRegister(TIMBLO)).to.equal(0xff)
     expect(readRegister(TIMBHI)).to.equal(0xff)
@@ -91,8 +91,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
   tr.CNT.level = 1
   for (let j = 1; j <= 5; j++) {
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
     }
     expect(readRegister(TIMBLO)).to.equal(0xff - j)
     expect(readRegister(TIMBHI)).to.equal(0xff)
@@ -110,29 +110,29 @@ export function tbRegRollover({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_START)
 
   // One clock pulse
-  tr.O2.set()
+  tr.φ2.set()
   expect(readRegister(TIMBLO)).to.equal(0xff)
   expect(readRegister(TIMBHI)).to.equal(0xfe)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function tbStop({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_START)
 
   for (let i = 1; i <= 5; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMBHI)).to.equal(0xff)
     expect(readRegister(TIMBLO)).to.equal(0xff - i)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 
   writeRegister(CIACRB, 0)
 
   for (let i = 1; i <= 5; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMBHI)).to.equal(0xff)
     expect(readRegister(TIMBLO)).to.equal(0xfa)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -142,10 +142,10 @@ export function tbContinue({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, (1 << CRB_LOAD) | (1 << CRB_START))
 
   for (let i = 0; i < 4; i++) {
-    tr.O2.set()
+    tr.φ2.set()
     expect(readRegister(TIMBLO)).to.equal((i % 2) + 1)
     expect(readRegister(TIMBHI)).to.equal(0)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -154,20 +154,20 @@ export function tbOneShot({ tr, writeRegister, readRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, (1 << CRB_LOAD) | (1 << CRB_RUN) | (1 << CRB_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   expect(readRegister(TIMBLO)).to.equal(1)
   expect(readRegister(TIMBHI)).to.equal(0)
-  tr.O2.clear()
-  tr.O2.set()
+  tr.φ2.clear()
+  tr.φ2.set()
   expect(readRegister(TIMBLO)).to.equal(2)
   expect(readRegister(TIMBHI)).to.equal(0)
   // START bit has been cleared
   expect(readRegister(CIACRB)).to.equal(1 << CRB_RUN)
-  tr.O2.clear()
-  tr.O2.set()
+  tr.φ2.clear()
+  tr.φ2.set()
   expect(readRegister(TIMBLO)).to.equal(2)
   expect(readRegister(TIMBHI)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
@@ -182,13 +182,13 @@ export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
-      tr.O2.set()
+      tr.φ2.set()
       expect(tr.PB7.level).to.equal(0)
-      tr.O2.clear()
+      tr.φ2.clear()
     }
-    tr.O2.set()
+    tr.φ2.set()
     expect(tr.PB7.level).to.equal(1)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -204,13 +204,13 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
-      tr.O2.set()
+      tr.φ2.set()
       expect(tr.PB7.level).to.equal(j % 2)
-      tr.O2.clear()
+      tr.φ2.clear()
     }
-    tr.O2.set()
+    tr.φ2.set()
     expect(tr.PB7.level).to.equal((j + 1) % 2)
-    tr.O2.clear()
+    tr.φ2.clear()
   }
 }
 
@@ -233,7 +233,7 @@ export function tbIrqDefault({ tr, writeRegister, readRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, (1 << CRB_LOAD) | (1 << CRB_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   // IRQ line to CPU; low indicates a request, no request made here
   expect(tr._IRQ.low).to.be.false
   // Have to read this once, as the read clears it
@@ -244,7 +244,7 @@ export function tbIrqDefault({ tr, writeRegister, readRegister }) {
   expect(bitSet(icr, ICR_IR)).to.be.false
   // Expect the ICR to be clear since it was read above
   expect(readRegister(CIAICR)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }
 
 export function tbIrqFlagSet({ tr, writeRegister, readRegister }) {
@@ -253,7 +253,7 @@ export function tbIrqFlagSet({ tr, writeRegister, readRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, (1 << CRB_LOAD) | (1 << CRB_START))
 
-  tr.O2.set()
+  tr.φ2.set()
   // Line low, interrupt requested
   expect(tr._IRQ.low).to.be.true
   const icr = readRegister(CIAICR)
@@ -263,5 +263,5 @@ export function tbIrqFlagSet({ tr, writeRegister, readRegister }) {
   // _IRQ signal is cleared by reading the ICR register
   expect(tr._IRQ.low).to.be.false
   expect(readRegister(CIAICR)).to.equal(0)
-  tr.O2.clear()
+  tr.φ2.clear()
 }

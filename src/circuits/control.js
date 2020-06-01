@@ -154,21 +154,21 @@ export function newControlCircuit(
 
   // Clocks
 
-  // U1: 6526 CIA (receives O2, TOD)
-  // U2: 6526 CIA (receives O2, TOD)
-  // U7: 6510 CPU (receives O0, provides O2)
-  // U18: 6581 SID (receives O2)
-  // U19: 6567 VIC (receives ODOT, OCOLOR, provides O0)
-  // CN6: Expansion port (receives ODOT, O2)
+  // U1: 6526 CIA (receives φ2, TOD)
+  // U2: 6526 CIA (receives φ2, TOD)
+  // U7: 6510 CPU (receives φ0, provides φ2)
+  // U18: 6581 SID (receives φ2)
+  // U19: 6567 VIC (receives φDOT, φCOLOR, provides φ0)
+  // CN6: Expansion port (receives φDOT, φ2)
 
   // Some of these don't really come from anywhere because we are not emulating the generation of
   // clock pulses. So there is no source for OCOLOR, ODOT, or TOD; the software will provide those
   // clock signals. (In fact, since we're also not emulating VIC output RF signals, there's no
   // *purpose* for OCOLOR and the only purpose for ODOT is providing it to the expansion port.)
-  const OCOLOR = newTrace(U19.OCOLOR)
-  const ODOT = newTrace(U19.OIN, CN6.DOT)
-  const O0 = newTrace(U19.O0, U7.O0)
-  const O2 = newTrace(U7.O2, U1.O2, U2.O2, U18.O2, CN6.O2)
+  const φCOLOR = newTrace(U19.φCOLOR)
+  const φDOT = newTrace(U19.φIN, CN6.φDOT)
+  const φ0 = newTrace(U19.φ0, U7.φ0)
+  const φ2 = newTrace(U7.φ2, U1.φ2, U2.φ2, U18.φ2, CN6.φ2)
 
   return {
     _CAS,
@@ -207,9 +207,9 @@ export function newControlCircuit(
     _RES,
     _NMI,
     _IRQ,
-    OCOLOR,
-    ODOT,
-    O0,
-    O2,
+    φCOLOR,
+    φDOT,
+    φ0,
+    φ2,
   }
 }

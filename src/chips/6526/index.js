@@ -114,9 +114,8 @@ export function new6526() {
     // serial port pin.
     newPin(40, "CNT", INPUT),
 
-    // System clock input. In the 6526 this is expected to be a 1 MHz clock. It's actually typically
-    // named "φ2" but that's difficult to type.
-    newPin(25, "O2", INPUT),
+    // System clock input. In the 6526 this is expected to be a 1 MHz clock.
+    newPin(25, "φ2", INPUT),
 
     // TOD clock input. This can be either 50Hz or 60Hz, selectable from a control register.
     newPin(19, "TOD", INPUT),

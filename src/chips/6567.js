@@ -60,10 +60,10 @@ export function new6567() {
 
     // Clock signal pins. Two clocks are inputs - the color clock (φcolor) at 14.31818 MHz and the
     // dot clock (φin) at 8.18 MHz -  and the latter is divided by 8 to create the system clock (φ0)
-    // output that drives the CPU. The names here use "O" in place of "φ" for ease of typing.
-    newPin(21, "OCOLOR", INPUT),
-    newPin(22, "OIN", INPUT),
-    newPin(17, "O0", OUTPUT),
+    // output that drives the CPU.
+    newPin(21, "φCOLOR", INPUT),
+    newPin(22, "φIN", INPUT),
+    newPin(17, "φ0", OUTPUT),
 
     // Light pen pin. A transition to low on this pin indicates that a light pen is connected and
     // has activated.

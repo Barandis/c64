@@ -160,9 +160,9 @@ export function pdrTriggerPc({ tr, readRegister, writeRegister, paTraces, pbTrac
   expect(tr._PC.level).to.equal(0)
 
   // _PC resets on the next clock high
-  tr.O2.set()
+  tr.φ2.set()
   expect(tr._PC.level).to.equal(1)
-  tr.O2.clear()
+  tr.φ2.clear()
 
   // Writing port B does trigger _PC
   writeRegister(CIDDRB, 0xff)
@@ -171,7 +171,7 @@ export function pdrTriggerPc({ tr, readRegister, writeRegister, paTraces, pbTrac
   expect(pinsToValue(...pbTraces)).to.equal(0x2f)
   expect(tr._PC.level).to.equal(0)
 
-  tr.O2.set()
+  tr.φ2.set()
   expect(tr._PC.level).to.equal(1)
-  tr.O2.clear()
+  tr.φ2.clear()
 }

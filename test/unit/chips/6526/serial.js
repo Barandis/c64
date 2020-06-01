@@ -53,8 +53,8 @@ export function spOutput({ tr, writeRegister }) {
   writeRegister(CIASDR, data)
 
   // Initial clock, before first timer underflow
-  tr.O2.set()
-  tr.O2.clear()
+  tr.φ2.set()
+  tr.φ2.clear()
   expect(tr.SP.level).to.equal(0)
   expect(tr.CNT.level).to.equal(0)
 
@@ -62,16 +62,16 @@ export function spOutput({ tr, writeRegister }) {
   for (let bit = 7; bit >= 0; bit--) {
     // First underflow, CNT is high and SP is the bit value
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
       expect(tr.CNT.level).to.equal(1)
       expect(tr.SP.level).to.equal((data >> bit) & 1)
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT stays high after a value is done
     // being sent) but SP retains its value
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
       expect(tr.CNT.level).to.equal(bit === 0 ? 1 : 0)
       expect(tr.SP.level).to.equal((data >> bit) & 1)
     }
@@ -88,8 +88,8 @@ export function spReady({ tr, writeRegister }) {
   writeRegister(CIASDR, 0x00)
 
   // Initial clock, before first timer underflow
-  tr.O2.set()
-  tr.O2.clear()
+  tr.φ2.set()
+  tr.φ2.clear()
   expect(tr.SP.level).to.equal(0)
   expect(tr.CNT.level).to.equal(0)
 
@@ -99,24 +99,24 @@ export function spReady({ tr, writeRegister }) {
 
   // pulse clock 32 times to shift out 8 bits from first value
   for (let i = 0; i < 32; i++) {
-    tr.O2.set()
-    tr.O2.clear()
+    tr.φ2.set()
+    tr.φ2.clear()
   }
 
   // 8 loops for 8 bits, MSB first
   for (let bit = 7; bit >= 0; bit--) {
     // First underflow, CNT is high and SP is the bit value
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
       expect(tr.CNT.level).to.equal(1)
       expect(tr.SP.level).to.equal((data >> bit) & 1)
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT stays high after a value is done
     // being sent) but SP retains its value
     for (let i = 0; i < 2; i++) {
-      tr.O2.set()
-      tr.O2.clear()
+      tr.φ2.set()
+      tr.φ2.clear()
       expect(tr.CNT.level).to.equal(bit === 0 ? 1 : 0)
       expect(tr.SP.level).to.equal((data >> bit) & 1)
     }
@@ -148,14 +148,14 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   writeRegister(CIASDR, data)
 
   // Initial clock, before first timer underflow
-  tr.O2.set()
-  tr.O2.clear()
+  tr.φ2.set()
+  tr.φ2.clear()
   expect(tr.SP.level).to.equal(0)
   expect(tr.CNT.level).to.equal(0)
 
   for (let i = 0; i < 32; i++) {
-    tr.O2.set()
-    tr.O2.clear()
+    tr.φ2.set()
+    tr.φ2.clear()
   }
 
   expect(tr._IRQ.low).to.be.false
@@ -191,14 +191,14 @@ export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   writeRegister(CIASDR, data)
 
   // Initial clock, before first timer underflow
-  tr.O2.set()
-  tr.O2.clear()
+  tr.φ2.set()
+  tr.φ2.clear()
   expect(tr.SP.level).to.equal(0)
   expect(tr.CNT.level).to.equal(0)
 
   for (let i = 0; i < 32; i++) {
-    tr.O2.set()
-    tr.O2.clear()
+    tr.φ2.set()
+    tr.φ2.clear()
   }
 
   expect(tr._IRQ.low).to.be.true
