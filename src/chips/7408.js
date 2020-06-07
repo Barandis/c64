@@ -1,16 +1,16 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
-
-// Emulation of the 7408 series of quad 2-input AND gates. The variant used in the Commodore 64 was
-// the 74LS08, but differences between variants boil down mostly to timing and levels, and this
-// emulation should serve for all of them.
+// Copyright (c) 2020 Thomas J. Otterson
 //
-// The chip consists of four independent dual-input AND gates. The operation is what one would
-// expect from AND gates - if both inputs are high, the output is high; otherwise the output is low.
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+// Emulation of the 7408 series of quad 2-input AND gates. The variant
+// used in the Commodore 64 was the 74LS08, but differences between
+// variants boil down mostly to timing and levels, and this emulation
+// should serve for all of them.
+//
+// The chip consists of four independent dual-input AND gates. The
+// operation is what one would expect from AND gates - if both inputs
+// are high, the output is high; otherwise the output is low.
 //
 // On the C64 schematic, U27 is a 74LS08.
 

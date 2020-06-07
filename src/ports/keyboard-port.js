@@ -1,9 +1,7 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { newPort } from "components/port"

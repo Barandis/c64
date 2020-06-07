@@ -1,34 +1,40 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import { newTrace } from "components/trace"
 
-export function newIoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3, CN4, CN8, CN9 }) {
+export function newIoCircuit(
+  { U1, U2, U7, U8, U18, U19, U28 },
+  { CN1, CN2, CN3, CN4, CN8, CN9 }
+) {
   // Keyboard/control ports
 
   // U1: 6526 CIA (connects to keyboard matrix)
   // U18: 6581 SID (receives pot lines)
   // U19: 6567 VIC (receives light pen line)
-  // U28: 4066 Quad bilateral switch (switches pot lines on for a portion of the polling cycle)
+  // U28: 4066 Quad bilateral switch (switches pot lines on for a
+  //      portion of the polling cycle)
   // CN1: Keyboard port
   // CN8: Control port 2
   // CN9: Control port 1
 
-  // Lines PB6 and PB7 from the CIA also have timer output functions, which is why they're connected
-  // to the bilateral switch controls. This limits the rate at which the potentiometers from the
-  // control ports are sampled. These poteniometers are typically game paddles, though they can in
-  // theory be other devices based on a variable R/C circuit compatible with what the SID A/D
-  // converters expect (this is not normal A/D conversion but is instead based on timing the
+  // Lines PB6 and PB7 from the CIA also have timer output functions,
+  // which is why they're connected to the bilateral switch controls.
+  // This limits the rate at which the potentiometers from the control
+  // ports are sampled. These poteniometers are typically game paddles,
+  // though they can in theory be other devices based on a variable R/C
+  // circuit compatible with what the SID A/D converters expect (this is
+  // not normal A/D conversion but is instead based on timing the
   // discharge from an R/C circuit).
   //
-  // These are merely the connections between the CIA and ports. The programming of those
-  // connections (data direction, polling, etc.) is done by KERNAL ROM routines.
+  // These are merely the connections between the CIA and ports. The
+  // programming of those connections (data direction, polling, etc.) is
+  // done by KERNAL ROM routines.
   //
-  // The keyboard line from the RESTORE key is already handled in the NMI circuit in 'control.js'.
+  // The keyboard line from the RESTORE key is already handled in the
+  // NMI circuit in 'control.js'.
   const COL0 = newTrace(U1.PA0, CN1.COL0, CN8.JOYB0)
   const COL1 = newTrace(U1.PA1, CN1.COL1, CN8.JOYB1)
   const COL2 = newTrace(U1.PA2, CN1.COL2, CN8.JOYB2)
@@ -56,15 +62,17 @@ export function newIoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3,
 
   // U1: 6526 CIA (provides one serial port)
   // U2: 6526 CIA (provides one serial port plus a parallel port)
-  // U8: 7406 Hex inverter (inverts active-low lines going to the serial port)
+  // U8: 7406 Hex inverter (inverts active-low lines going to the serial
+  //     port)
   // CN2: User port
   // CN4: Serial port
 
-  // These are merely the connections between the CIAs and the serial and user ports. Programming
-  // of these connections is done through KERNAL ROM routines.
+  // These are merely the connections between the CIAs and the serial
+  // and user ports. Programming of these connections is done through
+  // KERNAL ROM routines.
   //
-  // The _RESET line from both the user and the serial port has already been handled in the
-  // reset/interrupt circuitry in 'control.js'.
+  // The _RESET line from both the user and the serial port has already
+  // been handled in the reset/interrupt circuitry in 'control.js'.
   const PA2 = newTrace(U2.PA2, CN2.PA2)
   const PB0 = newTrace(U2.PB0, CN2.PB0)
   const PB1 = newTrace(U2.PB1, CN2.PB1)
@@ -74,7 +82,7 @@ export function newIoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3,
   const PB5 = newTrace(U2.PB5, CN2.PB5)
   const PB6 = newTrace(U2.PB6, CN2.PB6)
   const PB7 = newTrace(U2.PB7, CN2.PB7)
-  const _PC2 = newTrace(U2._PC, CN2._PC2) // not pulled up on the schematic?
+  const _PC2 = newTrace(U2._PC, CN2._PC2) // not pulled up on the schem?
   const _FLAG2 = newTrace(U2._FLAG, CN2._FLAG2).pullUp()
   const SP2 = newTrace(U2.SP, CN2.SP2).pullUp()
   const CNT2 = newTrace(U2.CNT, CN2.CNT2).pullUp()
@@ -99,52 +107,12 @@ export function newIoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3,
   const MOTOR = newTrace(U7.P5, CN3.MOTOR)
 
   return {
-    COL0,
-    COL1,
-    COL2,
-    COL3,
-    COL4,
-    COL5,
-    COL6,
-    COL7,
-    ROW0,
-    ROW1,
-    ROW2,
-    ROW3,
-    ROW4,
-    ROW5,
-    ROW6,
-    ROW7,
-    POTAX,
-    POTAY,
-    POTBX,
-    POTBY,
-    POTX,
-    POTY,
-    PA2,
-    PB0,
-    PB1,
-    PB2,
-    PB3,
-    PB4,
-    PB5,
-    PB6,
-    PB7,
-    _PC2,
-    _FLAG2,
-    SP1,
-    SP2,
-    CNT1,
-    CNT2,
-    ATN,
-    CLK,
-    DATA,
-    ATNOUT,
-    CLKOUT,
-    DATAOUT,
-    _SRQ,
-    WRITE,
-    SENSE,
-    MOTOR,
+    COL0, COL1, COL2, COL3, COL4, COL5, COL6, COL7,
+    ROW0, ROW1, ROW2, ROW3, ROW4, ROW5, ROW6, ROW7,
+    POTAX, POTAY, POTBX, POTBY, POTX, POTY,
+    PA2, PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
+    _PC2, _FLAG2, SP1, SP2, CNT1, CNT2,
+    ATN, CLK, DATA, ATNOUT, CLKOUT, DATAOUT, _SRQ,
+    WRITE, SENSE, MOTOR,
   }
 }

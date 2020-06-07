@@ -10,6 +10,7 @@
     "bundle": "cross-env NODE_ENV=production webpack --progress --colors --config webpack.config.js",
     "commit": "npx git-cz",
     "docs": "npm run clean:docs && jsdoc -c ./jsdoc.json",
+    "fix": "eslint ./src ./test --fix",
     "lint": "eslint ./src ./test",
     "test": "cross-env NODE_PATH=./src NODE_ENV=test mocha ./test --require @babel/register --reporter dot --recursive",
     "debug": "cross-env NODE_PATH=./src NODE_ENV=test DEBUG=1 mocha ./test --require @babel/register --reporter dot --recursive",
@@ -37,6 +38,7 @@
     "@babel/register": "^7.9.0",
     "@babel/runtime": "^7.9.6",
     "@istanbuljs/nyc-config-babel": "^3.0.0",
+    "@testdeck/mocha": "^0.1.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.0.0",
@@ -52,7 +54,6 @@
     "lint-staged": "^10.2.2",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
-    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
@@ -68,7 +69,6 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write",
       "eslint --fix"
     ]
   },

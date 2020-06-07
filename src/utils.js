@@ -1,9 +1,7 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
@@ -37,9 +35,9 @@ export function decode(base64) {
     e3 = lookup[base64.charCodeAt(i + 2)]
     e4 = lookup[base64.charCodeAt(i + 3)]
 
-    bytes[p++] = (e1 << 2) | (e2 >> 4)
-    bytes[p++] = ((e2 & 15) << 4) | (e3 >> 2)
-    bytes[p++] = ((e3 & 3) << 6) | (e4 & 63)
+    bytes[p++] = e1 << 2 | e2 >> 4
+    bytes[p++] = (e2 & 15) << 4 | e3 >> 2
+    bytes[p++] = (e3 & 3) << 6 | e4 & 63
   }
 
   return buffer
@@ -47,7 +45,7 @@ export function decode(base64) {
 
 export function valueToPins(value, ...pins) {
   for (let i = 0; i < pins.length; i++) {
-    pins[i].level = value === null ? null : (value >> i) & 1
+    pins[i].level = value === null ? null : value >> i & 1
   }
 }
 
@@ -66,15 +64,15 @@ export function setMode(mode, ...pins) {
 }
 
 export function bitSet(value, bit) {
-  return (value & (1 << bit)) > 0
+  return (value & 1 << bit) > 0
 }
 
 export function bitClear(value, bit) {
-  return (value & (1 << bit)) === 0
+  return (value & 1 << bit) === 0
 }
 
 export function setBit(value, bit) {
-  return value | (1 << bit)
+  return value | 1 << bit
 }
 
 export function clearBit(value, bit) {
@@ -82,5 +80,5 @@ export function clearBit(value, bit) {
 }
 
 export function toggleBit(value, bit) {
-  return value ^ (1 << bit)
+  return value ^ 1 << bit
 }

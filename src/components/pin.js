@@ -5,34 +5,43 @@
 
 // A pin on an IC package or a port.
 //
-// This is the sole interface between these devices and the outside world. Pins have a direction,
-// which indicates whether they're used by their chip/port for input, output, both, or neither; and
-// a level, which is the signal present on them. In digital circuits, this is generally 0 or 1,
-// though there's no reason a pin can't work with analog signals (and thus have any level at all).
+// This is the sole interface between these devices and the outside
+// world. Pins have a direction, which indicates whether they're used by
+// their chip/port for input, output, both, or neither; and a level,
+// which is the signal present on them. In digital circuits, this is
+// generally 0 or 1, though there's no reason a pin can't work with
+// analog signals (and thus have any level at all).
 //
-// Pins may also be pulled up or down, which defines what level they have if a level isn't given to
-// them. This emulates the internal pull-ups and pull-downs that some chips have (such as the port
-// pins on a 6526 CIA). If no level is given to them and they have no pull-up or pull-down, then
-// their level will be `null`, or no level at all, which is different from 0. This can be used to
-// represent, e.g., a high-impedance state that cuts the pin off from its circuit.
+// Pins may also be pulled up or down, which defines what level they
+// have if a level isn't given to them. This emulates the internal
+// pull-ups and pull-downs that some chips have (such as the port pins
+// on a 6526 CIA). If no level is given to them and they have no pull-up
+// or pull-down, then their level will be `null`, or no level at all,
+// which is different from 0. This can be used to represent, e.g., a
+// high-impedance state that cuts the pin off from its circuit.
 //
-// Pins and traces are intimately linked. A pin can be associated with exactly one trace, and unless
-// the pin's level is `null` and it is an output pin, the pin and the trace will have the same
-// level. (It follows then that all of the other pins connected to that trace will also have that
-// level.) If their levels do not match, then one is changed to match the other. If the pin is an
-// output pin, it will define the mutual level. If it's an input pin, the trace will define the
-// level. If the pin is bidirectional, the level will be the level of the trace if it is connected
-// to other non-bidirectional, non-null output pins; otherwise, whatever was set last will prevail.
+// Pins and traces are intimately linked. A pin can be associated with
+// exactly one trace, and unless the pin's level is `null` and it is an
+// output pin, the pin and the trace will have the same level. (It
+// follows then that all of the other pins connected to that trace will
+// also have that level.) If their levels do not match, then one is
+// changed to match the other. If the pin is an output pin, it will
+// define the mutual level. If it's an input pin, the trace will define
+// the level. If the pin is bidirectional, the level will be the level
+// of the trace if it is connected to other non-bidirectional, non-null
+// output pins; otherwise, whatever was set last will prevail.
 //
-// A pin may also have one or more listeners registered to it. The listener(s) will be invoked if
-// the level of the pin changes *because of a change to its trace's level.* No listener will be
-// invoked if the level of the pin is merely set programmatically. This means that only input and
-// bidirectional pins will invoke listeners, though output pins may also register them, since it is
-// possible that the output pin will become a different kind of pin later.
+// A pin may also have one or more listeners registered to it. The
+// listener(s) will be invoked if the level of the pin changes *because
+// of a change to its trace's level.* No listener will be invoked if the
+// level of the pin is merely set programmatically. This means that only
+// input and bidirectional pins will invoke listeners, though output
+// pins may also register them, since it is possible that the output pin
+// will become a different kind of pin later.
 
-// The possible directions that a pin can have. These are chosen so that bit 0 of the constant
-// determines whether it's an input and bit 1 whether it's an output (hence bidrectional pins have
-// both bits set).
+// The possible directions that a pin can have. These are chosen so that
+// bit 0 of the constant determines whether it's an input and bit 1
+// whether it's an output (hence bidrectional pins have both bits set).
 export const UNCONNECTED = 0b00
 export const INPUT = 0b01
 export const OUTPUT = 0b10
@@ -48,7 +57,7 @@ export function newPin(number, name, mode, level = null) {
 
   function setTrace(trace) {
     _trace = trace
-    if (_mode === INPUT || (_mode === BIDIRECTIONAL && _level === null)) {
+    if (_mode === INPUT || _mode === BIDIRECTIONAL && _level === null) {
       _level = _trace.level
     } else if (_mode & OUTPUT) {
       _trace.updateLevel()

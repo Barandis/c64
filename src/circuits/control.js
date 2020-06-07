@@ -1,40 +1,14 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import { newTrace } from "components/trace"
 
 export function newControlCircuit(
   {
-    U1,
-    U2,
-    U3,
-    U4,
-    U5,
-    U6,
-    U7,
-    U8,
-    U9,
-    U10,
-    U11,
-    U12,
-    U13,
-    U14,
-    U15,
-    U16,
-    U17,
-    U18,
-    U19,
-    U21,
-    U22,
-    U23,
-    U24,
-    U25,
-    U26,
-    U27,
+    U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15, U16, U17,
+    U18, U19, U21, U22, U23, U24, U25, U26, U27,
   },
   { CN1, CN2, CN4, CN6 },
 ) {
@@ -63,10 +37,12 @@ export function newControlCircuit(
   // U27: 74LS06 Quad AND gate (combines signals to enable SRAM)
   // CN6: Expansion port (source of _EXROM, _GAME)
 
-  // This is essentially everything into and out of the PLA and its associated demultiplexer, which
-  // uses programmed logic to take 20 inputs and determine which addressable chips/expansion port
-  // pins should be enabled. A8...A11 are connected to U15 and A12...A15, VA12...VA13, and _VA14 are
-  // already connected U17 in the address bus definitions.
+  // This is essentially everything into and out of the PLA and its
+  // associated demultiplexer, which uses programmed logic to take 20
+  // inputs and determine which addressable chips/expansion port pins
+  // should be enabled. A8...A11 are connected to U15 and A12...A15,
+  // VA12...VA13, and _VA14 are already connected U17 in the address bus
+  // definitions.
   const _CAS = newTrace(U19._CAS, U17.I0)
   const _LORAM = newTrace(U7.P0, U17.I1).pullUp()
   const _HIRAM = newTrace(U7.P1, U17.I2).pullUp()
@@ -81,7 +57,7 @@ export function newControlCircuit(
   const _BASIC = newTrace(U17.F1, U3._CS)
   const _KERNAL = newTrace(U17.F2, U4._CS)
   const _CHAROM = newTrace(U17.F3, U5._CS1)
-  const _CHAROM2 = newTrace(U5._CS2).pullUp() // _CS2 always high, _CS1 controls enable
+  const _CHAROM2 = newTrace(U5._CS2).pullUp() // _CS2 always high
   const GR__W = newTrace(U17.F4, U6._WE)
   const _IO = newTrace(U17.F5, U15._G1)
   const _ROML = newTrace(U17.F6, CN6._ROML)
@@ -95,7 +71,7 @@ export function newControlCircuit(
   const _CIA2 = newTrace(U15._Y21, U2._CS)
   const _IO1 = newTrace(U15._Y22, CN6._IO1)
   const _IO2 = newTrace(U15._Y23, CN6._IO2)
-  const _PLA = newTrace(U17._OE).pullDown() // PLA outputs always enabled
+  const _PLA = newTrace(U17._OE).pullDown() // PLA out always enabled
 
   // Non-PLA-based chip control
 
@@ -118,11 +94,13 @@ export function newControlCircuit(
   // U24: 4164 64k x 1-bit dynamic RAM (write-enabled by R/_W)
   // U25: 74LS257 Quad 2-1 mux (enabled by _AEC, seclected by _CAS)
   // U26: 74LS373 Octal latch (latched by _RAS)
-  // U27: 74LS08 Quad AND gate (combines AEC, BA, _DMA into CAEC, RDY, SRAM _CS)
+  // U27: 74LS08 Quad AND gate (combines AEC, BA, _DMA into CAEC, RDY,
+  //      SRAM _CS)
   // CN6: Expansion port (source of _DMA)
 
-  // Non-PLA signals are done here just in the interest of complexity. The only difference in
-  // criteria for this section is that the PLA is not involved in any of these signals.
+  // Non-PLA signals are done here just in the interest of complexity.
+  // The only difference in criteria for this section is that the PLA is
+  // not involved in any of these signals.
   _CAS.addPins(U14.SEL, U13.SEL, U25.SEL)
   BA.addPins(U27.A1, CN6.BA)
   _AEC.addPins(U13._OE, U25._OE)
@@ -161,55 +139,21 @@ export function newControlCircuit(
   // U19: 6567 VIC (receives φDOT, φCOLOR, provides φ0)
   // CN6: Expansion port (receives φDOT, φ2)
 
-  // Some of these don't really come from anywhere because we are not emulating the generation of
-  // clock pulses. So there is no source for OCOLOR, ODOT, or TOD; the software will provide those
-  // clock signals. (In fact, since we're also not emulating VIC output RF signals, there's no
-  // *purpose* for OCOLOR and the only purpose for ODOT is providing it to the expansion port.)
+  // Some of these don't really come from anywhere because we are not
+  // emulating the generation of clock pulses. So there is no source for
+  // OCOLOR, ODOT, or TOD; the software will provide those clock
+  // signals. (In fact, since we're also not emulating VIC output RF
+  // signals, there's no *purpose* for OCOLOR and the only purpose for
+  // ODOT is providing it to the expansion port.)
   const φCOLOR = newTrace(U19.φCOLOR)
   const φDOT = newTrace(U19.φIN, CN6.φDOT)
   const φ0 = newTrace(U19.φ0, U7.φ0)
   const φ2 = newTrace(U7.φ2, U1.φ2, U2.φ2, U18.φ2, CN6.φ2)
 
   return {
-    _CAS,
-    _LORAM,
-    _HIRAM,
-    _CHAREN,
-    BA,
-    _AEC,
-    R__W,
-    _EXROM,
-    _GAME,
-    _CASRAM,
-    _BASIC,
-    _KERNAL,
-    _CHAROM,
-    _CHAROM2,
-    GR__W,
-    _IO,
-    _ROML,
-    _ROMH,
-    _VIC,
-    _SID,
-    _COLOR,
-    _SRAM,
-    _CIAS,
-    _CIA1,
-    _CIA2,
-    _IO1,
-    _IO2,
-    _PLA,
-    _RAS,
-    AEC,
-    _DMA,
-    RDY,
-    CAEC,
-    _RES,
-    _NMI,
-    _IRQ,
-    φCOLOR,
-    φDOT,
-    φ0,
-    φ2,
+    _CAS, _LORAM, _HIRAM, _CHAREN, BA, _AEC, R__W, _EXROM, _GAME, _CASRAM,
+    _BASIC, _KERNAL, _CHAROM, _CHAROM2, GR__W, _IO, _ROML, _ROMH, _VIC, _SID,
+    _COLOR, _SRAM, _CIAS, _CIA1, _CIA2, _IO1, _IO2, _PLA, _RAS, AEC, _DMA, RDY,
+    CAEC, _RES, _NMI, _IRQ, φCOLOR, φDOT, φ0, φ2,
   }
 }

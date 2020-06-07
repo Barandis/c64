@@ -1,9 +1,7 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import chai from "chai"
 import sinonChai from "sinon-chai"
@@ -27,7 +25,9 @@ export function hex(value, digits = 2) {
   if (value === null) {
     return "null"
   }
-  return "$" + ("0000000000000000" + value.toString(16).toUpperCase()).substr(-digits)
+  return "$"
+      + ("0000000000000000"
+      + value.toString(16).toUpperCase()).substr(-digits)
 }
 
 export function bin(value, digits = 8) {
@@ -39,7 +39,9 @@ export function bin(value, digits = 8) {
 
 export function chipState(chip, name) {
   const terms = []
-  for (const pin of Object.values(chip.pins).sort((a, b) => a.num - b.num)) {
+  for (const pin of Object.values(chip.pins).sort(
+    (a, b) => a.num - b.num
+  )) {
     terms.push(`${pin.name}: ${pin.level === null ? "z" : pin.level}`)
   }
   return `${name}: [${terms.join(", ")}]`
@@ -64,7 +66,11 @@ export function portConnector(port) {
 
   for (const pin of port.pins) {
     if (pin) {
-      const mode = pin.mode === INPUT ? OUTPUT : pin.mode === OUTPUT ? INPUT : pin.mode
+      const mode = pin.mode === INPUT
+        ? OUTPUT
+        : pin.mode === OUTPUT
+          ? INPUT
+          : pin.mode
       pins[pin.num] = newPin(pin.num, pin.name, mode)
     }
   }

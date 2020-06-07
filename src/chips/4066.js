@@ -1,28 +1,30 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 // Emulation of the 4066 quad bilateral switch.
 //
-// This chip contains four different independent switches. Each has a pair of bidirectional analog
-// input/outputs and a single digital control input. If the control is low, then data passes freely
-// back and forth across the data pins. When the control goes high, it acts as an opening switch,
-// and the data input/outputs become disconnected.
+// This chip contains four different independent switches. Each has a
+// pair of bidirectional analog input/outputs and a single digital
+// control input. If the control is low, then data passes freely back
+// and forth across the data pins. When the control goes high, it acts
+// as an opening switch, and the data input/outputs become disconnected.
 //
-// There is no hi-Z state with this chip. If the switch is opened, each data pin takes on the value
-// dictated by the rest of its circuit.
+// There is no hi-Z state with this chip. If the switch is opened, each
+// data pin takes on the value dictated by the rest of its circuit.
 //
-// One challenge with this emulation is determining what value the input/output pins should take
-// after the control pin returns to low. Reasoning that in most applications, one I/O pin will be
-// used consistently for input and the other for output, I've implemented it so that the last pin
-// set determines the value of both pins when the switch closes.
+// One challenge with this emulation is determining what value the
+// input/output pins should take after the control pin returns to low.
+// Reasoning that in most applications, one I/O pin will be used
+// consistently for input and the other for output, I've implemented it
+// so that the last pin set determines the value of both pins when the
+// switch closes.
 //
-// This chip works fine with either analog or digital signals. In fact, in the Commodore 64 there
-// are two 4066's, and one works with analog signals (the analog inputs of the control ports) while
-// the other works with digital (part of the data bus).
+// This chip works fine with either analog or digital signals. In fact,
+// in the Commodore 64 there are two 4066's, and one works with analog
+// signals (the analog inputs of the control ports) while the other
+// works with digital (part of the data bus).
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 

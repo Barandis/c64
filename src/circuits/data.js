@@ -1,14 +1,15 @@
-/**
- * Copyright (c) 2020 Thomas J. Otterson
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+// Copyright (c) 2020 Thomas J. Otterson
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import { newTrace } from "components/trace"
 
 export function newDataCircuit(
-  { U1, U2, U3, U4, U5, U6, U7, U9, U10, U11, U12, U16, U18, U19, U21, U22, U23, U24 },
+  {
+    U1, U2, U3, U4, U5, U6, U7, U9, U10, U11, U12, U16, U18, U19, U21, U22, U23,
+    U24,
+  },
   { CN6 },
 ) {
   // Data bus to processor chips
@@ -41,8 +42,8 @@ export function newDataCircuit(
   // U23: 4164 64k x 1-bit dynamic RAM (bit 4)
   // U24: 4164 64k x 1-bit dynamic RAM (bit 6)
 
-  // U9...U12 and U21...U24 have two unidirectional data pins each, one in and one out. For this
-  // purpose they're simply tied together.
+  // U9...U12 and U21...U24 have two unidirectional data pins each, one
+  // in and one out. For this purpose they're simply tied together.
   D0.addPins(U3.D0, U4.D0, U5.D0, U21.D, U21.Q)
   D1.addPins(U3.D1, U4.D1, U5.D1, U9.D, U9.Q)
   D2.addPins(U3.D2, U4.D2, U5.D2, U22.D, U22.Q)
@@ -55,18 +56,21 @@ export function newDataCircuit(
   // Data bus to color RAM
 
   // U6: 2114 1k x 4-bit static RAM (color RAM)
-  // U16: 4066 Quad bilateral switch (connects/disconnects D0...D3 and color RAM)
+  // U16: 4066 Quad bilateral switch (connects/disconnects D0...D3 and
+  //      color RAM)
   // U19: 6567 VIC (source of D8...D11)
 
-  // Once again, the VIC complicates things, though far less so than with the address bus. The VIC
-  // has 12 data pins, and the upper four are used exclusively to read from color RAM. The CPU can
-  // also see color RAM and in fact is the only device that can write to it.
+  // Once again, the VIC complicates things, though far less so than
+  // with the address bus. The VIC has 12 data pins, and the upper four
+  // are used exclusively to read from color RAM. The CPU can also see
+  // color RAM and in fact is the only device that can write to it.
   //
-  // The CPU reads and writes color RAM through D0...D3, as expected. However, when the VIC reads
-  // color RAM, it does it through D8...D11 and may in fact do that at the same time as it reads
-  // other data via D0...D7. To keep color data from polluting D0...D7 at that time, the connection
-  // that the CPU needs to send data to color RAM on D0...D3 needs to be severed. That's the purpose
-  // of switch U16.
+  // The CPU reads and writes color RAM through D0...D3, as expected.
+  // However, when the VIC reads color RAM, it does it through D8...D11
+  // and may in fact do that at the same time as it reads other data via
+  // D0...D7. To keep color data from polluting D0...D7 at that time,
+  // the connection that the CPU needs to send data to color RAM on
+  // D0...D3 needs to be severed. That's the purpose of switch U16.
   D0.addPins(U16.X4)
   D1.addPins(U16.X3)
   D2.addPins(U16.X2)

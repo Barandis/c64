@@ -5,22 +5,22 @@
 
 import { OUTPUT } from "components/pin"
 
-// When a trace's level is set directly, its actual value is chosen according to the following
-// rules:
+// When a trace's level is set directly, its actual value is chosen
+// according to the following rules:
 //
-// 1. If the trace has an output pin connected to it that is high, the trace takes on that pin's
-//    value.
-// 2. If the trace has an output pin connected to it that is low, the trace takes on that pin's
-//    value.
-// 3. If the value being set is `null`:
-//    a. If the trace has been pulled up, its value is 1.
-//    b. If the trace has been pulled down, its value is 0.
-//    c. Its value is `null`.
+// 1. If the trace has an output pin connected to it that is high, the
+//    trace takes on that pin's value.
+// 2. If the trace has an output pin connected to it that is low, the
+//    trace takes on that pin's value.
+// 3. If the value being set is `null`: a. If the trace has been pulled
+//    up, its value is 1. b. If the trace has been pulled down, its
+//    value is 0. c. Its value is `null`.
 // 4. The trace takes on the set value.
 //
-// If a trace is set by a pin (either by an output pin changing values or by an unconnected pin
-// mode-changing into an output pin), then the value is simply set *unless* the value it's being set
-// to is `null`. In that case the same rules as direct setting apply.
+// If a trace is set by a pin (either by an output pin changing values
+// or by an unconnected pin mode-changing into an output pin), then the
+// value is simply set *unless* the value it's being set to is `null`.
+// In that case the same rules as direct setting apply.
 
 export function newTrace(...pins) {
   const _pins = []
@@ -63,8 +63,8 @@ export function newTrace(...pins) {
     return level
   }
 
-  // This is called by the trace's output pins changing values or by unconnected pins becoming
-  // output or bidirectional pins.
+  // This is called by the trace's output pins changing values or by
+  // unconnected pins becoming output or bidirectional pins.
   function updateLevel(level) {
     const normalized = normalize(level)
     if (normalized !== null) {
