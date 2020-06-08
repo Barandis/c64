@@ -6,7 +6,7 @@
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 const lookup = new Uint8Array(256)
-for (let i = 0; i < chars.length; i++) {
+for (const i of range(chars.length)) {
   lookup[chars.charCodeAt(i)] = i
 }
 
@@ -29,7 +29,7 @@ export function decode(base64) {
   const buffer = new ArrayBuffer(bufferLength)
   const bytes = new Uint8Array(buffer)
 
-  for (let i = 0; i < len; i += 4) {
+  for (const i of range(0, len, 4)) {
     e1 = lookup[base64.charCodeAt(i)]
     e2 = lookup[base64.charCodeAt(i + 1)]
     e3 = lookup[base64.charCodeAt(i + 2)]
@@ -44,15 +44,15 @@ export function decode(base64) {
 }
 
 export function valueToPins(value, ...pins) {
-  for (let i = 0; i < pins.length; i++) {
-    pins[i].level = value === null ? null : value >> i & 1
+  for (const [i, pin] of enumerate(pins)) {
+    pin.level = value === null ? null : value >> i & 1
   }
 }
 
 export function pinsToValue(...pins) {
   let value = 0
-  for (let i = 0; i < pins.length; i++) {
-    value |= pins[i].level << i
+  for (const [i, pin] of enumerate(pins)) {
+    value |= pin.level << i
   }
   return value
 }
@@ -111,4 +111,15 @@ export function *range(start, end, step, inclusive) {
     current = forward ? current + t : current - t
   }
   /* eslint-enable require-atomic-updates */
+}
+
+export function *enumerate(iterable) {
+  const iterator = iterable[Symbol.iterator]()
+  let result = iterator.next()
+  let index = 0
+
+  while (!result.done) {
+    yield [index++, result.value]
+    result = iterator.next()
+  }
 }

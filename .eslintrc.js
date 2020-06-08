@@ -72,6 +72,7 @@ module.exports = {
     // Variables
     "no-label-var": [ERROR],
     "no-undef-init": [ERROR],
+    "no-unused-vars": [ERROR, { varsIgnorePattern: "^_" }],
 
     // Stylistic Issues
     "array-bracket-newline": [ERROR, "consistent"],
@@ -88,7 +89,7 @@ module.exports = {
     "func-call-spacing": [ERROR],
     "func-name-matching": [ERROR],
     "function-paren-newline": [ERROR, "consistent"],
-    "indent": [ERROR, 2],
+    "indent": [ERROR, 2, { SwitchCase: 1 }],
     "jsx-quotes": [ERROR],
     "key-spacing": [ERROR],
     "keyword-spacing": [ERROR],

@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { range } from "utils"
-import { assertArray } from "test/helper"
+import { range, enumerate } from "utils"
+import { assertArray, assert } from "test/helper"
 
 describe("Utils", () => {
   describe("range", () => {
@@ -58,6 +58,28 @@ describe("Utils", () => {
 
     it("changes the step to 1 if you try to make it 0", () => {
       assertArray([...range(1, 6, 0)], [1, 2, 3, 4, 5])
+    })
+  })
+
+  describe("enumerate", () => {
+    it("produces index, element pairs from an array", () => {
+      const array = ["one", "two", "three", "four", "five"]
+      for (const [index, element] of enumerate(array)) {
+        assert(array[index] === element)
+      }
+    })
+
+    it("produces index, letter pairs from a string", () => {
+      const str = "012345"
+      for (const [index, letter] of enumerate(str)) {
+        assert(letter === index.toString())
+      }
+    })
+
+    it("produces index, element pairs from other iterables", () => {
+      for (const [index, element] of enumerate(range(0, 5, 2))) {
+        assert(index * 2 === element)
+      }
     })
   })
 })
