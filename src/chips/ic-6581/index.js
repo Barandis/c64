@@ -7,7 +7,7 @@ import {
   UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
 } from "./constants"
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 import { setMode, valueToPins, pinsToValue, range } from "utils"
 
@@ -61,15 +61,15 @@ export function Ic6581() {
     // the proper operation of the on-board filters, are connected
     // across these pairs of pins. There is no need to emulate them
     // here.
-    Pin(1, "CAP1A", UNCONNECTED),
-    Pin(2, "CAP1B", UNCONNECTED),
-    Pin(3, "CAP2A", UNCONNECTED),
-    Pin(4, "CAP2B", UNCONNECTED),
+    Pin(1, "CAP1A"),
+    Pin(2, "CAP1B"),
+    Pin(3, "CAP2A"),
+    Pin(4, "CAP2B"),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(25, "VCC", UNCONNECTED),
-    Pin(28, "VDD", UNCONNECTED),
-    Pin(14, "GND", UNCONNECTED),
+    Pin(25, "VCC"),
+    Pin(28, "VDD"),
+    Pin(14, "GND"),
   )
 
   const addrPins = [...range(5)].map(pin => chip[`A${pin}`])

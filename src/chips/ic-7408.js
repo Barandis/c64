@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic7408() {
@@ -22,26 +22,26 @@ export function Ic7408() {
     // Gate 1 inputs and output
     Pin(1, "A1", INPUT),
     Pin(2, "B1", INPUT),
-    Pin(3, "Y1", OUTPUT, 0),
+    Pin(3, "Y1", OUTPUT).clear(),
 
     // Gate 2 inputs and output
     Pin(4, "A2", INPUT),
     Pin(5, "B2", INPUT),
-    Pin(6, "Y2", OUTPUT, 0),
+    Pin(6, "Y2", OUTPUT).clear(),
 
     // Gate 3 inputs and output
     Pin(9, "A3", INPUT),
     Pin(10, "B3", INPUT),
-    Pin(8, "Y3", OUTPUT, 0),
+    Pin(8, "Y3", OUTPUT).clear(),
 
     // Gate 4 inputs and output
     Pin(12, "A4", INPUT),
     Pin(13, "B4", INPUT),
-    Pin(11, "Y4", OUTPUT, 0),
+    Pin(11, "Y4", OUTPUT).clear(),
 
     // Power supply and ground pins, not emulated
-    Pin(14, "VCC", UNCONNECTED),
-    Pin(7, "GND", UNCONNECTED),
+    Pin(14, "VCC"),
+    Pin(7, "GND"),
   )
 
   function setOutput(apin, bpin, ypin) {

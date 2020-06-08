@@ -19,6 +19,10 @@ export function decode(base64) {
   let e4
 
   let bufferLength = len * 0.75
+  // There are three base-64 files that make up ROM code for the C64.
+  // All three end with at least one `=`, so the else here will never
+  // execute.
+  /* istanbul ignore else */
   if (base64[base64.length - 1] === "=") {
     bufferLength--
     if (base64[base64.length - 2] === "=") {

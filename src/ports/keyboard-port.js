@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Port } from "components/port"
 
 export function KeyboardPort() {
@@ -29,7 +29,7 @@ export function KeyboardPort() {
 
     Pin(3, "_RESTORE", OUTPUT),
 
-    Pin(4, "VCC", UNCONNECTED),
-    Pin(1, "GND", UNCONNECTED),
+    Pin(4, "VCC"),
+    Pin(1, "GND"),
   )
 }

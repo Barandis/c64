@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, UNCONNECTED, OUTPUT } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Port } from "components/port"
 
 export function CassettePort() {
@@ -13,7 +13,7 @@ export function CassettePort() {
     Pin(6, "SENSE", OUTPUT),
     Pin(3, "MOTOR", INPUT),
 
-    Pin(2, "VCC", UNCONNECTED),
-    Pin(1, "GND", UNCONNECTED),
+    Pin(2, "VCC"),
+    Pin(1, "GND"),
   )
 }

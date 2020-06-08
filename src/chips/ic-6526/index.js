@@ -13,7 +13,7 @@ import { timers } from "./timers"
 import { tod } from "./tod"
 import { control } from "./control"
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from "utils"
 import { Chip } from "components/chip"
 
@@ -80,7 +80,7 @@ export function Ic6526() {
 
     // Port control pin. Pulses low after a read or write on port B, can
     // be used for handshaking.
-    Pin(18, "_PC", OUTPUT, 1),
+    Pin(18, "_PC", OUTPUT).set(),
 
     // IRQ input, maskable to fire hardware interrupt. Often used for
     // handshaking.
@@ -127,8 +127,8 @@ export function Ic6526() {
     Pin(34, "_RES", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(20, "VCC", UNCONNECTED),
-    Pin(1, "VSS", UNCONNECTED),
+    Pin(20, "VCC"),
+    Pin(1, "VSS"),
   )
 
   const addrPins = [...range(4)].map(pin => chip[`RS${pin}`])

@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic6567() {
@@ -60,8 +60,8 @@ export function Ic6567() {
     // DRAM control pins. These control the multiplexing of address bus
     // lines into rows (Row Address Strobe) and columns (Column Address
     // Strobe).
-    Pin(18, "_RAS", OUTPUT, 1),
-    Pin(19, "_CAS", OUTPUT, 1),
+    Pin(18, "_RAS", OUTPUT).set(),
+    Pin(19, "_CAS", OUTPUT).set(),
 
     // Clock signal pins. Two clocks are inputs - the color clock
     // (φcolor) at 14.31818 MHz and the dot clock (φin) at 8.18 MHz -
@@ -80,13 +80,13 @@ export function Ic6567() {
     // perform tasks that take more time than it normally has with the
     // φ2 low cycle. After three clock cycles, the AEC pin can then be
     // held low to take bus control.
-    Pin(12, "BA", OUTPUT, 1),
+    Pin(12, "BA", OUTPUT).set(),
 
     // Address Enable Control. When this is high, thye CPU has control
     // of the address and data busses. When it is low, the VIC does
     // instead. It normally follows the φ0 output except when using it
     // along with BA.
-    Pin(16, "AEC", OUTPUT, 0),
+    Pin(16, "AEC", OUTPUT).clear(),
 
     // Interrupt request. The VIC can request interrupts for four
     // reasons: the end of a raster line, a lightpen activation, a
@@ -106,15 +106,10 @@ export function Ic6567() {
     Pin(11, "R__W", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(40, "VCC", UNCONNECTED),
-    Pin(13, "VDD", UNCONNECTED),
-    Pin(20, "GND", UNCONNECTED),
+    Pin(40, "VCC"),
+    Pin(13, "VDD"),
+    Pin(20, "GND"),
   )
-
-  chip._RAS.set()
-  chip._CAS.set()
-  chip.BA.set()
-  chip.AEC.clear()
 
   return chip
 }

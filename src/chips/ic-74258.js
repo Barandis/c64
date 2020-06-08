@@ -29,7 +29,7 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic74258() {
@@ -46,26 +46,26 @@ export function Ic74258() {
     // Group 1 inputs and output
     Pin(2, "A1", INPUT),
     Pin(3, "B1", INPUT),
-    Pin(4, "_Y1", OUTPUT, 1),
+    Pin(4, "_Y1", OUTPUT).set(),
 
     // Group 2 input and output
     Pin(5, "A2", INPUT),
     Pin(6, "B2", INPUT),
-    Pin(7, "_Y2", OUTPUT, 1),
+    Pin(7, "_Y2", OUTPUT).set(),
 
     // Group 3 inputs and output
     Pin(11, "A3", INPUT),
     Pin(10, "B3", INPUT),
-    Pin(9, "_Y3", OUTPUT, 1),
+    Pin(9, "_Y3", OUTPUT).set(),
 
     // Group 4 inputs and output
     Pin(14, "A4", INPUT),
     Pin(13, "B4", INPUT),
-    Pin(12, "_Y4", OUTPUT, 1),
+    Pin(12, "_Y4", OUTPUT).set(),
 
     // Power supply pins. These are not emulated.
-    Pin(8, "GND", UNCONNECTED),
-    Pin(16, "VCC", UNCONNECTED),
+    Pin(8, "GND"),
+    Pin(16, "VCC"),
   )
 
   // Sets the value of the output (Y) pin based on the values of its

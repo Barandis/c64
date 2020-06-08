@@ -20,7 +20,7 @@
 //
 // On the C64 schematic, a 74LS139 can be found as U15.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic74139() {
@@ -36,24 +36,24 @@ export function Ic74139() {
     // Demultiplexer 1
     Pin(2, "A1", INPUT),
     Pin(3, "B1", INPUT),
-    Pin(4, "_Y10", OUTPUT, 0),
-    Pin(5, "_Y11", OUTPUT, 1),
-    Pin(6, "_Y12", OUTPUT, 1),
-    Pin(7, "_Y13", OUTPUT, 1),
+    Pin(4, "_Y10", OUTPUT).clear(),
+    Pin(5, "_Y11", OUTPUT).set(),
+    Pin(6, "_Y12", OUTPUT).set(),
+    Pin(7, "_Y13", OUTPUT).set(),
     Pin(1, "_G1", INPUT),
 
     // Demultiplexer 2
     Pin(14, "A2", INPUT),
     Pin(13, "B2", INPUT),
-    Pin(12, "_Y20", OUTPUT, 0),
-    Pin(11, "_Y21", OUTPUT, 1),
-    Pin(10, "_Y22", OUTPUT, 1),
-    Pin(9, "_Y23", OUTPUT, 1),
+    Pin(12, "_Y20", OUTPUT).clear(),
+    Pin(11, "_Y21", OUTPUT).set(),
+    Pin(10, "_Y22", OUTPUT).set(),
+    Pin(9, "_Y23", OUTPUT).set(),
     Pin(15, "_G2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(16, "VCC", UNCONNECTED),
-    Pin(8, "GND", UNCONNECTED),
+    Pin(16, "VCC"),
+    Pin(8, "GND"),
   )
 
   function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {

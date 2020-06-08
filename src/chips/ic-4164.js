@@ -46,9 +46,9 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order,
 // were U21, U9, U22, U10, U23, U11, U24, and U12.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
-import { pinsToValue } from "utils"
+import { pinsToValue, range } from "utils"
 
 export function Ic4164() {
   const chip = Chip(
@@ -89,14 +89,12 @@ export function Ic4164() {
     Pin(14, "Q", OUTPUT),
 
     // Power supply and no-contact pins. These are not emulated.
-    Pin(1, "NC", UNCONNECTED),
-    Pin(8, "VCC", UNCONNECTED),
-    Pin(16, "VSS", UNCONNECTED),
+    Pin(1, "NC"),
+    Pin(8, "VCC"),
+    Pin(16, "VSS"),
   )
 
-  const addressPins = [
-    chip.A0, chip.A1, chip.A2, chip.A3, chip.A4, chip.A5, chip.A6, chip.A7,
-  ]
+  const addrPins = [...range(8)].map(pin => chip[`A${pin}`])
 
   // 2048 32-bit unsigned integers is 65,536 bits.
   const memory = new Uint32Array(2048)
@@ -163,7 +161,7 @@ export function Ic4164() {
   // those reads and writes.
   function rasLatch(_ras) {
     if (_ras.low) {
-      row = pinsToValue(...addressPins)
+      row = pinsToValue(...addrPins)
     } else {
       row = null
     }
@@ -185,7 +183,7 @@ export function Ic4164() {
   // column and data (if there is one) values are cleared.
   function casLatch(_cas) {
     if (_cas.low) {
-      col = pinsToValue(...addressPins)
+      col = pinsToValue(...addrPins)
       if (chip._W.low) {
         data = chip.D.level
         write()

@@ -28,7 +28,7 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { Pin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, BIDIRECTIONAL } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic4066() {
@@ -54,8 +54,8 @@ export function Ic4066() {
     Pin(12, "A4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(14, "VDD", UNCONNECTED),
-    Pin(7, "GND", UNCONNECTED),
+    Pin(14, "VDD"),
+    Pin(7, "GND"),
   )
 
   const last = [null, null, null, null]

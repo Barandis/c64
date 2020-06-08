@@ -14,7 +14,7 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic7406() {
@@ -32,16 +32,16 @@ export function Ic7406() {
 
     // Output pins. Similarly, the TI data sheet refers to these as
     // "1Y", "2Y", etc.
-    Pin(2, "Y1", OUTPUT, 1),
-    Pin(4, "Y2", OUTPUT, 1),
-    Pin(6, "Y3", OUTPUT, 1),
-    Pin(8, "Y4", OUTPUT, 1),
-    Pin(10, "Y5", OUTPUT, 1),
-    Pin(12, "Y6", OUTPUT, 1),
+    Pin(2, "Y1", OUTPUT).set(),
+    Pin(4, "Y2", OUTPUT).set(),
+    Pin(6, "Y3", OUTPUT).set(),
+    Pin(8, "Y4", OUTPUT).set(),
+    Pin(10, "Y5", OUTPUT).set(),
+    Pin(12, "Y6", OUTPUT).set(),
 
     // Power supply and ground pins, not emulated
-    Pin(14, "VCC", UNCONNECTED),
-    Pin(7, "GND", UNCONNECTED),
+    Pin(14, "VCC"),
+    Pin(7, "GND"),
   )
 
   chip.A1.addListener(pin => (chip.Y1.level = pin.low))

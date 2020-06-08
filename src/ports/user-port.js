@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import {
-  Pin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED,
-} from "components/pin"
+import { Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components/pin"
 import { Port } from "components/port"
 
 export const A = 13
@@ -44,12 +42,12 @@ export function UserPort() {
     Pin(B, "_FLAG2", OUTPUT),
     Pin(3, "_RESET", BIDIRECTIONAL),
 
-    Pin(2, "VCC", UNCONNECTED),
-    Pin(10, "VAC1", UNCONNECTED),
-    Pin(11, "VAC22", UNCONNECTED),
-    Pin(1, "GND1", UNCONNECTED),
-    Pin(12, "GND2", UNCONNECTED),
-    Pin(A, "GND3", UNCONNECTED),
-    Pin(N, "GND4", UNCONNECTED),
+    Pin(2, "VCC"),
+    Pin(10, "VAC1"),
+    Pin(11, "VAC2"),
+    Pin(1, "GND1"),
+    Pin(12, "GND2"),
+    Pin(A, "GND3"),
+    Pin(N, "GND4"),
   )
 }

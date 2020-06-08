@@ -81,6 +81,21 @@ export function Trace(...pins) {
     _pins.forEach(p => p.updateLevel())
   }
 
+  function set() {
+    setLevel(1)
+    return trace
+  }
+
+  function clear() {
+    setLevel(0)
+    return trace
+  }
+
+  function float() {
+    setLevel(null)
+    return trace
+  }
+
   function pullUp() {
     _float = 1
     setLevel(_level)
@@ -116,16 +131,9 @@ export function Trace(...pins) {
       setLevel(level)
     },
 
-    set() {
-      setLevel(1)
-    },
-    clear() {
-      setLevel(0)
-    },
-    float() {
-      setLevel(null)
-    },
-
+    set,
+    clear,
+    float,
     pullUp,
     pullDown,
     noPull,

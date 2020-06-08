@@ -31,9 +31,9 @@
 //
 // On the C64 schematic, the CHARACTER ROM is U5.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
-import { pinsToValue, valueToPins } from "utils"
+import { pinsToValue, valueToPins, range } from "utils"
 
 export function Ic2332(buffer) {
   const chip = Chip(
@@ -68,33 +68,19 @@ export function Ic2332(buffer) {
     Pin(21, "_CS2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(24, "VCC", UNCONNECTED),
-    Pin(12, "GND", UNCONNECTED),
+    Pin(24, "VCC"),
+    Pin(12, "GND"),
   )
 
-  const addressPins = [
-    chip.A0,
-    chip.A1,
-    chip.A2,
-    chip.A3,
-    chip.A4,
-    chip.A5,
-    chip.A6,
-    chip.A7,
-    chip.A8,
-    chip.A9,
-    chip.A10,
-    chip.A11,
-  ]
-  const dataPins = [
-    chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7,
-  ]
+  const addrPins = [...range(12)].map(pin => chip[`A${pin}`])
+  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+
   const memory = new Uint8Array(buffer)
 
   // Reads the 8-bit value at the location indicated by the address pins
   // and puts that value on the data pins.
   function read() {
-    const address = pinsToValue(...addressPins)
+    const address = pinsToValue(...addrPins)
     const value = memory[address]
     valueToPins(value, ...dataPins)
   }

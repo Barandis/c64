@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic6510() {
@@ -51,11 +51,11 @@ export function Ic6510() {
     // signal on the input is merely forwarded to the output as a clock
     // reference for other chips on the board.
     Pin(1, "φ0", INPUT),
-    Pin(39, "φ2", OUTPUT, 0),
+    Pin(39, "φ2", OUTPUT).clear(),
 
     // Read/write control. This pin is used to inform memory devices
     // whether the CPU intends to read from them or write to them.
-    Pin(38, "R__W", OUTPUT, 1),
+    Pin(38, "R__W", OUTPUT).set(),
 
     // Address enable control. When this is low, the CPU tri-states its
     // busses to allow other chips to control them.
@@ -78,8 +78,8 @@ export function Ic6510() {
     Pin(40, "_RES", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(6, "VCC", UNCONNECTED),
-    Pin(21, "GND", UNCONNECTED),
+    Pin(6, "VCC"),
+    Pin(21, "GND"),
   )
 
   return chip

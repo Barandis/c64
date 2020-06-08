@@ -28,7 +28,7 @@
 //
 // On the C64 schematic, both U13 and U25 were 74LS257's.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 export function Ic74257() {
@@ -45,26 +45,26 @@ export function Ic74257() {
     // Group 1 inputs and output
     Pin(2, "A1", INPUT),
     Pin(3, "B1", INPUT),
-    Pin(4, "Y1", OUTPUT, 0),
+    Pin(4, "Y1", OUTPUT).clear(),
 
     // Group 2 input and output
     Pin(5, "A2", INPUT),
     Pin(6, "B2", INPUT),
-    Pin(7, "Y2", OUTPUT, 0),
+    Pin(7, "Y2", OUTPUT).clear(),
 
     // Group 3 inputs and output
     Pin(11, "A3", INPUT),
     Pin(10, "B3", INPUT),
-    Pin(9, "Y3", OUTPUT, 0),
+    Pin(9, "Y3", OUTPUT).clear(),
 
     // Group 4 inputs and output
     Pin(14, "A4", INPUT),
     Pin(13, "B4", INPUT),
-    Pin(12, "Y4", OUTPUT, 0),
+    Pin(12, "Y4", OUTPUT).clear(),
 
     // Power supply pins. These are not emulated.
-    Pin(8, "GND", UNCONNECTED),
-    Pin(16, "VCC", UNCONNECTED),
+    Pin(8, "GND"),
+    Pin(16, "VCC"),
   )
 
   // Sets the value of the output (Y) pin based on the values of its

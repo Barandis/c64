@@ -145,7 +145,9 @@ describe("82S100 Programmable Logic Array", () => {
   })
 
   describe("logic combinations", () => {
-    [...range(0x0000, 0xffff, 0x1000)].forEach(base => {
+    const blocks = [...range(0x0000, 0xffff, 0x1000)]
+
+    blocks.forEach(base => {
       it(`produces the correct output from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {

@@ -25,9 +25,9 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { Pin, INPUT, BIDIRECTIONAL, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, BIDIRECTIONAL } from "components/pin"
 import { Chip } from "components/chip"
-import { pinsToValue, valueToPins } from "utils"
+import { pinsToValue, valueToPins, range } from "utils"
 
 export function Ic2114() {
   const chip = Chip(
@@ -58,23 +58,13 @@ export function Ic2114() {
     Pin(10, "_WE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(18, "VCC", UNCONNECTED),
-    Pin(9, "GND", UNCONNECTED),
+    Pin(18, "VCC"),
+    Pin(9, "GND"),
   )
 
-  const addressPins = [
-    chip.A0,
-    chip.A1,
-    chip.A2,
-    chip.A3,
-    chip.A4,
-    chip.A5,
-    chip.A6,
-    chip.A7,
-    chip.A8,
-    chip.A9,
-  ]
-  const dataPins = [chip.D0, chip.D1, chip.D2, chip.D3]
+  const addrPins = [...range(10)].map(pin => chip[`A${pin}`])
+  const dataPins = [...range(4)].map(pin => chip[`D${pin}`])
+
   const memory = new Uint32Array(128)
 
   // Turns the address currently on the address pins into an index and
@@ -84,7 +74,7 @@ export function Ic2114() {
   // to be in the right position to write those bits in that array
   // index.
   function resolve() {
-    const addr = pinsToValue(...addressPins)
+    const addr = pinsToValue(...addrPins)
     const arrayIndex = addr >> 3
     const bitIndex = addr & 0x07
     return [arrayIndex, bitIndex * 4]
@@ -101,10 +91,7 @@ export function Ic2114() {
   // Writes the 4-bit value currently on the data pins to the location
   // indicated by the address pins.
   function write() {
-    const value = chip.D0.level
-                | chip.D1.level << 1
-                | chip.D2.level << 2
-                | chip.D3.level << 3
+    const value = pinsToValue(...dataPins)
     const [index, shift] = resolve()
     const current = memory[index] & ~(0b1111 << shift)
     memory[index] = current | value << shift

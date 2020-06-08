@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, OUTPUT } from "components/pin"
 import { Port } from "components/port"
 
 export function Control1Port() {
@@ -16,7 +16,7 @@ export function Control1Port() {
     Pin(5, "POTAY", OUTPUT),
     Pin(6, "BTNA_LP", OUTPUT),
 
-    Pin(7, "VCC", UNCONNECTED),
-    Pin(8, "GND", UNCONNECTED),
+    Pin(7, "VCC"),
+    Pin(8, "GND"),
   )
 }

@@ -47,11 +47,11 @@ export const INPUT = 0b01
 export const OUTPUT = 0b10
 export const BIDIRECTIONAL = 0b11
 
-export function Pin(number, name, mode, level = null) {
+export function Pin(number, name, mode = UNCONNECTED) {
   const _listeners = []
   let _trace = null
   let _float = null
-  let _level = normalize(level)
+  let _level = normalize(null)
   let _mode = UNCONNECTED
   setMode(mode)
 
@@ -112,10 +112,31 @@ export function Pin(number, name, mode, level = null) {
     }
   }
 
+  function set() {
+    setLevel(1)
+    return pin
+  }
+
+  function clear() {
+    setLevel(0)
+    return pin
+  }
+
+  function float() {
+    setLevel(null)
+    return pin
+  }
+
+  function toggle() {
+    setLevel(_level === null ? null : 1 - _level)
+    return pin
+  }
+
   function addListener(listener) {
     if (!_listeners.includes(listener)) {
       _listeners.push(listener)
     }
+    return pin
   }
 
   function removeListener(listener) {
@@ -123,6 +144,7 @@ export function Pin(number, name, mode, level = null) {
     if (index !== -1) {
       _listeners.splice(index, 1)
     }
+    return pin
   }
 
   function pullUp() {
@@ -184,19 +206,10 @@ export function Pin(number, name, mode, level = null) {
       return _trace !== null
     },
 
-    set() {
-      setLevel(1)
-    },
-    clear() {
-      setLevel(0)
-    },
-    float() {
-      setLevel(null)
-    },
-    toggle() {
-      setLevel(_level === null ? null : 1 - _level)
-    },
-
+    set,
+    clear,
+    float,
+    toggle,
     pullUp,
     pullDown,
     noPull,

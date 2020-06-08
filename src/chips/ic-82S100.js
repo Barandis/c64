@@ -77,7 +77,7 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 
 // These are alternate names for the input (I) and output (F) pins,
@@ -137,25 +137,25 @@ export function Ic82S100() {
 
     // Output pins. Similar to the input pins, these were named
     // generically on the 82S100.
-    Pin(18, "F0", OUTPUT, 0),
-    Pin(17, "F1", OUTPUT, 1),
-    Pin(16, "F2", OUTPUT, 1),
-    Pin(15, "F3", OUTPUT, 1),
-    Pin(13, "F4", OUTPUT, 1),
-    Pin(12, "F5", OUTPUT, 1),
-    Pin(11, "F6", OUTPUT, 1),
-    Pin(10, "F7", OUTPUT, 1),
+    Pin(18, "F0", OUTPUT).clear(),
+    Pin(17, "F1", OUTPUT).set(),
+    Pin(16, "F2", OUTPUT).set(),
+    Pin(15, "F3", OUTPUT).set(),
+    Pin(13, "F4", OUTPUT).set(),
+    Pin(12, "F5", OUTPUT).set(),
+    Pin(11, "F6", OUTPUT).set(),
+    Pin(10, "F7", OUTPUT).set(),
 
     // Output enable, disables all outputs when set HIGH
     Pin(19, "_OE", INPUT),
 
     // Field programming pin, not used in mask programmed parts and not
     // emulated
-    Pin(1, "FE", UNCONNECTED),
+    Pin(1, "FE"),
 
     // Power supply pins, not emulated
-    Pin(28, "VCC", UNCONNECTED),
-    Pin(14, "GND", UNCONNECTED),
+    Pin(28, "VCC"),
+    Pin(14, "GND"),
   )
 
   // One listener to rule them all

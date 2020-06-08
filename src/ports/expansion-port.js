@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import {
-  Pin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED,
-} from "components/pin"
+import { Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components/pin"
 import { Port } from "components/port"
 
 export const A = 23
@@ -78,12 +76,12 @@ export function ExpansionPort() {
 
     Pin(C, "_RESET", OUTPUT),
 
-    Pin(2, "VCC1", UNCONNECTED),
-    Pin(3, "VCC2", UNCONNECTED),
+    Pin(2, "VCC1"),
+    Pin(3, "VCC2"),
 
-    Pin(1, "GND1", UNCONNECTED),
-    Pin(22, "GND2", UNCONNECTED),
-    Pin(A, "GND3", UNCONNECTED),
-    Pin(Z, "GND4", UNCONNECTED),
+    Pin(1, "GND1"),
+    Pin(22, "GND2"),
+    Pin(A, "GND3"),
+    Pin(Z, "GND4"),
   )
 }

@@ -26,7 +26,7 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Pin, INPUT, OUTPUT } from "components/pin"
 import { Chip } from "components/chip"
 import { range } from "utils"
 
@@ -43,14 +43,14 @@ export function Ic74373() {
     Pin(18, "D7", INPUT),
 
     // Output pins.
-    Pin(2, "O0", OUTPUT),
-    Pin(5, "O1", OUTPUT),
-    Pin(6, "O2", OUTPUT),
-    Pin(9, "O3", OUTPUT),
-    Pin(12, "O4", OUTPUT),
-    Pin(15, "O5", OUTPUT),
-    Pin(16, "O6", OUTPUT),
-    Pin(19, "O7", OUTPUT),
+    Pin(2, "O0", OUTPUT).clear(),
+    Pin(5, "O1", OUTPUT).clear(),
+    Pin(6, "O2", OUTPUT).clear(),
+    Pin(9, "O3", OUTPUT).clear(),
+    Pin(12, "O4", OUTPUT).clear(),
+    Pin(15, "O5", OUTPUT).clear(),
+    Pin(16, "O6", OUTPUT).clear(),
+    Pin(19, "O7", OUTPUT).clear(),
 
     // Output enable. When this is high, the outputs function normally
     // according to their inputs and LE. When this is low, the outputs
@@ -64,8 +64,8 @@ export function Ic74373() {
     Pin(11, "LE", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(10, "GND", UNCONNECTED),
-    Pin(20, "VCC", UNCONNECTED),
+    Pin(10, "GND"),
+    Pin(20, "VCC"),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is
