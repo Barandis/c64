@@ -3,12 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
-import { newChip } from "components/chip"
-import { setMode, valueToPins, pinsToValue } from "utils"
 import {
   UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
 } from "./constants"
+
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { newChip } from "components/chip"
+import { setMode, valueToPins, pinsToValue } from "utils"
 
 export function new6581() {
   const chip = newChip(

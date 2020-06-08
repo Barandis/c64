@@ -3,10 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { setBit, clearBit, bitSet } from "utils"
 import {
   CIAPRA, CIAPRB, CIDDRA, CIACRA, CRA_PBON, CIDDRB, CIACRB, CRB_PBON,
 } from "./constants"
+
+import { setBit, clearBit, bitSet } from "utils"
 import { OUTPUT, INPUT } from "components/pin"
 
 export function ports(chip, registers) {

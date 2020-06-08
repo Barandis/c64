@@ -30,6 +30,7 @@ module.exports = {
     alias: {
       utils: path.resolve(__dirname, "src/utils"),
       chips: path.resolve(__dirname, "src/chips"),
+      circuits: path.resolve(__dirname, "src/circuits"),
       components: path.resolve(__dirname, "src/components"),
       ports: path.resolve(__dirname, "src/ports"),
       rom: path.resolve(__dirname, "src/rom"),

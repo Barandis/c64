@@ -7,6 +7,7 @@ import {
   CIAICR, ICR_SC, CIACRA, CRA_LOAD, CRA_PBON, CIDDRA, TIMALO, TIMAHI, CRA_SP,
   CIACRB, CRB_LOAD, CRB_PBON, CIDDRB, TIMBLO, TIMBHI,
 } from "./constants"
+
 import { bitSet } from "utils"
 import { OUTPUT, INPUT } from "components/pin"
 

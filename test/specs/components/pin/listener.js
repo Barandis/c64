@@ -3,8 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
 import Sinon from "sinon"
+
+import { expect } from "test/helper"
 import {
   newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
 } from "components/pin"

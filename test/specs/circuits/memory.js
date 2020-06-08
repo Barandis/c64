@@ -3,9 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { newBoard } from "circuits/board"
+
 import { expect } from "test/helper"
 import { valueToPins, pinsToValue, setMode } from "utils"
-import { newBoard } from "circuits/board"
 import { INPUT } from "components/pin"
 
 describe("Memory reading/writing", () => {

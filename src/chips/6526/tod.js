@@ -3,11 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { bitSet, toggleBit, setBit } from "utils"
 import {
   CIACRB, CRB_ALRM, TODTEN, CIACRA, CRA_TOD, TODMIN, TODSEC, TODHRS, CIAICR,
   ICR_ALRM, ICR_IR,
 } from "./constants"
+
+import { bitSet, toggleBit, setBit } from "utils"
 
 export function tod(chip, registers, latches) {
   // -------------------------------------------------------------------

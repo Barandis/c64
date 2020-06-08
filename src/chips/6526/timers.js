@@ -8,6 +8,7 @@ import {
   CRA_OUT, CRB_PBON, CRB_OUT, TIMALO, TIMAHI, TIMBLO, TIMBHI, CIAICR, ICR_TA,
   CRA_RUN, ICR_TB, CRB_RUN, CRA_SP, CIASDR, ICR_SP, ICR_IR,
 } from "./constants"
+
 import { bitSet, bitClear, setBit, clearBit } from "utils"
 
 export function timers(chip, registers, latches) {

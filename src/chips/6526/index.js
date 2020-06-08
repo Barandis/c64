@@ -3,9 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
-import { newChip } from "components/chip"
-import { valueToPins, pinsToValue, setMode, setBit, bitSet } from "utils"
 import {
   CIAPRA, CIAPRB, CIDDRA, CIDDRB, TIMALO, TIMBHI, TIMAHI, TIMBLO, TODTEN,
   TODSEC, TODMIN, TODHRS, CIASDR, CIAICR, CIACRA, CIACRB, ICR_FLG, ICR_IR,
@@ -15,6 +12,10 @@ import { ports } from "./ports"
 import { timers } from "./timers"
 import { tod } from "./tod"
 import { control } from "./control"
+
+import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { valueToPins, pinsToValue, setMode, setBit, bitSet } from "utils"
+import { newChip } from "components/chip"
 
 // An emulation of the MOS Technologies 6526 Complex Interface Adapter
 // (CIA). This is a chip designed as an I/O provider for 6500-series

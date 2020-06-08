@@ -9,31 +9,43 @@ module.exports = {
     mocha: true,
     browser: true,
   },
-  extends: "eslint:recommended",
+  extends: ["eslint:recommended", "plugin:import/errors"],
   parser: "babel-eslint",
   parserOptions: {
     sourceType: "module",
+  },
+  plugins: ["import"],
+  settings: {
+    "import/resolver": {
+      webpack: {
+        config: "webpack.common.js",
+      }
+    }
   },
   rules: {
     // Possible Errors
     "no-extra-parens": [ERROR, "all", { returnAssign: false }],
     "no-template-curly-in-string": [ERROR],
+    "require-atomic-updates": [ERROR],
 
     // Best Practices
     "accessor-pairs": [ERROR],
-    complexity: [ERROR, 20],
-    curly: [ERROR, "multi-line"],
+    "complexity": [ERROR, 20],
+    "consistent-return": [ERROR],
+    "curly": [ERROR, "multi-line"],
+    "default-param-last": [ERROR],
     "dot-location": [ERROR, "property"],
     "dot-notation": [ERROR],
-    eqeqeq: [ERROR, "smart"],
+    "eqeqeq": [ERROR, "smart"],
     "no-caller": [ERROR],
     "no-else-return": [ERROR],
     "no-extend-native": [ERROR],
     "no-extra-bind": [ERROR],
+    "no-extra-label": [ERROR],
+    "no-fallthrough": [ERROR, { commentPattern: "break[\\s\\w]*omitted" }],
     "no-floating-decimal": [ERROR],
     "no-implied-eval": [ERROR],
     "no-iterator": [ERROR],
-    "no-labels": [ERROR],
     "no-lone-blocks": [ERROR],
     "no-multi-spaces": [ERROR],
     "no-multi-str": [ERROR],
@@ -45,22 +57,20 @@ module.exports = {
     "no-proto": [ERROR],
     "no-return-assign": [ERROR],
     "no-self-compare": [ERROR],
-    "no-sequences": [ERROR],
     "no-throw-literal": [ERROR],
     "no-unmodified-loop-condition": [ERROR],
     "no-useless-call": [ERROR],
-    "no-useless-escape": [ERROR],
-    "no-void": [ERROR],
-    "no-with": [ERROR],
+    "no-useless-concat": [ERROR],
+    "no-useless-return": [ERROR],
+    "require-await": [ERROR],
     "wrap-iife": [ERROR],
-    yoda: [ERROR],
+    "yoda": [ERROR],
 
     // Strict Mode
-    strict: [ERROR],
+    "strict": [ERROR],
 
     // Variables
     "no-label-var": [ERROR],
-    "no-shadow-restricted-names": [ERROR],
     "no-undef-init": [ERROR],
 
     // Stylistic Issues
@@ -68,7 +78,7 @@ module.exports = {
     "array-bracket-spacing": [ERROR],
     "block-spacing": [ERROR],
     "brace-style": [ERROR, "1tbs", { allowSingleLine: true }],
-    camelcase: [ERROR, { properties: "never" }],
+    "camelcase": [ERROR, { properties: "never" }],
     "comma-dangle": [ERROR, "always-multiline"],
     "comma-spacing": [ERROR],
     "comma-style": [ERROR],
@@ -78,7 +88,7 @@ module.exports = {
     "func-call-spacing": [ERROR],
     "func-name-matching": [ERROR],
     "function-paren-newline": [ERROR, "consistent"],
-    indent: [ERROR, 2],
+    "indent": [ERROR, 2],
     "jsx-quotes": [ERROR],
     "key-spacing": [ERROR],
     "keyword-spacing": [ERROR],
@@ -107,8 +117,8 @@ module.exports = {
     "operator-linebreak": [ERROR, "before"],
     "prefer-object-spread": [ERROR],
     "quote-props": [ERROR, "consistent-as-needed"],
-    quotes: [ERROR],
-    semi: [ERROR, "never"],
+    "quotes": [ERROR],
+    "semi": [ERROR, "never"],
     "semi-spacing": [ERROR],
     "semi-style": [ERROR],
     "space-before-blocks": [ERROR],
@@ -156,5 +166,18 @@ module.exports = {
     "rest-spread-spacing": [ERROR],
     "template-curly-spacing": [ERROR],
     "yield-star-spacing": [ERROR],
+
+    // Import plugin
+    "import/no-absolute-path": [ERROR],
+    "import/no-webpack-loader-syntax": [ERROR],
+    "import/no-self-import": [ERROR],
+    "import/no-useless-path-segments": [ERROR],
+
+    "import/no-named-as-default-member": [ERROR],
+
+    "import/first": [ERROR],
+    "import/no-duplicates": [ERROR],
+    "import/no-namespace": [ERROR],
+    "import/order": [ERROR, { "newlines-between": "always-and-inside-groups" }],
   },
 }

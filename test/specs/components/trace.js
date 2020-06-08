@@ -3,21 +3,24 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
 import Sinon from "sinon"
-import { newPin, INPUT } from "components/pin"
-import { newTrace } from "components/trace"
+
 import {
   levelDirectUnconnected, levelDirectInput, levelDirectHiOutput,
   levelDirectLoOutput, levelDirectNullOutput, levelPinUnconnected,
   levelPinInput, levelPinOutput, levelPinBidirectional, levelPinHiOutputs,
   levelPinLoOutputs,
 } from "./trace/level"
+
 import {
   puInitial, puModeInput, puNoOutputs, puHiOutputs, puLoOutputs, puNullOutputs,
   pdInitial, pdModeInput, pdNoOutputs, pdHiOutputs, pdLoOutputs, pdNullOutputs,
   pnInitial, pnModeInput, pnNoOutputs, pnHiOutputs, pnLoOutputs, pnNullOutputs,
 } from "./trace/float"
+
+import { expect } from "test/helper"
+import { newPin, INPUT } from "components/pin"
+import { newTrace } from "components/trace"
 
 describe("Trace", () => {
   const test = fn => () => fn()

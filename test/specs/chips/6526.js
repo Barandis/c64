@@ -3,9 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { deviceTraces } from "test/helper"
-import { valueToPins, pinsToValue } from "utils"
-import { new6526 } from "chips/6526"
 import {
   ddrInput, ddrOutput, ddrCombo, ddrTimerOut, pdrReceive, pdrSend, pdrCombo,
   pdrTimerOut, pdrTriggerPc,
@@ -29,6 +26,10 @@ import {
   spIrqTxFlagSet, spInputWrite,
 } from "./6526/serial"
 import { reset, flagFlagReset, flagDefault, flagFlagSet } from "./6526/misc"
+
+import { new6526 } from "chips/6526"
+import { valueToPins, pinsToValue } from "utils"
+import { deviceTraces } from "test/helper"
 
 describe("6526 CIA", () => {
   let chip

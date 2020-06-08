@@ -4,6 +4,11 @@
 // https://opensource.org/licenses/MIT
 
 // ROM images
+import { newAddressCircuit } from "./address"
+import { newDataCircuit } from "./data"
+import { newControlCircuit } from "./control"
+import { newIoCircuit } from "./io"
+
 import { basic } from "rom/basic"
 import { kernal } from "rom/kernal"
 import { character } from "rom/character"
@@ -38,10 +43,6 @@ import { newExpansionPort } from "ports/expansion-port"
 import { newKeyboardPort } from "ports/keyboard-port"
 import { newSerialPort } from "ports/serial-port"
 import { newUserPort } from "ports/user-port"
-import { newAddressCircuit } from "./address"
-import { newDataCircuit } from "./data"
-import { newControlCircuit } from "./control"
-import { newIoCircuit } from "./io"
 
 export function newBoard() {
   const chips = {
