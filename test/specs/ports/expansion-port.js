@@ -4,63 +4,63 @@
 // https://opensource.org/licenses/MIT
 
 import { expect, deviceTraces } from "test/helper"
-import { newExpansionPort } from "ports/expansion-port"
-import { newPort } from "components/port"
+import { ExpansionPort } from "ports/expansion-port"
+import { Port } from "components/port"
 import {
-  newPin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+  Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
 
 describe("Expansion port", () => {
   let port, connector, p, c
 
   beforeEach(() => {
-    port = newExpansionPort()
+    port = ExpansionPort()
 
-    connector = newPort(
-      newPin(1, "GND1", UNCONNECTED),
-      newPin(2, "VCC1", UNCONNECTED),
-      newPin(3, "VCC2", UNCONNECTED),
-      newPin(4, "_IRQ", INPUT),
-      newPin(5, "R__W", OUTPUT),
-      newPin(6, "φDOT", OUTPUT),
-      newPin(7, "_IO1", OUTPUT),
-      newPin(8, "_GAME", INPUT),
-      newPin(9, "_EXROM", INPUT),
-      newPin(10, "_IO2", OUTPUT),
-      newPin(11, "_ROML", OUTPUT),
-      newPin(12, "BA", OUTPUT),
-      newPin(13, "_DMA", INPUT),
-      newPin(14, "D7", BIDIRECTIONAL),
-      newPin(15, "D6", BIDIRECTIONAL),
-      newPin(16, "D5", BIDIRECTIONAL),
-      newPin(17, "D4", BIDIRECTIONAL),
-      newPin(18, "D3", BIDIRECTIONAL),
-      newPin(19, "D2", BIDIRECTIONAL),
-      newPin(20, "D1", BIDIRECTIONAL),
-      newPin(21, "D0", BIDIRECTIONAL),
-      newPin(22, "GND2", UNCONNECTED),
-      newPin(23, "GND3", UNCONNECTED),
-      newPin(24, "_ROMH", OUTPUT),
-      newPin(25, "_RESET", INPUT),
-      newPin(26, "_NMI", INPUT),
-      newPin(27, "φ2", OUTPUT),
-      newPin(28, "A15", OUTPUT),
-      newPin(29, "A14", OUTPUT),
-      newPin(30, "A13", OUTPUT),
-      newPin(31, "A12", OUTPUT),
-      newPin(32, "A11", OUTPUT),
-      newPin(33, "A10", OUTPUT),
-      newPin(34, "A9", OUTPUT),
-      newPin(35, "A8", OUTPUT),
-      newPin(36, "A7", OUTPUT),
-      newPin(37, "A6", OUTPUT),
-      newPin(38, "A5", OUTPUT),
-      newPin(39, "A4", OUTPUT),
-      newPin(40, "A3", OUTPUT),
-      newPin(41, "A2", OUTPUT),
-      newPin(42, "A1", OUTPUT),
-      newPin(43, "A0", OUTPUT),
-      newPin(44, "GND4", UNCONNECTED),
+    connector = Port(
+      Pin(1, "GND1", UNCONNECTED),
+      Pin(2, "VCC1", UNCONNECTED),
+      Pin(3, "VCC2", UNCONNECTED),
+      Pin(4, "_IRQ", INPUT),
+      Pin(5, "R__W", OUTPUT),
+      Pin(6, "φDOT", OUTPUT),
+      Pin(7, "_IO1", OUTPUT),
+      Pin(8, "_GAME", INPUT),
+      Pin(9, "_EXROM", INPUT),
+      Pin(10, "_IO2", OUTPUT),
+      Pin(11, "_ROML", OUTPUT),
+      Pin(12, "BA", OUTPUT),
+      Pin(13, "_DMA", INPUT),
+      Pin(14, "D7", BIDIRECTIONAL),
+      Pin(15, "D6", BIDIRECTIONAL),
+      Pin(16, "D5", BIDIRECTIONAL),
+      Pin(17, "D4", BIDIRECTIONAL),
+      Pin(18, "D3", BIDIRECTIONAL),
+      Pin(19, "D2", BIDIRECTIONAL),
+      Pin(20, "D1", BIDIRECTIONAL),
+      Pin(21, "D0", BIDIRECTIONAL),
+      Pin(22, "GND2", UNCONNECTED),
+      Pin(23, "GND3", UNCONNECTED),
+      Pin(24, "_ROMH", OUTPUT),
+      Pin(25, "_RESET", INPUT),
+      Pin(26, "_NMI", INPUT),
+      Pin(27, "φ2", OUTPUT),
+      Pin(28, "A15", OUTPUT),
+      Pin(29, "A14", OUTPUT),
+      Pin(30, "A13", OUTPUT),
+      Pin(31, "A12", OUTPUT),
+      Pin(32, "A11", OUTPUT),
+      Pin(33, "A10", OUTPUT),
+      Pin(34, "A9", OUTPUT),
+      Pin(35, "A8", OUTPUT),
+      Pin(36, "A7", OUTPUT),
+      Pin(37, "A6", OUTPUT),
+      Pin(38, "A5", OUTPUT),
+      Pin(39, "A4", OUTPUT),
+      Pin(40, "A3", OUTPUT),
+      Pin(41, "A2", OUTPUT),
+      Pin(42, "A1", OUTPUT),
+      Pin(43, "A0", OUTPUT),
+      Pin(44, "GND4", UNCONNECTED),
     )
 
     p = deviceTraces(port)

@@ -47,7 +47,7 @@ export const INPUT = 0b01
 export const OUTPUT = 0b10
 export const BIDIRECTIONAL = 0b11
 
-export function newPin(number, name, mode, level = null) {
+export function Pin(number, name, mode, level = null) {
   const _listeners = []
   let _trace = null
   let _float = null
@@ -209,7 +209,7 @@ export function newPin(number, name, mode, level = null) {
   return pin
 }
 
-export function newPinArray(...pins) {
+export function PinArray(...pins) {
   const array = []
 
   for (const p of pins) {

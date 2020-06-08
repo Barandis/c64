@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newTrace } from "components/trace"
+import { Trace } from "components/trace"
 
 // The address bus in the Commodore 64 is written two by only two chips:
 // the CPU and the VIC. Only one can write to the address bus at a time,
@@ -68,7 +68,7 @@ import { newTrace } from "components/trace"
 // from CIA2. Putting them through the inverting mux once more produces
 // the active high multiplexed VA6_VA14 and VA7_VA15.
 
-function newFullBus(
+function FullBus(
   { U1, U2, U3, U4, U5, U6, U7, U13, U15, U17, U18, U19, U25, U26 },
   { CN6 }
 ) {
@@ -85,22 +85,22 @@ function newFullBus(
   // full bus's A12...A15. Thus, when the VIC is active and the CPU is
   // not connected to the bus, there is nothing driving those four
   // lines.
-  const A0 = newTrace(U7.A0, U1.RS0, U2.RS0, U18.A0)
-  const A1 = newTrace(U7.A1, U1.RS1, U2.RS1, U18.A1)
-  const A2 = newTrace(U7.A2, U1.RS2, U2.RS2, U18.A2)
-  const A3 = newTrace(U7.A3, U1.RS3, U2.RS3, U18.A3)
-  const A4 = newTrace(U7.A4, U18.A4)
-  const A5 = newTrace(U7.A5)
-  const A6 = newTrace(U7.A6)
-  const A7 = newTrace(U7.A7)
-  const A8 = newTrace(U7.A8, U19.A8)
-  const A9 = newTrace(U7.A9, U19.A9)
-  const A10 = newTrace(U7.A10, U19.A10)
-  const A11 = newTrace(U7.A11, U19.A11)
-  const A12 = newTrace(U7.A12).pullUp()
-  const A13 = newTrace(U7.A13).pullUp()
-  const A14 = newTrace(U7.A14).pullUp()
-  const A15 = newTrace(U7.A15).pullUp()
+  const A0 = Trace(U7.A0, U1.RS0, U2.RS0, U18.A0)
+  const A1 = Trace(U7.A1, U1.RS1, U2.RS1, U18.A1)
+  const A2 = Trace(U7.A2, U1.RS2, U2.RS2, U18.A2)
+  const A3 = Trace(U7.A3, U1.RS3, U2.RS3, U18.A3)
+  const A4 = Trace(U7.A4, U18.A4)
+  const A5 = Trace(U7.A5)
+  const A6 = Trace(U7.A6)
+  const A7 = Trace(U7.A7)
+  const A8 = Trace(U7.A8, U19.A8)
+  const A9 = Trace(U7.A9, U19.A9)
+  const A10 = Trace(U7.A10, U19.A10)
+  const A11 = Trace(U7.A11, U19.A11)
+  const A12 = Trace(U7.A12).pullUp()
+  const A13 = Trace(U7.A13).pullUp()
+  const A14 = Trace(U7.A14).pullUp()
+  const A15 = Trace(U7.A15).pullUp()
 
   // Full bus to memory address and memory control
 
@@ -157,7 +157,7 @@ function newFullBus(
   }
 }
 
-function newMuxBus(
+function MuxBus(
   { U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U24, U25, U26 }
 ) {
   // Multiplexers and latches
@@ -170,14 +170,14 @@ function newMuxBus(
   //      bus when CPU active)
   // U26: 74LS373 Octal Latch (connects VA0...VA7 to full bus when VIC
   //      active)
-  const VA0_VA8 = newTrace(U19.A0_A8, U26.D2, U25.Y4)
-  const VA1_VA9 = newTrace(U19.A1_A9, U26.D4, U25.Y3)
-  const VA2_VA10 = newTrace(U19.A2_A10, U26.D3, U25.Y2)
-  const VA3_VA11 = newTrace(U19.A3_A11, U26.D5, U25.Y1)
-  const VA4_VA12 = newTrace(U19.A4_A12, U26.D6, U13.Y4)
-  const VA5_VA13 = newTrace(U19.A5_A13, U26.D7, U13.Y2)
-  const VA6_VA14 = newTrace(U14._Y1, U26.D1, U13.Y1)
-  const VA7_VA15 = newTrace(U14._Y2, U26.D0, U13.Y3)
+  const VA0_VA8 = Trace(U19.A0_A8, U26.D2, U25.Y4)
+  const VA1_VA9 = Trace(U19.A1_A9, U26.D4, U25.Y3)
+  const VA2_VA10 = Trace(U19.A2_A10, U26.D3, U25.Y2)
+  const VA3_VA11 = Trace(U19.A3_A11, U26.D5, U25.Y1)
+  const VA4_VA12 = Trace(U19.A4_A12, U26.D6, U13.Y4)
+  const VA5_VA13 = Trace(U19.A5_A13, U26.D7, U13.Y2)
+  const VA6_VA14 = Trace(U14._Y1, U26.D1, U13.Y1)
+  const VA7_VA15 = Trace(U14._Y2, U26.D0, U13.Y3)
 
   // Connections to create VA6_VA14 and VA7_VA15
 
@@ -195,12 +195,12 @@ function newMuxBus(
   // multiplexed with the other two channels on U14, and since the
   // outputs are inverted, combine _VA6 and _VA14 into VA6_VA14, and
   // _VA7 and _VA15 into VA7_VA15.
-  const _VA14 = newTrace(U2.PA0, U14.A1)
-  const _VA15 = newTrace(U2.PA1, U14.A2)
-  const VA6 = newTrace(U19.A6, U14.A4, U14.B4)
-  const VA7 = newTrace(U19.A7, U14.A3, U14.B3)
-  const _VA6 = newTrace(U14._Y4, U14.B1)
-  const _VA7 = newTrace(U14._Y3, U14.B2)
+  const _VA14 = Trace(U2.PA0, U14.A1)
+  const _VA15 = Trace(U2.PA1, U14.A2)
+  const VA6 = Trace(U19.A6, U14.A4, U14.B4)
+  const VA7 = Trace(U19.A7, U14.A3, U14.B3)
+  const _VA6 = Trace(U14._Y4, U14.B1)
+  const _VA7 = Trace(U14._Y3, U14.B2)
 
   // Mux bus to DRAM
 
@@ -266,6 +266,6 @@ function newMuxBus(
   }
 }
 
-export function newAddressCircuit(chips, ports) {
-  return { ...newFullBus(chips, ports), ...newMuxBus(chips, ports) }
+export function AddressCircuit(chips, ports) {
+  return { ...FullBus(chips, ports), ...MuxBus(chips, ports) }
 }

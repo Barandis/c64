@@ -22,7 +22,7 @@ import { OUTPUT } from "components/pin"
 // value is simply set *unless* the value it's being set to is `null`.
 // In that case the same rules as direct setting apply.
 
-export function newTrace(...pins) {
+export function Trace(...pins) {
   const _pins = []
   let _float = null
   let _level = null

@@ -4,9 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import { expect, deviceTraces } from "test/helper"
-import { newKeyboardPort } from "ports/keyboard-port"
-import { newPort } from "components/port"
-import { newPin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
+import { KeyboardPort } from "ports/keyboard-port"
+import { Port } from "components/port"
+import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
 
 describe("Keyboard port", () => {
   let port
@@ -15,28 +15,28 @@ describe("Keyboard port", () => {
   let c
 
   beforeEach(() => {
-    port = newKeyboardPort()
+    port = KeyboardPort()
 
-    connector = newPort(
-      newPin(1, "GND", UNCONNECTED),
-      newPin(3, "_RESTORE", INPUT),
-      newPin(4, "VCC", UNCONNECTED),
-      newPin(5, "ROW3", INPUT),
-      newPin(6, "ROW6", INPUT),
-      newPin(7, "ROW5", INPUT),
-      newPin(8, "ROW4", INPUT),
-      newPin(9, "ROW7", INPUT),
-      newPin(10, "ROW2", INPUT),
-      newPin(11, "ROW1", INPUT),
-      newPin(12, "ROW0", INPUT),
-      newPin(13, "COL0", OUTPUT),
-      newPin(14, "COL6", OUTPUT),
-      newPin(15, "COL5", OUTPUT),
-      newPin(16, "COL4", OUTPUT),
-      newPin(17, "COL3", OUTPUT),
-      newPin(18, "COL2", OUTPUT),
-      newPin(19, "COL1", OUTPUT),
-      newPin(20, "COL7", OUTPUT),
+    connector = Port(
+      Pin(1, "GND", UNCONNECTED),
+      Pin(3, "_RESTORE", INPUT),
+      Pin(4, "VCC", UNCONNECTED),
+      Pin(5, "ROW3", INPUT),
+      Pin(6, "ROW6", INPUT),
+      Pin(7, "ROW5", INPUT),
+      Pin(8, "ROW4", INPUT),
+      Pin(9, "ROW7", INPUT),
+      Pin(10, "ROW2", INPUT),
+      Pin(11, "ROW1", INPUT),
+      Pin(12, "ROW0", INPUT),
+      Pin(13, "COL0", OUTPUT),
+      Pin(14, "COL6", OUTPUT),
+      Pin(15, "COL5", OUTPUT),
+      Pin(16, "COL4", OUTPUT),
+      Pin(17, "COL3", OUTPUT),
+      Pin(18, "COL2", OUTPUT),
+      Pin(19, "COL1", OUTPUT),
+      Pin(20, "COL7", OUTPUT),
     )
 
     p = deviceTraces(port)

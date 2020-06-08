@@ -7,13 +7,13 @@ import Sinon from "sinon"
 
 import { expect } from "test/helper"
 import {
-  newPin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
+  Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
 } from "components/pin"
-import { newTrace } from "components/trace"
+import { Trace } from "components/trace"
 
 export function listenerUnconnected() {
-  const p = newPin(1, "A", UNCONNECTED)
-  const t = newTrace(p)
+  const p = Pin(1, "A", UNCONNECTED)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -23,8 +23,8 @@ export function listenerUnconnected() {
 }
 
 export function listenerInput() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -35,8 +35,8 @@ export function listenerInput() {
 }
 
 export function listenerOutput() {
-  const p = newPin(1, "A", OUTPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", OUTPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -46,8 +46,8 @@ export function listenerOutput() {
 }
 
 export function listenerBidirectional() {
-  const p = newPin(1, "A", BIDIRECTIONAL)
-  const t = newTrace(p)
+  const p = Pin(1, "A", BIDIRECTIONAL)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -58,7 +58,7 @@ export function listenerBidirectional() {
 }
 
 export function listenerDirect() {
-  const p = newPin(1, "A", INPUT)
+  const p = Pin(1, "A", INPUT)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -67,8 +67,8 @@ export function listenerDirect() {
 }
 
 export function listenerRemove() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -88,8 +88,8 @@ export function listenerRemove() {
 }
 
 export function listenerNonexistent() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -108,8 +108,8 @@ export function listenerNonexistent() {
 }
 
 export function listenerDouble() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)

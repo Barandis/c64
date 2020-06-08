@@ -4,10 +4,10 @@
 // https://opensource.org/licenses/MIT
 
 import { expect, deviceTraces } from "test/helper"
-import { newUserPort } from "ports/user-port"
-import { newPort } from "components/port"
+import { UserPort } from "ports/user-port"
+import { Port } from "components/port"
 import {
-  newPin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+  Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
 
 describe("User port", () => {
@@ -17,33 +17,33 @@ describe("User port", () => {
   let c
 
   beforeEach(() => {
-    port = newUserPort()
+    port = UserPort()
 
-    connector = newPort(
-      newPin(1, "GND1", UNCONNECTED),
-      newPin(2, "VCC", UNCONNECTED),
-      newPin(3, "_RESET", BIDIRECTIONAL),
-      newPin(4, "CNT1", BIDIRECTIONAL),
-      newPin(5, "SP1", BIDIRECTIONAL),
-      newPin(6, "CNT2", BIDIRECTIONAL),
-      newPin(7, "SP2", BIDIRECTIONAL),
-      newPin(8, "_PC2", OUTPUT),
-      newPin(9, "ATN", INPUT),
-      newPin(10, "VAC1", UNCONNECTED),
-      newPin(11, "VAC2", UNCONNECTED),
-      newPin(12, "GND2", UNCONNECTED),
-      newPin(13, "GND3", UNCONNECTED),
-      newPin(14, "_FLAG2", INPUT),
-      newPin(15, "PB0", BIDIRECTIONAL),
-      newPin(16, "PB1", BIDIRECTIONAL),
-      newPin(17, "PB2", BIDIRECTIONAL),
-      newPin(18, "PB3", BIDIRECTIONAL),
-      newPin(19, "PB4", BIDIRECTIONAL),
-      newPin(20, "PB5", BIDIRECTIONAL),
-      newPin(21, "PB6", BIDIRECTIONAL),
-      newPin(22, "PB7", BIDIRECTIONAL),
-      newPin(23, "PA2", BIDIRECTIONAL),
-      newPin(24, "GND4", UNCONNECTED),
+    connector = Port(
+      Pin(1, "GND1", UNCONNECTED),
+      Pin(2, "VCC", UNCONNECTED),
+      Pin(3, "_RESET", BIDIRECTIONAL),
+      Pin(4, "CNT1", BIDIRECTIONAL),
+      Pin(5, "SP1", BIDIRECTIONAL),
+      Pin(6, "CNT2", BIDIRECTIONAL),
+      Pin(7, "SP2", BIDIRECTIONAL),
+      Pin(8, "_PC2", OUTPUT),
+      Pin(9, "ATN", INPUT),
+      Pin(10, "VAC1", UNCONNECTED),
+      Pin(11, "VAC2", UNCONNECTED),
+      Pin(12, "GND2", UNCONNECTED),
+      Pin(13, "GND3", UNCONNECTED),
+      Pin(14, "_FLAG2", INPUT),
+      Pin(15, "PB0", BIDIRECTIONAL),
+      Pin(16, "PB1", BIDIRECTIONAL),
+      Pin(17, "PB2", BIDIRECTIONAL),
+      Pin(18, "PB3", BIDIRECTIONAL),
+      Pin(19, "PB4", BIDIRECTIONAL),
+      Pin(20, "PB5", BIDIRECTIONAL),
+      Pin(21, "PB6", BIDIRECTIONAL),
+      Pin(22, "PB7", BIDIRECTIONAL),
+      Pin(23, "PA2", BIDIRECTIONAL),
+      Pin(24, "GND4", UNCONNECTED),
     )
 
     p = deviceTraces(port)

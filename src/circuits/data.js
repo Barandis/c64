@@ -3,9 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newTrace } from "components/trace"
+import { Trace } from "components/trace"
 
-export function newDataCircuit(
+export function DataCircuit(
   {
     U1, U2, U3, U4, U5, U6, U7, U9, U10, U11, U12, U16, U18, U19, U21, U22, U23,
     U24,
@@ -19,14 +19,14 @@ export function newDataCircuit(
   // U7: 6510 CPU
   // U18: 6581 SID
   // U19: 6567 VIC
-  const D0 = newTrace(U7.D0, U1.D0, U2.D0, U18.D0, U19.D0)
-  const D1 = newTrace(U7.D1, U1.D1, U2.D1, U18.D1, U19.D1)
-  const D2 = newTrace(U7.D2, U1.D2, U2.D2, U18.D2, U19.D2)
-  const D3 = newTrace(U7.D3, U1.D3, U2.D3, U18.D3, U19.D3)
-  const D4 = newTrace(U7.D4, U1.D4, U2.D4, U18.D4, U19.D4)
-  const D5 = newTrace(U7.D5, U1.D5, U2.D5, U18.D5, U19.D5)
-  const D6 = newTrace(U7.D6, U1.D6, U2.D6, U18.D6, U19.D6)
-  const D7 = newTrace(U7.D7, U1.D7, U2.D7, U18.D7, U19.D7)
+  const D0 = Trace(U7.D0, U1.D0, U2.D0, U18.D0, U19.D0)
+  const D1 = Trace(U7.D1, U1.D1, U2.D1, U18.D1, U19.D1)
+  const D2 = Trace(U7.D2, U1.D2, U2.D2, U18.D2, U19.D2)
+  const D3 = Trace(U7.D3, U1.D3, U2.D3, U18.D3, U19.D3)
+  const D4 = Trace(U7.D4, U1.D4, U2.D4, U18.D4, U19.D4)
+  const D5 = Trace(U7.D5, U1.D5, U2.D5, U18.D5, U19.D5)
+  const D6 = Trace(U7.D6, U1.D6, U2.D6, U18.D6, U19.D6)
+  const D7 = Trace(U7.D7, U1.D7, U2.D7, U18.D7, U19.D7)
 
   // Data bus to memory
 
@@ -75,10 +75,10 @@ export function newDataCircuit(
   D1.addPins(U16.X3)
   D2.addPins(U16.X2)
   D3.addPins(U16.X1)
-  const D8 = newTrace(U19.D8, U6.D0, U16.Y4)
-  const D9 = newTrace(U19.D9, U6.D1, U16.Y3)
-  const D10 = newTrace(U19.D10, U6.D2, U16.Y2)
-  const D11 = newTrace(U19.D11, U6.D3, U16.Y1)
+  const D8 = Trace(U19.D8, U6.D0, U16.Y4)
+  const D9 = Trace(U19.D9, U6.D1, U16.Y3)
+  const D10 = Trace(U19.D10, U6.D2, U16.Y2)
+  const D11 = Trace(U19.D11, U6.D3, U16.Y1)
 
   // Data bus to expansion port
 

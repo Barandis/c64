@@ -4,9 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import {
-  newPin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED,
+  Pin, BIDIRECTIONAL, INPUT, OUTPUT, UNCONNECTED,
 } from "components/pin"
-import { newPort } from "components/port"
+import { Port } from "components/port"
 
 export const A = 13
 export const B = 14
@@ -21,35 +21,35 @@ export const L = 22
 export const M = 23
 export const N = 24
 
-export function newUserPort() {
-  return newPort(
-    newPin(M, "PA2", BIDIRECTIONAL),
+export function UserPort() {
+  return Port(
+    Pin(M, "PA2", BIDIRECTIONAL),
 
-    newPin(C, "PB0", BIDIRECTIONAL),
-    newPin(D, "PB1", BIDIRECTIONAL),
-    newPin(E, "PB2", BIDIRECTIONAL),
-    newPin(F, "PB3", BIDIRECTIONAL),
-    newPin(H, "PB4", BIDIRECTIONAL),
-    newPin(J, "PB5", BIDIRECTIONAL),
-    newPin(K, "PB6", BIDIRECTIONAL),
-    newPin(L, "PB7", BIDIRECTIONAL),
+    Pin(C, "PB0", BIDIRECTIONAL),
+    Pin(D, "PB1", BIDIRECTIONAL),
+    Pin(E, "PB2", BIDIRECTIONAL),
+    Pin(F, "PB3", BIDIRECTIONAL),
+    Pin(H, "PB4", BIDIRECTIONAL),
+    Pin(J, "PB5", BIDIRECTIONAL),
+    Pin(K, "PB6", BIDIRECTIONAL),
+    Pin(L, "PB7", BIDIRECTIONAL),
 
-    newPin(5, "SP1", BIDIRECTIONAL),
-    newPin(7, "SP2", BIDIRECTIONAL),
+    Pin(5, "SP1", BIDIRECTIONAL),
+    Pin(7, "SP2", BIDIRECTIONAL),
 
-    newPin(4, "CNT1", BIDIRECTIONAL),
-    newPin(6, "CNT2", BIDIRECTIONAL),
-    newPin(9, "ATN", OUTPUT),
-    newPin(8, "_PC2", INPUT),
-    newPin(B, "_FLAG2", OUTPUT),
-    newPin(3, "_RESET", BIDIRECTIONAL),
+    Pin(4, "CNT1", BIDIRECTIONAL),
+    Pin(6, "CNT2", BIDIRECTIONAL),
+    Pin(9, "ATN", OUTPUT),
+    Pin(8, "_PC2", INPUT),
+    Pin(B, "_FLAG2", OUTPUT),
+    Pin(3, "_RESET", BIDIRECTIONAL),
 
-    newPin(2, "VCC", UNCONNECTED),
-    newPin(10, "VAC1", UNCONNECTED),
-    newPin(11, "VAC22", UNCONNECTED),
-    newPin(1, "GND1", UNCONNECTED),
-    newPin(12, "GND2", UNCONNECTED),
-    newPin(A, "GND3", UNCONNECTED),
-    newPin(N, "GND4", UNCONNECTED),
+    Pin(2, "VCC", UNCONNECTED),
+    Pin(10, "VAC1", UNCONNECTED),
+    Pin(11, "VAC22", UNCONNECTED),
+    Pin(1, "GND1", UNCONNECTED),
+    Pin(12, "GND2", UNCONNECTED),
+    Pin(A, "GND3", UNCONNECTED),
+    Pin(N, "GND4", UNCONNECTED),
   )
 }

@@ -15,7 +15,7 @@
 // instantaneously. If two bidirectional pins connect, then whichever
 // one is in the connector that actually called `connect` will be the
 // one whose signal takes precedence.
-export function newConnector(pin) {
+export function Connector(pin) {
   let other = null
 
   pin.addListener(p => {
@@ -67,12 +67,12 @@ export function newConnector(pin) {
   }
 }
 
-export function newConnectorArray(pinArray) {
+export function ConnectorArray(pinArray) {
   const array = []
 
   for (const pin of pinArray) {
     if (pin) {
-      const connector = newConnector(pin)
+      const connector = Connector(pin)
       array[pin.number] = connector
       array[pin.name] = connector
     }

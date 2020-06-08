@@ -6,9 +6,9 @@
 import chai from "chai"
 import sinonChai from "sinon-chai"
 
-import { newTrace } from "components/trace"
-import { OUTPUT, INPUT, newPin } from "components/pin"
-import { newPort } from "components/port"
+import { Trace } from "components/trace"
+import { OUTPUT, INPUT, Pin } from "components/pin"
+import { Port } from "components/port"
 
 chai.use(sinonChai)
 
@@ -52,7 +52,7 @@ export function deviceTraces(device) {
 
   for (const pin of device.pins) {
     if (pin) {
-      const trace = newTrace(pin)
+      const trace = Trace(pin)
       traces[pin.number] = trace
       traces[pin.name] = trace
     }
@@ -71,9 +71,9 @@ export function portConnector(port) {
         : pin.mode === OUTPUT
           ? INPUT
           : pin.mode
-      pins[pin.num] = newPin(pin.num, pin.name, mode)
+      pins[pin.num] = Pin(pin.num, pin.name, mode)
     }
   }
 
-  return newPort(...pins)
+  return Port(...pins)
 }

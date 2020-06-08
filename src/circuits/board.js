@@ -4,91 +4,91 @@
 // https://opensource.org/licenses/MIT
 
 // ROM images
-import { newAddressCircuit } from "./address"
-import { newDataCircuit } from "./data"
-import { newControlCircuit } from "./control"
-import { newIoCircuit } from "./io"
+import { AddressCircuit } from "./address"
+import { DataCircuit } from "./data"
+import { ControlCircuit } from "./control"
+import { IoCircuit } from "./io"
 
 import { basic } from "rom/basic"
 import { kernal } from "rom/kernal"
 import { character } from "rom/character"
 
 // Processor chips
-import { new6510 } from "chips/6510"
-import { new6526 } from "chips/6526"
-import { new6567 } from "chips/6567"
-import { new6581 } from "chips/6581"
+import { Ic6510 } from "chips/ic-6510"
+import { Ic6526 } from "chips/ic-6526"
+import { Ic6567 } from "chips/ic-6567"
+import { Ic6581 } from "chips/ic-6581"
 
 // Memory chips
-import { new2114 } from "chips/2114"
-import { new2332 } from "chips/2332"
-import { new2364 } from "chips/2364"
-import { new4164 } from "chips/4164"
+import { Ic2114 } from "chips/ic-2114"
+import { Ic2332 } from "chips/ic-2332"
+import { Ic2364 } from "chips/ic-2364"
+import { Ic4164 } from "chips/ic-4164"
 
 // Logic chips
-import { new4066 } from "chips/4066"
-import { new7406 } from "chips/7406"
-import { new7408 } from "chips/7408"
-import { new74139 } from "chips/74139"
-import { new74257 } from "chips/74257"
-import { new74258 } from "chips/74258"
-import { new74373 } from "chips/74373"
-import { new82S100 } from "chips/82S100"
+import { Ic4066 } from "chips/ic-4066"
+import { Ic7406 } from "chips/ic-7406"
+import { Ic7408 } from "chips/ic-7408"
+import { Ic74139 } from "chips/ic-74139"
+import { Ic74257 } from "chips/ic-74257"
+import { Ic74258 } from "chips/ic-74258"
+import { Ic74373 } from "chips/ic-74373"
+import { Ic82S100 } from "chips/ic-82S100"
 
 // Ports
-import { newCassettePort } from "ports/cassette-port"
-import { newControl1Port } from "ports/control-1-port"
-import { newControl2Port } from "ports/control-2-port"
-import { newExpansionPort } from "ports/expansion-port"
-import { newKeyboardPort } from "ports/keyboard-port"
-import { newSerialPort } from "ports/serial-port"
-import { newUserPort } from "ports/user-port"
+import { CassettePort } from "ports/cassette-port"
+import { Control1Port } from "ports/control-1-port"
+import { Control2Port } from "ports/control-2-port"
+import { ExpansionPort } from "ports/expansion-port"
+import { KeyboardPort } from "ports/keyboard-port"
+import { SerialPort } from "ports/serial-port"
+import { UserPort } from "ports/user-port"
 
 export function newBoard() {
   const chips = {
-    U1: new6526(),
-    U2: new6526(),
-    U3: new2364(basic),
-    U4: new2364(kernal),
-    U5: new2332(character),
-    U6: new2114(),
-    U7: new6510(),
-    U8: new7406(),
-    U9: new4164(),
-    U10: new4164(),
-    U11: new4164(),
-    U12: new4164(),
-    U13: new74257(),
-    U14: new74258(),
-    U15: new74139(),
-    U16: new4066(),
-    U17: new82S100(),
-    U18: new6581(),
-    U19: new6567(),
-    U21: new4164(),
-    U22: new4164(),
-    U23: new4164(),
-    U24: new4164(),
-    U25: new74257(),
-    U26: new74373(),
-    U27: new7408(),
-    U28: new4066(),
+    U1: Ic6526(),
+    U2: Ic6526(),
+    U3: Ic2364(basic),
+    U4: Ic2364(kernal),
+    U5: Ic2332(character),
+    U6: Ic2114(),
+    U7: Ic6510(),
+    U8: Ic7406(),
+    U9: Ic4164(),
+    U10: Ic4164(),
+    U11: Ic4164(),
+    U12: Ic4164(),
+    U13: Ic74257(),
+    U14: Ic74258(),
+    U15: Ic74139(),
+    U16: Ic4066(),
+    U17: Ic82S100(),
+    U18: Ic6581(),
+    U19: Ic6567(),
+    U21: Ic4164(),
+    U22: Ic4164(),
+    U23: Ic4164(),
+    U24: Ic4164(),
+    U25: Ic74257(),
+    U26: Ic74373(),
+    U27: Ic7408(),
+    U28: Ic4066(),
   }
 
   const ports = {
-    CN1: newKeyboardPort(),
-    CN2: newUserPort(),
-    CN3: newCassettePort(),
-    CN4: newSerialPort(),
-    CN6: newExpansionPort(),
-    CN8: newControl2Port(),
-    CN9: newControl1Port(),
+    CN1: KeyboardPort(),
+    CN2: UserPort(),
+    CN3: CassettePort(),
+    CN4: SerialPort(),
+    CN6: ExpansionPort(),
+    CN8: Control2Port(),
+    CN9: Control1Port(),
   }
 
-  const address = newAddressCircuit(chips, ports)
-  const data = newDataCircuit(chips, ports)
-  const control = newControlCircuit(chips, ports)
-  const io = newIoCircuit(chips, ports)
+  const address = AddressCircuit(chips, ports)
+  const data = DataCircuit(chips, ports)
+  const control = ControlCircuit(chips, ports)
+  const io = IoCircuit(chips, ports)
 
   return { ...chips, ...ports, ...address, ...data, ...control, ...io }
 }

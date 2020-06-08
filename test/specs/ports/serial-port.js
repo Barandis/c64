@@ -7,10 +7,10 @@
 // is also testing the functionality of a port in general.
 
 import { expect, deviceTraces } from "test/helper"
-import { newSerialPort } from "ports/serial-port"
-import { newPort } from "components/port"
+import { SerialPort } from "ports/serial-port"
+import { Port } from "components/port"
 import {
-  newPin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+  Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
 
 describe("Serial port", () => {
@@ -20,15 +20,15 @@ describe("Serial port", () => {
   let c
 
   beforeEach(() => {
-    port = newSerialPort()
+    port = SerialPort()
 
-    connector = newPort(
-      newPin(1, "_SRQ", INPUT),
-      newPin(2, "GND", UNCONNECTED),
-      newPin(3, "ATN", OUTPUT),
-      newPin(4, "CLK", BIDIRECTIONAL),
-      newPin(5, "DATA", BIDIRECTIONAL),
-      newPin(6, "_RESET", BIDIRECTIONAL),
+    connector = Port(
+      Pin(1, "_SRQ", INPUT),
+      Pin(2, "GND", UNCONNECTED),
+      Pin(3, "ATN", OUTPUT),
+      Pin(4, "CLK", BIDIRECTIONAL),
+      Pin(5, "DATA", BIDIRECTIONAL),
+      Pin(6, "_RESET", BIDIRECTIONAL),
     )
 
     p = deviceTraces(port)

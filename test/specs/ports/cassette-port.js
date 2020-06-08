@@ -4,9 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import { expect, deviceTraces } from "test/helper"
-import { newCassettePort } from "ports/cassette-port"
-import { newPort } from "components/port"
-import { newPin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
+import { CassettePort } from "ports/cassette-port"
+import { Port } from "components/port"
+import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
 
 describe("Cassette port", () => {
   let port
@@ -15,15 +15,15 @@ describe("Cassette port", () => {
   let c
 
   beforeEach(() => {
-    port = newCassettePort()
+    port = CassettePort()
 
-    connector = newPort(
-      newPin(1, "GND", UNCONNECTED),
-      newPin(2, "VCC", UNCONNECTED),
-      newPin(3, "MOTOR", OUTPUT),
-      newPin(4, "READ", INPUT),
-      newPin(5, "WRITE", OUTPUT),
-      newPin(6, "SENSE", INPUT),
+    connector = Port(
+      Pin(1, "GND", UNCONNECTED),
+      Pin(2, "VCC", UNCONNECTED),
+      Pin(3, "MOTOR", OUTPUT),
+      Pin(4, "READ", INPUT),
+      Pin(5, "WRITE", OUTPUT),
+      Pin(6, "SENSE", INPUT),
     )
 
     p = deviceTraces(port)

@@ -3,20 +3,20 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPin, OUTPUT, UNCONNECTED } from "components/pin"
-import { newPort } from "components/port"
+import { Pin, OUTPUT, UNCONNECTED } from "components/pin"
+import { Port } from "components/port"
 
-export function newControl1Port() {
-  return newPort(
-    newPin(1, "JOYA0", OUTPUT),
-    newPin(2, "JOYA1", OUTPUT),
-    newPin(3, "JOYA2", OUTPUT),
-    newPin(4, "JOYA3", OUTPUT),
-    newPin(9, "POTAX", OUTPUT),
-    newPin(5, "POTAY", OUTPUT),
-    newPin(6, "BTNA_LP", OUTPUT),
+export function Control1Port() {
+  return Port(
+    Pin(1, "JOYA0", OUTPUT),
+    Pin(2, "JOYA1", OUTPUT),
+    Pin(3, "JOYA2", OUTPUT),
+    Pin(4, "JOYA3", OUTPUT),
+    Pin(9, "POTAX", OUTPUT),
+    Pin(5, "POTAY", OUTPUT),
+    Pin(6, "BTNA_LP", OUTPUT),
 
-    newPin(7, "VCC", UNCONNECTED),
-    newPin(8, "GND", UNCONNECTED),
+    Pin(7, "VCC", UNCONNECTED),
+    Pin(8, "GND", UNCONNECTED),
   )
 }

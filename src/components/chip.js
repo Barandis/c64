@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPinArray } from "./pin"
+import { PinArray } from "./pin"
 
 // Represents a generic semiconductor chip. In this scheme, a chip is
 // defined by its connections to the outside world, which provide its
@@ -19,8 +19,8 @@ import { newPinArray } from "./pin"
 // chance of conflict since a chip isn't meant to have any properties
 // other than the pins themselves.
 
-export function newChip(...pins) {
-  const pinArray = newPinArray(...pins)
+export function Chip(...pins) {
+  const pinArray = PinArray(...pins)
 
   const chip = {
     pins: pinArray,

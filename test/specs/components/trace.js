@@ -19,15 +19,15 @@ import {
 } from "./trace/float"
 
 import { expect } from "test/helper"
-import { newPin, INPUT } from "components/pin"
-import { newTrace } from "components/trace"
+import { Pin, INPUT } from "components/pin"
+import { Trace } from "components/trace"
 
 describe("Trace", () => {
   const test = fn => () => fn()
 
   it("doesn't add a pin twice", () => {
-    const p = newPin(1, "A", INPUT)
-    const t = newTrace(p, p)
+    const p = Pin(1, "A", INPUT)
+    const t = Trace(p, p)
     const spy = Sinon.spy()
     p.addListener(spy)
     t.level = 1

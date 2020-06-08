@@ -3,33 +3,33 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
-import { newPort } from "components/port"
+import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
+import { Port } from "components/port"
 
-export function newKeyboardPort() {
+export function KeyboardPort() {
   // There is no pin 2; it is used for alignment.
-  return newPort(
-    newPin(12, "ROW0", OUTPUT),
-    newPin(11, "ROW1", OUTPUT),
-    newPin(10, "ROW2", OUTPUT),
-    newPin(5, "ROW3", OUTPUT),
-    newPin(8, "ROW4", OUTPUT),
-    newPin(7, "ROW5", OUTPUT),
-    newPin(6, "ROW6", OUTPUT),
-    newPin(9, "ROW7", OUTPUT),
+  return Port(
+    Pin(12, "ROW0", OUTPUT),
+    Pin(11, "ROW1", OUTPUT),
+    Pin(10, "ROW2", OUTPUT),
+    Pin(5, "ROW3", OUTPUT),
+    Pin(8, "ROW4", OUTPUT),
+    Pin(7, "ROW5", OUTPUT),
+    Pin(6, "ROW6", OUTPUT),
+    Pin(9, "ROW7", OUTPUT),
 
-    newPin(13, "COL0", INPUT),
-    newPin(19, "COL1", INPUT),
-    newPin(18, "COL2", INPUT),
-    newPin(17, "COL3", INPUT),
-    newPin(16, "COL4", INPUT),
-    newPin(15, "COL5", INPUT),
-    newPin(14, "COL6", INPUT),
-    newPin(20, "COL7", INPUT),
+    Pin(13, "COL0", INPUT),
+    Pin(19, "COL1", INPUT),
+    Pin(18, "COL2", INPUT),
+    Pin(17, "COL3", INPUT),
+    Pin(16, "COL4", INPUT),
+    Pin(15, "COL5", INPUT),
+    Pin(14, "COL6", INPUT),
+    Pin(20, "COL7", INPUT),
 
-    newPin(3, "_RESTORE", OUTPUT),
+    Pin(3, "_RESTORE", OUTPUT),
 
-    newPin(4, "VCC", UNCONNECTED),
-    newPin(1, "GND", UNCONNECTED),
+    Pin(4, "VCC", UNCONNECTED),
+    Pin(1, "GND", UNCONNECTED),
   )
 }

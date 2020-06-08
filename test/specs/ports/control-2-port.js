@@ -4,9 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import { expect, deviceTraces } from "test/helper"
-import { newControl2Port } from "ports/control-2-port"
-import { newPort } from "components/port"
-import { newPin, UNCONNECTED, INPUT } from "components/pin"
+import { Control2Port } from "ports/control-2-port"
+import { Port } from "components/port"
+import { Pin, UNCONNECTED, INPUT } from "components/pin"
 
 describe("Control port 1", () => {
   let port
@@ -15,18 +15,18 @@ describe("Control port 1", () => {
   let c
 
   beforeEach(() => {
-    port = newControl2Port()
+    port = Control2Port()
 
-    connector = newPort(
-      newPin(1, "JOYB0", INPUT),
-      newPin(2, "JOYB1", INPUT),
-      newPin(3, "JOYB2", INPUT),
-      newPin(4, "JOYB3", INPUT),
-      newPin(5, "POTBY", INPUT),
-      newPin(6, "BTNB", INPUT),
-      newPin(7, "VCC", UNCONNECTED),
-      newPin(8, "GND", UNCONNECTED),
-      newPin(9, "POTBX", INPUT),
+    connector = Port(
+      Pin(1, "JOYB0", INPUT),
+      Pin(2, "JOYB1", INPUT),
+      Pin(3, "JOYB2", INPUT),
+      Pin(4, "JOYB3", INPUT),
+      Pin(5, "POTBY", INPUT),
+      Pin(6, "BTNB", INPUT),
+      Pin(7, "VCC", UNCONNECTED),
+      Pin(8, "GND", UNCONNECTED),
+      Pin(9, "POTBX", INPUT),
     )
 
     p = deviceTraces(port)

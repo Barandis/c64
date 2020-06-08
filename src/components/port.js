@@ -3,16 +3,16 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newPinArray } from "components/pin"
-import { newConnectorArray } from "components/connector"
+import { PinArray } from "components/pin"
+import { ConnectorArray } from "components/connector"
 
 // Represents an external port on a computer, consisting of a number of
 // pins to connect to the electronics behind it and a matching number of
 // connectors to allow connection to external devices.
 
-export function newPort(...pins) {
-  const pinArray = newPinArray(...pins)
-  const connectorArray = newConnectorArray(pinArray)
+export function Port(...pins) {
+  const pinArray = PinArray(...pins)
+  const connectorArray = ConnectorArray(pinArray)
 
   const port = {
     pins: pinArray,

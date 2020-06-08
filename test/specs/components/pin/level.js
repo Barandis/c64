@@ -5,12 +5,12 @@
 
 import { expect } from "test/helper"
 import {
-  newPin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
+  Pin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
-import { newTrace } from "components/trace"
+import { Trace } from "components/trace"
 
 export function levelNoTrace() {
-  const p = newPin(1, "A", INPUT)
+  const p = Pin(1, "A", INPUT)
   expect(p.level).to.be.null
   expect(p.high).to.be.false
   expect(p.low).to.be.false
@@ -36,15 +36,15 @@ export function levelNoTrace() {
 }
 
 export function levelUpdateNoTrace() {
-  const p = newPin(1, "A", INPUT)
+  const p = Pin(1, "A", INPUT)
   p.level = 1
   p.updateLevel()
   expect(p.level).to.equal(1)
 }
 
 export function levelUnconnected() {
-  const p = newPin(1, "A", UNCONNECTED)
-  const t = newTrace(p)
+  const p = Pin(1, "A", UNCONNECTED)
+  const t = Trace(p)
 
   t.level = 1
   expect(p.level).to.be.null
@@ -68,8 +68,8 @@ export function levelUnconnected() {
 }
 
 export function levelInput() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
 
   t.level = 1
   expect(p.level).to.equal(1)
@@ -93,8 +93,8 @@ export function levelInput() {
 }
 
 export function levelOutput() {
-  const p = newPin(1, "A", OUTPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", OUTPUT)
+  const t = Trace(p)
 
   t.level = 1
   expect(p.level).to.equal(null)
@@ -118,8 +118,8 @@ export function levelOutput() {
 }
 
 export function levelBidirectional() {
-  const p = newPin(1, "A", BIDIRECTIONAL)
-  const t = newTrace(p)
+  const p = Pin(1, "A", BIDIRECTIONAL)
+  const t = Trace(p)
 
   t.level = 1
   expect(p.level).to.equal(1)
@@ -139,8 +139,8 @@ export function levelBidirectional() {
 }
 
 export function levelOptions() {
-  const p = newPin(1, "A", BIDIRECTIONAL)
-  const t = newTrace(p)
+  const p = Pin(1, "A", BIDIRECTIONAL)
+  const t = Trace(p)
 
   t.set()
   expect(p.level).to.equal(1)
@@ -164,21 +164,21 @@ export function levelOptions() {
 }
 
 export function levelToggleHigh() {
-  const p = newPin(1, "A")
+  const p = Pin(1, "A")
   p.level = 0
   p.toggle()
   expect(p.level).to.equal(1)
 }
 
 export function levelToggleLow() {
-  const p = newPin(1, "A")
+  const p = Pin(1, "A")
   p.level = 1
   p.toggle()
   expect(p.level).to.equal(0)
 }
 
 export function levelToggleNone() {
-  const p = newPin(1, "A")
+  const p = Pin(1, "A")
   p.level = null
   p.toggle()
   expect(p.level).to.equal(null)

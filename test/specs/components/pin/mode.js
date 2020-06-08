@@ -5,15 +5,15 @@
 
 import { expect } from "test/helper"
 import {
-  UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, newPin,
+  UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, Pin,
 } from "components/pin"
-import { newTrace } from "components/trace"
+import { Trace } from "components/trace"
 
 export function modeInitial() {
-  const p1 = newPin(1, "A", UNCONNECTED)
-  const p2 = newPin(2, "B", INPUT)
-  const p3 = newPin(3, "C", OUTPUT)
-  const p4 = newPin(4, "D", BIDIRECTIONAL)
+  const p1 = Pin(1, "A", UNCONNECTED)
+  const p2 = Pin(2, "B", INPUT)
+  const p3 = Pin(3, "C", OUTPUT)
+  const p4 = Pin(4, "D", BIDIRECTIONAL)
 
   expect(p1.mode).to.equal(UNCONNECTED)
   expect(p1.input).to.be.false
@@ -33,7 +33,7 @@ export function modeInitial() {
 }
 
 export function modeChange() {
-  const p = newPin(1, "A", UNCONNECTED)
+  const p = Pin(1, "A", UNCONNECTED)
   expect(p.mode).to.equal(UNCONNECTED)
   p.mode = INPUT
   expect(p.mode).to.equal(INPUT)
@@ -44,8 +44,8 @@ export function modeChange() {
 }
 
 export function modeOutToIn() {
-  const p = newPin(1, "A", OUTPUT)
-  const t = newTrace(p, newPin(2, "B", INPUT))
+  const p = Pin(1, "A", OUTPUT)
+  const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
   expect(t.level).to.equal(1)
   p.mode = INPUT
@@ -53,8 +53,8 @@ export function modeOutToIn() {
 }
 
 export function modeBidiToIn() {
-  const p = newPin(1, "A", BIDIRECTIONAL)
-  const t = newTrace(p, newPin(2, "B", INPUT))
+  const p = Pin(1, "A", BIDIRECTIONAL)
+  const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
   expect(t.level).to.equal(1)
   p.mode = INPUT
@@ -62,8 +62,8 @@ export function modeBidiToIn() {
 }
 
 export function modeUncToIn() {
-  const p = newPin(1, "A", UNCONNECTED)
-  const t = newTrace(p, newPin(2, "B", INPUT))
+  const p = Pin(1, "A", UNCONNECTED)
+  const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
   expect(t.level).to.be.null
   p.mode = INPUT
@@ -71,8 +71,8 @@ export function modeUncToIn() {
 }
 
 export function modeBidiToOut() {
-  const p = newPin(1, "A", BIDIRECTIONAL)
-  const t = newTrace(p)
+  const p = Pin(1, "A", BIDIRECTIONAL)
+  const t = Trace(p)
   p.level = 1
   expect(t.level).to.equal(1)
   p.mode = OUTPUT
@@ -80,8 +80,8 @@ export function modeBidiToOut() {
 }
 
 export function modeUncToOut() {
-  const p = newPin(1, "A", UNCONNECTED)
-  const t = newTrace(p)
+  const p = Pin(1, "A", UNCONNECTED)
+  const t = Trace(p)
   p.level = 1
   expect(t.level).to.be.null
   p.mode = OUTPUT
@@ -89,8 +89,8 @@ export function modeUncToOut() {
 }
 
 export function modeInToUnc() {
-  const p = newPin(1, "A", INPUT)
-  const t = newTrace(p)
+  const p = Pin(1, "A", INPUT)
+  const t = Trace(p)
   t.level = 1
   expect(p.level).to.equal(1)
   p.mode = UNCONNECTED

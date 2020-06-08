@@ -23,19 +23,19 @@ import {
 } from "./pin/listener"
 import { arrayContains, arrayByNumber, arrayByName } from "./pin/array"
 
-import { newPin } from "components/pin"
+import { Pin } from "components/pin"
 import { expect } from "test/helper"
 
 describe("Pin", () => {
   const test = fn => () => fn()
 
   it("has a number", () => {
-    const p = newPin(1, "A")
+    const p = Pin(1, "A")
     expect(p.number).to.equal(1)
   })
 
   it("has a name", () => {
-    const p = newPin(1, "A")
+    const p = Pin(1, "A")
     expect(p.name).to.equal("A")
   })
 
