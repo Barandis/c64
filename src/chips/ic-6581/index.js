@@ -72,10 +72,8 @@ export function Ic6581() {
     Pin(14, "GND", UNCONNECTED),
   )
 
-  const addressPins = [chip.RS0, chip.RS1, chip.RS2, chip.RS3]
-  const dataPins = [
-    chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7,
-  ]
+  const addrPins = [...range(5)].map(pin => chip[`A${pin}`])
+  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
 
   // The 32 addressable registers on the 6581. Only 29 of these are
   // actually used; reading the others will always return 0xff and
@@ -151,7 +149,7 @@ export function Ic6581() {
       setMode(OUTPUT, ...dataPins)
       valueToPins(null, ...dataPins)
     } else {
-      const index = pinsToValue(...addressPins)
+      const index = pinsToValue(...addrPins)
       if (chip.R__W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {

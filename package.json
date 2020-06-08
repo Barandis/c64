@@ -12,7 +12,7 @@
     "docs": "npm run clean:docs && jsdoc -c ./jsdoc.json",
     "fix": "eslint ./src ./test --fix",
     "lint": "eslint ./src ./test",
-    "test": "cross-env NODE_PATH=./src NODE_ENV=test mocha ./test --require @babel/register --recursive",
+    "test": "cross-env NODE_PATH=./src NODE_ENV=test mocha ./test --require @babel/register --reporter dot --recursive",
     "debug": "cross-env NODE_PATH=./src NODE_ENV=test DEBUG=1 mocha ./test --require @babel/register --reporter dot --recursive",
     "test:unit": "cross-env NODE_PATH=./src NODE_ENV=test mocha ./test/unit --require @babel/register --reporter dot --recursive",
     "debug:unit": "cross-env NODE_PATH=./src NODE_ENV=test DEBUG=1 mocha ./test/unit --require @babel/register --reporter dot --recursive",

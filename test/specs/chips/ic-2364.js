@@ -23,9 +23,11 @@ describe("2364 8k x 8-bit ROM", () => {
 
       addrTraces = [...range(13)].map(pin => traces[`A${pin}`])
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
-    });
+    })
 
-    [...range(0x0000, 0x1fff, 0x1000)].forEach(base => {
+    const blocks = [...range(0x0000, 0x1fff, 0x1000)]
+
+    blocks.forEach(base => {
       it(`reads correctly from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {
@@ -65,9 +67,11 @@ describe("2364 8k x 8-bit ROM", () => {
 
       addrTraces = [...range(13)].map(pin => traces[`A${pin}`])
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
-    });
+    })
 
-    [...range(0x0000, 0x1fff, 0x1000)].forEach(base => {
+    const blocks = [...range(0x0000, 0x1fff, 0x1000)]
+
+    blocks.forEach(base => {
       it(`reads correctly from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {

@@ -70,7 +70,9 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   }
 
   describe("reading and writing", () => {
-    [...range(0x0000, 0xffff, 0x1000)].forEach(base => {
+    const blocks = [...range(0x0000, 0xffff, 0x1000)]
+
+    blocks.forEach(base => {
       it(`writes and reads correctly from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {

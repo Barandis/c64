@@ -131,10 +131,8 @@ export function Ic6526() {
     Pin(1, "VSS", UNCONNECTED),
   )
 
-  const addressPins = [chip.RS0, chip.RS1, chip.RS2, chip.RS3]
-  const dataPins = [
-    chip.D0, chip.D1, chip.D2, chip.D3, chip.D4, chip.D5, chip.D6, chip.D7,
-  ]
+  const addrPins = [...range(4)].map(pin => chip[`RS${pin}`])
+  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
 
   // The 16 readable registers on the 6526.
   const registers = new Uint8Array(16)
@@ -229,7 +227,7 @@ export function Ic6526() {
       setMode(OUTPUT, ...dataPins)
       valueToPins(null, ...dataPins)
     } else {
-      const index = pinsToValue(...addressPins)
+      const index = pinsToValue(...addrPins)
       if (chip.R__W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {
