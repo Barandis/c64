@@ -9,7 +9,7 @@ import {
   CRA_IN, CIAICR, ICR_TA, ICR_IR, ICR_SC, CIDDRA,
 } from "chips/ic-6526/constants"
 import { OUTPUT } from "components/pin"
-import { bitSet, bitClear } from "utils"
+import { bitSet, bitClear, range } from "utils"
 
 export function taDefault({ readRegister }) {
   assert(readRegister(TIMAHI) === 0xff)
@@ -19,7 +19,7 @@ export function taDefault({ readRegister }) {
 export function taClockDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_START)
 
-  for (let i = 1; i <= 10; i++) {
+  for (const i of range(1, 10, true)) {
     tr.φ2.set()
     assert(readRegister(TIMAHI) === 0xff)
     assert(readRegister(TIMALO) === 0xff - i)
@@ -30,7 +30,7 @@ export function taClockDec({ tr, writeRegister, readRegister }) {
 export function taCntDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_IN | 1 << CRA_START)
 
-  for (let i = 1; i <= 10; i++) {
+  for (const i of range(1, 10, true)) {
     tr.CNT.set()
     assert(readRegister(TIMAHI) === 0xff)
     assert(readRegister(TIMALO) === 0xff - i)
@@ -58,7 +58,7 @@ export function taRegRollover({ tr, writeRegister, readRegister }) {
 export function taStop({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_START)
 
-  for (let i = 1; i <= 5; i++) {
+  for (const i of range(1, 5, true)) {
     tr.φ2.set()
     assert(readRegister(TIMAHI) === 0xff)
     assert(readRegister(TIMALO) === 0xff - i)
@@ -67,7 +67,7 @@ export function taStop({ tr, writeRegister, readRegister }) {
 
   writeRegister(CIACRA, 0)
 
-  for (let i = 1; i <= 5; i++) {
+  for (const _ of range(1, 5, true)) {
     tr.φ2.set()
     assert(readRegister(TIMAHI) === 0xff)
     assert(readRegister(TIMALO) === 0xfa)
@@ -80,7 +80,7 @@ export function taContinue({ tr, writeRegister, readRegister }) {
   writeRegister(TIMAHI, 0)
   writeRegister(CIACRA, 1 << CRA_LOAD | 1 << CRA_START)
 
-  for (let i = 0; i < 4; i++) {
+  for (const i of range(4)) {
     tr.φ2.set()
     assert(readRegister(TIMALO) === i % 2 + 1)
     assert(readRegister(TIMAHI) === 0)
@@ -119,8 +119,8 @@ export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
   assert(chip.PB6.mode === OUTPUT)
   assert(tr.PB6.low)
 
-  for (let j = 0; j < 3; j++) {
-    for (let i = 0; i < 4; i++) {
+  for (const _ of range(3)) {
+    for (const _ of range(4)) {
       tr.φ2.set()
       assert(tr.PB6.low)
       tr.φ2.clear()
@@ -144,14 +144,14 @@ export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
   assert(chip.PB6.mode === OUTPUT)
   assert(tr.PB6.low)
 
-  for (let j = 0; j < 3; j++) {
-    for (let i = 0; i < 4; i++) {
+  for (const i of range(3)) {
+    for (const _ of range(4)) {
       tr.φ2.set()
-      assert(tr.PB6.level === j % 2)
+      assert(tr.PB6.level === i % 2)
       tr.φ2.clear()
     }
     tr.φ2.set()
-    assert(tr.PB6.level === (j + 1) % 2)
+    assert(tr.PB6.level === (i + 1) % 2)
     tr.φ2.clear()
   }
 }

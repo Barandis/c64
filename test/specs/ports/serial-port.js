@@ -12,6 +12,7 @@ import { Port } from "components/port"
 import {
   Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
+import { range } from "utils"
 
 describe("Serial port", () => {
   let port
@@ -34,7 +35,7 @@ describe("Serial port", () => {
     p = deviceTraces(port)
     c = deviceTraces(connector)
 
-    for (let i = 1; i <= 6; i++) {
+    for (const i of range(1, 6, true)) {
       p[i].clear()
       c[i].clear()
     }

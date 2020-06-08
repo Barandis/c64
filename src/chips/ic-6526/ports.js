@@ -7,7 +7,7 @@ import {
   CIAPRA, CIAPRB, CIDDRA, CIACRA, CRA_PBON, CIDDRB, CIACRB, CRB_PBON,
 } from "./constants"
 
-import { setBit, clearBit, bitSet } from "utils"
+import { setBit, clearBit, bitSet, range } from "utils"
 import { OUTPUT, INPUT } from "components/pin"
 
 export function ports(chip, registers) {
@@ -80,7 +80,7 @@ export function ports(chip, registers) {
       }
     }
   }
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     chip[`PA${i}`].addListener(portListener(CIAPRA, i))
     chip[`PB${i}`].addListener(portListener(CIAPRB, i))
   }
@@ -115,7 +115,7 @@ export function ports(chip, registers) {
   }
 
   function setPortPins(value, mask, pins) {
-    for (let bit = 0; bit < 8; bit++) {
+    for (const bit of range(8)) {
       if (bitSet(mask, bit)) {
         pins[bit].level = bitSet(value, bit)
       }
@@ -145,14 +145,14 @@ export function ports(chip, registers) {
 
   function writeDdra(value) {
     registers[CIDDRA] = value
-    for (let bit = 0; bit < 8; bit++) {
+    for (const bit of range(8)) {
       chip[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
     }
   }
 
   function writeDdrb(value) {
     registers[CIDDRB] = value
-    for (let bit = 0; bit < 8; bit++) {
+    for (const bit of range(8)) {
       if (
         !(
           bit === 6 && bitSet(registers[CIACRA], CRA_PBON)

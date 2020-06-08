@@ -5,6 +5,7 @@
 
 import { assert, deviceTraces } from "test/helper"
 import { Ic74373 } from "chips/ic-74373"
+import { range } from "utils"
 
 describe("74373 Octal tri-state transparent latch", () => {
   let chip
@@ -19,12 +20,12 @@ describe("74373 Octal tri-state transparent latch", () => {
   it("allows data to pass through when LE is true", () => {
     traces.LE.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces["D" + i].set()
       assert(traces["O" + i].high)
     }
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces["D" + i].clear()
       assert(traces["O" + i].low)
     }
@@ -33,17 +34,17 @@ describe("74373 Octal tri-state transparent latch", () => {
   it("latches the data when LE goes false", () => {
     traces.LE.set()
 
-    for (let i = 0; i < 8; i += 2) {
+    for (const i of range(0, 8, 2)) {
       traces[`D${i}`].set()
     }
 
     traces.LE.clear()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces[`D${i}`].set()
       assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces[`D${i}`].clear()
       assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
@@ -52,20 +53,20 @@ describe("74373 Octal tri-state transparent latch", () => {
   it("returns to transparent data if false when LE returns to true", () => {
     traces.LE.set()
 
-    for (let i = 0; i < 8; i += 2) {
+    for (const i of range(0, 8, 2)) {
       traces[`D${i}`].set()
     }
 
     traces.LE.clear()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces[`D${i}`].set()
       assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
 
     traces.LE.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       assert(traces[`O${i}`].high)
     }
   })
@@ -73,19 +74,19 @@ describe("74373 Octal tri-state transparent latch", () => {
   it("sets all outputs to null when _OE is true", () => {
     traces.LE.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces[`D${i}`].set()
     }
 
     traces._OE.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       assert(traces[`O${i}`].floating)
     }
 
     traces._OE.clear()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       assert(traces[`O${i}`].high)
     }
   })
@@ -93,20 +94,20 @@ describe("74373 Octal tri-state transparent latch", () => {
   it("remembers latched levels", () => {
     traces.LE.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       traces[`D${i}`].set()
     }
 
     traces._OE.set()
 
-    for (let i = 0; i < 8; i += 2) {
+    for (const i of range(0, 8, 2)) {
       traces[`D${i}`].clear()
     }
     traces.LE.clear()
 
     traces._OE.clear()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       assert(!!traces[`O${i}`].level === (i % 2 !== 0))
     }
   })

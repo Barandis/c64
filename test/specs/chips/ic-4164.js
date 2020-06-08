@@ -5,6 +5,7 @@
 
 import { assert, deviceTraces } from "test/helper"
 import { Ic4164 } from "chips/ic-4164"
+import { range } from "utils"
 
 describe("4164 64k x 1 bit dynamic RAM", () => {
   let chip
@@ -82,7 +83,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   }
 
   function runRwTest(lo, hi) {
-    for (let addr = lo; addr < hi; addr++) {
+    for (const addr of range(lo, hi)) {
       const row = (addr & 0xff00) >> 8
       const col = addr & 0x00ff
 
@@ -100,7 +101,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       traces._W.set()
     }
 
-    for (let addr = lo; addr < hi; addr++) {
+    for (const addr of range(lo, hi)) {
       const row = (addr & 0xff00) >> 8
       const col = addr & 0x00ff
 
@@ -190,7 +191,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
         setAddressPins(row)
         traces._RAS.clear()
 
-        for (let col = 0; col < 256; col++) {
+        for (const col of range(256)) {
           setAddressPins(col)
           traces._CAS.clear()
 
@@ -201,7 +202,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
           traces._W.set()
         }
 
-        for (let col = 0; col < 256; col++) {
+        for (const col of range(256)) {
           setAddressPins(col)
           traces._CAS.clear()
 
@@ -219,7 +220,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       setAddressPins(row)
       traces._RAS.clear()
 
-      for (let col = 0; col < 256; col++) {
+      for (const col of range(256)) {
         traces.D.clear()
         setAddressPins(col)
         traces._CAS.clear()
@@ -238,7 +239,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       setAddressPins(row)
       traces._RAS.clear()
 
-      for (let col = 0; col < 256; col++) {
+      for (const col of range(256)) {
         setAddressPins(col)
         traces.D.set()
         traces._W.clear()

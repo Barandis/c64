@@ -8,12 +8,12 @@ import {
   CIASDR, TIMALO, TIMAHI, CIACRA, CRA_LOAD, CRA_SP, CRA_START, CIAICR, ICR_SP,
   ICR_IR,
 } from "chips/ic-6526/constants"
-import { bitSet, bitClear } from "utils"
+import { bitSet, bitClear, range } from "utils"
 
 export function spInput({ tr, readRegister }) {
   const data = 0x2f
 
-  for (let i = 7; i >= 0; i--) {
+  for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
     tr.CNT.set()
     tr.CNT.clear()
@@ -26,7 +26,7 @@ export function spInputWrite({ tr, writeRegister, readRegister }) {
   const data = 0x2f
   writeRegister(CIASDR, 0xa9)
 
-  for (let i = 7; i >= 0; i--) {
+  for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
     tr.CNT.set()
     tr.CNT.clear()
@@ -51,9 +51,9 @@ export function spOutput({ tr, writeRegister }) {
   assert(tr.CNT.low)
 
   // 8 loops for 8 bits, MSB first
-  for (let bit = 7; bit >= 0; bit--) {
+  for (const bit of range(7, 0, true)) {
     // First underflow, CNT is high and SP is the bit value
-    for (let i = 0; i < 2; i++) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
@@ -62,7 +62,7 @@ export function spOutput({ tr, writeRegister }) {
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
     // value
-    for (let i = 0; i < 2; i++) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.level === (bit === 0 ? 1 : 0))
@@ -92,15 +92,15 @@ export function spReady({ tr, writeRegister }) {
   writeRegister(CIASDR, data)
 
   // pulse clock 32 times to shift out 8 bits from first value
-  for (let i = 0; i < 32; i++) {
+  for (const _ of range(32)) {
     tr.φ2.set()
     tr.φ2.clear()
   }
 
   // 8 loops for 8 bits, MSB first
-  for (let bit = 7; bit >= 0; bit--) {
+  for (const bit of range(7, 0, true)) {
     // First underflow, CNT is high and SP is the bit value
-    for (let i = 0; i < 2; i++) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
@@ -109,7 +109,7 @@ export function spReady({ tr, writeRegister }) {
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
     // value
-    for (let i = 0; i < 2; i++) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.level === (bit === 0 ? 1 : 0))
@@ -121,7 +121,7 @@ export function spReady({ tr, writeRegister }) {
 export function spIrqRxDefault({ tr, readRegister }) {
   const data = 0x2f
 
-  for (let i = 7; i >= 0; i--) {
+  for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
     tr.CNT.set()
     tr.CNT.clear()
@@ -148,7 +148,7 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   assert(tr.SP.low)
   assert(tr.CNT.low)
 
-  for (let i = 0; i < 32; i++) {
+  for (const _ of range(32)) {
     tr.φ2.set()
     tr.φ2.clear()
   }
@@ -163,7 +163,7 @@ export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
   const data = 0x2f
   writeRegister(CIAICR, 1 << ICR_IR | 1 << ICR_SP)
 
-  for (let i = 7; i >= 0; i--) {
+  for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
     tr.CNT.set()
     tr.CNT.clear()
@@ -191,7 +191,7 @@ export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   assert(tr.SP.low)
   assert(tr.CNT.low)
 
-  for (let i = 0; i < 32; i++) {
+  for (const _ of range(32)) {
     tr.φ2.set()
     tr.φ2.clear()
   }

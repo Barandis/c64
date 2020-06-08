@@ -5,6 +5,7 @@
 
 import { assert, bin, deviceTraces } from "test/helper"
 import { Ic82S100 } from "chips/ic-82S100"
+import { range } from "utils"
 
 // This program was adapted from a C program that provides a 64k table
 // of outputs for PLA based on all of the possible inputs. The original
@@ -175,7 +176,7 @@ describe("82S100 Programmable Logic Array", () => {
   })
 
   function runTest(lo, hi) {
-    for (let i = lo; i < hi; i++) {
+    for (const i of range(lo, hi)) {
       const expected = getExpected(i)
       applyInputs(i)
       const actual = outputValue()

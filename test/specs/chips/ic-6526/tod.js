@@ -8,12 +8,12 @@ import {
   TODTEN, CIACRA, CRA_TOD, TODSEC, TODMIN, TODHRS, CIAICR, ICR_ALRM, ICR_IR,
   CIACRB, CRB_ALRM, ICR_SC,
 } from "chips/ic-6526/constants"
-import { bitSet, bitClear } from "utils"
+import { bitSet, bitClear, range } from "utils"
 
 export function todAdvance({ tr, readRegister }) {
   assert(readRegister(TODTEN) === 0)
-  for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 5; j++) {
+  for (const i of range(6)) {
+    for (const _ of range(5)) {
       tr.TOD.set()
       assert(readRegister(TODTEN) === i)
       tr.TOD.clear()
@@ -27,8 +27,8 @@ export function todAdvance({ tr, readRegister }) {
 export function todAdvance50Hz({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_TOD)
   assert(readRegister(TODTEN) === 0)
-  for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 4; j++) {
+  for (const i of range(6)) {
+    for (const _ of range(4)) {
       tr.TOD.set()
       assert(readRegister(TODTEN) === i)
       tr.TOD.clear()
@@ -43,7 +43,7 @@ export function todSecond({ tr, writeRegister, readRegister }) {
   writeRegister(TODTEN, 0x09)
   assert(readRegister(TODSEC) === 0)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -56,7 +56,7 @@ export function todBcdSec({ tr, writeRegister, readRegister }) {
   writeRegister(TODTEN, 0x09)
   writeRegister(TODSEC, 0x09)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -70,7 +70,7 @@ export function todMinute({ tr, writeRegister, readRegister }) {
   writeRegister(TODSEC, 0x59)
   assert(readRegister(TODMIN) === 0)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -85,7 +85,7 @@ export function todBcdMin({ tr, writeRegister, readRegister }) {
   writeRegister(TODSEC, 0x59)
   writeRegister(TODMIN, 0x09)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -104,7 +104,7 @@ export function todHour({ tr, writeRegister, readRegister }) {
   // are read
   readRegister(TODTEN)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -123,7 +123,7 @@ export function todBcdHour({ tr, writeRegister, readRegister }) {
   // are written
   writeRegister(TODTEN, 0x09)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -140,7 +140,7 @@ export function todAmPm({ tr, writeRegister, readRegister }) {
   writeRegister(TODHRS, 0x11)
   writeRegister(TODTEN, 0x09)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -157,7 +157,7 @@ export function todPmAm({ tr, writeRegister, readRegister }) {
   writeRegister(TODHRS, 0x11 | 1 << 7)
   writeRegister(TODTEN, 0x09)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -178,7 +178,7 @@ export function todNoUpdate({ tr, writeRegister, readRegister }) {
   // stop the clock
   readRegister(TODHRS)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -204,7 +204,7 @@ export function todHalt({ tr, writeRegister, readRegister }) {
 
   // If the clock was not halted, this would be enough to push it to
   // 1:00:00
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -218,7 +218,7 @@ export function todHalt({ tr, writeRegister, readRegister }) {
 
   // The clock is running again, so this will be enough to push it to
   // 1:00:00
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -249,7 +249,7 @@ export function todIrqDefault({ tr, writeRegister, readRegister }) {
   assert(readRegister(TODTEN) === 0x09)
 
   // Ticking one tenth of a second makes time match the alarm
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }
@@ -279,7 +279,7 @@ export function todIrqFlagSet({ tr, writeRegister, readRegister }) {
 
   writeRegister(CIAICR, 1 << ICR_SC | 1 << ICR_ALRM)
 
-  for (let i = 0; i < 6; i++) {
+  for (const _ of range(6)) {
     tr.TOD.set()
     tr.TOD.clear()
   }

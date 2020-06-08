@@ -28,6 +28,7 @@
 
 import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { Chip } from "components/chip"
+import { range } from "utils"
 
 export function Ic74373() {
   const chip = Chip(
@@ -81,11 +82,11 @@ export function Ic74373() {
 
   function latchChanged(le) {
     if (le.low) {
-      for (let i = 0; i < 8; i++) {
+      for (const i of range(8)) {
         latches[i] = !!chip[`D${i}`].level
       }
     } else {
-      for (let i = 0; i < 8; i++) {
+      for (const i of range(8)) {
         chip[`O${i}`].level = chip[`D${i}`].level
         latches[i] = null
       }
@@ -94,18 +95,18 @@ export function Ic74373() {
 
   function enableChanged(_oe) {
     if (_oe.high) {
-      for (let i = 0; i < 8; i++) {
+      for (const i of range(8)) {
         chip[`O${i}`].float()
       }
     } else {
       const le = chip.LE.low
-      for (let i = 0; i < 8; i++) {
+      for (const i of range(8)) {
         chip[`O${i}`].level = le ? latches[i] : chip[`D${i}`].level
       }
     }
   }
 
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     chip[`D${i}`].addListener(() => inputChanged(chip[`D${i}`], chip[`O${i}`]))
   }
   chip.LE.addListener(latchChanged)

@@ -9,6 +9,7 @@ import { Port } from "components/port"
 import {
   Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
+import { range } from "utils"
 
 describe("User port", () => {
   let port
@@ -49,7 +50,7 @@ describe("User port", () => {
     p = deviceTraces(port)
     c = deviceTraces(connector)
 
-    for (let i = 1; i <= 24; i++) {
+    for (const i of range(1, 24, true)) {
       if (i === 2) {
         continue
       }

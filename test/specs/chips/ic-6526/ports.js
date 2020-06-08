@@ -8,28 +8,28 @@ import {
   CIDDRA, CIDDRB, CIACRA, CIACRB, CIAPRA, CIAPRB,
 } from "chips/ic-6526/constants"
 import { INPUT, OUTPUT } from "components/pin"
-import { bitSet, valueToPins, pinsToValue } from "utils"
+import { bitSet, valueToPins, pinsToValue, range } from "utils"
 
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(CIDDRA, 0)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PA${i}`].mode === INPUT)
   }
 
   writeRegister(CIDDRB, 0)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PB${i}`].mode === INPUT)
   }
 }
 
 export function ddrOutput({ chip, writeRegister }) {
   writeRegister(CIDDRA, 0xff)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PA${i}`].mode === OUTPUT)
   }
 
   writeRegister(CIDDRB, 0xff)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PB${i}`].mode === OUTPUT)
   }
 }
@@ -38,12 +38,12 @@ export function ddrCombo({ chip, writeRegister }) {
   const value = rand(256)
 
   writeRegister(CIDDRA, value)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PA${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
   }
 
   writeRegister(CIDDRB, value)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PB${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
   }
 }
@@ -54,7 +54,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
 
   // Set DDR for port B to all inputs, bit 6 and should remain output
   writeRegister(CIDDRB, 0)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PB${i}`].mode === (i === 6 ? OUTPUT : INPUT))
   }
 
@@ -64,7 +64,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // Set DDR for port B to all inputs, bits 6 and 7 and should remain
   // outputs
   writeRegister(CIDDRB, 0)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     assert(chip[`PB${i}`].mode === (i === 6 || i === 7 ? OUTPUT : INPUT))
   }
 }

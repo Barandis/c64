@@ -8,22 +8,22 @@ import { INPUT, OUTPUT } from "components/pin"
 import {
   TIMBHI, TIMALO, CIAICR, ICR_FLG, ICR_IR, ICR_SC, CIAPRB,
 } from "chips/ic-6526/constants"
-import { bitSet, bitClear } from "utils"
+import { bitSet, bitClear, range } from "utils"
 
 export function reset({ chip, tr, writeRegister, readRegister }) {
-  for (let i = 0; i < 16; i++) {
+  for (const i of range(16)) {
     writeRegister(i, rand(256))
   }
   tr._RES.clear()
   tr._RES.set()
-  for (let i = 0; i < 16; i++) {
+  for (const i of range(16)) {
     assert(
       readRegister(i) === (i <= CIAPRB || i >= TIMALO && i <= TIMBHI ? 255 : 0)
     )
   }
   assert(chip.CNT.mode === INPUT)
   assert(tr._IRQ.floating)
-  for (let i = 0; i < 8; i++) {
+  for (const i of range(8)) {
     const name = `D${i}`
     assert(chip[name].mode === OUTPUT)
     assert(tr[name].floating)

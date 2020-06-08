@@ -9,6 +9,7 @@ import { assert, deviceTraces, DEBUG, hex } from "test/helper"
 import { Ic2364 } from "chips/ic-2364"
 import { kernal } from "rom/kernal"
 import { basic } from "rom/basic"
+import { range } from "utils"
 
 describe("2364 8k x 8-bit ROM", () => {
   describe("KERNAL ROM", () => {
@@ -52,7 +53,7 @@ describe("2364 8k x 8-bit ROM", () => {
     }
 
     function runTests(lo, hi) {
-      for (let addr = lo; addr < hi; addr++) {
+      for (const addr of range(lo, hi)) {
         setAddressPins(addr)
         traces._CS.clear()
         const data = readDataPins()
@@ -121,7 +122,7 @@ describe("2364 8k x 8-bit ROM", () => {
     }
 
     function runTests(lo, hi) {
-      for (let addr = lo; addr < hi; addr++) {
+      for (const addr of range(lo, hi)) {
         setAddressPins(addr)
         traces._CS.clear()
         const data = readDataPins()

@@ -14,7 +14,7 @@ import { tod } from "./tod"
 import { control } from "./control"
 
 import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
-import { valueToPins, pinsToValue, setMode, setBit, bitSet } from "utils"
+import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from "utils"
 import { Chip } from "components/chip"
 
 // An emulation of the MOS Technologies 6526 Complex Interface Adapter
@@ -181,7 +181,7 @@ export function Ic6526() {
     // setting the TOD clock later and not the TOD alarm, and also to
     // ensure hours gets hit before tenths so we know the clock hasn't
     // halted
-    for (let i = registers.length; i >= 0; i--) {
+    for (const i of range(registers.length - 1, 0, true)) {
       // Timer latches get all 1's; ICR mask gets all flags reset; all
       // others get all 0's
       const value = i >= TIMALO && i <= TIMBHI
@@ -206,7 +206,7 @@ export function Ic6526() {
 
     chip._PC.set()
 
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       const name = `D${i}`
       chip[name].mode = OUTPUT
       chip[name].level = null
@@ -241,63 +241,63 @@ export function Ic6526() {
 
   function readRegister(index) {
     switch (index) {
-    case CIAPRB:
-      return readPrb()
-    case TODTEN:
-      return readTenths()
-    case TODHRS:
-      return readHours()
-    case CIAICR:
-      return readIcr()
-    default:
-      return registers[index]
+      case CIAPRB:
+        return readPrb()
+      case TODTEN:
+        return readTenths()
+      case TODHRS:
+        return readHours()
+      case CIAICR:
+        return readIcr()
+      default:
+        return registers[index]
     }
   }
 
   function writeRegister(index, value) {
     switch (index) {
-    case CIAPRA:
-      writePra(value)
-      break
-    case CIAPRB:
-      writePrb(value)
-      break
-    case CIDDRA:
-      writeDdra(value)
-      break
-    case CIDDRB:
-      writeDdrb(value)
-      break
-    case TIMALO:
-    case TIMAHI:
-    case TIMBLO:
-    case TIMBHI:
-      latches[index] = value
-      break
-    case TODTEN:
-      writeTenths(value)
-      break
-    case TODSEC:
-      writeSeconds(value)
-      break
-    case TODMIN:
-      writeMinutes(value)
-      break
-    case TODHRS:
-      writeHours(value)
-      break
-    case CIASDR:
-      writeSdr(value)
-      break
-    case CIAICR:
-      writeIcr(value)
-      break
-    case CIACRA:
-      writeCra(value)
-      break
-    case CIACRB:
-      writeCrb(value)
-      break
+      case CIAPRA:
+        writePra(value)
+        break
+      case CIAPRB:
+        writePrb(value)
+        break
+      case CIDDRA:
+        writeDdra(value)
+        break
+      case CIDDRB:
+        writeDdrb(value)
+        break
+      case TIMALO:
+      case TIMAHI:
+      case TIMBLO:
+      case TIMBHI:
+        latches[index] = value
+        break
+      case TODTEN:
+        writeTenths(value)
+        break
+      case TODSEC:
+        writeSeconds(value)
+        break
+      case TODMIN:
+        writeMinutes(value)
+        break
+      case TODHRS:
+        writeHours(value)
+        break
+      case CIASDR:
+        writeSdr(value)
+        break
+      case CIAICR:
+        writeIcr(value)
+        break
+      case CIACRA:
+        writeCra(value)
+        break
+      case CIACRB:
+        writeCrb(value)
+        break
     }
   }
 

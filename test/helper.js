@@ -8,6 +8,7 @@ import chai from "chai"
 import { Trace } from "components/trace"
 import { OUTPUT, INPUT, Pin } from "components/pin"
 import { Port } from "components/port"
+import { range } from "utils"
 
 export const assert = chai.assert
 
@@ -20,8 +21,11 @@ export function rand(min, max = null) {
 
 export function assertArray(actual, expected) {
   assert(actual.length === expected.length)
-  for (let i = 0; i < actual.length; i++) {
-    assert(actual[i] === expected[i])
+  for (const i of range(actual.length)) {
+    assert(
+      actual[i] === expected[i],
+      `Expected: ${expected[i]}, Actual: ${actual[i]}`
+    )
   }
 }
 

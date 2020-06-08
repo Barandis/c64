@@ -10,7 +10,7 @@ import {
   ICR_IR, ICR_SC, CIDDRB,
 } from "chips/ic-6526/constants"
 import { OUTPUT } from "components/pin"
-import { bitSet, bitClear } from "utils"
+import { bitSet, bitClear, range } from "utils"
 
 export function tbDefault({ readRegister }) {
   assert(readRegister(TIMBHI) === 0xff)
@@ -20,7 +20,7 @@ export function tbDefault({ readRegister }) {
 export function tbClockDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_START)
 
-  for (let i = 1; i <= 10; i++) {
+  for (const i of range(1, 10, true)) {
     tr.φ2.set()
     assert(readRegister(TIMBHI) === 0xff)
     assert(readRegister(TIMBLO) === 0xff - i)
@@ -31,7 +31,7 @@ export function tbClockDec({ tr, writeRegister, readRegister }) {
 export function tbCntDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_IN0 | 1 << CRB_START)
 
-  for (let i = 1; i <= 10; i++) {
+  for (const i of range(1, 10, true)) {
     tr.CNT.set()
     assert(readRegister(TIMBHI) === 0xff)
     assert(readRegister(TIMBLO) === 0xff - i)
@@ -45,12 +45,12 @@ export function tbUnderDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_LOAD | 1 << CRA_START)
   writeRegister(CIACRB, 1 << CRB_IN1 | 1 << CRB_START)
 
-  for (let j = 1; j <= 10; j++) {
-    for (let i = 0; i < 2; i++) {
+  for (const i of range(1, 10, true)) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
     }
-    assert(readRegister(TIMBLO) === 0xff - j)
+    assert(readRegister(TIMBLO) === 0xff - i)
     assert(readRegister(TIMBHI) === 0xff)
   }
 }
@@ -62,8 +62,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_IN1 | 1 << CRB_IN0 | 1 << CRB_START)
 
   tr.CNT.level = 0
-  for (let j = 1; j <= 5; j++) {
-    for (let i = 0; i < 2; i++) {
+  for (const _ of range(5)) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
     }
@@ -72,8 +72,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
   }
 
   tr.CNT.level = 1
-  for (let j = 1; j <= 5; j++) {
-    for (let i = 0; i < 2; i++) {
+  for (const j of range(1, 5, true)) {
+    for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
     }
@@ -102,7 +102,7 @@ export function tbRegRollover({ tr, writeRegister, readRegister }) {
 export function tbStop({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_START)
 
-  for (let i = 1; i <= 5; i++) {
+  for (const i of range(1, 5, true)) {
     tr.φ2.set()
     assert(readRegister(TIMBHI) === 0xff)
     assert(readRegister(TIMBLO) === 0xff - i)
@@ -111,7 +111,7 @@ export function tbStop({ tr, writeRegister, readRegister }) {
 
   writeRegister(CIACRB, 0)
 
-  for (let i = 1; i <= 5; i++) {
+  for (const _ of range(5)) {
     tr.φ2.set()
     assert(readRegister(TIMBHI) === 0xff)
     assert(readRegister(TIMBLO) === 0xfa)
@@ -124,7 +124,7 @@ export function tbContinue({ tr, writeRegister, readRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, 1 << CRB_LOAD | 1 << CRB_START)
 
-  for (let i = 0; i < 4; i++) {
+  for (const i of range(4)) {
     tr.φ2.set()
     assert(readRegister(TIMBLO) === i % 2 + 1)
     assert(readRegister(TIMBHI) === 0)
@@ -163,8 +163,8 @@ export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
   assert(chip.PB7.mode === OUTPUT)
   assert(tr.PB7.low)
 
-  for (let j = 0; j < 3; j++) {
-    for (let i = 0; i < 4; i++) {
+  for (const _ of range(3)) {
+    for (const _ of range(4)) {
       tr.φ2.set()
       assert(tr.PB7.low)
       tr.φ2.clear()
@@ -188,14 +188,14 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
   assert(chip.PB7.mode === OUTPUT)
   assert(tr.PB7.low)
 
-  for (let j = 0; j < 3; j++) {
-    for (let i = 0; i < 4; i++) {
+  for (const i of range(3)) {
+    for (const _ of range(4)) {
       tr.φ2.set()
-      assert(tr.PB7.level === j % 2)
+      assert(tr.PB7.level === i % 2)
       tr.φ2.clear()
     }
     tr.φ2.set()
-    assert(tr.PB7.level === (j + 1) % 2)
+    assert(tr.PB7.level === (i + 1) % 2)
     tr.φ2.clear()
   }
 }

@@ -7,6 +7,7 @@ import { assert, deviceTraces } from "test/helper"
 import { KeyboardPort } from "ports/keyboard-port"
 import { Port } from "components/port"
 import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
+import { range } from "utils"
 
 describe("Keyboard port", () => {
   let port
@@ -42,7 +43,7 @@ describe("Keyboard port", () => {
     p = deviceTraces(port)
     c = deviceTraces(connector)
 
-    for (let i = 1; i <= 20; i++) {
+    for (const i of range(1, 20, true)) {
       if (i === 2) {
         continue
       }

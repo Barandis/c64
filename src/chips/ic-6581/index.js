@@ -9,7 +9,7 @@ import {
 
 import { Pin, INPUT, OUTPUT, UNCONNECTED } from "components/pin"
 import { Chip } from "components/chip"
-import { setMode, valueToPins, pinsToValue } from "utils"
+import { setMode, valueToPins, pinsToValue, range } from "utils"
 
 export function Ic6581() {
   const chip = Chip(
@@ -110,10 +110,10 @@ export function Ic6581() {
   // no side effects in writing them; when sound is implemented this may
   // or may not change.
   function reset() {
-    for (let i = 0; i < 32; i++) {
+    for (const i of range(32)) {
       registers[i] = i >= UNUSED1 ? 0xff : 0x00
     }
-    for (let i = 0; i < 8; i++) {
+    for (const i of range(8)) {
       const name = `D${i}`
       chip[name].mode = OUTPUT
       chip[name].level = null

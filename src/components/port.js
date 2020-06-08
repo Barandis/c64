@@ -5,6 +5,7 @@
 
 import { PinArray } from "components/pin"
 import { ConnectorArray } from "components/connector"
+import { enumerate } from "utils"
 
 // Represents an external port on a computer, consisting of a number of
 // pins to connect to the electronics behind it and a matching number of
@@ -25,8 +26,8 @@ export function Port(...pins) {
     // has a pin 3 and the other doesn't), then simply no connection is
     // made for that pin.
     connect(port) {
-      for (let i = 0; i < connectorArray.length; i++) {
-        const con1 = connectorArray[i]
+      for (const [i, connector] of enumerate(connectorArray)) {
+        const con1 = connector
         const con2 = port.connectors[i]
         if (con1 && con2) {
           con1.connect(con2)

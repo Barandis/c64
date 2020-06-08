@@ -5,6 +5,7 @@
 
 import { assert, deviceTraces } from "test/helper"
 import { Ic2114 } from "chips/ic-2114"
+import { range } from "utils"
 
 describe("2114 1024 x 4-bit static RAM", () => {
   let chip
@@ -48,7 +49,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
   }
 
   it("reads and writes all of the correct levels from 0x000 to 0x3ff", () => {
-    for (let addr = 0x000; addr < 0x400; addr++) {
+    for (const addr of range(0x000, 0x400)) {
       const level = addr & 0xf
       setAddressPins(addr)
       setDataPins(level)
@@ -58,7 +59,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
       traces._WE.set()
     }
 
-    for (let addr = 0x000; addr < 0x400; addr++) {
+    for (const addr of range(0x000, 0x400)) {
       const level = addr & 0xf
       setAddressPins(addr)
       traces._CE.clear()

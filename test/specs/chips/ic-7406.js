@@ -5,6 +5,7 @@
 
 import { assert, deviceTraces } from "test/helper"
 import { Ic7406 } from "chips/ic-7406"
+import { range } from "utils"
 
 describe("7406 hex inverter", () => {
   let chip
@@ -16,14 +17,14 @@ describe("7406 hex inverter", () => {
   })
 
   it("sets output to false when the input is true", () => {
-    for (let i = 1; i <= 6; i++) {
+    for (const i of range(1, 6, true)) {
       traces[`A${i}`].set()
       assert(traces[`Y${i}`].low)
     }
   })
 
   it("sets output to true when the input is false", () => {
-    for (let i = 1; i <= 6; i++) {
+    for (const i of range(1, 6, true)) {
       traces[`A${i}`].clear()
       assert(traces[`Y${i}`].high)
     }

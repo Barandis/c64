@@ -7,6 +7,7 @@ import { assert, deviceTraces } from "test/helper"
 import { Control1Port } from "ports/control-1-port"
 import { Port } from "components/port"
 import { Pin, UNCONNECTED, INPUT } from "components/pin"
+import { range } from "utils"
 
 describe("Control port 1", () => {
   let port
@@ -32,7 +33,7 @@ describe("Control port 1", () => {
     p = deviceTraces(port)
     c = deviceTraces(connector)
 
-    for (let i = 1; i <= 9; i++) {
+    for (const i of range(1, 9, true)) {
       p[i].clear()
       c[i].clear()
     }
