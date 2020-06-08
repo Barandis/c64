@@ -33,9 +33,7 @@ export function hex(value, digits = 2) {
   if (value === null) {
     return "null"
   }
-  return "$"
-      + ("0000000000000000"
-      + value.toString(16).toUpperCase()).substr(-digits)
+  return ("0000000000000000" + value.toString(16).toLowerCase()).substr(-digits)
 }
 
 export function bin(value, digits = 8) {

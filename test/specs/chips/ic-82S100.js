@@ -3,9 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, bin, deviceTraces } from "test/helper"
+import { assert, bin, deviceTraces, hex } from "test/helper"
 import { Ic82S100 } from "chips/ic-82S100"
-import { range } from "utils"
+import { range, valueToPins, pinsToValue } from "utils"
 
 // This program was adapted from a C program that provides a 64k table
 // of outputs for PLA based on all of the possible inputs. The original
@@ -128,39 +128,8 @@ describe("82S100 Programmable Logic Array", () => {
   const chip = Ic82S100()
   const traces = deviceTraces(chip)
 
-  const bitValue = (input, bit) => (input & 1 << bit) >> bit
-
-  function applyInputs(input) {
-    traces.I0.level = bitValue(input, 0)
-    traces.I1.level = bitValue(input, 1)
-    traces.I2.level = bitValue(input, 2)
-    traces.I3.level = bitValue(input, 3)
-    traces.I4.level = bitValue(input, 4)
-    traces.I5.level = bitValue(input, 5)
-    traces.I6.level = bitValue(input, 6)
-    traces.I7.level = bitValue(input, 7)
-    traces.I8.level = bitValue(input, 8)
-    traces.I9.level = bitValue(input, 9)
-    traces.I10.level = bitValue(input, 10)
-    traces.I11.level = bitValue(input, 11)
-    traces.I12.level = bitValue(input, 12)
-    traces.I13.level = bitValue(input, 13)
-    traces.I14.level = bitValue(input, 14)
-    traces.I15.level = bitValue(input, 15)
-  }
-
-  function outputValue() {
-    let output = 0
-    output |= traces.F0.level << 0
-    output |= traces.F1.level << 1
-    output |= traces.F2.level << 2
-    output |= traces.F3.level << 3
-    output |= traces.F4.level << 4
-    output |= traces.F5.level << 5
-    output |= traces.F6.level << 6
-    output |= traces.F7.level << 7
-    return output
-  }
+  const inTraces = [...range(0, 16)].map(pin => traces[`I${pin}`])
+  const outTraces = [...range(0, 8)].map(pin => traces[`F${pin}`])
 
   it("disables all outputs if _OE is set high", () => {
     traces._OE.set()
@@ -175,66 +144,24 @@ describe("82S100 Programmable Logic Array", () => {
     traces._OE.clear()
   })
 
-  function runTest(lo, hi) {
-    for (const i of range(lo, hi)) {
-      const expected = getExpected(i)
-      applyInputs(i)
-      const actual = outputValue()
-      assert(
-        actual === expected,
-        `input: ${bin(i, 16)}, expected: ${bin(expected, 8)}, actual: ${
-          bin(actual, 8)
-        }`,
-      )
-    }
-  }
+  describe("logic combinations", () => {
+    [...range(0x0000, 0xffff, 0x1000)].forEach(base => {
+      it(`produces the correct output from 0x${hex(base, 4)} to 0x${
+        hex(base + 0x0fff, 4)
+      }`, () => {
+        for (const addr of range(base, base + 0x1000)) {
+          const expected = getExpected(addr)
 
-  it("produces the correct output for inputs 0x0000 - 0x0fff", () => {
-    runTest(0x0000, 0x1000)
-  })
-  it("produces the correct output for inputs 0x1000 - 0x1fff", () => {
-    runTest(0x1000, 0x2000)
-  })
-  it("produces the correct output for inputs 0x2000 - 0x2fff", () => {
-    runTest(0x2000, 0x3000)
-  })
-  it("produces the correct output for inputs 0x3000 - 0x3fff", () => {
-    runTest(0x3000, 0x4000)
-  })
-  it("produces the correct output for inputs 0x4000 - 0x4fff", () => {
-    runTest(0x4000, 0x5000)
-  })
-  it("produces the correct output for inputs 0x5000 - 0x5fff", () => {
-    runTest(0x5000, 0x6000)
-  })
-  it("produces the correct output for inputs 0x6000 - 0x6fff", () => {
-    runTest(0x6000, 0x7000)
-  })
-  it("produces the correct output for inputs 0x7000 - 0x7fff", () => {
-    runTest(0x7000, 0x8000)
-  })
-  it("produces the correct output for inputs 0x8000 - 0x8fff", () => {
-    runTest(0x8000, 0x9000)
-  })
-  it("produces the correct output for inputs 0x9000 - 0x9fff", () => {
-    runTest(0x9000, 0xa000)
-  })
-  it("produces the correct output for inputs 0xa000 - 0xafff", () => {
-    runTest(0xa000, 0xb000)
-  })
-  it("produces the correct output for inputs 0xb000 - 0xbfff", () => {
-    runTest(0xb000, 0xc000)
-  })
-  it("produces the correct output for inputs 0xc000 - 0xcfff", () => {
-    runTest(0xc000, 0xd000)
-  })
-  it("produces the correct output for inputs 0xd000 - 0xdfff", () => {
-    runTest(0xd000, 0xe000)
-  })
-  it("produces the correct output for inputs 0xe000 - 0xefff", () => {
-    runTest(0xe000, 0xf000)
-  })
-  it("produces the correct output for inputs 0xf000 - 0xffff", () => {
-    runTest(0xf000, 0x10000)
+          valueToPins(addr, ...inTraces)
+          const actual = pinsToValue(...outTraces)
+          assert(
+            actual === expected,
+            `Incorrect output for input ${bin(addr, 16)}: expected: ${
+              bin(expected, 8)
+            }, actual ${bin(actual, 8)}`
+          )
+        }
+      })
+    })
   })
 })

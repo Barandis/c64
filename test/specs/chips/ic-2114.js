@@ -3,13 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces } from "test/helper"
+import { assert, deviceTraces, hex } from "test/helper"
 import { Ic2114 } from "chips/ic-2114"
-import { range } from "utils"
+import { range, valueToPins, pinsToValue } from "utils"
 
 describe("2114 1024 x 4-bit static RAM", () => {
-  let chip
-  let traces
+  let chip, traces, addrTraces, dataTraces
 
   beforeEach(() => {
     chip = Ic2114()
@@ -17,42 +16,16 @@ describe("2114 1024 x 4-bit static RAM", () => {
 
     traces._CE.set()
     traces._WE.set()
+
+    addrTraces = [...range(10)].map(pin => traces[`A${pin}`])
+    dataTraces = [...range(4)].map(pin => traces[`D${pin}`])
   })
 
-  function setAddressPins(addr) {
-    traces.A0.level = (addr & 0b0000000001) >> 0
-    traces.A1.level = (addr & 0b0000000010) >> 1
-    traces.A2.level = (addr & 0b0000000100) >> 2
-    traces.A3.level = (addr & 0b0000001000) >> 3
-    traces.A4.level = (addr & 0b0000010000) >> 4
-    traces.A5.level = (addr & 0b0000100000) >> 5
-    traces.A6.level = (addr & 0b0001000000) >> 6
-    traces.A7.level = (addr & 0b0010000000) >> 7
-    traces.A8.level = (addr & 0b0100000000) >> 8
-    traces.A9.level = (addr & 0b1000000000) >> 9
-  }
-
-  function setDataPins(value) {
-    traces.D0.level = (value & 0b0001) >> 0
-    traces.D1.level = (value & 0b0010) >> 1
-    traces.D2.level = (value & 0b0100) >> 2
-    traces.D3.level = (value & 0b1000) >> 3
-  }
-
-  function readDataPins() {
-    return (
-      traces.D0.level << 0
-      | traces.D1.level << 1
-      | traces.D2.level << 2
-      | traces.D3.level << 3
-    )
-  }
-
-  it("reads and writes all of the correct levels from 0x000 to 0x3ff", () => {
+  it("reads and writes correctly from 0x000 to 0x3ff", () => {
     for (const addr of range(0x000, 0x400)) {
       const level = addr & 0xf
-      setAddressPins(addr)
-      setDataPins(level)
+      valueToPins(addr, ...addrTraces)
+      valueToPins(level, ...dataTraces)
       traces._WE.clear()
       traces._CE.clear()
       traces._CE.set()
@@ -60,10 +33,17 @@ describe("2114 1024 x 4-bit static RAM", () => {
     }
 
     for (const addr of range(0x000, 0x400)) {
-      const level = addr & 0xf
-      setAddressPins(addr)
+      const expected = addr & 0xf
+      valueToPins(addr, ...addrTraces)
       traces._CE.clear()
-      assert(readDataPins() === level)
+      const data = pinsToValue(...dataTraces)
+
+      assert(
+        data === expected,
+        `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${
+          hex(expected, 1)
+        }, actual 0x${hex(data, 1)}`
+      )
       traces._CE.set()
     }
   })
