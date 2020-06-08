@@ -104,13 +104,13 @@ export function pdNullOutputs() {
 }
 
 export function pnInitial() {
-  const t = Trace().pullNone()
+  const t = Trace().noPull()
   assert(t.floating)
 }
 
 export function pnModeInput() {
   const p = Pin(1, "A", OUTPUT)
-  const t = Trace(p).pullNone()
+  const t = Trace(p).noPull()
 
   p.level = 1
   assert(t.high)
@@ -120,7 +120,7 @@ export function pnModeInput() {
 
 export function pnNoOutputs() {
   const p = Pin(1, "A", INPUT)
-  const t = Trace(p).pullNone()
+  const t = Trace(p).noPull()
   assert(t.floating)
 }
 
@@ -129,7 +129,7 @@ export function pnHiOutputs() {
   const p2 = Pin(2, "B", OUTPUT)
   p1.level = 1
   p2.level = 0
-  const t = Trace(p1, p2).pullNone()
+  const t = Trace(p1, p2).noPull()
   assert(t.high)
 }
 
@@ -138,7 +138,7 @@ export function pnLoOutputs() {
   const p2 = Pin(2, "B", OUTPUT)
   p1.level = 0
   p2.level = 0
-  const t = Trace(p1, p2).pullNone()
+  const t = Trace(p1, p2).noPull()
   assert(t.low)
 }
 
@@ -147,6 +147,6 @@ export function pnNullOutputs() {
   const p2 = Pin(2, "B", OUTPUT)
   p1.level = null
   p2.level = null
-  const t = Trace(p1, p2).pullNone()
+  const t = Trace(p1, p2).noPull()
   assert(t.floating)
 }

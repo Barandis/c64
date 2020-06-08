@@ -137,7 +137,7 @@ export function Pin(number, name, mode, level = null) {
     return pin
   }
 
-  function pullNone() {
+  function noPull() {
     _float = null
     _level = normalize(_level)
     return pin
@@ -199,7 +199,7 @@ export function Pin(number, name, mode, level = null) {
 
     pullUp,
     pullDown,
-    pullNone,
+    noPull,
     setTrace,
     updateLevel,
     addListener,

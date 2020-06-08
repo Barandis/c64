@@ -104,7 +104,7 @@ export function pdAfter() {
 }
 
 export function pnInitial() {
-  const p = Pin(1, "A", OUTPUT).pullNone()
+  const p = Pin(1, "A", OUTPUT).noPull()
   assert(p.floating)
 }
 
@@ -112,7 +112,7 @@ export function pnPullUp() {
   const p = Pin(1, "A", OUTPUT).pullUp()
   p.level = null
   assert(p.high)
-  p.pullNone()
+  p.noPull()
   p.level = null
   assert(p.floating)
 }
@@ -121,7 +121,7 @@ export function pnPullDown() {
   const p = Pin(1, "A", OUTPUT).pullDown()
   p.level = null
   assert(p.low)
-  p.pullNone()
+  p.noPull()
   p.level = null
   assert(p.floating)
 }
