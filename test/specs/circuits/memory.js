@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { newBoard } from "circuits/board"
-
+import { Board } from "circuits/board"
 import { assert } from "test/helper"
 import { valueToPins, pinsToValue, setMode } from "utils"
 import { INPUT } from "components/pin"
@@ -13,7 +12,7 @@ describe("Memory reading/writing", () => {
   let board
 
   beforeEach(() => {
-    board = newBoard()
+    board = Board()
 
     // Set normal values for PLA inputs
     const { U7, U19 } = board

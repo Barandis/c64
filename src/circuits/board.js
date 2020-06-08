@@ -44,7 +44,7 @@ import { KeyboardPort } from "ports/keyboard-port"
 import { SerialPort } from "ports/serial-port"
 import { UserPort } from "ports/user-port"
 
-export function newBoard() {
+export function Board() {
   const chips = {
     U1: Ic6526(),
     U2: Ic6526(),
