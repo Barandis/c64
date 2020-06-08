@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { CassettePort } from "ports/cassette-port"
 import { Port } from "components/port"
 import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
@@ -39,17 +39,17 @@ describe("Cassette port", () => {
 
   it("writes data to MOTOR and WRITE", () => {
     p.MOTOR.set()
-    expect(c.MOTOR.level).to.equal(1)
+    assert(c.MOTOR.high)
 
     p.WRITE.set()
-    expect(c.WRITE.level).to.equal(1)
+    assert(c.WRITE.high)
   })
 
   it("reads data from READ and SENSE", () => {
     c.READ.set()
-    expect(p.READ.level).to.equal(1)
+    assert(p.READ.high)
 
     c.SENSE.set()
-    expect(p.SENSE.level).to.equal(1)
+    assert(p.SENSE.high)
   })
 })

@@ -5,7 +5,7 @@
 
 import Sinon from "sinon"
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
 } from "components/pin"
@@ -19,7 +19,7 @@ export function listenerUnconnected() {
   p.addListener(spy)
 
   t.set()
-  expect(spy).not.to.be.called
+  assert(spy.notCalled)
 }
 
 export function listenerInput() {
@@ -30,8 +30,7 @@ export function listenerInput() {
   p.addListener(spy)
 
   t.set()
-  expect(spy).to.be.calledOnce
-  expect(spy).to.be.calledWith(p)
+  assert(spy.calledOnceWith(p))
 }
 
 export function listenerOutput() {
@@ -42,7 +41,7 @@ export function listenerOutput() {
   p.addListener(spy)
 
   t.set()
-  expect(spy).not.to.be.called
+  assert(spy.notCalled)
 }
 
 export function listenerBidirectional() {
@@ -53,8 +52,7 @@ export function listenerBidirectional() {
   p.addListener(spy)
 
   t.set()
-  expect(spy).to.be.calledOnce
-  expect(spy).to.be.calledWith(p)
+  assert(spy.calledOnceWith(p))
 }
 
 export function listenerDirect() {
@@ -63,7 +61,7 @@ export function listenerDirect() {
   const spy = Sinon.spy()
   p.addListener(spy)
 
-  expect(spy).not.to.be.called
+  assert(spy.notCalled)
 }
 
 export function listenerRemove() {
@@ -77,14 +75,14 @@ export function listenerRemove() {
   p.addListener(spy2)
 
   t.set()
-  expect(spy1).to.be.calledOnce
-  expect(spy2).to.be.calledOnce
+  assert(spy1.calledOnce)
+  assert(spy2.calledOnce)
 
   p.removeListener(spy1)
 
   t.clear()
-  expect(spy1).to.be.calledOnce
-  expect(spy2).to.be.calledTwice
+  assert(spy1.calledOnce)
+  assert(spy2.calledTwice)
 }
 
 export function listenerNonexistent() {
@@ -97,14 +95,14 @@ export function listenerNonexistent() {
   p.addListener(spy2)
 
   t.set()
-  expect(spy1).not.to.be.called
-  expect(spy2).to.be.calledOnce
+  assert(spy1.notCalled)
+  assert(spy2.calledOnce)
 
   p.removeListener(spy1)
 
   t.clear()
-  expect(spy1).not.to.be.called
-  expect(spy2).to.be.calledTwice
+  assert(spy1.notCalled)
+  assert(spy2.calledTwice)
 }
 
 export function listenerDouble() {
@@ -116,5 +114,5 @@ export function listenerDouble() {
   p.addListener(spy)
 
   t.set()
-  expect(spy).to.be.calledOnce
+  assert(spy.calledOnce)
 }

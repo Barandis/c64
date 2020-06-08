@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Ic4164 } from "chips/ic-4164"
 
 describe("4164 64k x 1 bit dynamic RAM", () => {
@@ -20,7 +20,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
 
   describe("idle state", () => {
     it("has Q set to hi-z", () => {
-      expect(traces.Q.null).to.be.true
+      assert(traces.Q.floating)
     })
   })
 
@@ -28,11 +28,11 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
     it("enables Q", () => {
       traces._RAS.clear()
       traces._CAS.clear()
-      expect(traces.Q.low).to.be.true // data at 0x0000
+      assert(traces.Q.low) // data at 0x0000
 
       traces._RAS.set()
       traces._CAS.set()
-      expect(traces.Q.null).to.be.true
+      assert(traces.Q.floating)
     })
   })
 
@@ -41,12 +41,12 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       traces._RAS.clear()
       traces._W.clear()
       traces._CAS.clear()
-      expect(traces.Q.null).to.be.true
+      assert(traces.Q.floating)
 
       traces._RAS.set()
       traces._W.set()
       traces._CAS.set()
-      expect(traces.Q.null).to.be.true
+      assert(traces.Q.floating)
     })
   })
 
@@ -56,12 +56,12 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       traces._RAS.clear()
       traces._CAS.clear()
       traces._W.clear()
-      expect(traces.Q.low).to.be.true
+      assert(traces.Q.low)
 
       traces._RAS.set()
       traces._CAS.set()
       traces._W.set()
-      expect(traces.Q.null).to.be.true
+      assert(traces.Q.floating)
     })
   })
 
@@ -110,7 +110,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       setAddressPins(col)
       traces._CAS.clear()
 
-      expect(traces.Q.level).to.equal(bitValue(row, col))
+      assert(traces.Q.level === bitValue(row, col))
 
       traces._RAS.set()
       traces._CAS.set()
@@ -205,7 +205,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
           setAddressPins(col)
           traces._CAS.clear()
 
-          expect(traces.Q.level).to.equal(bitValue(row, col))
+          assert(traces.Q.level === bitValue(row, col))
 
           traces._CAS.set()
         }
@@ -223,10 +223,10 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
         traces.D.clear()
         setAddressPins(col)
         traces._CAS.clear()
-        expect(traces.Q.level).to.equal(0)
+        assert(traces.Q.low)
         traces.D.set()
         traces._W.clear()
-        expect(traces.Q.level).to.equal(1)
+        assert(traces.Q.high)
         traces._W.set()
         traces._CAS.set()
       }
@@ -243,7 +243,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
         traces.D.set()
         traces._W.clear()
         traces._CAS.clear()
-        expect(traces.Q.level).to.be.null
+        assert(traces.Q.floating)
         traces._W.set()
         traces._CAS.set()
       }

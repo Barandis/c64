@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 
 import { Connector } from "components/connector"
 import { Pin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
@@ -19,7 +19,7 @@ describe("Connector", () => {
     const con2 = Connector(pin2)
 
     con2.connect(con1)
-    expect(pin2.level).to.equal(1)
+    assert(pin2.high)
   })
 
   it("sets an input pin's level to an output's when it connects", () => {
@@ -31,7 +31,7 @@ describe("Connector", () => {
     const con2 = Connector(pin2)
 
     con1.connect(con2)
-    expect(pin2.level).to.equal(1)
+    assert(pin2.high)
   })
 
   it("passes level changes from input to output", () => {
@@ -46,10 +46,10 @@ describe("Connector", () => {
     const con2 = Connector(pin2)
 
     con1.connect(con2)
-    expect(trace2.level).to.equal(1)
+    assert(trace2.high)
 
     trace1.level = 0
-    expect(trace2.level).to.equal(0)
+    assert(trace2.low)
   })
 
   it("reverts the output pin's level to null after disconnect", () => {
@@ -65,13 +65,13 @@ describe("Connector", () => {
     con1.connect(con2)
 
     trace1.level = 1
-    expect(trace2.level).to.equal(1)
+    assert(trace2.high)
 
     con1.disconnect()
     con2.disconnect() // unnecessary, check for errors
 
-    expect(trace1.level).to.equal(1) // trace overrides input pin
-    expect(trace2.level).to.equal(0) // because of PULL_DOWN
+    assert(trace1.high) // trace overrides input pin
+    assert(trace2.low) // because of PULL_DOWN
   })
 
   it("doesn't do anything if two input pins with traces connect", () => {
@@ -88,14 +88,14 @@ describe("Connector", () => {
 
     con1.connect(con2)
 
-    expect(trace1.level).to.equal(1)
-    expect(trace2.level).to.equal(0)
+    assert(trace1.high)
+    assert(trace2.low)
 
     trace1.level = 0
     trace1.level = 1
 
-    expect(trace1.level).to.equal(1)
-    expect(trace2.level).to.equal(0)
+    assert(trace1.high)
+    assert(trace2.low)
   })
 
   it("doesn't do anything if two output pins with traces connect", () => {
@@ -112,14 +112,14 @@ describe("Connector", () => {
 
     con1.connect(con2)
 
-    expect(trace1.level).to.equal(1)
-    expect(trace2.level).to.equal(0)
+    assert(trace1.high)
+    assert(trace2.low)
 
     pin1.level = 0
     pin1.level = 1
 
-    expect(trace1.level).to.equal(1)
-    expect(trace2.level).to.equal(0)
+    assert(trace1.high)
+    assert(trace2.low)
   })
 
   it("favors the connecting pin when two bidi pins connect", () => {
@@ -136,7 +136,7 @@ describe("Connector", () => {
 
     con1.connect(con2)
 
-    expect(trace2.level).to.equal(1)
+    assert(trace2.high)
 
     con1.disconnect()
 
@@ -145,7 +145,7 @@ describe("Connector", () => {
 
     con2.connect(con1)
 
-    expect(trace1.level).to.equal(0)
+    assert(trace1.low)
   })
 
   it("passes data both ways with two connected bidirectional pins", () => {
@@ -163,10 +163,10 @@ describe("Connector", () => {
     con1.connect(con2)
 
     trace1.level = 1
-    expect(trace2.level).to.equal(1)
+    assert(trace2.high)
 
     trace2.level = 0
-    expect(trace1.level).to.equal(0)
+    assert(trace1.low)
   })
 
   it("cannot connect to more than one other connector", () => {
@@ -190,7 +190,7 @@ describe("Connector", () => {
     con2.connect(con3)
 
     trace1.level = 1
-    expect(trace2.level).to.equal(1)
-    expect(trace3.level).to.equal(0)
+    assert(trace2.high)
+    assert(trace3.low)
   })
 })

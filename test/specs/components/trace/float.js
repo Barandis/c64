@@ -3,13 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import { Trace } from "components/trace"
 import { Pin, OUTPUT, INPUT } from "components/pin"
 
 export function puInitial() {
   const t = Trace().pullUp()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function puModeInput() {
@@ -17,15 +17,15 @@ export function puModeInput() {
   const t = Trace(p).pullUp()
 
   p.level = 0
-  expect(t.level).to.equal(0)
+  assert(t.low)
   p.mode = INPUT
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function puNoOutputs() {
   const p = Pin(1, "A", INPUT)
   const t = Trace(p).pullUp()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function puHiOutputs() {
@@ -34,7 +34,7 @@ export function puHiOutputs() {
   p1.level = 1
   p2.level = 0
   const t = Trace(p1, p2).pullUp()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function puLoOutputs() {
@@ -43,7 +43,7 @@ export function puLoOutputs() {
   p1.level = 0
   p2.level = 0
   const t = Trace(p1, p2).pullUp()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function puNullOutputs() {
@@ -52,12 +52,12 @@ export function puNullOutputs() {
   p1.level = null
   p2.level = null
   const t = Trace(p1, p2).pullUp()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function pdInitial() {
   const t = Trace().pullDown()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pdModeInput() {
@@ -65,15 +65,15 @@ export function pdModeInput() {
   const t = Trace(p).pullDown()
 
   p.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.high)
   p.mode = INPUT
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pdNoOutputs() {
   const p = Pin(1, "A", INPUT)
   const t = Trace(p).pullDown()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pdHiOutputs() {
@@ -82,7 +82,7 @@ export function pdHiOutputs() {
   p1.level = 1
   p2.level = 0
   const t = Trace(p1, p2).pullDown()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function pdLoOutputs() {
@@ -91,7 +91,7 @@ export function pdLoOutputs() {
   p1.level = 0
   p2.level = 0
   const t = Trace(p1, p2).pullDown()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pdNullOutputs() {
@@ -100,12 +100,12 @@ export function pdNullOutputs() {
   p1.level = null
   p2.level = null
   const t = Trace(p1, p2).pullDown()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pnInitial() {
   const t = Trace().pullNone()
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function pnModeInput() {
@@ -113,15 +113,15 @@ export function pnModeInput() {
   const t = Trace(p).pullNone()
 
   p.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.high)
   p.mode = INPUT
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function pnNoOutputs() {
   const p = Pin(1, "A", INPUT)
   const t = Trace(p).pullNone()
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function pnHiOutputs() {
@@ -130,7 +130,7 @@ export function pnHiOutputs() {
   p1.level = 1
   p2.level = 0
   const t = Trace(p1, p2).pullNone()
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function pnLoOutputs() {
@@ -139,7 +139,7 @@ export function pnLoOutputs() {
   p1.level = 0
   p2.level = 0
   const t = Trace(p1, p2).pullNone()
-  expect(t.level).to.equal(0)
+  assert(t.low)
 }
 
 export function pnNullOutputs() {
@@ -148,5 +148,5 @@ export function pnNullOutputs() {
   p1.level = null
   p2.level = null
   const t = Trace(p1, p2).pullNone()
-  expect(t.level).to.be.null
+  assert(t.floating)
 }

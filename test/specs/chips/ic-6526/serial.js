@@ -3,12 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   CIASDR, TIMALO, TIMAHI, CIACRA, CRA_LOAD, CRA_SP, CRA_START, CIAICR, ICR_SP,
   ICR_IR,
 } from "chips/ic-6526/constants"
-import { bitSet } from "utils"
+import { bitSet, bitClear } from "utils"
 
 export function spInput({ tr, readRegister }) {
   const data = 0x2f
@@ -19,7 +19,7 @@ export function spInput({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  expect(readRegister(CIASDR)).to.equal(0x2f)
+  assert(readRegister(CIASDR) === 0x2f)
 }
 
 export function spInputWrite({ tr, writeRegister, readRegister }) {
@@ -32,7 +32,7 @@ export function spInputWrite({ tr, writeRegister, readRegister }) {
     tr.CNT.clear()
   }
 
-  expect(readRegister(CIASDR)).to.equal(0x2f)
+  assert(readRegister(CIASDR) === 0x2f)
 }
 
 export function spOutput({ tr, writeRegister }) {
@@ -47,8 +47,8 @@ export function spOutput({ tr, writeRegister }) {
   // Initial clock, before first timer underflow
   tr.φ2.set()
   tr.φ2.clear()
-  expect(tr.SP.level).to.equal(0)
-  expect(tr.CNT.level).to.equal(0)
+  assert(tr.SP.low)
+  assert(tr.CNT.low)
 
   // 8 loops for 8 bits, MSB first
   for (let bit = 7; bit >= 0; bit--) {
@@ -56,8 +56,8 @@ export function spOutput({ tr, writeRegister }) {
     for (let i = 0; i < 2; i++) {
       tr.φ2.set()
       tr.φ2.clear()
-      expect(tr.CNT.level).to.equal(1)
-      expect(tr.SP.level).to.equal(data >> bit & 1)
+      assert(tr.CNT.high)
+      assert(tr.SP.level === (data >> bit & 1))
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -65,8 +65,8 @@ export function spOutput({ tr, writeRegister }) {
     for (let i = 0; i < 2; i++) {
       tr.φ2.set()
       tr.φ2.clear()
-      expect(tr.CNT.level).to.equal(bit === 0 ? 1 : 0)
-      expect(tr.SP.level).to.equal(data >> bit & 1)
+      assert(tr.CNT.level === (bit === 0 ? 1 : 0))
+      assert(tr.SP.level === (data >> bit & 1))
     }
   }
 }
@@ -83,8 +83,8 @@ export function spReady({ tr, writeRegister }) {
   // Initial clock, before first timer underflow
   tr.φ2.set()
   tr.φ2.clear()
-  expect(tr.SP.level).to.equal(0)
-  expect(tr.CNT.level).to.equal(0)
+  assert(tr.SP.low)
+  assert(tr.CNT.low)
 
   // Dropping a new value into the SDR as the old one is being
   // transmitted; this one will automatically begin when the first one
@@ -103,8 +103,8 @@ export function spReady({ tr, writeRegister }) {
     for (let i = 0; i < 2; i++) {
       tr.φ2.set()
       tr.φ2.clear()
-      expect(tr.CNT.level).to.equal(1)
-      expect(tr.SP.level).to.equal(data >> bit & 1)
+      assert(tr.CNT.high)
+      assert(tr.SP.level === (data >> bit & 1))
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -112,8 +112,8 @@ export function spReady({ tr, writeRegister }) {
     for (let i = 0; i < 2; i++) {
       tr.φ2.set()
       tr.φ2.clear()
-      expect(tr.CNT.level).to.equal(bit === 0 ? 1 : 0)
-      expect(tr.SP.level).to.equal(data >> bit & 1)
+      assert(tr.CNT.level === (bit === 0 ? 1 : 0))
+      assert(tr.SP.level === (data >> bit & 1))
     }
   }
 }
@@ -127,10 +127,10 @@ export function spIrqRxDefault({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  expect(tr._IRQ.low).to.be.false
+  assert(!tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_SP)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.false
+  assert(bitSet(icr, ICR_SP))
+  assert(bitClear(icr, ICR_IR))
 }
 
 export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
@@ -145,18 +145,18 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   // Initial clock, before first timer underflow
   tr.φ2.set()
   tr.φ2.clear()
-  expect(tr.SP.level).to.equal(0)
-  expect(tr.CNT.level).to.equal(0)
+  assert(tr.SP.low)
+  assert(tr.CNT.low)
 
   for (let i = 0; i < 32; i++) {
     tr.φ2.set()
     tr.φ2.clear()
   }
 
-  expect(tr._IRQ.low).to.be.false
+  assert(!tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_SP)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.false
+  assert(bitSet(icr, ICR_SP))
+  assert(bitClear(icr, ICR_IR))
 }
 
 export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
@@ -169,10 +169,10 @@ export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
     tr.CNT.clear()
   }
 
-  expect(tr._IRQ.low).to.be.true
+  assert(tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_SP)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.true
+  assert(bitSet(icr, ICR_SP))
+  assert(bitSet(icr, ICR_IR))
 }
 
 export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
@@ -188,16 +188,16 @@ export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   // Initial clock, before first timer underflow
   tr.φ2.set()
   tr.φ2.clear()
-  expect(tr.SP.level).to.equal(0)
-  expect(tr.CNT.level).to.equal(0)
+  assert(tr.SP.low)
+  assert(tr.CNT.low)
 
   for (let i = 0; i < 32; i++) {
     tr.φ2.set()
     tr.φ2.clear()
   }
 
-  expect(tr._IRQ.low).to.be.true
+  assert(tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_SP)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.true
+  assert(bitSet(icr, ICR_SP))
+  assert(bitSet(icr, ICR_IR))
 }

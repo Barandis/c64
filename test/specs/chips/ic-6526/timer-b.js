@@ -3,18 +3,18 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   TIMBHI, TIMBLO, CIACRB, CRB_LOAD, CRB_START, CRB_RUN, CRB_PBON, CRB_OUT,
   CRB_IN0, TIMALO, TIMAHI, CIACRA, CRA_START, CRB_IN1, CRA_LOAD, CIAICR, ICR_TB,
   ICR_IR, ICR_SC, CIDDRB,
 } from "chips/ic-6526/constants"
 import { OUTPUT } from "components/pin"
-import { bitSet } from "utils"
+import { bitSet, bitClear } from "utils"
 
 export function tbDefault({ readRegister }) {
-  expect(readRegister(TIMBHI)).to.equal(0xff)
-  expect(readRegister(TIMBLO)).to.equal(0xff)
+  assert(readRegister(TIMBHI) === 0xff)
+  assert(readRegister(TIMBLO) === 0xff)
 }
 
 export function tbClockDec({ tr, writeRegister, readRegister }) {
@@ -22,8 +22,8 @@ export function tbClockDec({ tr, writeRegister, readRegister }) {
 
   for (let i = 1; i <= 10; i++) {
     tr.φ2.set()
-    expect(readRegister(TIMBHI)).to.equal(0xff)
-    expect(readRegister(TIMBLO)).to.equal(0xff - i)
+    assert(readRegister(TIMBHI) === 0xff)
+    assert(readRegister(TIMBLO) === 0xff - i)
     tr.φ2.clear()
   }
 }
@@ -33,8 +33,8 @@ export function tbCntDec({ tr, writeRegister, readRegister }) {
 
   for (let i = 1; i <= 10; i++) {
     tr.CNT.set()
-    expect(readRegister(TIMBHI)).to.equal(0xff)
-    expect(readRegister(TIMBLO)).to.equal(0xff - i)
+    assert(readRegister(TIMBHI) === 0xff)
+    assert(readRegister(TIMBLO) === 0xff - i)
     tr.CNT.clear()
   }
 }
@@ -50,8 +50,8 @@ export function tbUnderDec({ tr, writeRegister, readRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
     }
-    expect(readRegister(TIMBLO)).to.equal(0xff - j)
-    expect(readRegister(TIMBHI)).to.equal(0xff)
+    assert(readRegister(TIMBLO) === 0xff - j)
+    assert(readRegister(TIMBHI) === 0xff)
   }
 }
 
@@ -67,8 +67,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
     }
-    expect(readRegister(TIMBLO)).to.equal(0xff)
-    expect(readRegister(TIMBHI)).to.equal(0xff)
+    assert(readRegister(TIMBLO) === 0xff)
+    assert(readRegister(TIMBHI) === 0xff)
   }
 
   tr.CNT.level = 1
@@ -77,8 +77,8 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
     }
-    expect(readRegister(TIMBLO)).to.equal(0xff - j)
-    expect(readRegister(TIMBHI)).to.equal(0xff)
+    assert(readRegister(TIMBLO) === 0xff - j)
+    assert(readRegister(TIMBHI) === 0xff)
   }
 }
 
@@ -87,15 +87,15 @@ export function tbRegRollover({ tr, writeRegister, readRegister }) {
 
   // Force this value into the timer register
   writeRegister(CIACRB, 1 << CRB_LOAD)
-  expect(readRegister(CIACRB)).to.equal(0)
+  assert(readRegister(CIACRB) === 0)
 
   // Start timer
   writeRegister(CIACRB, 1 << CRB_START)
 
   // One clock pulse
   tr.φ2.set()
-  expect(readRegister(TIMBLO)).to.equal(0xff)
-  expect(readRegister(TIMBHI)).to.equal(0xfe)
+  assert(readRegister(TIMBLO) === 0xff)
+  assert(readRegister(TIMBHI) === 0xfe)
   tr.φ2.clear()
 }
 
@@ -104,8 +104,8 @@ export function tbStop({ tr, writeRegister, readRegister }) {
 
   for (let i = 1; i <= 5; i++) {
     tr.φ2.set()
-    expect(readRegister(TIMBHI)).to.equal(0xff)
-    expect(readRegister(TIMBLO)).to.equal(0xff - i)
+    assert(readRegister(TIMBHI) === 0xff)
+    assert(readRegister(TIMBLO) === 0xff - i)
     tr.φ2.clear()
   }
 
@@ -113,8 +113,8 @@ export function tbStop({ tr, writeRegister, readRegister }) {
 
   for (let i = 1; i <= 5; i++) {
     tr.φ2.set()
-    expect(readRegister(TIMBHI)).to.equal(0xff)
-    expect(readRegister(TIMBLO)).to.equal(0xfa)
+    assert(readRegister(TIMBHI) === 0xff)
+    assert(readRegister(TIMBLO) === 0xfa)
     tr.φ2.clear()
   }
 }
@@ -126,8 +126,8 @@ export function tbContinue({ tr, writeRegister, readRegister }) {
 
   for (let i = 0; i < 4; i++) {
     tr.φ2.set()
-    expect(readRegister(TIMBLO)).to.equal(i % 2 + 1)
-    expect(readRegister(TIMBHI)).to.equal(0)
+    assert(readRegister(TIMBLO) === i % 2 + 1)
+    assert(readRegister(TIMBHI) === 0)
     tr.φ2.clear()
   }
 }
@@ -138,18 +138,18 @@ export function tbOneShot({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRB, 1 << CRB_LOAD | 1 << CRB_RUN | 1 << CRB_START)
 
   tr.φ2.set()
-  expect(readRegister(TIMBLO)).to.equal(1)
-  expect(readRegister(TIMBHI)).to.equal(0)
+  assert(readRegister(TIMBLO) === 1)
+  assert(readRegister(TIMBHI) === 0)
   tr.φ2.clear()
   tr.φ2.set()
-  expect(readRegister(TIMBLO)).to.equal(2)
-  expect(readRegister(TIMBHI)).to.equal(0)
+  assert(readRegister(TIMBLO) === 2)
+  assert(readRegister(TIMBHI) === 0)
   // START bit has been cleared
-  expect(readRegister(CIACRB)).to.equal(1 << CRB_RUN)
+  assert(readRegister(CIACRB) === 1 << CRB_RUN)
   tr.φ2.clear()
   tr.φ2.set()
-  expect(readRegister(TIMBLO)).to.equal(2)
-  expect(readRegister(TIMBHI)).to.equal(0)
+  assert(readRegister(TIMBLO) === 2)
+  assert(readRegister(TIMBHI) === 0)
   tr.φ2.clear()
 }
 
@@ -158,19 +158,19 @@ export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, 1 << CRB_LOAD | 1 << CRB_PBON | 1 << CRB_START)
 
-  expect(readRegister(TIMBLO)).to.equal(5)
-  expect(readRegister(TIMBHI)).to.equal(0)
-  expect(chip.PB7.mode).to.equal(OUTPUT)
-  expect(tr.PB7.level).to.equal(0)
+  assert(readRegister(TIMBLO) === 5)
+  assert(readRegister(TIMBHI) === 0)
+  assert(chip.PB7.mode === OUTPUT)
+  assert(tr.PB7.low)
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
       tr.φ2.set()
-      expect(tr.PB7.level).to.equal(0)
+      assert(tr.PB7.low)
       tr.φ2.clear()
     }
     tr.φ2.set()
-    expect(tr.PB7.level).to.equal(1)
+    assert(tr.PB7.high)
     tr.φ2.clear()
   }
 }
@@ -183,19 +183,19 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
     1 << CRB_LOAD | 1 << CRB_OUT | 1 << CRB_PBON | 1 << CRB_START
   )
 
-  expect(readRegister(TIMBLO)).to.equal(5)
-  expect(readRegister(TIMBHI)).to.equal(0)
-  expect(chip.PB7.mode).to.equal(OUTPUT)
-  expect(tr.PB7.level).to.equal(0)
+  assert(readRegister(TIMBLO) === 5)
+  assert(readRegister(TIMBHI) === 0)
+  assert(chip.PB7.mode === OUTPUT)
+  assert(tr.PB7.low)
 
   for (let j = 0; j < 3; j++) {
     for (let i = 0; i < 4; i++) {
       tr.φ2.set()
-      expect(tr.PB7.level).to.equal(j % 2)
+      assert(tr.PB7.level === j % 2)
       tr.φ2.clear()
     }
     tr.φ2.set()
-    expect(tr.PB7.level).to.equal((j + 1) % 2)
+    assert(tr.PB7.level === (j + 1) % 2)
     tr.φ2.clear()
   }
 }
@@ -205,13 +205,13 @@ export function tbPbRemove({ chip, tr, writeRegister }) {
   writeRegister(TIMBHI, 0)
   writeRegister(CIACRB, 1 << CRB_LOAD | 1 << CRB_PBON)
 
-  expect(chip.PB7.mode).to.equal(OUTPUT)
-  expect(tr.PB7.level).to.equal(0)
+  assert(chip.PB7.mode === OUTPUT)
+  assert(tr.PB7.low)
 
   writeRegister(CIDDRB, 0xff)
   // PBON gets reset
   writeRegister(CIACRB, 1 << CRB_START)
-  expect(chip.PB7.mode).to.equal(OUTPUT)
+  assert(chip.PB7.mode === OUTPUT)
 }
 
 export function tbIrqDefault({ tr, writeRegister, readRegister }) {
@@ -221,15 +221,15 @@ export function tbIrqDefault({ tr, writeRegister, readRegister }) {
 
   tr.φ2.set()
   // IRQ line to CPU; low indicates a request, no request made here
-  expect(tr._IRQ.low).to.be.false
+  assert(!tr._IRQ.low)
   // Have to read this once, as the read clears it
   const icr = readRegister(CIAICR)
   // TA bit is set whether an interrupt is requested or not
-  expect(bitSet(icr, ICR_TB)).to.be.true
+  assert(bitSet(icr, ICR_TB))
   // IR bit is only set when an interrupt is requested
-  expect(bitSet(icr, ICR_IR)).to.be.false
+  assert(bitClear(icr, ICR_IR))
   // Expect the ICR to be clear since it was read above
-  expect(readRegister(CIAICR)).to.equal(0)
+  assert(readRegister(CIAICR) === 0)
   tr.φ2.clear()
 }
 
@@ -241,13 +241,13 @@ export function tbIrqFlagSet({ tr, writeRegister, readRegister }) {
 
   tr.φ2.set()
   // Line low, interrupt requested
-  expect(tr._IRQ.low).to.be.true
+  assert(tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_TB)).to.be.true
+  assert(bitSet(icr, ICR_TB))
   // IR bit indicates an interrupt was actually fired
-  expect(bitSet(icr, ICR_IR)).to.be.true
+  assert(bitSet(icr, ICR_IR))
   // _IRQ signal is cleared by reading the ICR register
-  expect(tr._IRQ.low).to.be.false
-  expect(readRegister(CIAICR)).to.equal(0)
+  assert(!tr._IRQ.low)
+  assert(readRegister(CIAICR) === 0)
   tr.φ2.clear()
 }

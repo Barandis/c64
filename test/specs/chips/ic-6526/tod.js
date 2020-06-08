@@ -3,53 +3,53 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   TODTEN, CIACRA, CRA_TOD, TODSEC, TODMIN, TODHRS, CIAICR, ICR_ALRM, ICR_IR,
   CIACRB, CRB_ALRM, ICR_SC,
 } from "chips/ic-6526/constants"
-import { bitSet } from "utils"
+import { bitSet, bitClear } from "utils"
 
 export function todAdvance({ tr, readRegister }) {
-  expect(readRegister(TODTEN)).to.equal(0)
+  assert(readRegister(TODTEN) === 0)
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 5; j++) {
       tr.TOD.set()
-      expect(readRegister(TODTEN)).to.equal(i)
+      assert(readRegister(TODTEN) === i)
       tr.TOD.clear()
     }
     tr.TOD.set()
-    expect(readRegister(TODTEN)).to.equal(i + 1)
+    assert(readRegister(TODTEN) === i + 1)
     tr.TOD.clear()
   }
 }
 
 export function todAdvance50Hz({ tr, writeRegister, readRegister }) {
   writeRegister(CIACRA, 1 << CRA_TOD)
-  expect(readRegister(TODTEN)).to.equal(0)
+  assert(readRegister(TODTEN) === 0)
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 4; j++) {
       tr.TOD.set()
-      expect(readRegister(TODTEN)).to.equal(i)
+      assert(readRegister(TODTEN) === i)
       tr.TOD.clear()
     }
     tr.TOD.set()
-    expect(readRegister(TODTEN)).to.equal(i + 1)
+    assert(readRegister(TODTEN) === i + 1)
     tr.TOD.clear()
   }
 }
 
 export function todSecond({ tr, writeRegister, readRegister }) {
   writeRegister(TODTEN, 0x09)
-  expect(readRegister(TODSEC)).to.equal(0)
+  assert(readRegister(TODSEC) === 0)
 
   for (let i = 0; i < 6; i++) {
     tr.TOD.set()
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(1)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 1)
 }
 
 export function todBcdSec({ tr, writeRegister, readRegister }) {
@@ -61,23 +61,23 @@ export function todBcdSec({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0x10)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0x10)
 }
 
 export function todMinute({ tr, writeRegister, readRegister }) {
   writeRegister(TODTEN, 0x09)
   writeRegister(TODSEC, 0x59)
-  expect(readRegister(TODMIN)).to.equal(0)
+  assert(readRegister(TODMIN) === 0)
 
   for (let i = 0; i < 6; i++) {
     tr.TOD.set()
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(1)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 1)
 }
 
 export function todBcdMin({ tr, writeRegister, readRegister }) {
@@ -90,16 +90,16 @@ export function todBcdMin({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0x10)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0x10)
 }
 
 export function todHour({ tr, writeRegister, readRegister }) {
   writeRegister(TODTEN, 0x09)
   writeRegister(TODSEC, 0x59)
   writeRegister(TODMIN, 0x59)
-  expect(readRegister(TODHRS)).to.equal(0)
+  assert(readRegister(TODHRS) === 0)
   // Have to do this because reading hours pauses updates until tenths
   // are read
   readRegister(TODTEN)
@@ -109,10 +109,10 @@ export function todHour({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(1)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === 1)
 }
 
 export function todBcdHour({ tr, writeRegister, readRegister }) {
@@ -128,10 +128,10 @@ export function todBcdHour({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(0x10)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === 0x10)
 }
 
 export function todAmPm({ tr, writeRegister, readRegister }) {
@@ -145,10 +145,10 @@ export function todAmPm({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(0x12 | 1 << 7)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === (0x12 | 1 << 7))
 }
 
 export function todPmAm({ tr, writeRegister, readRegister }) {
@@ -162,10 +162,10 @@ export function todPmAm({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(0x12)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === 0x12)
 }
 
 export function todNoUpdate({ tr, writeRegister, readRegister }) {
@@ -183,15 +183,15 @@ export function todNoUpdate({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODHRS)).to.equal(0x12)
-  expect(readRegister(TODMIN)).to.equal(0x59)
-  expect(readRegister(TODSEC)).to.equal(0x59)
+  assert(readRegister(TODHRS) === 0x12)
+  assert(readRegister(TODMIN) === 0x59)
+  assert(readRegister(TODSEC) === 0x59)
   // Reading the tenths register updates registers to current time and
   // starts updates again
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(1)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === 1)
 }
 
 export function todHalt({ tr, writeRegister, readRegister }) {
@@ -211,10 +211,10 @@ export function todHalt({ tr, writeRegister, readRegister }) {
 
   // This write unfreezes the clock
   writeRegister(TODTEN, 0x09)
-  expect(readRegister(TODHRS)).to.equal(0x12)
-  expect(readRegister(TODMIN)).to.equal(0x59)
-  expect(readRegister(TODSEC)).to.equal(0x59)
-  expect(readRegister(TODTEN)).to.equal(0x09)
+  assert(readRegister(TODHRS) === 0x12)
+  assert(readRegister(TODMIN) === 0x59)
+  assert(readRegister(TODSEC) === 0x59)
+  assert(readRegister(TODTEN) === 0x09)
 
   // The clock is running again, so this will be enough to push it to
   // 1:00:00
@@ -223,10 +223,10 @@ export function todHalt({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODTEN)).to.equal(0)
-  expect(readRegister(TODSEC)).to.equal(0)
-  expect(readRegister(TODMIN)).to.equal(0)
-  expect(readRegister(TODHRS)).to.equal(1)
+  assert(readRegister(TODTEN) === 0)
+  assert(readRegister(TODSEC) === 0)
+  assert(readRegister(TODMIN) === 0)
+  assert(readRegister(TODHRS) === 1)
 }
 
 export function todIrqDefault({ tr, writeRegister, readRegister }) {
@@ -243,10 +243,10 @@ export function todIrqDefault({ tr, writeRegister, readRegister }) {
   writeRegister(TODSEC, 0x00)
   writeRegister(TODTEN, 0x00)
 
-  expect(readRegister(TODHRS)).to.equal(0x12)
-  expect(readRegister(TODMIN)).to.equal(0x59)
-  expect(readRegister(TODSEC)).to.equal(0x59)
-  expect(readRegister(TODTEN)).to.equal(0x09)
+  assert(readRegister(TODHRS) === 0x12)
+  assert(readRegister(TODMIN) === 0x59)
+  assert(readRegister(TODSEC) === 0x59)
+  assert(readRegister(TODTEN) === 0x09)
 
   // Ticking one tenth of a second makes time match the alarm
   for (let i = 0; i < 6; i++) {
@@ -254,14 +254,14 @@ export function todIrqDefault({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(readRegister(TODHRS)).to.equal(0x01)
-  expect(readRegister(TODMIN)).to.equal(0x00)
-  expect(readRegister(TODSEC)).to.equal(0x00)
-  expect(readRegister(TODTEN)).to.equal(0x00)
+  assert(readRegister(TODHRS) === 0x01)
+  assert(readRegister(TODMIN) === 0x00)
+  assert(readRegister(TODSEC) === 0x00)
+  assert(readRegister(TODTEN) === 0x00)
 
-  expect(bitSet(readRegister(CIAICR), ICR_ALRM)).to.be.true
-  expect(bitSet(readRegister(CIAICR), ICR_IR)).to.be.false
-  expect(tr._IRQ.low).to.be.false
+  assert(bitSet(readRegister(CIAICR), ICR_ALRM))
+  assert(bitClear(readRegister(CIAICR), ICR_IR))
+  assert(!tr._IRQ.low)
 }
 
 export function todIrqFlagSet({ tr, writeRegister, readRegister }) {
@@ -284,8 +284,8 @@ export function todIrqFlagSet({ tr, writeRegister, readRegister }) {
     tr.TOD.clear()
   }
 
-  expect(tr._IRQ.low).to.be.true
+  assert(tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_ALRM)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.true
+  assert(bitSet(icr, ICR_ALRM))
+  assert(bitSet(icr, ICR_IR))
 }

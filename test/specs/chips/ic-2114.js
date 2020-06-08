@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Ic2114 } from "chips/ic-2114"
 
 describe("2114 1024 x 4-bit static RAM", () => {
@@ -62,7 +62,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
       const level = addr & 0xf
       setAddressPins(addr)
       traces._CE.clear()
-      expect(readDataPins()).to.equal(level)
+      assert(readDataPins() === level)
       traces._CE.set()
     }
   })

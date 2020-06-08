@@ -170,7 +170,7 @@ export function Pin(number, name, mode, level = null) {
     get low() {
       return _level < 0.5 && _level !== null
     },
-    get null() {
+    get floating() {
       return _level === null
     },
     get level() {

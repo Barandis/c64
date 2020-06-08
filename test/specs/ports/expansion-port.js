@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { ExpansionPort } from "ports/expansion-port"
 import { Port } from "components/port"
 import {
@@ -103,30 +103,30 @@ describe("Expansion port", () => {
     p.A1.level = 23
     p.A0.level = 24
 
-    expect(c.R__W.level).to.equal(1)
-    expect(c.φDOT.level).to.equal(2)
-    expect(c._IO1.level).to.equal(3)
-    expect(c._IO2.level).to.equal(4)
-    expect(c._ROML.level).to.equal(5)
-    expect(c.BA.level).to.equal(6)
-    expect(c._ROMH.level).to.equal(7)
-    expect(c.φ2.level).to.equal(8)
-    expect(c.A15.level).to.equal(9)
-    expect(c.A14.level).to.equal(10)
-    expect(c.A13.level).to.equal(11)
-    expect(c.A12.level).to.equal(12)
-    expect(c.A11.level).to.equal(13)
-    expect(c.A10.level).to.equal(14)
-    expect(c.A9.level).to.equal(15)
-    expect(c.A8.level).to.equal(16)
-    expect(c.A7.level).to.equal(17)
-    expect(c.A6.level).to.equal(18)
-    expect(c.A5.level).to.equal(19)
-    expect(c.A4.level).to.equal(20)
-    expect(c.A3.level).to.equal(21)
-    expect(c.A2.level).to.equal(22)
-    expect(c.A1.level).to.equal(23)
-    expect(c.A0.level).to.equal(24)
+    assert(c.R__W.level === 1)
+    assert(c.φDOT.level === 2)
+    assert(c._IO1.level === 3)
+    assert(c._IO2.level === 4)
+    assert(c._ROML.level === 5)
+    assert(c.BA.level === 6)
+    assert(c._ROMH.level === 7)
+    assert(c.φ2.level === 8)
+    assert(c.A15.level === 9)
+    assert(c.A14.level === 10)
+    assert(c.A13.level === 11)
+    assert(c.A12.level === 12)
+    assert(c.A11.level === 13)
+    assert(c.A10.level === 14)
+    assert(c.A9.level === 15)
+    assert(c.A8.level === 16)
+    assert(c.A7.level === 17)
+    assert(c.A6.level === 18)
+    assert(c.A5.level === 19)
+    assert(c.A4.level === 20)
+    assert(c.A3.level === 21)
+    assert(c.A2.level === 22)
+    assert(c.A1.level === 23)
+    assert(c.A0.level === 24)
   })
 
   it("reads from 6 pins", () => {
@@ -137,53 +137,53 @@ describe("Expansion port", () => {
     c._RESET.level = 5
     c._NMI.level = 6
 
-    expect(p._IRQ.level).to.equal(1)
-    expect(p._EXROM.level).to.equal(2)
-    expect(p._GAME.level).to.equal(3)
-    expect(p._DMA.level).to.equal(4)
-    expect(p._RESET.level).to.equal(5)
-    expect(p._NMI.level).to.equal(6)
+    assert(p._IRQ.level === 1)
+    assert(p._EXROM.level === 2)
+    assert(p._GAME.level === 3)
+    assert(p._DMA.level === 4)
+    assert(p._RESET.level === 5)
+    assert(p._NMI.level === 6)
   })
 
   it("both reads and writes to 8 pins", () => {
     p.D7.level = 1
-    expect(c.D7.level).to.equal(1)
+    assert(c.D7.level === 1)
     c.D7.level = 0
-    expect(p.D7.level).to.equal(0)
+    assert(p.D7.level === 0)
 
     p.D6.level = 1
-    expect(c.D6.level).to.equal(1)
+    assert(c.D6.level === 1)
     c.D6.level = 0
-    expect(p.D6.level).to.equal(0)
+    assert(p.D6.level === 0)
 
     p.D5.level = 1
-    expect(c.D5.level).to.equal(1)
+    assert(c.D5.level === 1)
     c.D5.level = 0
-    expect(p.D5.level).to.equal(0)
+    assert(p.D5.level === 0)
 
     p.D4.level = 1
-    expect(c.D4.level).to.equal(1)
+    assert(c.D4.level === 1)
     c.D4.level = 0
-    expect(p.D4.level).to.equal(0)
+    assert(p.D4.level === 0)
 
     p.D3.level = 1
-    expect(c.D3.level).to.equal(1)
+    assert(c.D3.level === 1)
     c.D3.level = 0
-    expect(p.D3.level).to.equal(0)
+    assert(p.D3.level === 0)
 
     p.D2.level = 1
-    expect(c.D2.level).to.equal(1)
+    assert(c.D2.level === 1)
     c.D2.level = 0
-    expect(p.D2.level).to.equal(0)
+    assert(p.D2.level === 0)
 
     p.D1.level = 1
-    expect(c.D1.level).to.equal(1)
+    assert(c.D1.level === 1)
     c.D1.level = 0
-    expect(p.D1.level).to.equal(0)
+    assert(p.D1.level === 0)
 
     p.D0.level = 1
-    expect(c.D0.level).to.equal(1)
+    assert(c.D0.level === 1)
     c.D0.level = 0
-    expect(p.D0.level).to.equal(0)
+    assert(p.D0.level === 0)
   })
 })

@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, rand } from "test/helper"
+import { assert, rand } from "test/helper"
 import {
   CIDDRA, CIDDRB, CIACRA, CIACRB, CIAPRA, CIAPRB,
 } from "chips/ic-6526/constants"
@@ -13,24 +13,24 @@ import { bitSet, valueToPins, pinsToValue } from "utils"
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(CIDDRA, 0)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PA${i}`].mode).to.equal(INPUT)
+    assert(chip[`PA${i}`].mode === INPUT)
   }
 
   writeRegister(CIDDRB, 0)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PB${i}`].mode).to.equal(INPUT)
+    assert(chip[`PB${i}`].mode === INPUT)
   }
 }
 
 export function ddrOutput({ chip, writeRegister }) {
   writeRegister(CIDDRA, 0xff)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PA${i}`].mode).to.equal(OUTPUT)
+    assert(chip[`PA${i}`].mode === OUTPUT)
   }
 
   writeRegister(CIDDRB, 0xff)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PB${i}`].mode).to.equal(OUTPUT)
+    assert(chip[`PB${i}`].mode === OUTPUT)
   }
 }
 
@@ -39,12 +39,12 @@ export function ddrCombo({ chip, writeRegister }) {
 
   writeRegister(CIDDRA, value)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PA${i}`].mode).to.equal(bitSet(value, i) ? OUTPUT : INPUT)
+    assert(chip[`PA${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
   }
 
   writeRegister(CIDDRB, value)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PB${i}`].mode).to.equal(bitSet(value, i) ? OUTPUT : INPUT)
+    assert(chip[`PB${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
   }
 }
 
@@ -55,7 +55,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // Set DDR for port B to all inputs, bit 6 and should remain output
   writeRegister(CIDDRB, 0)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PB${i}`].mode).to.equal(i === 6 ? OUTPUT : INPUT)
+    assert(chip[`PB${i}`].mode === (i === 6 ? OUTPUT : INPUT))
   }
 
   // turn on PBON for timer B
@@ -65,7 +65,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // outputs
   writeRegister(CIDDRB, 0)
   for (let i = 0; i < 8; i++) {
-    expect(chip[`PB${i}`].mode).to.equal(i === 6 || i === 7 ? OUTPUT : INPUT)
+    assert(chip[`PB${i}`].mode === (i === 6 || i === 7 ? OUTPUT : INPUT))
   }
 }
 
@@ -76,13 +76,13 @@ export function pdrReceive(
 
   writeRegister(CIDDRA, 0)
   valueToPins(paValue, ...paTraces)
-  expect(readRegister(CIAPRA)).to.equal(paValue)
+  assert(readRegister(CIAPRA) === paValue)
 
   const pbValue = rand(256)
 
   writeRegister(CIDDRB, 0)
   valueToPins(pbValue, ...pbTraces)
-  expect(readRegister(CIAPRB)).to.equal(pbValue)
+  assert(readRegister(CIAPRB) === pbValue)
 }
 
 export function pdrSend({ writeRegister, paTraces, pbTraces }) {
@@ -90,13 +90,13 @@ export function pdrSend({ writeRegister, paTraces, pbTraces }) {
 
   writeRegister(CIDDRA, 0xff)
   writeRegister(CIAPRA, paValue)
-  expect(pinsToValue(...paTraces)).to.equal(paValue)
+  assert(pinsToValue(...paTraces) === paValue)
 
   const pbValue = rand(256)
 
   writeRegister(CIDDRB, 0xff)
   writeRegister(CIAPRB, pbValue)
-  expect(pinsToValue(...pbTraces)).to.equal(pbValue)
+  assert(pinsToValue(...pbTraces) === pbValue)
 }
 
 export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
@@ -111,8 +111,8 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const paReg = readRegister(CIAPRA)
   const paPins = pinsToValue(...paTraces)
 
-  expect(paReg).to.equal(paExp)
-  expect(paPins).to.equal(paExp)
+  assert(paReg === paExp)
+  assert(paPins === paExp)
 
   const pbMask = rand(256)
   const pbIn = rand(256)
@@ -125,8 +125,8 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const pbReg = readRegister(CIAPRB)
   const pbPins = pinsToValue(...pbTraces)
 
-  expect(pbReg).to.equal(pbExp)
-  expect(pbPins).to.equal(pbExp)
+  assert(pbReg === pbExp)
+  assert(pbPins === pbExp)
 }
 
 export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
@@ -140,8 +140,8 @@ export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
 
   // Write all 1's; PB6 and PB7 shouldn't respond
   writeRegister(CIAPRB, 0b11111111)
-  expect(readRegister(CIAPRB)).to.equal(0b00111111)
-  expect(pinsToValue(...pbTraces)).to.equal(0b00111111)
+  assert(readRegister(CIAPRB) === 0b00111111)
+  assert(pinsToValue(...pbTraces) === 0b00111111)
 }
 
 export function pdrTriggerPc(
@@ -150,35 +150,35 @@ export function pdrTriggerPc(
   // Reading port A does not trigger _PC
   writeRegister(CIDDRA, 0x00)
   valueToPins(0xff, ...paTraces)
-  expect(readRegister(CIAPRA)).to.equal(0xff)
-  expect(tr._PC.level).to.equal(1)
+  assert(readRegister(CIAPRA) === 0xff)
+  assert(tr._PC.high)
 
   // Writing port A does not trigger _PC
   writeRegister(CIDDRA, 0xff)
   writeRegister(CIAPRA, 0x2f)
-  expect(pinsToValue(...paTraces)).to.equal(0x2f)
-  expect(tr._PC.level).to.equal(1)
+  assert(pinsToValue(...paTraces) === 0x2f)
+  assert(tr._PC.high)
 
   // Reading port B does trigger _PC
   writeRegister(CIDDRB, 0x00)
   valueToPins(0xff, ...pbTraces)
-  expect(tr._PC.level).to.equal(1)
-  expect(readRegister(CIAPRB)).to.equal(0xff)
-  expect(tr._PC.level).to.equal(0)
+  assert(tr._PC.high)
+  assert(readRegister(CIAPRB) === 0xff)
+  assert(tr._PC.low)
 
   // _PC resets on the next clock high
   tr.φ2.set()
-  expect(tr._PC.level).to.equal(1)
+  assert(tr._PC.high)
   tr.φ2.clear()
 
   // Writing port B does trigger _PC
   writeRegister(CIDDRB, 0xff)
-  expect(tr._PC.level).to.equal(1)
+  assert(tr._PC.high)
   writeRegister(CIAPRB, 0x2f)
-  expect(pinsToValue(...pbTraces)).to.equal(0x2f)
-  expect(tr._PC.level).to.equal(0)
+  assert(pinsToValue(...pbTraces) === 0x2f)
+  assert(tr._PC.low)
 
   tr.φ2.set()
-  expect(tr._PC.level).to.equal(1)
+  assert(tr._PC.high)
   tr.φ2.clear()
 }

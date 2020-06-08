@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Ic74258 } from "chips/ic-74258"
 
 describe("74258 3-State Quad 2-Data Multiplexers", () => {
@@ -23,29 +23,29 @@ describe("74258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces._Y1.high).to.be.true
+      assert(traces._Y1.high)
 
       traces.A1.set()
-      expect(traces._Y1.low).to.be.true
+      assert(traces._Y1.low)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces._Y1.low).to.be.true
+      assert(traces._Y1.low)
 
       traces.B1.clear()
-      expect(traces._Y1.high).to.be.true
+      assert(traces._Y1.high)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces._Y1.low).to.be.true
+      assert(traces._Y1.low)
 
       traces._OE.set()
-      expect(traces._Y1.null).to.be.true
+      assert(traces._Y1.floating)
 
       traces.SEL.clear()
-      expect(traces._Y1.null).to.be.true
+      assert(traces._Y1.floating)
     })
   })
 
@@ -57,29 +57,29 @@ describe("74258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces._Y2.high).to.be.true
+      assert(traces._Y2.high)
 
       traces.A2.set()
-      expect(traces._Y2.low).to.be.true
+      assert(traces._Y2.low)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces._Y2.low).to.be.true
+      assert(traces._Y2.low)
 
       traces.B2.clear()
-      expect(traces._Y2.high).to.be.true
+      assert(traces._Y2.high)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces._Y2.low).to.be.true
+      assert(traces._Y2.low)
 
       traces._OE.set()
-      expect(traces._Y2.null).to.be.true
+      assert(traces._Y2.floating)
 
       traces.SEL.clear()
-      expect(traces._Y2.null).to.be.true
+      assert(traces._Y2.floating)
     })
   })
 
@@ -91,29 +91,29 @@ describe("74258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces._Y3.high).to.be.true
+      assert(traces._Y3.high)
 
       traces.A3.set()
-      expect(traces._Y3.low).to.be.true
+      assert(traces._Y3.low)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces._Y3.low).to.be.true
+      assert(traces._Y3.low)
 
       traces.B3.clear()
-      expect(traces._Y3.high).to.be.true
+      assert(traces._Y3.high)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces._Y3.low).to.be.true
+      assert(traces._Y3.low)
 
       traces._OE.set()
-      expect(traces._Y3.null).to.be.true
+      assert(traces._Y3.floating)
 
       traces.SEL.clear()
-      expect(traces._Y3.null).to.be.true
+      assert(traces._Y3.floating)
     })
   })
 
@@ -125,29 +125,29 @@ describe("74258 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces._Y4.high).to.be.true
+      assert(traces._Y4.high)
 
       traces.A4.set()
-      expect(traces._Y4.low).to.be.true
+      assert(traces._Y4.low)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces._Y4.low).to.be.true
+      assert(traces._Y4.low)
 
       traces.B4.clear()
-      expect(traces._Y4.high).to.be.true
+      assert(traces._Y4.high)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces._Y4.low).to.be.true
+      assert(traces._Y4.low)
 
       traces._OE.set()
-      expect(traces._Y4.null).to.be.true
+      assert(traces._Y4.floating)
 
       traces.SEL.clear()
-      expect(traces._Y4.null).to.be.true
+      assert(traces._Y4.floating)
     })
   })
 })

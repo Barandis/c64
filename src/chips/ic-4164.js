@@ -147,7 +147,7 @@ export function Ic4164() {
     } else {
       memory[index] &= ~(1 << bit)
     }
-    if (!chip.Q.null) {
+    if (!chip.Q.floating) {
       chip.Q.level = data
     }
   }

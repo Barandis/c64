@@ -6,7 +6,7 @@
 // These tests are more numerous (per pin) than others because this one
 // is also testing the functionality of a port in general.
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { SerialPort } from "ports/serial-port"
 import { Port } from "components/port"
 import {
@@ -44,44 +44,44 @@ describe("Serial port", () => {
     connector.connect(port)
 
     p.GND.level = 1
-    expect(c.GND.level).to.equal(0)
+    assert(c.GND.level === 0)
 
     p.GND.level = 0
     c.GND.level = 1
-    expect(p.GND.level).to.equal(0)
+    assert(p.GND.level === 0)
   })
 
   it("allows data to pass through ports in the correct direction", () => {
     connector.connect(port)
 
     c._SRQ.level = 1
-    expect(p._SRQ.level).to.equal(1)
+    assert(p._SRQ.level === 1)
     p._SRQ.level = 0
-    expect(c._SRQ.level).to.equal(1)
+    assert(c._SRQ.level === 1)
 
     p.ATN.level = 1
-    expect(c.ATN.level).to.equal(1)
+    assert(c.ATN.level === 1)
     c.ATN.level = 0
-    expect(p.ATN.level).to.equal(1)
+    assert(p.ATN.level === 1)
   })
 
   it("allows data to pass both ways through a bidirectional port", () => {
     connector.connect(port)
 
     c.CLK.level = 1
-    expect(p.CLK.level).to.equal(1)
+    assert(p.CLK.level === 1)
     p.CLK.level = 0
-    expect(c.CLK.level).to.equal(0)
+    assert(c.CLK.level === 0)
 
     c.DATA.level = 1
-    expect(p.DATA.level).to.equal(1)
+    assert(p.DATA.level === 1)
     p.DATA.level = 0
-    expect(c.DATA.level).to.equal(0)
+    assert(c.DATA.level === 0)
 
     c._RESET.level = 1
-    expect(p._RESET.level).to.equal(1)
+    assert(p._RESET.level === 1)
     p._RESET.level = 0
-    expect(c._RESET.level).to.equal(0)
+    assert(c._RESET.level === 0)
   })
 
   it("stops passing data when the port is disconnected", () => {
@@ -89,21 +89,21 @@ describe("Serial port", () => {
     connector.disconnect()
 
     p.GND.level = 1
-    expect(c.GND.level).to.equal(0)
+    assert(c.GND.low)
 
     c._SRQ.level = 1
-    expect(p._SRQ.level).to.be.null
+    assert(p._SRQ.floating)
 
     p.ATN.level = 1
-    expect(c.ATN.level).to.be.null
+    assert(c.ATN.floating)
 
     c.CLK.level = 1
-    expect(p.CLK.level).to.be.null
+    assert(p.CLK.floating)
 
     c.DATA.level = 1
-    expect(p.DATA.level).to.be.null
+    assert(p.DATA.floating)
 
     c._RESET.level = 1
-    expect(p._RESET.level).to.be.null
+    assert(p._RESET.floating)
   })
 })

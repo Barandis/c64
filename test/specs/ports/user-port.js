@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { UserPort } from "ports/user-port"
 import { Port } from "components/port"
 import {
@@ -62,85 +62,85 @@ describe("User port", () => {
 
   it("writes to 1 pin", () => {
     p._PC2.level = 1
-    expect(c._PC2.level).to.equal(1)
+    assert(c._PC2.level === 1)
   })
 
   it("reads from 2 pins", () => {
     c.ATN.level = 1
     c._FLAG2.level = 2
-    expect(p.ATN.level).to.equal(1)
-    expect(p._FLAG2.level).to.equal(2)
+    assert(p.ATN.level === 1)
+    assert(p._FLAG2.level === 2)
   })
 
   it("both reads and writes to 14 pins", () => {
     p._RESET.level = 1
-    expect(c._RESET.level).to.equal(1)
+    assert(c._RESET.level === 1)
     c._RESET.level = 0
-    expect(p._RESET.level).to.equal(0)
+    assert(p._RESET.level === 0)
 
     p.CNT1.level = 1
-    expect(c.CNT1.level).to.equal(1)
+    assert(c.CNT1.level === 1)
     c.CNT1.level = 0
-    expect(p.CNT1.level).to.equal(0)
+    assert(p.CNT1.level === 0)
 
     p.SP1.level = 1
-    expect(c.SP1.level).to.equal(1)
+    assert(c.SP1.level === 1)
     c.SP1.level = 0
-    expect(p.SP1.level).to.equal(0)
+    assert(p.SP1.level === 0)
 
     p.CNT2.level = 1
-    expect(c.CNT2.level).to.equal(1)
+    assert(c.CNT2.level === 1)
     c.CNT2.level = 0
-    expect(p.CNT2.level).to.equal(0)
+    assert(p.CNT2.level === 0)
 
     p.SP2.level = 1
-    expect(c.SP2.level).to.equal(1)
+    assert(c.SP2.level === 1)
     c.SP2.level = 0
-    expect(p.SP2.level).to.equal(0)
+    assert(p.SP2.level === 0)
 
     p.PB0.level = 1
-    expect(c.PB0.level).to.equal(1)
+    assert(c.PB0.level === 1)
     c.PB0.level = 0
-    expect(p.PB0.level).to.equal(0)
+    assert(p.PB0.level === 0)
 
     p.PB1.level = 1
-    expect(c.PB1.level).to.equal(1)
+    assert(c.PB1.level === 1)
     c.PB1.level = 0
-    expect(p.PB1.level).to.equal(0)
+    assert(p.PB1.level === 0)
 
     p.PB2.level = 1
-    expect(c.PB2.level).to.equal(1)
+    assert(c.PB2.level === 1)
     c.PB2.level = 0
-    expect(p.PB2.level).to.equal(0)
+    assert(p.PB2.level === 0)
 
     p.PB3.level = 1
-    expect(c.PB3.level).to.equal(1)
+    assert(c.PB3.level === 1)
     c.PB3.level = 0
-    expect(p.PB3.level).to.equal(0)
+    assert(p.PB3.level === 0)
 
     p.PB4.level = 1
-    expect(c.PB4.level).to.equal(1)
+    assert(c.PB4.level === 1)
     c.PB4.level = 0
-    expect(p.PB4.level).to.equal(0)
+    assert(p.PB4.level === 0)
 
     p.PB5.level = 1
-    expect(c.PB5.level).to.equal(1)
+    assert(c.PB5.level === 1)
     c.PB5.level = 0
-    expect(p.PB5.level).to.equal(0)
+    assert(p.PB5.level === 0)
 
     p.PB6.level = 1
-    expect(c.PB6.level).to.equal(1)
+    assert(c.PB6.level === 1)
     c.PB6.level = 0
-    expect(p.PB6.level).to.equal(0)
+    assert(p.PB6.level === 0)
 
     p.PB7.level = 1
-    expect(c.PB7.level).to.equal(1)
+    assert(c.PB7.level === 1)
     c.PB7.level = 0
-    expect(p.PB7.level).to.equal(0)
+    assert(p.PB7.level === 0)
 
     p.PA2.level = 1
-    expect(c.PA2.level).to.equal(1)
+    assert(c.PA2.level === 1)
     c.PA2.level = 0
-    expect(p.PA2.level).to.equal(0)
+    assert(p.PA2.level === 0)
   })
 })

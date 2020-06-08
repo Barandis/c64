@@ -18,7 +18,7 @@ import {
   pnInitial, pnModeInput, pnNoOutputs, pnHiOutputs, pnLoOutputs, pnNullOutputs,
 } from "./trace/float"
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import { Pin, INPUT } from "components/pin"
 import { Trace } from "components/trace"
 
@@ -31,7 +31,7 @@ describe("Trace", () => {
     const spy = Sinon.spy()
     p.addListener(spy)
     t.level = 1
-    expect(spy).to.be.calledOnce
+    assert(spy.calledOnce)
   })
 
   describe("level", () => {

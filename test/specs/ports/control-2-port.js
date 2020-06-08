@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Control2Port } from "ports/control-2-port"
 import { Port } from "components/port"
 import { Pin, UNCONNECTED, INPUT } from "components/pin"
@@ -49,12 +49,12 @@ describe("Control port 1", () => {
     c.BTNB.level = 1
     c.POTBX.level = 0.4
 
-    expect(p.JOYB0.level).to.equal(0.9)
-    expect(p.JOYB1.level).to.equal(0.8)
-    expect(p.JOYB2.level).to.equal(0.7)
-    expect(p.JOYB3.level).to.equal(0.6)
-    expect(p.POTBY.level).to.equal(0.5)
-    expect(p.BTNB.level).to.equal(1)
-    expect(p.POTBX.level).to.equal(0.4)
+    assert(p.JOYB0.level === 0.9)
+    assert(p.JOYB1.level === 0.8)
+    assert(p.JOYB2.level === 0.7)
+    assert(p.JOYB3.level === 0.6)
+    assert(p.POTBY.level === 0.5)
+    assert(p.BTNB.level === 1)
+    assert(p.POTBX.level === 0.4)
   })
 })

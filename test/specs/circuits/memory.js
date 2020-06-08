@@ -5,7 +5,7 @@
 
 import { newBoard } from "circuits/board"
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import { valueToPins, pinsToValue, setMode } from "utils"
 import { INPUT } from "components/pin"
 
@@ -52,7 +52,7 @@ describe("Memory reading/writing", () => {
       // Try to read value from register
       setMode(INPUT, ...dataPins)
       valueToPins(0xdc02, ...addressPins)
-      expect(pinsToValue(...dataPins)).to.equal(0x2f)
+      assert(pinsToValue(...dataPins) === 0x2f)
     })
   })
 })

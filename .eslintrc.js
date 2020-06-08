@@ -98,7 +98,6 @@ module.exports = {
       skipBlankLines: true,
       skipComments: true,
     }],
-    "multiline-ternary": [ERROR, "always-multiline"],
     "new-parens": [ERROR],
     "newline-per-chained-call": [ERROR],
     "no-lonely-if": [ERROR],

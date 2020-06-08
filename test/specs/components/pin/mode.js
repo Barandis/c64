@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, Pin,
 } from "components/pin"
@@ -15,85 +15,85 @@ export function modeInitial() {
   const p3 = Pin(3, "C", OUTPUT)
   const p4 = Pin(4, "D", BIDIRECTIONAL)
 
-  expect(p1.mode).to.equal(UNCONNECTED)
-  expect(p1.input).to.be.false
-  expect(p1.output).to.be.false
+  assert(p1.mode === UNCONNECTED)
+  assert(!p1.input)
+  assert(!p1.output)
 
-  expect(p2.mode).to.equal(INPUT)
-  expect(p2.input).to.be.true
-  expect(p2.output).to.be.false
+  assert(p2.mode === INPUT)
+  assert(p2.input)
+  assert(!p2.output)
 
-  expect(p3.mode).to.equal(OUTPUT)
-  expect(p3.input).to.be.false
-  expect(p3.output).to.be.true
+  assert(p3.mode === OUTPUT)
+  assert(!p3.input)
+  assert(p3.output)
 
-  expect(p4.mode).to.equal(BIDIRECTIONAL)
-  expect(p4.input).to.be.true
-  expect(p4.output).to.be.true
+  assert(p4.mode === BIDIRECTIONAL)
+  assert(p4.input)
+  assert(p4.output)
 }
 
 export function modeChange() {
   const p = Pin(1, "A", UNCONNECTED)
-  expect(p.mode).to.equal(UNCONNECTED)
+  assert(p.mode === UNCONNECTED)
   p.mode = INPUT
-  expect(p.mode).to.equal(INPUT)
+  assert(p.mode === INPUT)
   p.mode = OUTPUT
-  expect(p.mode).to.equal(OUTPUT)
+  assert(p.mode === OUTPUT)
   p.mode = BIDIRECTIONAL
-  expect(p.mode).to.equal(BIDIRECTIONAL)
+  assert(p.mode === BIDIRECTIONAL)
 }
 
 export function modeOutToIn() {
   const p = Pin(1, "A", OUTPUT)
   const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.high)
   p.mode = INPUT
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function modeBidiToIn() {
   const p = Pin(1, "A", BIDIRECTIONAL)
   const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.high)
   p.mode = INPUT
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function modeUncToIn() {
   const p = Pin(1, "A", UNCONNECTED)
   const t = Trace(p, Pin(2, "B", INPUT))
   p.level = 1
-  expect(t.level).to.be.null
+  assert(t.floating)
   p.mode = INPUT
-  expect(t.level).to.be.null
+  assert(t.floating)
 }
 
 export function modeBidiToOut() {
   const p = Pin(1, "A", BIDIRECTIONAL)
   const t = Trace(p)
   p.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.high)
   p.mode = OUTPUT
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function modeUncToOut() {
   const p = Pin(1, "A", UNCONNECTED)
   const t = Trace(p)
   p.level = 1
-  expect(t.level).to.be.null
+  assert(t.floating)
   p.mode = OUTPUT
-  expect(t.level).to.equal(1)
+  assert(t.high)
 }
 
 export function modeInToUnc() {
   const p = Pin(1, "A", INPUT)
   const t = Trace(p)
   t.level = 1
-  expect(p.level).to.equal(1)
+  assert(p.high)
   p.mode = UNCONNECTED
-  expect(t.level).to.equal(1)
-  expect(p.level).to.equal(1)
+  assert(t.high)
+  assert(p.high)
 }

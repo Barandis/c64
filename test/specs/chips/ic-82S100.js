@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, bin, deviceTraces } from "test/helper"
+import { assert, bin, deviceTraces } from "test/helper"
 import { Ic82S100 } from "chips/ic-82S100"
 
 // This program was adapted from a C program that provides a 64k table
@@ -163,14 +163,14 @@ describe("82S100 Programmable Logic Array", () => {
 
   it("disables all outputs if _OE is set high", () => {
     traces._OE.set()
-    expect(traces.F0.null).to.be.true
-    expect(traces.F1.null).to.be.true
-    expect(traces.F2.null).to.be.true
-    expect(traces.F3.null).to.be.true
-    expect(traces.F4.null).to.be.true
-    expect(traces.F5.null).to.be.true
-    expect(traces.F6.null).to.be.true
-    expect(traces.F7.null).to.be.true
+    assert(traces.F0.floating)
+    assert(traces.F1.floating)
+    assert(traces.F2.floating)
+    assert(traces.F3.floating)
+    assert(traces.F4.floating)
+    assert(traces.F5.floating)
+    assert(traces.F6.floating)
+    assert(traces.F7.floating)
     traces._OE.clear()
   })
 
@@ -179,12 +179,12 @@ describe("82S100 Programmable Logic Array", () => {
       const expected = getExpected(i)
       applyInputs(i)
       const actual = outputValue()
-      expect(
-        actual,
+      assert(
+        actual === expected,
         `input: ${bin(i, 16)}, expected: ${bin(expected, 8)}, actual: ${
           bin(actual, 8)
         }`,
-      ).to.equal(expected)
+      )
     }
   }
 

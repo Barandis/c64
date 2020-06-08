@@ -82,3 +82,41 @@ export function clearBit(value, bit) {
 export function toggleBit(value, bit) {
   return value ^ 1 << bit
 }
+
+export function *range(start, end, step, inclusive) {
+  let s, e, t, i
+
+  if (typeof start === "string") {
+    [s, e, t = 1] = start.split(":")
+    i = !!end
+  } else {
+    s = typeof step === "number" || typeof end === "number" ? start : 0
+    e = typeof step === "number" || typeof end === "number" ? end : start
+    t = typeof step === "number" ? step : 1
+    i = typeof step === "number"
+      ? !!inclusive : typeof end === "number"
+        ? !!step : !!end
+  }
+  t = t === 0 ? 1 : Math.abs(t)
+
+  const forward = s < e
+  let current = s
+
+  const finished = () => {
+    if (forward) {
+      return i ? current > e : current >= e
+    }
+    return i ? current < e : current <= e
+
+  }
+
+  // `current` is a local variable not readable from outside this
+  // function, so there's no need to worry about it being updated
+  // during the yield
+  /* eslint-disable require-atomic-updates */
+  while (!finished()) {
+    yield current
+    current = forward ? current + t : current - t
+  }
+  /* eslint-enable require-atomic-updates */
+}

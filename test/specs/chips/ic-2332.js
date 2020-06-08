@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces, DEBUG, hex } from "test/helper"
+import { assert, deviceTraces, DEBUG, hex } from "test/helper"
 import { Ic2332 } from "chips/ic-2332"
 import { character } from "rom/character"
 
@@ -62,7 +62,7 @@ describe("2332 4k x 8-bit ROM", () => {
           )
         }
 
-        expect(data).to.equal(expected[addr])
+        assert(data === expected[addr])
         traces._CS1.set()
       }
     }

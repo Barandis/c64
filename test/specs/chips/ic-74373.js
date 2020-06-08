@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Ic74373 } from "chips/ic-74373"
 
 describe("74373 Octal tri-state transparent latch", () => {
@@ -21,12 +21,12 @@ describe("74373 Octal tri-state transparent latch", () => {
 
     for (let i = 0; i < 8; i++) {
       traces["D" + i].set()
-      expect(traces["O" + i].high).to.be.true
+      assert(traces["O" + i].high)
     }
 
     for (let i = 0; i < 8; i++) {
       traces["D" + i].clear()
-      expect(traces["O" + i].low).to.be.true
+      assert(traces["O" + i].low)
     }
   })
 
@@ -41,11 +41,11 @@ describe("74373 Octal tri-state transparent latch", () => {
 
     for (let i = 0; i < 8; i++) {
       traces[`D${i}`].set()
-      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
+      assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
     for (let i = 0; i < 8; i++) {
       traces[`D${i}`].clear()
-      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
+      assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
   })
 
@@ -60,13 +60,13 @@ describe("74373 Octal tri-state transparent latch", () => {
 
     for (let i = 0; i < 8; i++) {
       traces[`D${i}`].set()
-      expect(!!traces[`O${i}`].level).to.equal(i % 2 === 0)
+      assert(!!traces[`O${i}`].level === (i % 2 === 0))
     }
 
     traces.LE.set()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].high).to.be.true
+      assert(traces[`O${i}`].high)
     }
   })
 
@@ -80,13 +80,13 @@ describe("74373 Octal tri-state transparent latch", () => {
     traces._OE.set()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].level).to.be.null
+      assert(traces[`O${i}`].floating)
     }
 
     traces._OE.clear()
 
     for (let i = 0; i < 8; i++) {
-      expect(traces[`O${i}`].level).to.equal(1)
+      assert(traces[`O${i}`].high)
     }
   })
 
@@ -107,7 +107,7 @@ describe("74373 Octal tri-state transparent latch", () => {
     traces._OE.clear()
 
     for (let i = 0; i < 8; i++) {
-      expect(!!traces[`O${i}`].level).to.equal(i % 2 !== 0)
+      assert(!!traces[`O${i}`].level === (i % 2 !== 0))
     }
   })
 })

@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { expect, deviceTraces, DEBUG, hex } from "test/helper"
+import { assert, deviceTraces, DEBUG, hex } from "test/helper"
 import { Ic2364 } from "chips/ic-2364"
 import { kernal } from "rom/kernal"
 import { basic } from "rom/basic"
@@ -65,7 +65,7 @@ describe("2364 8k x 8-bit ROM", () => {
           )
         }
 
-        expect(data).to.equal(expected[addr])
+        assert(data === expected[addr])
         traces._CS.set()
       }
     }
@@ -134,7 +134,7 @@ describe("2364 8k x 8-bit ROM", () => {
           )
         }
 
-        expect(data).to.equal(expected[addr])
+        assert(data === expected[addr])
         traces._CS.set()
       }
     }

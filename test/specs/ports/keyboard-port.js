@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { KeyboardPort } from "ports/keyboard-port"
 import { Port } from "components/port"
 import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
@@ -64,15 +64,15 @@ describe("Keyboard port", () => {
     c.ROW7.level = 8
     c._RESTORE.level = 9
 
-    expect(p.ROW0.level).to.equal(1)
-    expect(p.ROW1.level).to.equal(2)
-    expect(p.ROW2.level).to.equal(3)
-    expect(p.ROW3.level).to.equal(4)
-    expect(p.ROW4.level).to.equal(5)
-    expect(p.ROW5.level).to.equal(6)
-    expect(p.ROW6.level).to.equal(7)
-    expect(p.ROW7.level).to.equal(8)
-    expect(p._RESTORE.level).to.equal(9)
+    assert(p.ROW0.level === 1)
+    assert(p.ROW1.level === 2)
+    assert(p.ROW2.level === 3)
+    assert(p.ROW3.level === 4)
+    assert(p.ROW4.level === 5)
+    assert(p.ROW5.level === 6)
+    assert(p.ROW6.level === 7)
+    assert(p.ROW7.level === 8)
+    assert(p._RESTORE.level === 9)
   })
 
   it("writes data to 8 pins", () => {
@@ -85,13 +85,13 @@ describe("Keyboard port", () => {
     p.COL6.level = 7
     p.COL7.level = 8
 
-    expect(c.COL0.level).to.equal(1)
-    expect(c.COL1.level).to.equal(2)
-    expect(c.COL2.level).to.equal(3)
-    expect(c.COL3.level).to.equal(4)
-    expect(c.COL4.level).to.equal(5)
-    expect(c.COL5.level).to.equal(6)
-    expect(c.COL6.level).to.equal(7)
-    expect(c.COL7.level).to.equal(8)
+    assert(c.COL0.level === 1)
+    assert(c.COL1.level === 2)
+    assert(c.COL2.level === 3)
+    assert(c.COL3.level === 4)
+    assert(c.COL4.level === 5)
+    assert(c.COL5.level === 6)
+    assert(c.COL6.level === 7)
+    assert(c.COL7.level === 8)
   })
 })

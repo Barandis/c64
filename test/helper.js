@@ -4,15 +4,12 @@
 // https://opensource.org/licenses/MIT
 
 import chai from "chai"
-import sinonChai from "sinon-chai"
 
 import { Trace } from "components/trace"
 import { OUTPUT, INPUT, Pin } from "components/pin"
 import { Port } from "components/port"
 
-chai.use(sinonChai)
-
-export const expect = chai.expect
+export const assert = chai.assert
 
 export const DEBUG = process.env.DEBUG || false
 

@@ -24,19 +24,19 @@ import {
 import { arrayContains, arrayByNumber, arrayByName } from "./pin/array"
 
 import { Pin } from "components/pin"
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 
 describe("Pin", () => {
   const test = fn => () => fn()
 
   it("has a number", () => {
     const p = Pin(1, "A")
-    expect(p.number).to.equal(1)
+    assert(p.number === 1)
   })
 
   it("has a name", () => {
     const p = Pin(1, "A")
-    expect(p.name).to.equal("A")
+    assert(p.name === "A")
   })
 
   describe("mode", () => {

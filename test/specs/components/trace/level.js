@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import { Trace } from "components/trace"
 import {
   Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
@@ -12,22 +12,22 @@ import {
 export function levelDirectUnconnected() {
   const t = Trace()
   t.set()
-  expect(t.high).to.be.true
-  expect(t.low).to.be.false
-  expect(t.null).to.be.false
+  assert(t.high)
+  assert(!t.low)
+  assert(!t.floating)
 
   t.clear()
-  expect(t.high).to.be.false
-  expect(t.low).to.be.true
-  expect(t.null).to.be.false
+  assert(!t.high)
+  assert(t.low)
+  assert(!t.floating)
 
   t.float()
-  expect(t.high).to.be.false
-  expect(t.low).to.be.false
-  expect(t.null).to.be.true
+  assert(!t.high)
+  assert(!t.low)
+  assert(t.floating)
 
   t.level = -0.35
-  expect(t.level).to.equal(-0.35)
+  assert(t.level === -0.35)
 }
 
 export function levelDirectInput() {
@@ -35,13 +35,13 @@ export function levelDirectInput() {
   const t = Trace(p)
 
   t.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
   t.level = 0
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
   t.level = null
-  expect(t.level).to.be.null
+  assert(t.level === null)
   t.level = -0.35
-  expect(t.level).to.equal(-0.35)
+  assert(t.level === -0.35)
 }
 
 export function levelDirectHiOutput() {
@@ -53,13 +53,13 @@ export function levelDirectHiOutput() {
   p2.level = 0
 
   t.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
   t.level = 0
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
   t.level = null
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
   t.level = -0.35
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
 }
 
 export function levelDirectLoOutput() {
@@ -71,13 +71,13 @@ export function levelDirectLoOutput() {
   p2.level = 0
 
   t.level = 1
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
   t.level = 0
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
   t.level = null
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
   t.level = -0.35
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
 }
 
 export function levelDirectNullOutput() {
@@ -89,13 +89,13 @@ export function levelDirectNullOutput() {
   p2.level = null
 
   t.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
   t.level = 0
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
   t.level = null
-  expect(t.level).to.be.null
+  assert(t.level === null)
   t.level = -0.35
-  expect(t.level).to.equal(-0.35)
+  assert(t.level === -0.35)
 }
 
 export function levelPinUnconnected() {
@@ -104,8 +104,8 @@ export function levelPinUnconnected() {
   t.level = 0
 
   p.level = 1
-  expect(t.level).to.equal(0)
-  expect(p.level).to.equal(1)
+  assert(t.level === 0)
+  assert(p.level === 1)
 }
 
 export function levelPinInput() {
@@ -114,8 +114,8 @@ export function levelPinInput() {
   t.level = 0
 
   p.level = 1
-  expect(t.level).to.equal(0)
-  expect(p.level).to.equal(0)
+  assert(t.level === 0)
+  assert(p.level === 0)
 }
 
 export function levelPinOutput() {
@@ -124,8 +124,8 @@ export function levelPinOutput() {
   t.level = 0
 
   p.level = 1
-  expect(t.level).to.equal(1)
-  expect(p.level).to.equal(1)
+  assert(t.level === 1)
+  assert(p.level === 1)
 }
 
 export function levelPinBidirectional() {
@@ -134,12 +134,12 @@ export function levelPinBidirectional() {
   t.level = 0
 
   p.level = 1
-  expect(t.level).to.equal(1)
-  expect(p.level).to.equal(1)
+  assert(t.level === 1)
+  assert(p.level === 1)
 
   t.level = null
-  expect(t.level).to.equal(null)
-  expect(p.level).to.equal(null)
+  assert(t.level === null)
+  assert(p.level === null)
 }
 
 export function levelPinHiOutputs() {
@@ -152,7 +152,7 @@ export function levelPinHiOutputs() {
   p3.level = 1
 
   p1.level = 0
-  expect(t.level).to.equal(0)
+  assert(t.level === 0)
 }
 
 export function levelPinLoOutputs() {
@@ -165,5 +165,5 @@ export function levelPinLoOutputs() {
   p3.level = 0
 
   p1.level = 1
-  expect(t.level).to.equal(1)
+  assert(t.level === 1)
 }

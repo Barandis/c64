@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect, deviceTraces } from "test/helper"
+import { assert, deviceTraces } from "test/helper"
 import { Ic74257 } from "chips/ic-74257"
 
 describe("74257 3-State Quad 2-Data Multiplexers", () => {
@@ -23,29 +23,29 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces.Y1.low).to.be.true
+      assert(traces.Y1.low)
 
       traces.A1.set()
-      expect(traces.Y1.high).to.be.true
+      assert(traces.Y1.high)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces.Y1.high).to.be.true
+      assert(traces.Y1.high)
 
       traces.B1.clear()
-      expect(traces.Y1.low).to.be.true
+      assert(traces.Y1.low)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces.Y1.high).to.be.true
+      assert(traces.Y1.high)
 
       traces._OE.set()
-      expect(traces.Y1.null).to.be.true
+      assert(traces.Y1.floating)
 
       traces.SEL.clear()
-      expect(traces.Y1.null).to.be.true
+      assert(traces.Y1.floating)
     })
   })
 
@@ -57,29 +57,29 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces.Y2.low).to.be.true
+      assert(traces.Y2.low)
 
       traces.A2.set()
-      expect(traces.Y2.high).to.be.true
+      assert(traces.Y2.high)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces.Y2.high).to.be.true
+      assert(traces.Y2.high)
 
       traces.B2.clear()
-      expect(traces.Y2.low).to.be.true
+      assert(traces.Y2.low)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces.Y2.high).to.be.true
+      assert(traces.Y2.high)
 
       traces._OE.set()
-      expect(traces.Y2.null).to.be.true
+      assert(traces.Y2.floating)
 
       traces.SEL.clear()
-      expect(traces.Y2.null).to.be.true
+      assert(traces.Y2.floating)
     })
   })
 
@@ -91,29 +91,29 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces.Y3.low).to.be.true
+      assert(traces.Y3.low)
 
       traces.A3.set()
-      expect(traces.Y3.high).to.be.true
+      assert(traces.Y3.high)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces.Y3.high).to.be.true
+      assert(traces.Y3.high)
 
       traces.B3.clear()
-      expect(traces.Y3.low).to.be.true
+      assert(traces.Y3.low)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces.Y3.high).to.be.true
+      assert(traces.Y3.high)
 
       traces._OE.set()
-      expect(traces.Y3.null).to.be.true
+      assert(traces.Y3.floating)
 
       traces.SEL.clear()
-      expect(traces.Y3.null).to.be.true
+      assert(traces.Y3.floating)
     })
   })
 
@@ -125,29 +125,29 @@ describe("74257 3-State Quad 2-Data Multiplexers", () => {
 
     it("selects A when SEL is false", () => {
       traces.SEL.clear()
-      expect(traces.Y4.low).to.be.true
+      assert(traces.Y4.low)
 
       traces.A4.set()
-      expect(traces.Y4.high).to.be.true
+      assert(traces.Y4.high)
     })
 
     it("selects B when SEL is true", () => {
       traces.SEL.set()
-      expect(traces.Y4.high).to.be.true
+      assert(traces.Y4.high)
 
       traces.B4.clear()
-      expect(traces.Y4.low).to.be.true
+      assert(traces.Y4.low)
     })
 
     it("is off when OE is true, no matter the value of SEL", () => {
       traces.SEL.set()
-      expect(traces.Y4.high).to.be.true
+      assert(traces.Y4.high)
 
       traces._OE.set()
-      expect(traces.Y4.null).to.be.true
+      assert(traces.Y4.floating)
 
       traces.SEL.clear()
-      expect(traces.Y4.null).to.be.true
+      assert(traces.Y4.floating)
     })
   })
 })

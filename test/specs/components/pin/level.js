@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { expect } from "test/helper"
+import { assert } from "test/helper"
 import {
   Pin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
 } from "components/pin"
@@ -11,35 +11,35 @@ import { Trace } from "components/trace"
 
 export function levelNoTrace() {
   const p = Pin(1, "A", INPUT)
-  expect(p.level).to.be.null
-  expect(p.high).to.be.false
-  expect(p.low).to.be.false
-  expect(p.null).to.be.true
+  assert(p.level === null)
+  assert(!p.high)
+  assert(!p.low)
+  assert(p.floating)
 
   p.level = 1
-  expect(p.level).to.equal(1)
-  expect(p.high).to.be.true
-  expect(p.low).to.be.false
-  expect(p.null).to.be.false
+  assert(p.level === 1)
+  assert(p.high)
+  assert(!p.low)
+  assert(!p.floating)
 
   p.level = 0
-  expect(p.level).to.equal(0)
-  expect(p.high).to.be.false
-  expect(p.low).to.be.true
-  expect(p.null).to.be.false
+  assert(p.level === 0)
+  assert(!p.high)
+  assert(p.low)
+  assert(!p.floating)
 
   p.level = -0.35
-  expect(p.level).to.equal(-0.35)
-  expect(p.high).to.be.false
-  expect(p.low).to.be.true
-  expect(p.null).to.be.false
+  assert(p.level === -0.35)
+  assert(!p.high)
+  assert(p.low)
+  assert(!p.floating)
 }
 
 export function levelUpdateNoTrace() {
   const p = Pin(1, "A", INPUT)
   p.level = 1
   p.updateLevel()
-  expect(p.level).to.equal(1)
+  assert(p.level === 1)
 }
 
 export function levelUnconnected() {
@@ -47,24 +47,24 @@ export function levelUnconnected() {
   const t = Trace(p)
 
   t.level = 1
-  expect(p.level).to.be.null
-  expect(t.level).to.equal(1)
+  assert(p.level === null)
+  assert(t.level === 1)
 
   p.level = 1
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = 0
-  expect(p.level).to.equal(0)
-  expect(t.level).to.equal(1)
+  assert(p.level === 0)
+  assert(t.level === 1)
 
   p.level = -0.35
-  expect(p.level).to.equal(-0.35)
-  expect(t.level).to.equal(1)
+  assert(p.level === -0.35)
+  assert(t.level === 1)
 
   p.level = null
-  expect(p.level).to.equal(null)
-  expect(t.level).to.equal(1)
+  assert(p.level === null)
+  assert(t.level === 1)
 }
 
 export function levelInput() {
@@ -72,24 +72,24 @@ export function levelInput() {
   const t = Trace(p)
 
   t.level = 1
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = 1
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = 0
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = -0.35
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = null
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 }
 
 export function levelOutput() {
@@ -97,24 +97,24 @@ export function levelOutput() {
   const t = Trace(p)
 
   t.level = 1
-  expect(p.level).to.equal(null)
-  expect(t.level).to.equal(1)
+  assert(p.level === null)
+  assert(t.level === 1)
 
   p.level = 1
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = 0
-  expect(p.level).to.equal(0)
-  expect(t.level).to.equal(0)
+  assert(p.level === 0)
+  assert(t.level === 0)
 
   p.level = -0.35
-  expect(p.level).to.equal(-0.35)
-  expect(t.level).to.equal(-0.35)
+  assert(p.level === -0.35)
+  assert(t.level === -0.35)
 
   p.level = null
-  expect(p.level).to.equal(null)
-  expect(t.level).to.equal(null)
+  assert(p.level === null)
+  assert(t.level === null)
 }
 
 export function levelBidirectional() {
@@ -122,20 +122,20 @@ export function levelBidirectional() {
   const t = Trace(p)
 
   t.level = 1
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.level = 0
-  expect(p.level).to.equal(0)
-  expect(t.level).to.equal(0)
+  assert(p.level === 0)
+  assert(t.level === 0)
 
   t.level = -0.35
-  expect(p.level).to.equal(-0.35)
-  expect(t.level).to.equal(-0.35)
+  assert(p.level === -0.35)
+  assert(t.level === -0.35)
 
   p.level = null
-  expect(p.level).to.equal(null)
-  expect(t.level).to.equal(null)
+  assert(p.level === null)
+  assert(t.level === null)
 }
 
 export function levelOptions() {
@@ -143,43 +143,43 @@ export function levelOptions() {
   const t = Trace(p)
 
   t.set()
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.clear()
-  expect(p.level).to.equal(0)
-  expect(t.level).to.equal(0)
+  assert(p.level === 0)
+  assert(t.level === 0)
 
   t.level = -0.35
-  expect(p.level).to.equal(-0.35)
-  expect(t.level).to.equal(-0.35)
+  assert(p.level === -0.35)
+  assert(t.level === -0.35)
 
   p.set()
-  expect(p.level).to.equal(1)
-  expect(t.level).to.equal(1)
+  assert(p.level === 1)
+  assert(t.level === 1)
 
   p.float()
-  expect(p.level).to.equal(null)
-  expect(t.level).to.equal(null)
+  assert(p.level === null)
+  assert(t.level === null)
 }
 
 export function levelToggleHigh() {
   const p = Pin(1, "A")
   p.level = 0
   p.toggle()
-  expect(p.level).to.equal(1)
+  assert(p.level === 1)
 }
 
 export function levelToggleLow() {
   const p = Pin(1, "A")
   p.level = 1
   p.toggle()
-  expect(p.level).to.equal(0)
+  assert(p.level === 0)
 }
 
 export function levelToggleNone() {
   const p = Pin(1, "A")
   p.level = null
   p.toggle()
-  expect(p.level).to.equal(null)
+  assert(p.level === null)
 }

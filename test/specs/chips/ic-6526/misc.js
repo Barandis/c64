@@ -3,12 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { rand, expect } from "test/helper"
+import { rand, assert } from "test/helper"
 import { INPUT, OUTPUT } from "components/pin"
 import {
   TIMBHI, TIMALO, CIAICR, ICR_FLG, ICR_IR, ICR_SC, CIAPRB,
 } from "chips/ic-6526/constants"
-import { bitSet } from "utils"
+import { bitSet, bitClear } from "utils"
 
 export function reset({ chip, tr, writeRegister, readRegister }) {
   for (let i = 0; i < 16; i++) {
@@ -17,34 +17,35 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   tr._RES.clear()
   tr._RES.set()
   for (let i = 0; i < 16; i++) {
-    expect(readRegister(i))
-      .to.equal(i <= CIAPRB || i >= TIMALO && i <= TIMBHI ? 255 : 0)
+    assert(
+      readRegister(i) === (i <= CIAPRB || i >= TIMALO && i <= TIMBHI ? 255 : 0)
+    )
   }
-  expect(chip.CNT.mode).to.equal(INPUT)
-  expect(tr._IRQ.level).to.be.null
+  assert(chip.CNT.mode === INPUT)
+  assert(tr._IRQ.floating)
   for (let i = 0; i < 8; i++) {
     const name = `D${i}`
-    expect(chip[name].mode).to.equal(OUTPUT)
-    expect(tr[name].level).to.be.null
+    assert(chip[name].mode === OUTPUT)
+    assert(tr[name].floating)
   }
 }
 
 export function flagDefault({ tr, readRegister }) {
   tr._FLAG.clear()
-  expect(tr._IRQ.low).to.be.false
+  assert(!tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_FLG)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.false
+  assert(bitSet(icr, ICR_FLG))
+  assert(bitClear(icr, ICR_IR))
 }
 
 export function flagFlagSet({ tr, readRegister, writeRegister }) {
   writeRegister(CIAICR, 1 << ICR_SC | 1 << ICR_FLG)
 
   tr._FLAG.clear()
-  expect(tr._IRQ.low).to.be.true
+  assert(tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_FLG)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.true
+  assert(bitSet(icr, ICR_FLG))
+  assert(bitSet(icr, ICR_IR))
 }
 
 export function flagFlagReset({ tr, readRegister, writeRegister }) {
@@ -52,8 +53,8 @@ export function flagFlagReset({ tr, readRegister, writeRegister }) {
   writeRegister(CIAICR, 1 << ICR_FLG)
 
   tr._FLAG.clear()
-  expect(tr._IRQ.low).to.be.false
+  assert(!tr._IRQ.low)
   const icr = readRegister(CIAICR)
-  expect(bitSet(icr, ICR_FLG)).to.be.true
-  expect(bitSet(icr, ICR_IR)).to.be.false
+  assert(bitSet(icr, ICR_FLG))
+  assert(bitClear(icr, ICR_IR))
 }
