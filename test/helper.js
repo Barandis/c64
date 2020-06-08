@@ -18,6 +18,13 @@ export function rand(min, max = null) {
   return Math.floor(Math.random() * (hi - lo)) + lo
 }
 
+export function assertArray(actual, expected) {
+  assert(actual.length === expected.length)
+  for (let i = 0; i < actual.length; i++) {
+    assert(actual[i] === expected[i])
+  }
+}
+
 export function hex(value, digits = 2) {
   if (value === null) {
     return "null"

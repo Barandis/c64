@@ -84,20 +84,12 @@ export function toggleBit(value, bit) {
 }
 
 export function *range(start, end, step, inclusive) {
-  let s, e, t, i
-
-  if (typeof start === "string") {
-    [s, e, t = 1] = start.split(":")
-    i = !!end
-  } else {
-    s = typeof step === "number" || typeof end === "number" ? start : 0
-    e = typeof step === "number" || typeof end === "number" ? end : start
-    t = typeof step === "number" ? step : 1
-    i = typeof step === "number"
-      ? !!inclusive : typeof end === "number"
-        ? !!step : !!end
-  }
-  t = t === 0 ? 1 : Math.abs(t)
+  const s = typeof step === "number" || typeof end === "number" ? start : 0
+  const e = typeof step === "number" || typeof end === "number" ? end : start
+  const t = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
+  const i = typeof step === "number"
+    ? !!inclusive : typeof end === "number"
+      ? !!step : !!end
 
   const forward = s < e
   let current = s
