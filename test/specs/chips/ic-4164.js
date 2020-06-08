@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces, hex } from "test/helper"
-import { Ic4164 } from "chips/ic-4164"
+import { Ic4164 } from "chips"
 import { range, valueToPins } from "utils"
 
 describe("4164 64k x 1 bit dynamic RAM", () => {

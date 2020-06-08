@@ -5,9 +5,7 @@
 
 import chai from "chai"
 
-import { Trace } from "components/trace"
-import { OUTPUT, INPUT, Pin } from "components/pin"
-import { Port } from "components/port"
+import { OUTPUT, INPUT, Pin, Port, Trace } from "components"
 import { range } from "utils"
 
 export const assert = chai.assert

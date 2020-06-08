@@ -8,7 +8,7 @@ import {
 } from "./constants"
 
 import { setBit, clearBit, bitSet, range } from "utils"
-import { OUTPUT, INPUT } from "components/pin"
+import { OUTPUT, INPUT } from "components"
 
 export function ports(chip, registers) {
   // -------------------------------------------------------------------

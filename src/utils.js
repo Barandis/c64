@@ -13,10 +13,7 @@ for (const i of range(chars.length)) {
 export function decode(base64) {
   const len = base64.length
   let p = 0
-  let e1
-  let e2
-  let e3
-  let e4
+  let e1, e2, e3, e4
 
   let bufferLength = len * 0.75
   // There are three base-64 files that make up ROM code for the C64.
@@ -40,8 +37,8 @@ export function decode(base64) {
     e4 = lookup[base64.charCodeAt(i + 3)]
 
     bytes[p++] = e1 << 2 | e2 >> 4
-    bytes[p++] = (e2 & 15) << 4 | e3 >> 2
-    bytes[p++] = (e3 & 3) << 6 | e4 & 63
+    bytes[p++] = (e2 & 0x0f) << 4 | e3 >> 2
+    bytes[p++] = (e3 & 0x03) << 6 | e4 & 0x3f
   }
 
   return buffer
@@ -103,7 +100,6 @@ export function *range(start, end, step, inclusive) {
       return i ? current > e : current >= e
     }
     return i ? current < e : current <= e
-
   }
 
   // `current` is a local variable not readable from outside this

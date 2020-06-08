@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, bin, deviceTraces, hex } from "test/helper"
-import { Ic82S100 } from "chips/ic-82S100"
+import { Ic82S100 } from "chips"
 import { range, valueToPins, pinsToValue } from "utils"
 
 // This program was adapted from a C program that provides a 64k table

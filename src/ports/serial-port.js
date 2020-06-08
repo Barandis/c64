@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components/pin"
-import { Port } from "components/port"
+import { Port, Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components"
 
 export function SerialPort() {
   return Port(

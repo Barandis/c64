@@ -4,10 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import { assert } from "test/helper"
-import { Trace } from "components/trace"
 import {
-  Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
-} from "components/pin"
+  Trace, Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
+} from "components"
 
 export function levelDirectUnconnected() {
   const t = Trace()

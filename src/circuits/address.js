@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Trace } from "components/trace"
+import { Trace } from "components"
 
 // The address bus in the Commodore 64 is written two by only two chips:
 // the CPU and the VIC. Only one can write to the address bus at a time,

@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces, DEBUG, hex } from "test/helper"
-import { Ic2332 } from "chips/ic-2332"
+import { Ic2332 } from "chips"
 import { character } from "rom/character"
 import { range, valueToPins, pinsToValue } from "utils"
 

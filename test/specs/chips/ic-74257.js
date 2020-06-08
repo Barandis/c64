@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic74257 } from "chips/ic-74257"
+import { Ic74257 } from "chips"
 
 describe("74257 3-State Quad 2-Data Multiplexers", () => {
   let chip

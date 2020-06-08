@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic7408 } from "chips/ic-7408"
+import { Ic7408 } from "chips"
 
 describe("7408 quad 2-input AND gate", () => {
   let chip

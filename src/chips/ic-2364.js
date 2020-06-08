@@ -28,8 +28,7 @@
 //
 // On the C64 schematic, the BASIC ROM is U3 and the KERNAL ROM is U4.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 import { pinsToValue, valueToPins, range } from "utils"
 
 export function Ic2364(buffer) {

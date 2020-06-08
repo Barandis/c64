@@ -13,9 +13,8 @@ import { timers } from "./timers"
 import { tod } from "./tod"
 import { control } from "./control"
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from "utils"
-import { Chip } from "components/chip"
 
 // An emulation of the MOS Technologies 6526 Complex Interface Adapter
 // (CIA). This is a chip designed as an I/O provider for 6500-series

@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic4066 } from "chips/ic-4066"
+import { Ic4066 } from "chips"
 
 describe("4066 quad bilateral switch", () => {
   let chip

@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic74373 } from "chips/ic-74373"
+import { Ic74373 } from "chips"
 import { range } from "utils"
 
 describe("74373 Octal tri-state transparent latch", () => {

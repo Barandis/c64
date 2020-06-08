@@ -7,9 +7,8 @@ import Sinon from "sinon"
 
 import { assert } from "test/helper"
 import {
-  Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
-} from "components/pin"
-import { Trace } from "components/trace"
+  Trace, Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
+} from "components"
 
 export function listenerUnconnected() {
   const p = Pin(1, "A", UNCONNECTED)

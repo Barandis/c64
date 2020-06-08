@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic7406 } from "chips/ic-7406"
+import { Ic7406 } from "chips"
 import { range } from "utils"
 
 describe("7406 hex inverter", () => {

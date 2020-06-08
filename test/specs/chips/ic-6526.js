@@ -27,7 +27,7 @@ import {
 } from "./ic-6526/serial"
 import { reset, flagFlagReset, flagDefault, flagFlagSet } from "./ic-6526/misc"
 
-import { Ic6526 } from "chips/ic-6526"
+import { Ic6526 } from "chips"
 import { valueToPins, pinsToValue } from "utils"
 import { deviceTraces } from "test/helper"
 

@@ -4,16 +4,12 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { KeyboardPort } from "ports/keyboard-port"
-import { Port } from "components/port"
-import { Pin, UNCONNECTED, INPUT, OUTPUT } from "components/pin"
+import { KeyboardPort } from "ports"
+import { Port, Pin, UNCONNECTED, INPUT, OUTPUT } from "components"
 import { range } from "utils"
 
 describe("Keyboard port", () => {
-  let port
-  let connector
-  let p
-  let c
+  let port, connector, p, c
 
   beforeEach(() => {
     port = KeyboardPort()

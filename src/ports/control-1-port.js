@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, OUTPUT } from "components/pin"
-import { Port } from "components/port"
+import { Port, Pin, OUTPUT } from "components"
 
 export function Control1Port() {
   return Port(

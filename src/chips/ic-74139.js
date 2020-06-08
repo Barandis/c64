@@ -20,8 +20,7 @@
 //
 // On the C64 schematic, a 74LS139 can be found as U15.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic74139() {
   // A typical naming scheme for these pins (Fairchild, Texas

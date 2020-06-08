@@ -6,7 +6,7 @@
  */
 
 import { assert, deviceTraces, DEBUG, hex } from "test/helper"
-import { Ic2364 } from "chips/ic-2364"
+import { Ic2364 } from "chips"
 import { kernal } from "rom/kernal"
 import { basic } from "rom/basic"
 import { range, valueToPins, pinsToValue } from "utils"

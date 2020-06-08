@@ -178,6 +178,6 @@ module.exports = {
     "import/first": [ERROR],
     "import/no-duplicates": [ERROR],
     "import/no-namespace": [ERROR],
-    "import/order": [ERROR, { "newlines-between": "always-and-inside-groups" }],
+    "import/order": [ERROR, { "newlines-between": "always" }],
   },
 }

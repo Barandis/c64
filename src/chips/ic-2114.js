@@ -25,8 +25,7 @@
 //
 // On the C64 schematic, there is a 2114 at U6.
 
-import { Pin, INPUT, BIDIRECTIONAL } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
 import { pinsToValue, valueToPins, range } from "utils"
 
 export function Ic2114() {

@@ -7,7 +7,7 @@ import { assert, rand } from "test/helper"
 import {
   CIDDRA, CIDDRB, CIACRA, CIACRB, CIAPRA, CIAPRB,
 } from "chips/ic-6526/constants"
-import { INPUT, OUTPUT } from "components/pin"
+import { INPUT, OUTPUT } from "components"
 import { bitSet, valueToPins, pinsToValue, range } from "utils"
 
 export function ddrInput({ chip, writeRegister }) {

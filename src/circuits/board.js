@@ -9,40 +9,16 @@ import { DataCircuit } from "./data"
 import { ControlCircuit } from "./control"
 import { IoCircuit } from "./io"
 
-import { basic } from "rom/basic"
-import { kernal } from "rom/kernal"
-import { character } from "rom/character"
-
-// Processor chips
-import { Ic6510 } from "chips/ic-6510"
-import { Ic6526 } from "chips/ic-6526"
-import { Ic6567 } from "chips/ic-6567"
-import { Ic6581 } from "chips/ic-6581"
-
-// Memory chips
-import { Ic2114 } from "chips/ic-2114"
-import { Ic2332 } from "chips/ic-2332"
-import { Ic2364 } from "chips/ic-2364"
-import { Ic4164 } from "chips/ic-4164"
-
-// Logic chips
-import { Ic4066 } from "chips/ic-4066"
-import { Ic7406 } from "chips/ic-7406"
-import { Ic7408 } from "chips/ic-7408"
-import { Ic74139 } from "chips/ic-74139"
-import { Ic74257 } from "chips/ic-74257"
-import { Ic74258 } from "chips/ic-74258"
-import { Ic74373 } from "chips/ic-74373"
-import { Ic82S100 } from "chips/ic-82S100"
-
-// Ports
-import { CassettePort } from "ports/cassette-port"
-import { Control1Port } from "ports/control-1-port"
-import { Control2Port } from "ports/control-2-port"
-import { ExpansionPort } from "ports/expansion-port"
-import { KeyboardPort } from "ports/keyboard-port"
-import { SerialPort } from "ports/serial-port"
-import { UserPort } from "ports/user-port"
+import { basic, kernal, character } from "rom"
+import {
+  Ic6510, Ic6526, Ic6567, Ic6581,
+  Ic2114, Ic2332, Ic2364, Ic4164,
+  Ic4066, Ic7406, Ic7408, Ic74139, Ic74257, Ic74258, Ic74373, Ic82S100,
+} from "chips"
+import {
+  CassettePort, Control1Port, Control2Port, ExpansionPort, KeyboardPort,
+  SerialPort, UserPort,
+} from "ports"
 
 export function Board() {
   const chips = {

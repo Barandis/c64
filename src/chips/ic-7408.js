@@ -14,8 +14,7 @@
 //
 // On the C64 schematic, U27 is a 74LS08.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic7408() {
   const chip = Chip(

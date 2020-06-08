@@ -7,8 +7,7 @@ import {
   UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
 } from "./constants"
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 import { setMode, valueToPins, pinsToValue, range } from "utils"
 
 export function Ic6581() {

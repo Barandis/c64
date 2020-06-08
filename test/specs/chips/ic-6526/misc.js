@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { rand, assert } from "test/helper"
-import { INPUT, OUTPUT } from "components/pin"
+import { INPUT, OUTPUT } from "components"
 import {
   TIMBHI, TIMALO, CIAICR, ICR_FLG, ICR_IR, ICR_SC, CIAPRB,
 } from "chips/ic-6526/constants"

@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic6510() {
   const chip = Chip(

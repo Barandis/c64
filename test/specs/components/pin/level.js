@@ -5,9 +5,8 @@
 
 import { assert } from "test/helper"
 import {
-  Pin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
-} from "components/pin"
-import { Trace } from "components/trace"
+  Trace, Pin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
+} from "components"
 
 export function levelNoTrace() {
   const p = Pin(1, "A", INPUT)

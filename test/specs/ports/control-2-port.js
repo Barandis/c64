@@ -4,16 +4,12 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Control2Port } from "ports/control-2-port"
-import { Port } from "components/port"
-import { Pin, UNCONNECTED, INPUT } from "components/pin"
+import { Control2Port } from "ports"
+import { Port, Pin, UNCONNECTED, INPUT } from "components"
 import { range } from "utils"
 
 describe("Control port 1", () => {
-  let port
-  let connector
-  let p
-  let c
+  let port, connector, p, c
 
   beforeEach(() => {
     port = Control2Port()

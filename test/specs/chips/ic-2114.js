@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces, hex } from "test/helper"
-import { Ic2114 } from "chips/ic-2114"
+import { Ic2114 } from "chips/"
 import { range, valueToPins, pinsToValue } from "utils"
 
 describe("2114 1024 x 4-bit static RAM", () => {

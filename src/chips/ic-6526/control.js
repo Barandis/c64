@@ -9,7 +9,7 @@ import {
 } from "./constants"
 
 import { bitSet } from "utils"
-import { OUTPUT, INPUT } from "components/pin"
+import { OUTPUT, INPUT } from "components"
 
 export function control(chip, registers, latches) {
   // -------------------------------------------------------------------

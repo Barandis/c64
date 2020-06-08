@@ -23,7 +23,7 @@ import {
 } from "./pin/listener"
 import { arrayContains, arrayByNumber, arrayByName } from "./pin/array"
 
-import { Pin } from "components/pin"
+import { Pin } from "components"
 import { assert } from "test/helper"
 
 describe("Pin", () => {

@@ -77,8 +77,7 @@
 //
 // The 82S100 PLA is U17 on the C64 schematic.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 // These are alternate names for the input (I) and output (F) pins,
 // matching purpose of each pin in the Commodore 64. They can be used to

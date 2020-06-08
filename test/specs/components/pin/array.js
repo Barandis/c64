@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert } from "test/helper"
-import { Pin, PinArray } from "components/pin"
+import { Pin, PinArray } from "components"
 
 export function arrayContains() {
   const p1 = Pin(1, "A")

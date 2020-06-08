@@ -46,8 +46,7 @@
 // On the C64 schematic, the 4164's that handled D0-D7, in that order,
 // were U21, U9, U22, U10, U23, U11, U24, and U12.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 import { pinsToValue, range } from "utils"
 
 export function Ic4164() {

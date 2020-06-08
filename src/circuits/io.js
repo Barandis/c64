@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Trace } from "components/trace"
+import { Trace } from "components"
 
 export function IoCircuit(
   { U1, U2, U7, U8, U18, U19, U28 },

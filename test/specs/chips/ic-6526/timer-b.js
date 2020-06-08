@@ -9,7 +9,7 @@ import {
   CRB_IN0, TIMALO, TIMAHI, CIACRA, CRA_START, CRB_IN1, CRA_LOAD, CIAICR, ICR_TB,
   ICR_IR, ICR_SC, CIDDRB,
 } from "chips/ic-6526/constants"
-import { OUTPUT } from "components/pin"
+import { OUTPUT } from "components"
 import { bitSet, bitClear, range } from "utils"
 
 export function tbDefault({ readRegister }) {

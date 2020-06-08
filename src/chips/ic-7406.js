@@ -14,8 +14,7 @@
 //
 // On the C64 schematic, U8 is a 7406.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic7406() {
   const chip = Chip(

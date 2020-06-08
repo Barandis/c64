@@ -4,10 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert } from "test/helper"
-
-import { Connector } from "components/connector"
-import { Pin, INPUT, OUTPUT, BIDIRECTIONAL } from "components/pin"
-import { Trace } from "components/trace"
+import { Trace, Connector, Pin, INPUT, OUTPUT, BIDIRECTIONAL } from "components"
 
 describe("Connector", () => {
   it("sets an output pin's level to an input's when connecting to it", () => {

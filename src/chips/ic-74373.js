@@ -26,8 +26,7 @@
 //
 // On the C64 schematic, there is a 74LS373 at U26.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 import { range } from "utils"
 
 export function Ic74373() {

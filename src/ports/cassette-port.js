@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Port } from "components/port"
+import { Port, Pin, INPUT, OUTPUT } from "components"
 
 export function CassettePort() {
   return Port(

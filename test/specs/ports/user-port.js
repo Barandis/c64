@@ -4,11 +4,10 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { UserPort } from "ports/user-port"
-import { Port } from "components/port"
+import { UserPort } from "ports"
 import {
-  Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
-} from "components/pin"
+  Port, Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+} from "components"
 import { range } from "utils"
 
 describe("User port", () => {

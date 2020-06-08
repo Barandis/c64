@@ -5,9 +5,8 @@
 
 import { assert } from "test/helper"
 import {
-  UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL, Pin,
-} from "components/pin"
-import { Trace } from "components/trace"
+  Trace, Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+} from "components"
 
 export function modeInitial() {
   const p1 = Pin(1, "A", UNCONNECTED)

@@ -29,8 +29,7 @@
 //
 // On the C64 schematic, a 74LS258 is found at U14.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic74258() {
   const chip = Chip(

@@ -11,7 +11,6 @@ import {
   levelPinInput, levelPinOutput, levelPinBidirectional, levelPinHiOutputs,
   levelPinLoOutputs,
 } from "./trace/level"
-
 import {
   puInitial, puModeInput, puNoOutputs, puHiOutputs, puLoOutputs, puNullOutputs,
   pdInitial, pdModeInput, pdNoOutputs, pdHiOutputs, pdLoOutputs, pdNullOutputs,
@@ -19,8 +18,7 @@ import {
 } from "./trace/float"
 
 import { assert } from "test/helper"
-import { Pin, INPUT } from "components/pin"
-import { Trace } from "components/trace"
+import { Trace, Pin, INPUT } from "components"
 
 describe("Trace", () => {
   const test = fn => () => fn()

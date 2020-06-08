@@ -7,18 +7,14 @@
 // is also testing the functionality of a port in general.
 
 import { assert, deviceTraces } from "test/helper"
-import { SerialPort } from "ports/serial-port"
-import { Port } from "components/port"
+import { SerialPort } from "ports"
 import {
-  Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
-} from "components/pin"
+  Port, Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
+} from "components"
 import { range } from "utils"
 
 describe("Serial port", () => {
-  let port
-  let connector
-  let p
-  let c
+  let port, connector, p, c
 
   beforeEach(() => {
     port = SerialPort()

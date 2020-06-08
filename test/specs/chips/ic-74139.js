@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces } from "test/helper"
-import { Ic74139 } from "chips/ic-74139"
+import { Ic74139 } from "chips"
 
 describe("74139 dual 2-line to 4-line demultiplexer", () => {
   let chip

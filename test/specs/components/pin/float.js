@@ -5,9 +5,8 @@
 
 import { assert } from "test/helper"
 import {
-  Pin, OUTPUT, UNCONNECTED, INPUT, BIDIRECTIONAL,
-} from "components/pin"
-import { Trace } from "components/trace"
+  Trace, Pin, OUTPUT, UNCONNECTED, INPUT, BIDIRECTIONAL,
+} from "components"
 
 export function puInitial() {
   const p = Pin(1, "A", OUTPUT).pullUp()

@@ -28,8 +28,7 @@
 //
 // On the C64 schematic, both U13 and U25 were 74LS257's.
 
-import { Pin, INPUT, OUTPUT } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, OUTPUT } from "components"
 
 export function Ic74257() {
   const chip = Chip(

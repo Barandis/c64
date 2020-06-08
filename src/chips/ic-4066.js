@@ -28,8 +28,7 @@
 //
 // On the C64 schematic, U16 and U28 are 4066's.
 
-import { Pin, INPUT, BIDIRECTIONAL } from "components/pin"
-import { Chip } from "components/chip"
+import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
 
 export function Ic4066() {
   const chip = Chip(

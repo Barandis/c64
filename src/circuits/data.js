@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Trace } from "components/trace"
+import { Trace } from "components"
 
 export function DataCircuit(
   {

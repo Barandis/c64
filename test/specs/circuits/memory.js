@@ -6,7 +6,7 @@
 import { Board } from "circuits/board"
 import { assert } from "test/helper"
 import { valueToPins, pinsToValue, setMode } from "utils"
-import { INPUT } from "components/pin"
+import { INPUT } from "components"
 
 describe("Memory reading/writing", () => {
   let board

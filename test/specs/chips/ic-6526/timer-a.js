@@ -8,7 +8,7 @@ import {
   TIMAHI, TIMALO, CIACRA, CRA_LOAD, CRA_START, CRA_RUN, CRA_PBON, CRA_OUT,
   CRA_IN, CIAICR, ICR_TA, ICR_IR, ICR_SC, CIDDRA,
 } from "chips/ic-6526/constants"
-import { OUTPUT } from "components/pin"
+import { OUTPUT } from "components"
 import { bitSet, bitClear, range } from "utils"
 
 export function taDefault({ readRegister }) {
