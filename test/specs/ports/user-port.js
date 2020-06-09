@@ -11,10 +11,7 @@ import {
 import { range } from "utils"
 
 describe("User port", () => {
-  let port
-  let connector
-  let p
-  let c
+  let port, connector, p, c
 
   beforeEach(() => {
     port = UserPort()

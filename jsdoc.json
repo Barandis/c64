@@ -26,11 +26,13 @@
     "monospaceLinks": false,
     "default": {
       "outputSourceFiles": true,
-      "includeDate": false
+      "includeDate": false,
+      "useLongnameInNav": false
     }
   },
   "docdash": {
-    "static": false,
+    "typedef": true,
+    "static": true,
     "sort": true
   }
 }

@@ -30,5 +30,5 @@ export function Chip(...pins) {
     chip[name] = pinArray[name]
   }
 
-  return chip
+  return Object.freeze(chip)
 }
