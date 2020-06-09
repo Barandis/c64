@@ -71,14 +71,14 @@ export function DataCircuit(
   // D0...D7. To keep color data from polluting D0...D7 at that time,
   // the connection that the CPU needs to send data to color RAM on
   // D0...D3 needs to be severed. That's the purpose of switch U16.
-  D0.addPins(U16.X4)
-  D1.addPins(U16.X3)
-  D2.addPins(U16.X2)
-  D3.addPins(U16.X1)
-  const D8 = Trace(U19.D8, U6.D0, U16.Y4)
-  const D9 = Trace(U19.D9, U6.D1, U16.Y3)
-  const D10 = Trace(U19.D10, U6.D2, U16.Y2)
-  const D11 = Trace(U19.D11, U6.D3, U16.Y1)
+  D0.addPins(U16.A4)
+  D1.addPins(U16.A3)
+  D2.addPins(U16.A2)
+  D3.addPins(U16.A1)
+  const D8 = Trace(U19.D8, U6.D0, U16.B4)
+  const D9 = Trace(U19.D9, U6.D1, U16.B3)
+  const D10 = Trace(U19.D10, U6.D2, U16.B2)
+  const D11 = Trace(U19.D11, U6.D3, U16.B1)
 
   // Data bus to expansion port
 

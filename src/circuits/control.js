@@ -108,7 +108,7 @@ export function ControlCircuit(
   R__W.addPins(U9._W, U10._W, U11._W, U12._W, U21._W, U22._W, U23._W, U24._W)
   const _RAS = Trace(U19._RAS, U26.LE, U9._RAS, U10._RAS, U11._RAS, U12._RAS)
   _RAS.addPins(U21._RAS, U22._RAS, U23._RAS)
-  const AEC = Trace(U19.AEC, U16.A1, U16.A2, U16.A3, U16.A4)
+  const AEC = Trace(U19.AEC, U16.X1, U16.X2, U16.X3, U16.X4)
   AEC.addPins(U27.B3, U26._OE, U14._OE, U8.A5, U27.A2)
   const _DMA = Trace(CN6._DMA, U27.B1, U27.B2).pullUp()
   const RDY = Trace(U27.Y1, U7.RDY)
