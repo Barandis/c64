@@ -10,12 +10,12 @@
  * single-input inverters. An inverter is the simplest of logic gates:
  * if the input is low, the output is high, and vice versa.
  *
- * | Pin An | Pin Yn |
+ * | An     | Yn     |
  * | :----: | :----: |
  * | L      | **H**  |
  * | H      | **L**  |
  *
- * The chip was in a 14-pin dual in-line package with the following pin
+ * The chip is in a 14-pin dual in-line package with the following pin
  * assignments.
  * ```txt
  *         +---U---+
@@ -38,36 +38,34 @@
  *
  * @typedef Ic7406
  * @memberof module:chips
- * @property {module:components.PinArray} pins A collection of the pins
- *     of this chip, as detailed here.
- * @property {module:components.Pin} A1 (Pin 1) The input of the first
+ * @property {module:components.Pin} A1 [1] The input of the first
  *     inverter.
- * @property {module:components.Pin} A2 (Pin 3) The input of the second
+ * @property {module:components.Pin} A2 [3] The input of the second
  *     inverter.
- * @property {module:components.Pin} A3 (Pin 5) The input of the third
+ * @property {module:components.Pin} A3 [5] The input of the third
  *     inverter.
- * @property {module:components.Pin} A4 (Pin 9) The input of the fourth
+ * @property {module:components.Pin} A4 [9] The input of the fourth
  *     inverter.
- * @property {module:components.Pin} A5 (Pin 11) The input of the fifth
+ * @property {module:components.Pin} A5 [11] The input of the fifth
  *     nverter.
- * @property {module:components.Pin} A6 (Pin 13) The input of the sixth
+ * @property {module:components.Pin} A6 [13] The input of the sixth
  *     inverter.
- * @property {module:components.Pin} Y1 (Pin 2) The output of the first
+ * @property {module:components.Pin} Y1 [2] The output of the first
  *     inverter.
- * @property {module:components.Pin} Y2 (Pin 4) The output of the second
+ * @property {module:components.Pin} Y2 [4] The output of the second
  *     inverter.
- * @property {module:components.Pin} Y3 (Pin 6) The output of the third
+ * @property {module:components.Pin} Y3 [6] The output of the third
  *     inverter.
- * @property {module:components.Pin} Y4 (Pin 8) The output of the fourth
+ * @property {module:components.Pin} Y4 [8] The output of the fourth
  *     inverter.
- * @property {module:components.Pin} Y5 (Pin 10) The output of the fifth
+ * @property {module:components.Pin} Y5 [10] The output of the fifth
  *     inverter.
- * @property {module:components.Pin} Y6 (Pin 12) The output of the sixth
+ * @property {module:components.Pin} Y6 [12] The output of the sixth
  *     inverter.
- * @property {module:components.Pin} Vcc (Pin 14) The positive power
- *     supply. This pin is not emulated.
- * @property {module:components.Pin} GND (Pin 7) The ground. This pin is
- *     not emulated.
+ * @property {module:components.Pin} Vcc [14] The positive power supply.
+ *     This pin is not emulated.
+ * @property {module:components.Pin} GND [7] The ground. This pin is not
+ *     emulated.
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"

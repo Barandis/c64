@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { PinArray } from "components/pin"
-import { ConnectorArray } from "components/connector"
+import { Connector } from "components/connector"
 import { enumerate } from "utils"
 
 // Represents an external port on a computer, consisting of a number of
@@ -12,12 +11,15 @@ import { enumerate } from "utils"
 // connectors to allow connection to external devices.
 
 export function Port(...pins) {
-  const pinArray = PinArray(...pins)
-  const connectorArray = ConnectorArray(pinArray)
+  const connectors = []
+  for (const pin of pins) {
+    if (pin) {
+      connectors[pin.number] = Connector(pin)
+    }
+  }
 
-  const port = {
-    pins: pinArray,
-    connectors: connectorArray,
+  const port = Object.assign([], {
+    connectors,
 
     // Connects each connector to the corresponding connector on the
     // other port. This doens't check to see if the pins match in name,
@@ -26,7 +28,7 @@ export function Port(...pins) {
     // has a pin 3 and the other doesn't), then simply no connection is
     // made for that pin.
     connect(port) {
-      for (const [i, connector] of enumerate(connectorArray)) {
+      for (const [i, connector] of enumerate(connectors)) {
         const con1 = connector
         const con2 = port.connectors[i]
         if (con1 && con2) {
@@ -38,17 +40,20 @@ export function Port(...pins) {
     // Disconnects each connector in the port to whatever it was
     // connected to.
     disconnect() {
-      for (const con of connectorArray) {
+      for (const con of connectors) {
         if (con) {
           con.disconnect()
         }
       }
     },
+  })
+
+  for (const pin of pins) {
+    if (pin) {
+      port[pin.name] = pin
+      port[pin.number] = pin
+    }
   }
 
-  for (const name in pinArray) {
-    port[name] = pinArray[name]
-  }
-
-  return port
+  return Object.freeze(port)
 }

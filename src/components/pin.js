@@ -221,14 +221,3 @@ export function Pin(number, name, mode = UNCONNECTED) {
 
   return pin
 }
-
-export function PinArray(...pins) {
-  const array = []
-
-  for (const p of pins) {
-    array[p.number] = p
-    array[p.name] = p
-  }
-
-  return array
-}

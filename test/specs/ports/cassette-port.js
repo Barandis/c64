@@ -3,50 +3,43 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces } from "test/helper"
+import {
+  assert, deviceTraces, portCable, cableMessage, portMessage,
+} from "test/helper"
 import { CassettePort } from "ports"
-import { Port, Pin, UNCONNECTED, INPUT, OUTPUT } from "components"
 import { range } from "utils"
 
 describe("Cassette port", () => {
-  let port, connector, p, c
+  let port, cable, p, c
 
   beforeEach(() => {
     port = CassettePort()
-
-    connector = Port(
-      Pin(1, "GND", UNCONNECTED),
-      Pin(2, "VCC", UNCONNECTED),
-      Pin(3, "MOTOR", OUTPUT),
-      Pin(4, "READ", INPUT),
-      Pin(5, "WRITE", OUTPUT),
-      Pin(6, "SENSE", INPUT),
-    )
+    cable = portCable(port)
 
     p = deviceTraces(port)
-    c = deviceTraces(connector)
+    c = deviceTraces(cable)
 
     for (const i of range(1, 6, true)) {
       p[i].clear()
       c[i].clear()
     }
 
-    connector.connect(port)
+    cable.connect(port)
   })
 
   it("writes data to MOTOR and WRITE", () => {
     p.MOTOR.set()
-    assert(c.MOTOR.high)
+    assert(c.MOTOR.high, cableMessage("MOTOR"))
 
     p.WRITE.set()
-    assert(c.WRITE.high)
+    assert(c.WRITE.high, cableMessage("WRITE"))
   })
 
   it("reads data from READ and SENSE", () => {
     c.READ.set()
-    assert(p.READ.high)
+    assert(p.READ.high, portMessage("READ"))
 
     c.SENSE.set()
-    assert(p.SENSE.high)
+    assert(p.SENSE.high, portMessage("SENSE"))
   })
 })

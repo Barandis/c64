@@ -54,7 +54,7 @@ export function chipState(chip, name) {
 export function deviceTraces(device) {
   const traces = []
 
-  for (const pin of device.pins) {
+  for (const pin of device) {
     if (pin) {
       const trace = Trace(pin)
       traces[pin.number] = trace
@@ -65,19 +65,27 @@ export function deviceTraces(device) {
   return traces
 }
 
-export function portConnector(port) {
+export function portCable(port) {
   const pins = []
 
-  for (const pin of port.pins) {
+  for (const pin of port) {
     if (pin) {
       const mode = pin.mode === INPUT
         ? OUTPUT
         : pin.mode === OUTPUT
           ? INPUT
           : pin.mode
-      pins[pin.num] = Pin(pin.num, pin.name, mode)
+      pins[pin.number] = Pin(pin.number, pin.name, mode)
     }
   }
 
   return Port(...pins)
+}
+
+export function portMessage(name) {
+  return `Port ${name} should change when cable ${name} does`
+}
+
+export function cableMessage(name) {
+  return `Cable ${name} should change when port ${name} does`
 }

@@ -96,3 +96,9 @@ export function modeInToUnc() {
   assert(t.high)
   assert(p.high)
 }
+
+export function incorrectMode() {
+  const p = Pin(1, "A", INPUT)
+  p.mode = 1729
+  assert(p.mode === INPUT)
+}

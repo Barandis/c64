@@ -5,7 +5,7 @@
 
 import {
   modeInitial, modeChange, modeOutToIn, modeUncToOut, modeBidiToIn,
-  modeUncToIn, modeBidiToOut, modeInToUnc,
+  modeUncToIn, modeBidiToOut, modeInToUnc, incorrectMode,
 } from "./pin/mode"
 import {
   levelNoTrace, levelUnconnected, levelInput, levelOutput, levelBidirectional,
@@ -21,7 +21,6 @@ import {
   listenerInput, listenerOutput, listenerBidirectional, listenerUnconnected,
   listenerDirect, listenerRemove, listenerNonexistent, listenerDouble,
 } from "./pin/listener"
-import { arrayContains, arrayByNumber, arrayByName } from "./pin/array"
 
 import { Pin } from "components"
 import { assert } from "test/helper"
@@ -66,6 +65,7 @@ describe("Pin", () => {
       "does not change trace after mode change from in to unc",
       test(modeInToUnc)
     )
+    it("will not change to an invalid mode", test(incorrectMode))
   })
 
   describe("level", () => {
@@ -150,14 +150,5 @@ describe("Pin", () => {
       "will not call a listener twice if it's added twice",
       test(listenerDouble)
     )
-  })
-
-  describe("pin arrays", () => {
-    it(
-      "will contain any pins passed in the factory function",
-      test(arrayContains)
-    )
-    it("can look up included pins by number", test(arrayByNumber))
-    it("can look up included pins by name", test(arrayByName))
   })
 })

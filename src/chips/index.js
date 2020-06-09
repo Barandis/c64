@@ -12,54 +12,61 @@
  *
  * | Designation | Link | Description |
  * | ---| --- | ---|
- * | U1 | `{@link module:chips.Ic6526|Ic6526}` | 6526 CIA
- * | U2 | `{@link module:chips.Ic6526|Ic6526}` | 6526 CIA
- * | U3 | `{@link module:chips.Ic2364|Ic2364}` | 2364 Basic ROM
- * | U4 | `{@link module:chips.Ic2364|Ic2364}` | 2364 Kernal ROM
- * | U5 | `{@link module:chips.Ic2332|Ic2332}` | 2332 Charcter ROM
- * | U6 | `{@link module:chips.Ic2114|Ic2114}` | 2114L-30 Static RAM
- * | U7 | `{@link module:chips.Ic6510|Ic6510}` | 6510 CPU
- * | U8 | `{@link module:chips.Ic7406|Ic7406}` | 7406 Inverter
- * | U9 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U10 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U11 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U12 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U13 | `{@link module:chips.Ic74257|Ic74257}` | 74LS257 Mux
- * | U14 | `{@link module:chips.Ic74258|Ic74258}` | 74LS258 Mux
- * | U15 | `{@link module:chips.Ic74139|Ic74139}` | 74LS139 Demux
- * | U16 | `{@link module:chips.Ic4066|Ic4066}` | 4066 Bilateral Switch
- * | U17 | `{@link module:chips.Ic82S100|Ic82S100}` | 82S100 PLA
- * | U18 | `{@link module:chips.Ic6581|Ic6581}` | 6581 SID
- * | U19 | `{@link module:chips.Ic6567|Ic6567}` | 6567 VIC
- * | U21| `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U22 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U23 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U24 | `{@link module:chips.Ic4164|Ic4164}` | 4164 Dynamic RAM
- * | U25 | `{@link module:chips.Ic74257|Ic74257}` | 74LS257 Mux
- * | U26 | `{@link module:chips.Ic74373|Ic74373}` | 74LS373 Latch
- * | U27 | `{@link module:chips.Ic7408|Ic7408}` | 74LS08 AND Gate
- * | U28 | `{@link module:chips.Ic4066|Ic4066}` | 4066 Bilateral Switch
+ * | U1 | `{@link module:chips.Ic6526|6526}` | Complex Interface Adapter
+ * | U2 | `{@link module:chips.Ic6526|6526}` | Complex Interface Adapter
+ * | U3 | `{@link module:chips.Ic2364|2364}` | 8k x 8 Basic ROM
+ * | U4 | `{@link module:chips.Ic2364|2364}` | 8k x 8 Kernal ROM
+ * | U5 | `{@link module:chips.Ic2332|2332}` | 4k x 8 Charcter ROM
+ * | U6 | `{@link module:chips.Ic2114|2114}` | 1k x 4 Static RAM
+ * | U7 | `{@link module:chips.Ic6510|6510}` | Microprocessor
+ * | U8 | `{@link module:chips.Ic7406|7406}` | Hex Inverter
+ * | U9 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U10 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U11 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U12 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U13 | `{@link module:chips.Ic74257|74257}` | Quad 2-to-1 Mux
+ * | U14 | `{@link module:chips.Ic74258|74258}` | Quad 2-to-1 Mux
+ * | U15 | `{@link module:chips.Ic74139|74139}` | Dual 2-to-4 Demux
+ * | U16 | `{@link module:chips.Ic4066|4066}` | Quad Bilateral Switch
+ * | U17 | `{@link module:chips.Ic82S100|82S100}` | Logic Array
+ * | U18 | `{@link module:chips.Ic6581|6581}` | Sound Interface Device
+ * | U19 | `{@link module:chips.Ic6567|6567}` | Video Controller
+ * | U21 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U22 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U23 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U24 | `{@link module:chips.Ic4164|4164}` | 64k x 1 Dynamic RAM
+ * | U25 | `{@link module:chips.Ic74257|74257}` | Quad 2-to-1 Mux
+ * | U26 | `{@link module:chips.Ic74373|74373}` | Octal Latch
+ * | U27 | `{@link module:chips.Ic7408|7408}` | Quad 2-input AND Gate
+ * | U28 | `{@link module:chips.Ic4066|4066}` | Quad Bilateral Switch
  *
  * Those not emulated are
- * - U20: 556 Timer
- * - U29: 74LS74 Flip Flop
- * - U30: 74LS193 Binary Counter
- * - U31: 74LS629 Oscillator
- * - U32: MC4044 Phase Detector
+ * - U20: 556 Dual Timer
+ * - U29: 74LS74 Dual D-Type Flip Flop
+ * - U30: 74LS193 4-bit Binary Counter
+ * - U31: 74LS629 Voltage-Controlled Oscillator
+ * - U32: MC4044 Phase-Frequency Detector
  *
  * U20 is used to more precisely time NMI and RESET signals, while
  * U29-U32 are components of the clock. Since a software emulation
  * defines its own timing, none of these is necessary or even useful.
  *
- * Each chip's API is defined wholly by its pins. This makes the API
- * documentation a little unusual. Chips have a similar set of
- * capabilities, none of which are methods.
+ * Each chip's API is defined wholly by its pins. The pins for each chip
+ * can be referenced in two different ways.
  *
- * - `pins`: a `{@link module:components.PinArray|PinArray}` of all of
- *   the pins the chip has
- * - A set of properties named after each individual pin, which are
- *   themselves `{@link module:components.Pin|Pin}` objects representing
- *   those pins
+ * 1. Via a property with the same name as the pin. These properties are
+ *    listed in each chip's documentation.
+ * 2. Via an array index with the pin's number. Each property
+ *    description includes a number in square brackets; this is the pin
+ *    number and the index into the chip object that will return that
+ *    pin. Note that because these pin numbers match the numbers on the
+ *    chip's datasheet, they are 1-indexed. There is no Pin 0.
+ *
+ * Additionally, a chip has all methods that an array would, using its
+ * pins as its elements. Therefore you can iterate over a chip, map its
+ * pins, etc. Remember when doing so that since there is no pin 0 but an
+ * array does have an element 0, that element 0 will be an empty item.
+ * Filtering it out may be necessary.
  *
  * A chip responds to inputs on some of its pins with outputs on others
  * of its pins. The details on how this happens and upon which pins it
