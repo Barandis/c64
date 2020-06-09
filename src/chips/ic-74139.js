@@ -3,34 +3,97 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-// An emulation of the 74139 family of dual 2-line to 4-line
-// demultiplexers. The variant used in the Commodore 64 was the 74LS139,
-// but as the variants differ only in timing and electrical levels, this
-// emulation should work well for them all.
-//
-// The 74LS139 takes two input lines and, depending on which of the four
-// possible states they're in (00, 01, 10, and 11), activates one of the
-// four output pins. The output pins are active low, so at any given
-// time one of them will be low while the others are high. An exception
-// to this comes from an additional input per demultiplexer, an enable
-// signal. If this active-low pin is set high, then all outputs for that
-// demux are also high. Note that this is not a tri-state device;
-// "deactivating" a demux sets all of the outputs to high, not to a
-// high-impedance state.
-//
-// On the C64 schematic, a 74LS139 can be found as U15.
+/**
+ * An emulation of the 74139 dual 2-to-4 demultiplexer.
+ *
+ * The 74139 is one of the 7400-series TTL logic chips, consisting of a
+ * paior of 2-input, 4-output demultiplexers. There are four possible
+ * binary combinations on two pins (LL, HL, LH, and HH), and each of
+ * these combinations selects a different one of the output pins to
+ * activate. Each demultiplexer also has an enable pin.
+ *
+ * Most literature names the pins with numbers first. This makes sense
+ * since there are really two numbers that go into the output's name
+ * (the demultiplexer number and the output number) and having a letter
+ * separate them is quite readable. But since each of these pin names
+ * becomes a property on the chip, that scheme cannot be used here.
+ * Therefore each demultiplexer has two inputs starting with `A` and
+ * `B`, an active-low enable pin starting with `_G`, and four inverted
+ * outputs whose names start with `_Y`.
+ *
+ * | _Gn    | An     | Bn     | _Yn0   | _Yn1   | _Yn2   | _Yn3   |
+ * | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
+ * | H      | X      | X      | **H**  | **H**  | **H**  | **H**  |
+ * | L      | L      | L      | **L**  | **H**  | **H**  | **H**  |
+ * | L      | H      | L      | **H**  | **L**  | **H**  | **H**  |
+ * | L      | L      | H      | **H**  | **H**  | **L**  | **H**  |
+ * | L      | H      | H      | **H**  | **H**  | **H**  | **L**  |
+ *
+ * The chip comes in a 16-pin dual in-line package with the following
+ * pin assignments.
+ * ```txt
+ *         +---U---+
+ *     _G1 |1    16| Vcc
+ *      A1 |2    15| _G2
+ *      B1 |3    14| A2
+ *    _Y10 |4    13| B2
+ *    _Y11 |5    12| _Y20
+ *    _Y12 |6    11| _Y21
+ *    _Y13 |7    10| _Y22
+ *     GND |8     9| _Y23
+ *         +-------+
+ * ```
+ * *(GND and Vcc are ground and power supply pins respectively, and they
+ * are not emulated.)*
+ *
+ * In the Commodore 64, U15 is a 74LS139 (a lower-power, faster variant
+ * whose emulation is the same). Its two demultiplexers are chained
+ * together to provide additional address decoding when the PLA's `_IO`
+ * output is selected.
+ *
+ * This chip is produced by calling the
+ * `{@link module:chips.Ic74139|Ic74139}` function.
+ *
+ * @typedef Ic74139
+ * @property {Pin} _G1 [1] The active-low enable pin for demultiplexer
+ *     1.
+ * @property {Pin} A1 [2] The first input to demultiplexer 1.
+ * @property {Pin} B1 [3] The second input to demultiplexer 1.
+ * @property {Pin} _Y10 [4] The first inverted output from demultiplexer
+ *     1.
+ * @property {Pin} _Y11 [5] The second inverted output from
+ *     demultiplexer 1.
+ * @property {Pin} _Y12 [6] The third inverted output from demultiplexer
+ *     1.
+ * @property {Pin} _Y13 [7] The fourth inverted output from
+ *     demultiplexer 1.
+ * @property {Pin} _G2 [15] The active-low enable pin for demultiplexer
+ *     2.
+ * @property {Pin} A2 [14] The first input to demultiplexer 2.
+ * @property {Pin} B2 [13] The second input to demultiplexer 2.
+ * @property {Pin} _Y20 [12] The first inverted output from
+ *     demultiplexer 2.
+ * @property {Pin} _Y21 [11] The second inverted output from
+ *     demultiplexer 2.
+ * @property {Pin} _Y22 [10] The third inverted output from
+ *     demultiplexer 2.
+ * @property {Pin} _Y23 [9] The fourth inverted output from
+ *     demultiplexer 2.
+ * @property {Pin} Vcc [16] The positive power supply. This pin is not
+ *     emulated.
+ * @property {Pin} GND [8] The ground. This pin is not emulated.
+ */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
+import { range } from "utils"
 
-export function Ic74139() {
-  // A typical naming scheme for these pins (Fairchild, Texas
-  // Instruments) has the outputs as 1Y0, 1Y1, etc. (TI also has the
-  // inputs in this number-first form, 1G, 1A, and 1B, for instance).
-  // Since using these names wouldn't allow access with the dot
-  // operator, I've moved the first number after the letter. (There are
-  // other schemes as well - an ON Semiconductor datasheet lists them as
-  // Ea, A0a, A1a, O0a, O1a, etc., but A, B, and Y is closer to what is
-  // written on the schematic.)
+/**
+ * Creates an emulation of the 74139 dual 2-to-4 demultiplexer.
+ *
+ * @returns {Ic74139} A new 74139 dual 2-to-4 demultiplexer.
+ * @memberof module:chips
+ */
+function Ic74139() {
   const chip = Chip(
     // Demultiplexer 1
     Pin(2, "A1", INPUT),
@@ -55,31 +118,30 @@ export function Ic74139() {
     Pin(8, "GND"),
   )
 
-  function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {
-    y0pin.level = !(gpin.low && apin.low && bpin.low)
-    y1pin.level = !(gpin.low && apin.high && bpin.low)
-    y2pin.level = !(gpin.low && apin.low && bpin.high)
-    y3pin.level = !(gpin.low && apin.high && bpin.high)
+  function listener(demux) {
+    const gpin = chip[`_G${demux}`]
+    const apin = chip[`A${demux}`]
+    const bpin = chip[`B${demux}`]
+    const y0pin = chip[`_Y${demux}0`]
+    const y1pin = chip[`_Y${demux}1`]
+    const y2pin = chip[`_Y${demux}2`]
+    const y3pin = chip[`_Y${demux}3`]
+
+    return () => {
+      y0pin.level = 1 - (gpin.low && apin.low && bpin.low)
+      y1pin.level = 1 - (gpin.low && apin.high && bpin.low)
+      y2pin.level = 1 - (gpin.low && apin.low && bpin.high)
+      y3pin.level = 1 - (gpin.low && apin.high && bpin.high)
+    }
   }
 
-  function setDemux1() {
-    setOutput(
-      chip._G1, chip.A1, chip.B1, chip._Y10, chip._Y11, chip._Y12, chip._Y13
-    )
+  for (const i of range(1, 2, true)) {
+    chip[`_G${i}`].addListener(listener(i))
+    chip[`A${i}`].addListener(listener(i))
+    chip[`B${i}`].addListener(listener(i))
   }
-
-  function setDemux2() {
-    setOutput(
-      chip._G2, chip.A2, chip.B2, chip._Y20, chip._Y21, chip._Y22, chip._Y23
-    )
-  }
-
-  chip._G1.addListener(setDemux1)
-  chip.A1.addListener(setDemux1)
-  chip.B1.addListener(setDemux1)
-  chip._G2.addListener(setDemux2)
-  chip.A2.addListener(setDemux2)
-  chip.B2.addListener(setDemux2)
 
   return chip
 }
+
+export { Ic74139 }
