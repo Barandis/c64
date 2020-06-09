@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 /**
- * Emulation of the 4066 quad bilateral switch.
+ * An emulation of the 4066 quad bilateral switch.
  *
  * The 4066 is one of the 4000-series CMOS logic chips, consisting of
  * four symmetrical analong switches. The data pins transfer data
@@ -34,8 +34,8 @@
  * arrangement (if not the pin names) is taken from the datasheet for
  * the Texas Instruments CD4066B.
  *
- * The chip is in a 14-pin dual in-line package with the following pin
- * assignments.
+ * The chip comes in a 14-pin dual in-line package with the following
+ * pin assignments.
  * ```txt
  *         +---U---+
  *      A1 |1    14| Vdd
@@ -51,46 +51,35 @@
  *
  * This chip is unusual in that it's the only analog chip in the system
  * as emulated (with the exception of the filter portion of the
- * {@link modules:chip.Ic6581|6581}). Even so, it works fine for
- * switching digital signals as well, and one of the Commodore 64's two
- * 4066's is in fact used as a digital switch.
+ * {@link Ic6581|6581}). Even so, it works fine for switching digital
+ * signals as well, and one of the Commodore 64's two 4066's is in fact
+ * used as a digital switch.
  *
  * In the Commodore 64, U16 and U28 are 4066's. The former is used as a
  * digital switch to control which processor has access to the color
  * RAM's data pins, while the other is used as an analog switch to
  * control which game port is providing paddle data to the
- * {@link modules:chip.Ic6581|6581} SID.
+ * {@link Ic6581|6581} SID.
  *
- * @typedef Chip4066
- * @memberof module:chips
- * @property {module:components.Pin} A1 [1] One of the data pins on
- *     switch 1.
- * @property {module:components.Pin} B1 [2] One of the data pins on
- *     switch 1.
- * @property {module:components.Pin} X1 [13] The control pin for switch
- *     1.
- * @property {module:components.Pin} A2 [3] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} B2 [4] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} X2 [5] The control pin for switch
- *     2.
- * @property {module:components.Pin} A3 [9] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} B3 [8] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} X3 [6] The control pin for switch
- *     2.
- * @property {module:components.Pin} A4 [11] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} B4 [10] One of the data pins on
- *     switch 2.
- * @property {module:components.Pin} X4 [12] The control pin for switch
- *     2.
- * @property {module:components.Pin} Vcc [14] The positive power supply.
- *     This pin is not emulated.
- * @property {module:components.Pin} Vss [7] The ground. This pin is not
+ * This chip is produced by calling the
+ * `{@link module:chips.Ic4066|Ic4066}` function.
+ *
+ * @typedef Ic4066
+ * @property {Pin} A1 [1] One of the data pins on switch 1.
+ * @property {Pin} B1 [2] One of the data pins on switch 1.
+ * @property {Pin} X1 [13] The control pin for switch 1.
+ * @property {Pin} A2 [3] One of the data pins on switch 2.
+ * @property {Pin} B2 [4] One of the data pins on switch 2.
+ * @property {Pin} X2 [5] The control pin for switch 2.
+ * @property {Pin} A3 [9] One of the data pins on switch 2.
+ * @property {Pin} B3 [8] One of the data pins on switch 2.
+ * @property {Pin} X3 [6] The control pin for switch 2.
+ * @property {Pin} A4 [11] One of the data pins on switch 2.
+ * @property {Pin} B4 [10] One of the data pins on switch 2.
+ * @property {Pin} X4 [12] The control pin for switch 2.
+ * @property {Pin} Vcc [14] The positive power supply. This pin is not
  *     emulated.
+ * @property {Pin} Vss [7] The ground. This pin is not emulated.
  */
 
 import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
@@ -98,7 +87,7 @@ import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
 /**
  * Creates an emulation of the 4066 quad bilateral switch.
  *
- * @returns {module:chips.Chip4066} A new 4066 quad bilateral switch.
+ * @returns {Ic4066} A new 4066 quad bilateral switch.
  * @memberof module:chips
  */
 function Ic4066() {

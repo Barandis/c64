@@ -15,8 +15,8 @@
  * | L      | **H**  |
  * | H      | **L**  |
  *
- * The chip is in a 14-pin dual in-line package with the following pin
- * assignments.
+ * The chip comes in a 14-pin dual in-line package with the following
+ * pin assignments.
  * ```txt
  *         +---U---+
  *      A1 |1    14| Vcc
@@ -36,24 +36,25 @@
  * the 6567's `AEC` signal being turned into the inverse `_AEC` signal
  * for the 82S100.
  *
- * @typedef Chip7406
- * @memberof module:chips
- * @property {module:components.Pin} A1 [1] The input of inverter 1.
- * @property {module:components.Pin} Y1 [2] The output of inverter 1.
- * @property {module:components.Pin} A2 [3] The input of inverter 2.
- * @property {module:components.Pin} Y2 [4] The output of inverter 2.
- * @property {module:components.Pin} A3 [5] The input of inverter 3.
- * @property {module:components.Pin} Y3 [6] The output of inverter 3.
- * @property {module:components.Pin} A4 [9] The input of inverter 4.
- * @property {module:components.Pin} Y4 [8] The output of inverter 4.
- * @property {module:components.Pin} A5 [11] The input of inverter 5.
- * @property {module:components.Pin} Y5 [10] The output of inverter 5.
- * @property {module:components.Pin} A6 [13] The input of inverter 6.
- * @property {module:components.Pin} Y6 [12] The output of inverter 6.
- * @property {module:components.Pin} Vcc [14] The positive power supply.
- *     This pin is not emulated.
- * @property {module:components.Pin} GND [7] The ground. This pin is not
+ * This chip is produced by calling the
+ * `{@link module:chips.Ic7406|Ic7406}` function.
+ *
+ * @typedef Ic7406
+ * @property {Pin} A1 [1] The input of inverter 1.
+ * @property {Pin} Y1 [2] The output of inverter 1.
+ * @property {Pin} A2 [3] The input of inverter 2.
+ * @property {Pin} Y2 [4] The output of inverter 2.
+ * @property {Pin} A3 [5] The input of inverter 3.
+ * @property {Pin} Y3 [6] The output of inverter 3.
+ * @property {Pin} A4 [9] The input of inverter 4.
+ * @property {Pin} Y4 [8] The output of inverter 4.
+ * @property {Pin} A5 [11] The input of inverter 5.
+ * @property {Pin} Y5 [10] The output of inverter 5.
+ * @property {Pin} A6 [13] The input of inverter 6.
+ * @property {Pin} Y6 [12] The output of inverter 6.
+ * @property {Pin} Vcc [14] The positive power supply. This pin is not
  *     emulated.
+ * @property {Pin} GND [7] The ground. This pin is not emulated.
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
@@ -61,7 +62,7 @@ import { Chip, Pin, INPUT, OUTPUT } from "components"
 /**
  * Creates an emulation of the 7406 hex inverter.
  *
- * @returns {module:chips.Chip7406} A new 7406 hex inverter.
+ * @returns {Ic7406} A new 7406 hex inverter.
  * @memberof module:chips
  */
 function Ic7406() {
