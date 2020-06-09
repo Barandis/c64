@@ -57,7 +57,6 @@
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
 
 /**
  * Creates an emulation of the 7406 hex inverter.
@@ -92,14 +91,16 @@ function Ic7406() {
     Pin(7, "GND"),
   )
 
-  function listener(index) {
-    const out = chip[`Y${index}`]
+  function listener(out) {
     return pin => (out.level = +pin.low)
   }
 
-  for (const i of range(1, 6, true)) {
-    chip[`A${i}`].addListener(listener(i))
-  }
+  chip.A1.addListener(listener(chip.Y1))
+  chip.A2.addListener(listener(chip.Y2))
+  chip.A3.addListener(listener(chip.Y3))
+  chip.A4.addListener(listener(chip.Y4))
+  chip.A5.addListener(listener(chip.Y5))
+  chip.A6.addListener(listener(chip.Y6))
 
   return chip
 }

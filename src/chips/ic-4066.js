@@ -94,7 +94,6 @@
  */
 
 import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
-import { range } from "utils"
 
 /**
  * Creates an emulation of the 4066 quad bilateral switch.
@@ -131,45 +130,52 @@ function Ic4066() {
 
   const last = [null, null, null, null]
 
-  function controlListener(pin) {
-    const num = pin.name[1]
-    const xpin = pin
-    const apin = chip[`A${num}`]
-    const bpin = chip[`B${num}`]
+  function controlListener(apin, bpin) {
+    const num = +apin.name[1]
 
-    if (xpin.high) {
-      apin.mode = INPUT
-      bpin.mode = INPUT
-    } else {
-      apin.mode = BIDIRECTIONAL
-      bpin.mode = BIDIRECTIONAL
-      if (last[+num - 1] === apin) {
-        bpin.level = apin.level
-      } else if (last[+num - 1] === bpin) {
-        apin.level = bpin.level
+    return pin => {
+      if (pin.high) {
+        apin.mode = INPUT
+        bpin.mode = INPUT
       } else {
-        apin.clear()
-        bpin.clear()
+        apin.mode = BIDIRECTIONAL
+        bpin.mode = BIDIRECTIONAL
+
+        if (last[num - 1] === apin) {
+          bpin.level = apin.level
+        } else if (last[num - 1] === bpin) {
+          apin.level = bpin.level
+        } else {
+          apin.clear()
+          bpin.clear()
+        }
       }
     }
   }
 
-  function dataListener(pin) {
-    const [letter, num] = [...pin.name]
-    const xpin = chip[`X${num}`]
-    const out = chip[letter === "A" ? `B${num}` : `A${num}`]
+  function dataListener(xpin, outpin) {
+    const num = +outpin.name[1]
 
-    last[+num - 1] = pin
-    if (xpin.low) {
-      out.level = pin.level
+    return pin => {
+      last[num - 1] = pin
+      if (xpin.low) {
+        outpin.level = pin.level
+      }
     }
   }
 
-  for (const i of range(1, 4, true)) {
-    chip[`X${i}`].addListener(controlListener)
-    chip[`A${i}`].addListener(dataListener)
-    chip[`B${i}`].addListener(dataListener)
-  }
+  chip.X1.addListener(controlListener(chip.A1, chip.B1))
+  chip.A1.addListener(dataListener(chip.X1, chip.B1))
+  chip.B1.addListener(dataListener(chip.X1, chip.A1))
+  chip.X2.addListener(controlListener(chip.A2, chip.B2))
+  chip.A2.addListener(dataListener(chip.X2, chip.B2))
+  chip.B2.addListener(dataListener(chip.X2, chip.A2))
+  chip.X3.addListener(controlListener(chip.A3, chip.B3))
+  chip.A3.addListener(dataListener(chip.X3, chip.B3))
+  chip.B3.addListener(dataListener(chip.X3, chip.A3))
+  chip.X4.addListener(controlListener(chip.A4, chip.B4))
+  chip.A4.addListener(dataListener(chip.X4, chip.B4))
+  chip.B4.addListener(dataListener(chip.X4, chip.A4))
 
   return chip
 }
