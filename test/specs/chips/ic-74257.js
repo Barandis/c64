@@ -61,7 +61,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       traces.B2.set()
     })
 
-    it("selects A when SEL is false", () => {
+    it("selects A when SEL is low", () => {
       traces.SEL.clear()
       assert(traces.Y2.low, selLowMessage(2, "low"))
 
@@ -69,7 +69,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y2.high, selLowMessage(2, "high"))
     })
 
-    it("selects B when SEL is true", () => {
+    it("selects B when SEL is high", () => {
       traces.SEL.set()
       assert(traces.Y2.high, selHighMessage(2, "high"))
 
@@ -77,7 +77,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y2.low, selHighMessage(2, "low"))
     })
 
-    it("is off when OE is true, no matter the value of SEL", () => {
+    it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.set()
       assert(traces.Y2.high, selHighMessage(2, "high"))
 
@@ -95,7 +95,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       traces.B3.set()
     })
 
-    it("selects A when SEL is false", () => {
+    it("selects A when SEL is low", () => {
       traces.SEL.clear()
       assert(traces.Y3.low, selLowMessage(3, "low"))
 
@@ -103,7 +103,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y3.high, selLowMessage(3, "high"))
     })
 
-    it("selects B when SEL is true", () => {
+    it("selects B when SEL is high", () => {
       traces.SEL.set()
       assert(traces.Y3.high, selHighMessage(3, "high"))
 
@@ -111,7 +111,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y3.low, selHighMessage(3, "low"))
     })
 
-    it("is off when OE is true, no matter the value of SEL", () => {
+    it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.set()
       assert(traces.Y3.high, selHighMessage(3, "high"))
 
@@ -129,7 +129,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       traces.B4.set()
     })
 
-    it("selects A when SEL is false", () => {
+    it("selects A when SEL is low", () => {
       traces.SEL.clear()
       assert(traces.Y4.low, selLowMessage(4, "low"))
 
@@ -137,7 +137,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y4.high, selLowMessage(4, "high"))
     })
 
-    it("selects B when SEL is true", () => {
+    it("selects B when SEL is high", () => {
       traces.SEL.set()
       assert(traces.Y4.high, selHighMessage(4, "high"))
 
@@ -145,7 +145,7 @@ describe("74257 3-State Quad 2-to-1 Multiplexers", () => {
       assert(traces.Y4.low, selHighMessage(4, "low"))
     })
 
-    it("is off when OE is true, no matter the value of SEL", () => {
+    it("is off when OE is high, no matter the value of SEL", () => {
       traces.SEL.set()
       assert(traces.Y4.high, selHighMessage(4, "high"))
 
