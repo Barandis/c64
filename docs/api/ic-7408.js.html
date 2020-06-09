@@ -107,6 +107,7 @@
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
+import { range } from "utils"
 
 /**
  * Creates an emulation of the 7408 quad two-input AND gate.
@@ -141,18 +142,18 @@ function Ic7408() {
     Pin(7, "GND"),
   )
 
-  function listener(other, out) {
-    return pin => (out.level = pin.level &amp;&amp; other.level)
+  function listener(gate) {
+    const apin = chip[`A${gate}`]
+    const bpin = chip[`B${gate}`]
+    const ypin = chip[`Y${gate}`]
+
+    return () => (ypin.level = apin.level &amp;&amp; bpin.level)
   }
 
-  chip.A1.addListener(listener(chip.B1, chip.Y1))
-  chip.B1.addListener(listener(chip.A1, chip.Y1))
-  chip.A2.addListener(listener(chip.B2, chip.Y2))
-  chip.B2.addListener(listener(chip.A2, chip.Y2))
-  chip.A3.addListener(listener(chip.B3, chip.Y3))
-  chip.B3.addListener(listener(chip.A3, chip.Y3))
-  chip.A4.addListener(listener(chip.B4, chip.Y4))
-  chip.B4.addListener(listener(chip.A4, chip.Y4))
+  for (const i of range(1, 4, true)) {
+    chip[`A${i}`].addListener(listener(i))
+    chip[`B${i}`].addListener(listener(i))
+  }
 
   return chip
 }

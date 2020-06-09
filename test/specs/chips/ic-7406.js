@@ -8,8 +8,7 @@ import { Ic7406 } from "chips"
 import { range } from "utils"
 
 describe("7406 hex inverter", () => {
-  let chip
-  let traces
+  let chip, traces
 
   beforeEach(() => {
     chip = Ic7406()

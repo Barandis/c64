@@ -21,8 +21,7 @@ const noSetMessage = target =>
   `${target} should be low since nothing was last set`
 
 describe("4066 quad bilateral switch", () => {
-  let chip
-  let traces
+  let chip, traces
 
   beforeEach(() => {
     chip = Ic4066()

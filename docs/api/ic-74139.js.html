@@ -129,6 +129,7 @@
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
+import { range } from "utils"
 
 /**
  * Creates an emulation of the 74139 dual 2-to-4 demultiplexer.
@@ -161,31 +162,28 @@ function Ic74139() {
     Pin(8, "GND"),
   )
 
-  function setOutput(gpin, apin, bpin, y0pin, y1pin, y2pin, y3pin) {
-    y0pin.level = !(gpin.low &amp;&amp; apin.low &amp;&amp; bpin.low)
-    y1pin.level = !(gpin.low &amp;&amp; apin.high &amp;&amp; bpin.low)
-    y2pin.level = !(gpin.low &amp;&amp; apin.low &amp;&amp; bpin.high)
-    y3pin.level = !(gpin.low &amp;&amp; apin.high &amp;&amp; bpin.high)
+  function listener(demux) {
+    const gpin = chip[`_G${demux}`]
+    const apin = chip[`A${demux}`]
+    const bpin = chip[`B${demux}`]
+    const y0pin = chip[`_Y${demux}0`]
+    const y1pin = chip[`_Y${demux}1`]
+    const y2pin = chip[`_Y${demux}2`]
+    const y3pin = chip[`_Y${demux}3`]
+
+    return () => {
+      y0pin.level = 1 - (gpin.low &amp;&amp; apin.low &amp;&amp; bpin.low)
+      y1pin.level = 1 - (gpin.low &amp;&amp; apin.high &amp;&amp; bpin.low)
+      y2pin.level = 1 - (gpin.low &amp;&amp; apin.low &amp;&amp; bpin.high)
+      y3pin.level = 1 - (gpin.low &amp;&amp; apin.high &amp;&amp; bpin.high)
+    }
   }
 
-  function setDemux1() {
-    setOutput(
-      chip._G1, chip.A1, chip.B1, chip._Y10, chip._Y11, chip._Y12, chip._Y13
-    )
+  for (const i of range(1, 2, true)) {
+    chip[`_G${i}`].addListener(listener(i))
+    chip[`A${i}`].addListener(listener(i))
+    chip[`B${i}`].addListener(listener(i))
   }
-
-  function setDemux2() {
-    setOutput(
-      chip._G2, chip.A2, chip.B2, chip._Y20, chip._Y21, chip._Y22, chip._Y23
-    )
-  }
-
-  chip._G1.addListener(setDemux1)
-  chip.A1.addListener(setDemux1)
-  chip.B1.addListener(setDemux1)
-  chip._G2.addListener(setDemux2)
-  chip.A2.addListener(setDemux2)
-  chip.B2.addListener(setDemux2)
 
   return chip
 }
