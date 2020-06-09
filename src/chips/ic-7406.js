@@ -36,7 +36,7 @@
  * the 6567's `AEC` signal being turned into the inverse `_AEC` signal
  * for the 82S100.
  *
- * @typedef Ic7406
+ * @typedef Chip7406
  * @memberof module:chips
  * @property {module:components.Pin} A1 [1] The input of inverter 1.
  * @property {module:components.Pin} Y1 [2] The output of inverter 1.
@@ -62,7 +62,7 @@ import { range } from "utils"
 /**
  * Creates an emulation of the 7406 hex inverter.
  *
- * @returns {module:chips.Ic7406} A new 7406 hex inverter.
+ * @returns {module:chips.Chip7406} A new 7406 hex inverter.
  * @memberof module:chips
  */
 function Ic7406() {

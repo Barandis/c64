@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -105,7 +105,7 @@
  * control which game port is providing paddle data to the
  * {@link modules:chip.Ic6581|6581} SID.
  *
- * @typedef Ic4066
+ * @typedef Chip4066
  * @memberof module:chips
  * @property {module:components.Pin} A1 [1] One of the data pins on
  *     switch 1.
@@ -133,7 +133,7 @@
  *     2.
  * @property {module:components.Pin} Vcc [14] The positive power supply.
  *     This pin is not emulated.
- * @property {module:components.Pin} GND [7] The ground. This pin is not
+ * @property {module:components.Pin} Vss [7] The ground. This pin is not
  *     emulated.
  */
 
@@ -143,7 +143,7 @@ import { range } from "utils"
 /**
  * Creates an emulation of the 4066 quad bilateral switch.
  *
- * @returns {module:chips.Ic4066} A new 4066 quad bilateral switch.
+ * @returns {module:chips.Chip4066} A new 4066 quad bilateral switch.
  * @memberof module:chips
  */
 function Ic4066() {

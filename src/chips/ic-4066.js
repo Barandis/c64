@@ -61,7 +61,7 @@
  * control which game port is providing paddle data to the
  * {@link modules:chip.Ic6581|6581} SID.
  *
- * @typedef Ic4066
+ * @typedef Chip4066
  * @memberof module:chips
  * @property {module:components.Pin} A1 [1] One of the data pins on
  *     switch 1.
@@ -89,7 +89,7 @@
  *     2.
  * @property {module:components.Pin} Vcc [14] The positive power supply.
  *     This pin is not emulated.
- * @property {module:components.Pin} GND [7] The ground. This pin is not
+ * @property {module:components.Pin} Vss [7] The ground. This pin is not
  *     emulated.
  */
 
@@ -99,7 +99,7 @@ import { range } from "utils"
 /**
  * Creates an emulation of the 4066 quad bilateral switch.
  *
- * @returns {module:chips.Ic4066} A new 4066 quad bilateral switch.
+ * @returns {module:chips.Chip4066} A new 4066 quad bilateral switch.
  * @memberof module:chips
  */
 function Ic4066() {
