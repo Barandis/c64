@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -2068,6 +2068,553 @@ together to provide additional address decoding when the PLA's <code>_IO</code>
 output is selected.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic74139">Ic74139</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Ic74257">Ic74257</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-74257.js.html">ic-74257.js</a>, <a href="ic-74257.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>SEL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] The chip-wide select pin. When this pin is
+low, all of the <code>Y</code> pins will have the levels of their respective
+<code>A</code> pins. When it's high, the <code>Y</code> pins will instead reflect the
+levels of the corresponding <code>B</code> pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_OE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] The chip-wide active-low output enable pin.
+When this pin is high, all of the <code>Y</code> pins are put into a high
+impedance state, disconnecting them from their circuits.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] The first input to multiplexer 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>B1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] The second input to multiplexer 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Y1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] The output from multiplexer 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] The first input to multiplexer 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>B2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] The second input to multiplexer 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Y2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] The output from multiplexer 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] The first input to multiplexer 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>B3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] The second input to multiplexer 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Y3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] The output from multiplexer 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] The first input to multiplexer 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>B4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] The second input to multiplexer 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Y4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] The output from multiplexer 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>GND</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 74257 quad 2-to-1 multiplexer.</p>
+<p>The 74257 is one of the 7400-series TTL logic chips, consisting of
+four 2-to-1 multiplexers. Each multiplexer is essentially a switch
+which uses a single, shared select signal to choose which of its two
+inputs to reflect on its output. Each output is tri-state.</p>
+<p>This chip is exactly the same as the <code>Ic74258</code> except that
+the latter has inverted outputs and this one doesn't.</p>
+<p>The inputs to each multiplexer are the <code>A</code> and <code>B</code> pins, and the <code>Y</code>
+pins are their outputs. The <code>SEL</code> pin selects between the <code>A</code> inputs
+(when <code>SEL</code> is low) and the <code>B</code> inputs (when <code>SEL</code> is high). This
+single pin selects the outputs for all four multiplexers
+simultaneously. The active low output-enable pin, <code>_OE</code>, tri-states
+all four outputs when it's set high.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">_OE</th>
+<th style="text-align:center">SEL</th>
+<th style="text-align:center">An</th>
+<th style="text-align:center">Bn</th>
+<th style="text-align:center">Yn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><strong>Z</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><strong>L</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><strong>H</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center"><strong>L</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center"><strong>H</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The chip comes in a 16-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +---U---+
+    SEL |1    16| Vcc
+     A1 |2    15| _OE
+     B1 |3    14| A4
+     Y1 |4    13| B4
+     A2 |5    12| Y4
+     B2 |6    11| A3
+     Y2 |7    10| B3
+    GND |8     9| Y3
+        +-------+
+</code></pre>
+<p><em>(GND and Vcc are ground and power supply pins respectively, and they
+are not emulated.)</em></p>
+<p>In the Commodore 64, both U13 and U25 are 74LS257 chips (a
+lower-power, faster variant whose emulation is the same). They are
+used together to multiplex the CPU's 16 address lines into the 8
+lines expected by the 4164 DRAM chips.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic74257">Ic74257</a></code> function.</p>
 </div>
 
 
