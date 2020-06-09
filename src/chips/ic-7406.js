@@ -38,30 +38,18 @@
  *
  * @typedef Ic7406
  * @memberof module:chips
- * @property {module:components.Pin} A1 [1] The input of the first
- *     inverter.
- * @property {module:components.Pin} A2 [3] The input of the second
- *     inverter.
- * @property {module:components.Pin} A3 [5] The input of the third
- *     inverter.
- * @property {module:components.Pin} A4 [9] The input of the fourth
- *     inverter.
- * @property {module:components.Pin} A5 [11] The input of the fifth
- *     nverter.
- * @property {module:components.Pin} A6 [13] The input of the sixth
- *     inverter.
- * @property {module:components.Pin} Y1 [2] The output of the first
- *     inverter.
- * @property {module:components.Pin} Y2 [4] The output of the second
- *     inverter.
- * @property {module:components.Pin} Y3 [6] The output of the third
- *     inverter.
- * @property {module:components.Pin} Y4 [8] The output of the fourth
- *     inverter.
- * @property {module:components.Pin} Y5 [10] The output of the fifth
- *     inverter.
- * @property {module:components.Pin} Y6 [12] The output of the sixth
- *     inverter.
+ * @property {module:components.Pin} A1 [1] The input of inverter 1.
+ * @property {module:components.Pin} Y1 [2] The output of inverter 1.
+ * @property {module:components.Pin} A2 [3] The input of inverter 2.
+ * @property {module:components.Pin} Y2 [4] The output of inverter 2.
+ * @property {module:components.Pin} A3 [5] The input of inverter 3.
+ * @property {module:components.Pin} Y3 [6] The output of inverter 3.
+ * @property {module:components.Pin} A4 [9] The input of inverter 4.
+ * @property {module:components.Pin} Y4 [8] The output of inverter 4.
+ * @property {module:components.Pin} A5 [11] The input of inverter 5.
+ * @property {module:components.Pin} Y5 [10] The output of inverter 5.
+ * @property {module:components.Pin} A6 [13] The input of inverter 6.
+ * @property {module:components.Pin} Y6 [12] The output of inverter 6.
  * @property {module:components.Pin} Vcc [14] The positive power supply.
  *     This pin is not emulated.
  * @property {module:components.Pin} GND [7] The ground. This pin is not
@@ -69,6 +57,7 @@
  */
 
 import { Chip, Pin, INPUT, OUTPUT } from "components"
+import { range } from "utils"
 
 /**
  * Creates an emulation of the 7406 hex inverter.
@@ -103,12 +92,14 @@ function Ic7406() {
     Pin(7, "GND"),
   )
 
-  chip.A1.addListener(pin => (chip.Y1.level = pin.low))
-  chip.A2.addListener(pin => (chip.Y2.level = pin.low))
-  chip.A3.addListener(pin => (chip.Y3.level = pin.low))
-  chip.A4.addListener(pin => (chip.Y4.level = pin.low))
-  chip.A5.addListener(pin => (chip.Y5.level = pin.low))
-  chip.A6.addListener(pin => (chip.Y6.level = pin.low))
+  function listener(index) {
+    const out = chip[`Y${index}`]
+    return pin => (out.level = +pin.low)
+  }
+
+  for (const i of range(1, 6, true)) {
+    chip[`A${i}`].addListener(listener(i))
+  }
 
   return chip
 }

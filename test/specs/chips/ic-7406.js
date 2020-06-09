@@ -16,17 +16,17 @@ describe("7406 hex inverter", () => {
     traces = deviceTraces(chip)
   })
 
-  it("sets output to false when the input is true", () => {
+  it("sets output to low when the input is high", () => {
     for (const i of range(1, 6, true)) {
       traces[`A${i}`].set()
-      assert(traces[`Y${i}`].low)
+      assert(traces[`Y${i}`].low, `Y${i} should be low when A${i} is high`)
     }
   })
 
-  it("sets output to true when the input is false", () => {
+  it("sets output to high when the input is low", () => {
     for (const i of range(1, 6, true)) {
       traces[`A${i}`].clear()
-      assert(traces[`Y${i}`].high)
+      assert(traces[`Y${i}`].high, `Y${i} should be high when A${i} is low`)
     }
   })
 })
