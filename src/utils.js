@@ -85,9 +85,9 @@ export function toggleBit(value, bit) {
 }
 
 export function *range(start, end, step, inclusive) {
-  const s = typeof step === "number" || typeof end === "number" ? start : 0
-  const e = typeof step === "number" || typeof end === "number" ? end : start
-  const t = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
+  const s = typeof end === "number" ? start : 0
+  const e = typeof end === "number" ? end : start
+  const p = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
   const i = typeof step === "number"
     ? !!inclusive : typeof end === "number"
       ? !!step : !!end
@@ -108,7 +108,7 @@ export function *range(start, end, step, inclusive) {
   /* eslint-disable require-atomic-updates */
   while (!finished()) {
     yield current
-    current = forward ? current + t : current - t
+    current = forward ? current + p : current - p
   }
   /* eslint-enable require-atomic-updates */
 }
