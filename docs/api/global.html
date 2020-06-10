@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -122,6 +122,570 @@
         <h3 class="subsection-title">Type Definitions</h3>
 
         
+                
+<h4 class="name" id="Ic2114">Ic2114</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-2114.js.html">ic-2114.js</a>, <a href="ic-2114.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_CS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] The active-low chip select pin. When this pin
+is high, the chip acts normally; when the pin is low, the chip
+doesn't respond to any other pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_WE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] The active-low write enable pin. When this
+pin is low, a write operation will be performed (immediately if
+<code>_CS</code> is already there, or when <code>_CS</code> eventually goes low). When
+it's high, a read operation will be performed instead.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] Address pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] Address pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] Address pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] Address pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] Address pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] Address pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] Address pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[17] Address pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A8</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] Address pin 8.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A9</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] Address pin 9.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] Data pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] Data pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] Data pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] Data pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>GND</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 2114 1k x 4 bit static RAM.</p>
+<p>Static RAM differs from dynamic RAM (the RAM generally used for
+computer memory) in that it doesn't require periodic refresh cycles
+in order to retain data. Since no reads or writes have to wait for
+these refresh cycles, static RAM is considerably faster than dynamic
+RAM.</p>
+<p>However, it's also considerably more expensive. For this reason,
+static RAM is generally only in use in particularly speed-sensitive
+applications and in relatively small amounts. For instance, modern
+CPU on-board cache RAM is static. The Commodore 64 uses it for color
+RAM, which is accessed by the VIC at a much higher speed than the
+DRAM is accessed by the CPU.</p>
+<p>The 2114 has 1024 addressable locations that hold 4 bits each. Since
+the Commodore 64 has a fixed palette of 16 colors, 4 bits is all it
+needs. Therefore a single 2114 could store 1k of colors and it isn't
+necessary to use it with a second 2114 to store full 8-bit bytes.</p>
+<p>The timing of reads and writes is particularly simple. If the chip
+select pin <code>_CS</code> is low, the 4 bits stored at the location given on
+its address pins is put onto the 4 data pins. If the write enable pin
+<code>_WE</code> is also low, then the value on the 4 data pins is stored at the
+location given on its address pins. The <code>_CS</code> pin can stay low for
+several cycles of reads and writes; it does not require <code>_CS</code> to
+return to high to start the next cycle.</p>
+<p>The downside of this simple scheme is that care has to be taken to
+avoid unwanted writes. Address changes should not take place while
+both <code>_CS</code> and <code>_WE</code> are low; since address lines do not change
+simultaneously, changing addresses while both pins are low can and
+will cause data to be written to multiple addresses, potentially
+overwriting legitimate data. This is naturally emulated here for the
+same reason: the chip responds to address line changes, and those
+changes do not happen simultaneously.</p>
+<p>Aside from the active-low <code>_CS</code> and <code>_WE</code> pins, this simple memory
+device only has the necessary address pins to address 1k of memory
+and the four necessary bidirectional data pins. It's packages in an
+18-pin dual-inline package with the following pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +---U---+
+     A6 |1    18| Vcc
+     A5 |2    17| A7
+     A4 |3    16| A8
+     A3 |4    15| A9
+     A0 |5    14| D0
+     A1 |6    13| D1
+     A2 |7    12| D2
+    _CS |8    11| D3
+    GND |9    10| _WE
+        +-------+
+</code></pre>
+<p><em>(GND and Vcc are ground and power supply pins respectively, and they
+are not emulated.)</em></p>
+<p>In the Commodore 64, U6 is a 2114. As explained above, it was used
+strictly as RAM for storing graphics colors.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic2114">Ic2114</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
                 
 <h4 class="name" id="Ic4066">Ic4066</h4>
 

@@ -65,7 +65,7 @@ export function ControlCircuit(
   const _VIC = Trace(U15._Y10, U19._CS)
   const _SID = Trace(U15._Y11, U18._CS)
   const _COLOR = Trace(U15._Y12, U27.A3)
-  const _SRAM = Trace(U27.Y3, U6._CE)
+  const _SRAM = Trace(U27.Y3, U6._CS)
   const _CIAS = Trace(U15._Y13, U15._G2)
   const _CIA1 = Trace(U15._Y20, U1._CS)
   const _CIA2 = Trace(U15._Y21, U2._CS)
