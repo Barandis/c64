@@ -114,7 +114,7 @@ function Ic74139() {
     Pin(15, "_G2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(16, "VCC"),
+    Pin(16, "Vcc"),
     Pin(8, "GND"),
   )
 

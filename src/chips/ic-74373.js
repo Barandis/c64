@@ -133,7 +133,7 @@ function Ic74373() {
 
     // Power supply and ground pins. These are not emulated.
     Pin(10, "GND"),
-    Pin(20, "VCC"),
+    Pin(20, "Vcc"),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is

@@ -121,7 +121,7 @@ function Ic74257() {
 
     // Power supply pins. These are not emulated.
     Pin(8, "GND"),
-    Pin(16, "VCC"),
+    Pin(16, "Vcc"),
   )
 
   function dataListener(mux) {

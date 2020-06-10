@@ -94,7 +94,7 @@ function Ic7408() {
     Pin(11, "Y4", OUTPUT).clear(),
 
     // Power supply and ground pins, not emulated
-    Pin(14, "VCC"),
+    Pin(14, "Vcc"),
     Pin(7, "GND"),
   )
 

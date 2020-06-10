@@ -114,7 +114,7 @@ function Ic4066() {
     Pin(12, "X4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(14, "VDD"),
+    Pin(14, "Vdd"),
     Pin(7, "GND"),
   )
 
