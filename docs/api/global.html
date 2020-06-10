@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -3163,6 +3163,639 @@ from the 6567 VIC and the <code>_VA14</code> and <code>_VA15</code> lines
 from one of the 6526 CIAs.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic74258">Ic74258</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Ic74373">Ic74373</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-74373.js.html">ic-74373.js</a>, <a href="ic-74373.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_OE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] The chip-wide active-low output enable pin.
+When this pin is high, all of the <code>Q</code> pins are put into a high
+impedance state, disconnecting them from their circuits.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>LE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] The latch enable. As long as this pin is
+high, data will flow from input to output pins freely. Setting
+<code>LE</code> to low will latch the output pins, keeping them constant no
+matter the levels on the input pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] The input to latch 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] The output from latch 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] The input to latch 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] The output from latch 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] The input to latch 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] The output from latch 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] The input to latch 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] The output from latch 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] The input to latch 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] The output from latch 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] The input to latch 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] The output from latch 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[17] The input to latch 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] The output from latch 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] The input to latch 8.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[19] The output from latch 8.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[20] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>GND</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 74373 octal D-type transparent latch.</p>
+<p>The 74373 is one of the 7400-series TTL logic chips, consisting of
+eight transparent latches. These latches normally allow data to flow
+freely from input to output, but when the latch enable pin <code>LE</code> is
+set to low, the output is latched. That means it retains its current
+state, no matter what the input pins do in the meantime. Once <code>LE</code>
+goes high again, the outputs once more reflect their inputs.</p>
+<p>Since this chip is most often used in bus-type applications, the pins
+are named using more of a bus-type convention. The inputs are <code>D</code> and
+the outputs are <code>Q</code>, and the latches are numbered from 0 rather than
+from 1.</p>
+<p>The chip has an active-low output enable pin, <code>_OE</code>. When this is
+high, all outputs are set to a high impedance state.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">_OE</th>
+<th style="text-align:center">LE</th>
+<th style="text-align:center">Dn</th>
+<th style="text-align:center">Qn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><strong>Z</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center"><strong>L</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center"><strong>H</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><strong>Q₀</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>(Q₀ means whatever level the pin was in the previous state. If the
+pin was high, then it remains high. If it was low, it remains low.)</em></p>
+<p>The chip comes in a 20-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +---U---+
+    _OE |1    20| Vcc
+     Q0 |2    19| Q7
+     D0 |3    18| D7
+     D1 |4    17| D6
+     Q1 |5    16| Q6
+     Q2 |6    15| Q5
+     D2 |7    14| D5
+     D3 |8    13| D4
+     Q3 |9    12| Q4
+    GND |10   11| LE
+        +-------+
+</code></pre>
+<p><em>(GND and Vcc are ground and power supply pins respectively, and they
+are not emulated.)</em></p>
+<p>In the Commodore 64, U26 is a 74LS373 (a lower-power, faster variant
+whose emulation is the same). It's used to connect the multiplexed
+address bus to the lower 8 bits of the main address bus. It latches
+the low 8 bits of the multiplexed bus so that, when the lines are
+switched to the high 8 bits, those bits do not leak onto the low 8
+bits of the main bus.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic74373">Ic74373</a></code> function.</p>
 </div>
 
 
