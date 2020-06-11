@@ -18,18 +18,18 @@
  * The chip comes in a 14-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *      A1 |1    14| Vcc
- *      Y1 |2    13| A6
- *      A2 |3    12| Y6
- *      Y2 |4    11| A5
- *      A3 |5    10| Y5
- *      Y3 |6     9| A4
- *     GND |7     8| Y4
- *         +-------+
+ *         +---+--+---+
+ *      A1 |1  +--+ 14| Vcc
+ *      Y1 |2       13| A6
+ *      A2 |3       12| Y6
+ *      Y2 |4  7406 11| A5
+ *      A3 |5       10| Y5
+ *      Y3 |6        9| A4
+ *     GND |7        8| Y4
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, U8 is a 7406. It's responsible for inverting
  * logic signals that are expected in the inverse they're given, such as

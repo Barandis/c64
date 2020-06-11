@@ -37,17 +37,17 @@
  * The chip comes in a 14-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *      A1 |1    14| Vdd
- *      B1 |2    13| X1
- *      B2 |3    12| X4
- *      A2 |4    11| A4
- *      X2 |5    10| B4
- *      X3 |6     9| B3
- *     Vss |7     8| A3
- *         +-------+
+ *         +---+--+---+
+ *      A1 |1  +--+ 14| Vdd
+ *      B1 |2       13| X1
+ *      B2 |3       12| X4
+ *      A2 |4  4066 11| A4
+ *      X2 |5       10| B4
+ *      X3 |6        9| B3
+ *     Vss |7        8| A3
+ *         +----------+
  * ```
- * *(Vdd and Vss are power supply pins and are not emulated.)*
+ * *(`Vdd` and `Vss` are power supply pins and are not emulated.)*
  *
  * This chip is unusual in that it's the only analog chip in the system
  * as emulated (with the exception of the filter portion of the

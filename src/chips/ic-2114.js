@@ -46,20 +46,20 @@
  * and the four necessary bidirectional data pins. It's packages in an
  * 18-pin dual-inline package with the following pin assignments.
  * ```txt
- *         +---U---+
- *      A6 |1    18| Vcc
- *      A5 |2    17| A7
- *      A4 |3    16| A8
- *      A3 |4    15| A9
- *      A0 |5    14| D0
- *      A1 |6    13| D1
- *      A2 |7    12| D2
- *     _CS |8    11| D3
- *     GND |9    10| _WE
- *         +-------+
+ *         +---+--+---+
+ *      A6 |1  +--+ 18| Vcc
+ *      A5 |2       17| A7
+ *      A4 |3       16| A8
+ *      A3 |4       15| A9
+ *      A0 |5  2114 14| D0
+ *      A1 |6       13| D1
+ *      A2 |7       12| D2
+ *     _CS |8       11| D3
+ *     GND |9       10| _WE
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, U6 is a 2114. As explained above, it was used
  * strictly as RAM for storing graphics colors.

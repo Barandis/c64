@@ -22,18 +22,18 @@
  * The chip comes in a 14-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *      A1 |1    14| Vcc
- *      B1 |2    13| B4
- *      Y1 |3    12| A4
- *      A2 |4    11| Y4
- *      B2 |5    10| B3
- *      Y2 |6     9| A3
- *     GND |7     8| Y3
- *         +-------+
+ *         +---+--+---+
+ *      A1 |1  +--+ 14| Vcc
+ *      B1 |2       13| B4
+ *      Y1 |3       12| A4
+ *      A2 |4  7408 11| Y4
+ *      B2 |5       10| B3
+ *      Y2 |6        9| A3
+ *     GND |7        8| Y3
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, U27 is a 74LS08 (a lower-power, faster variant
  * whose emulation is the same). It's used for combining control signals

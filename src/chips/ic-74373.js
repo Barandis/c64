@@ -34,20 +34,21 @@
  * The chip comes in a 20-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     _OE |1    20| Vcc
- *      Q0 |2    19| Q7
- *      D0 |3    18| D7
- *      D1 |4    17| D6
- *      Q1 |5    16| Q6
- *      Q2 |6    15| Q5
- *      D2 |7    14| D5
- *      D3 |8    13| D4
- *      Q3 |9    12| Q4
- *     GND |10   11| LE
- *         +-------+
+ *         +---+--+---+
+ *     _OE |1  +--+ 20| Vcc
+ *      Q0 |2       19| Q7
+ *      D0 |3       18| D7
+ *      D1 |4       17| D6
+ *      Q1 |5       16| Q6
+ *      Q2 |6 74373 15| Q5
+ *      D2 |7       14| D5
+ *      D3 |8       13| D4
+ *      Q3 |9       12| Q4
+ *     GND |10      11| LE
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they
  * are not emulated.)*
  *
  * In the Commodore 64, U26 is a 74LS373 (a lower-power, faster variant

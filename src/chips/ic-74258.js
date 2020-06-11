@@ -32,19 +32,19 @@
  * The chip comes in a 16-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     SEL |1    16| Vcc
- *      A1 |2    15| _OE
- *      B1 |3    14| A4
- *     _Y1 |4    13| B4
- *      A2 |5    12| _Y4
- *      B2 |6    11| A3
- *     _Y2 |7    10| B3
- *     GND |8     9| _Y3
- *         +-------+
+ *         +---+--+---+
+ *     SEL |1  +--+ 16| Vcc
+ *      A1 |2       15| _OE
+ *      B1 |3       14| A4
+ *     _Y1 |4       13| B4
+ *      A2 |5 74258 12| _Y4
+ *      B2 |6       11| A3
+ *     _Y2 |7       10| B3
+ *     GND |8        9| _Y3
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, U14 is a 74LS258 (a lower-power, faster variant
  * whose emulation is the same). It's used to multiplex the upper two

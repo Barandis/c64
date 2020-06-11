@@ -32,19 +32,19 @@
  * The chip comes in a 16-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     SEL |1    16| Vcc
- *      A1 |2    15| _OE
- *      B1 |3    14| A4
- *      Y1 |4    13| B4
- *      A2 |5    12| Y4
- *      B2 |6    11| A3
- *      Y2 |7    10| B3
- *     GND |8     9| Y3
- *         +-------+
+ *         +---+--+---+
+ *     SEL |1  +--+ 16| Vcc
+ *      A1 |2       15| _OE
+ *      B1 |3       14| A4
+ *      Y1 |4       13| B4
+ *      A2 |5 74257 12| Y4
+ *      B2 |6       11| A3
+ *      Y2 |7       10| B3
+ *     GND |8        9| Y3
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, both U13 and U25 are 74LS257 chips (a
  * lower-power, faster variant whose emulation is the same). They are

@@ -32,19 +32,19 @@
  * The chip comes in a 16-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     _G1 |1    16| Vcc
- *      A1 |2    15| _G2
- *      B1 |3    14| A2
- *    _Y10 |4    13| B2
- *    _Y11 |5    12| _Y20
- *    _Y12 |6    11| _Y21
- *    _Y13 |7    10| _Y22
- *     GND |8     9| _Y23
- *         +-------+
+ *         +---+--+---+
+ *     _G1 |1  +--+ 16| Vcc
+ *      A1 |2       15| _G2
+ *      B1 |3       14| A2
+ *    _Y10 |4       13| B2
+ *    _Y11 |5 74139 12| _Y20
+ *    _Y12 |6       11| _Y21
+ *    _Y13 |7       10| _Y22
+ *     GND |8        9| _Y23
+ *         +----------+
  * ```
- * *(GND and Vcc are ground and power supply pins respectively, and they
- * are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and
+ * they are not emulated.)*
  *
  * In the Commodore 64, U15 is a 74LS139 (a lower-power, faster variant
  * whose emulation is the same). Its two demultiplexers are chained
