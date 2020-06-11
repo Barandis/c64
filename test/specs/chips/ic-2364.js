@@ -25,9 +25,7 @@ describe("2364 8k x 8-bit ROM", () => {
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
     })
 
-    const blocks = [...range(0x0000, 0x1fff, 0x1000)]
-
-    blocks.forEach(base => {
+    for (const base of range(0x0000, 0x1fff, 0x1000)) {
       it(`reads correctly from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {
@@ -53,7 +51,7 @@ describe("2364 8k x 8-bit ROM", () => {
           traces._CS.set()
         }
       })
-    })
+    }
   })
 
   describe("BASIC ROM", () => {
