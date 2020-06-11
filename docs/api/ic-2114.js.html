@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -90,17 +90,17 @@
  * and the four necessary bidirectional data pins. It's packages in an
  * 18-pin dual-inline package with the following pin assignments.
  * ```txt
- *         +---U---+
- *      A6 |1    18| Vcc
- *      A5 |2    17| A7
- *      A4 |3    16| A8
- *      A3 |4    15| A9
- *      A0 |5    14| D0
- *      A1 |6    13| D1
- *      A2 |7    12| D2
- *     _CS |8    11| D3
- *     GND |9    10| _WE
- *         +-------+
+ *         +---+--+---+
+ *      A6 |1  +--+ 18| Vcc
+ *      A5 |2       17| A7
+ *      A4 |3       16| A8
+ *      A3 |4       15| A9
+ *      A0 |5  2114 14| D0
+ *      A1 |6       13| D1
+ *      A2 |7       12| D2
+ *     _CS |8       11| D3
+ *     GND |9       10| _WE
+ *         +----------+
  * ```
  * *(GND and Vcc are ground and power supply pins respectively, and they
  * are not emulated.)*

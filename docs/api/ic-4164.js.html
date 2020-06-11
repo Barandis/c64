@@ -1,4 +1,48 @@
-// Copyright (c) 2020 Thomas J. Otterson
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ic-4164.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ic-4164.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Copyright (c) 2020 Thomas J. Otterson
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
@@ -190,9 +234,9 @@ function Ic4164() {
   // array where that bit resides; the second element is the index of
   // the bit within that 32-bit number.
   function resolve() {
-    const rowIndex = row << 3
-    const colIndex = (col & 0b11100000) >> 5
-    const bitIndex = col & 0b00011111
+    const rowIndex = row &lt;&lt; 3
+    const colIndex = (col &amp; 0b11100000) >> 5
+    const bitIndex = col &amp; 0b00011111
 
     return [rowIndex | colIndex, bitIndex]
   }
@@ -201,7 +245,7 @@ function Ic4164() {
   // the Q pin to the value of that bit.
   function read() {
     const [index, bit] = resolve()
-    const value = (memory[index] & 1 << bit) >> bit
+    const value = (memory[index] &amp; 1 &lt;&lt; bit) >> bit
     chip.Q.level = value
   }
 
@@ -212,9 +256,9 @@ function Ic4164() {
   function write() {
     const [index, bit] = resolve()
     if (data === 1) {
-      memory[index] |= 1 << bit
+      memory[index] |= 1 &lt;&lt; bit
     } else {
-      memory[index] &= ~(1 << bit)
+      memory[index] &amp;= ~(1 &lt;&lt; bit)
     }
     if (!chip.Q.floating) {
       chip.Q.level = data
@@ -244,13 +288,13 @@ function Ic4164() {
   // latched in a smiliar way to when _RAS goes low. What else happens
   // depends on whether the _WE pin is low. If it is, the chip goes into
   // write mode and the value on the D pin is saved to a memory location
-  // referred to by the latched row and column values. If _WE is not
-  // low, read mode is entered, and the value in that memory location is
-  // put onto the Q pin. (Setting the _WE pin low after _CAS goes low
-  // sets read-modify-write mode; the read that _CAS initiated is still
+  // referred to by the latched row and column values. If _WE is not low,
+  // read mode is entered, and the value in that memory location is put
+  // onto the Q pin. (Setting the _WE pin low after _CAS goes low sets
+  // read-modify-write mode; the read that _CAS initiated is still
   // valid.)
   //
-  // When _CAS goes high, the Q pin is disconnected and the latched
+  // When /CAS goes high, the Q pin is disconnected and the latched
   // column and data (if there is one) values are cleared.
   function casListener(pin) {
     if (pin.low) {
@@ -275,13 +319,13 @@ function Ic4164() {
   // that the address of the read is valid). The D pin is disconnected
   // and the internal latched input data value is cleared.
   //
-  // When _WE goes low, the write mode that is enabled depends on
-  // whether _CAS is already low. If it is, the chip must have been in
-  // read mode and now moves into read-modify-write mode. The data value
-  // on the Q pin remains valid, and the valus on the D pin is latched
-  // and stored at the appropriate memory location.
+  // When _WE goes low, the write mode that is enabled depends on whether
+  // _CAS is already low. If it is, the chip must have been in read mode
+  // and now moves into read-modify-write mode. The data value on the Q
+  // pin remains valid, and the valus on the D pin is latched and stored
+  // at the appropriate memory location.
   //
-  // If _CAS is still high when _WE goes low, the Q pin is disconnected.
+  // If _CAS is still high when /W goes low, the Q pin is disconnected.
   // Nothing further happens until _CAS goes low; at that point, the
   // chip goes into write mode (data is written to memory but nothing is
   // available to be read).
@@ -307,3 +351,28 @@ function Ic4164() {
 }
 
 export { Ic4164 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

@@ -15,7 +15,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   beforeEach(() => {
     chip = Ic4164()
     traces = deviceTraces(chip)
-    traces._W.set()
+    traces._WE.set()
     traces._RAS.set()
     traces._CAS.set()
 
@@ -38,12 +38,12 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   describe("write mode", () => {
     it("disables Q", () => {
       traces._RAS.clear()
-      traces._W.clear()
+      traces._WE.clear()
       traces._CAS.clear()
       assert(traces.Q.floating, "Q should be disabled during write")
 
       traces._RAS.set()
-      traces._W.set()
+      traces._WE.set()
       traces._CAS.set()
       assert(traces.Q.floating, "Q should be disabled after write")
     })
@@ -54,12 +54,12 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       traces.D.clear()
       traces._RAS.clear()
       traces._CAS.clear()
-      traces._W.clear()
+      traces._WE.clear()
       assert(traces.Q.low, "Q should be enabled during RMW")
 
       traces._RAS.set()
       traces._CAS.set()
-      traces._W.set()
+      traces._WE.set()
       assert(traces.Q.floating, "Q should be disabled after RMW")
     })
   })
@@ -87,11 +87,11 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
           traces._CAS.clear()
 
           traces.D.level = bitValue(row, col)
-          traces._W.clear()
+          traces._WE.clear()
 
           traces._RAS.set()
           traces._CAS.set()
-          traces._W.set()
+          traces._WE.set()
         }
 
         for (const addr of range(base, base + 0x1000)) {
@@ -127,10 +127,10 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
           traces._CAS.clear()
 
           traces.D.level = bitValue(row, col)
-          traces._W.clear()
+          traces._WE.clear()
 
           traces._CAS.set()
-          traces._W.set()
+          traces._WE.set()
         }
 
         for (const col of range(256)) {
@@ -160,9 +160,9 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
         traces._CAS.clear()
         assert(traces.Q.low, "Q should reflect the low on D")
         traces.D.set()
-        traces._W.clear()
+        traces._WE.clear()
         assert(traces.Q.high, "Q should reflect the high on D")
-        traces._W.set()
+        traces._WE.set()
         traces._CAS.set()
       }
       traces._RAS.set()
@@ -176,10 +176,10 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
       for (const col of range(256)) {
         valueToPins(col, ...addrTraces)
         traces.D.set()
-        traces._W.clear()
+        traces._WE.clear()
         traces._CAS.clear()
         assert(traces.Q.floating, "Q should not reflect D in write mode")
-        traces._W.set()
+        traces._WE.set()
         traces._CAS.set()
       }
       traces._RAS.set()

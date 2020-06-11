@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -81,15 +81,15 @@
  * The chip comes in a 14-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *      A1 |1    14| Vdd
- *      B1 |2    13| X1
- *      B2 |3    12| X4
- *      A2 |4    11| A4
- *      X2 |5    10| B4
- *      X3 |6     9| B3
- *     Vss |7     8| A3
- *         +-------+
+ *         +---+--+---+
+ *      A1 |1  +--+ 14| Vdd
+ *      B1 |2       13| X1
+ *      B2 |3       12| X4
+ *      A2 |4  4066 11| A4
+ *      X2 |5       10| B4
+ *      X3 |6        9| B3
+ *     Vss |7        8| A3
+ *         +----------+
  * ```
  * *(Vdd and Vss are power supply pins and are not emulated.)*
  *
@@ -158,7 +158,7 @@ function Ic4066() {
     Pin(12, "X4", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(14, "VDD"),
+    Pin(14, "Vdd"),
     Pin(7, "GND"),
   )
 

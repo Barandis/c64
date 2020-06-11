@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -78,18 +78,18 @@
  * The chip comes in a 20-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     _OE |1    20| Vcc
- *      Q0 |2    19| Q7
- *      D0 |3    18| D7
- *      D1 |4    17| D6
- *      Q1 |5    16| Q6
- *      Q2 |6    15| Q5
- *      D2 |7    14| D5
- *      D3 |8    13| D4
- *      Q3 |9    12| Q4
- *     GND |10   11| LE
- *         +-------+
+ *         +---+--+---+
+ *     _OE |1  +--+ 20| Vcc
+ *      Q0 |2       19| Q7
+ *      D0 |3       18| D7
+ *      D1 |4       17| D6
+ *      Q1 |5       16| Q6
+ *      Q2 |6 74373 15| Q5
+ *      D2 |7       14| D5
+ *      D3 |8       13| D4
+ *      Q3 |9       12| Q4
+ *     GND |10      11| LE
+ *         +----------+
  * ```
  * *(GND and Vcc are ground and power supply pins respectively, and they
  * are not emulated.)*
@@ -177,7 +177,7 @@ function Ic74373() {
 
     // Power supply and ground pins. These are not emulated.
     Pin(10, "GND"),
-    Pin(20, "VCC"),
+    Pin(20, "Vcc"),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is

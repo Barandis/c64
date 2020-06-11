@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -76,16 +76,16 @@
  * The chip comes in a 16-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---U---+
- *     _G1 |1    16| Vcc
- *      A1 |2    15| _G2
- *      B1 |3    14| A2
- *    _Y10 |4    13| B2
- *    _Y11 |5    12| _Y20
- *    _Y12 |6    11| _Y21
- *    _Y13 |7    10| _Y22
- *     GND |8     9| _Y23
- *         +-------+
+ *         +---+--+---+
+ *     _G1 |1  +--+ 16| Vcc
+ *      A1 |2       15| _G2
+ *      B1 |3       14| A2
+ *    _Y10 |4       13| B2
+ *    _Y11 |5 74139 12| _Y20
+ *    _Y12 |6       11| _Y21
+ *    _Y13 |7       10| _Y22
+ *     GND |8        9| _Y23
+ *         +----------+
  * ```
  * *(GND and Vcc are ground and power supply pins respectively, and they
  * are not emulated.)*
@@ -158,7 +158,7 @@ function Ic74139() {
     Pin(15, "_G2", INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(16, "VCC"),
+    Pin(16, "Vcc"),
     Pin(8, "GND"),
   )
 

@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -658,17 +658,17 @@ changes do not happen simultaneously.</p>
 device only has the necessary address pins to address 1k of memory
 and the four necessary bidirectional data pins. It's packages in an
 18-pin dual-inline package with the following pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-     A6 |1    18| Vcc
-     A5 |2    17| A7
-     A4 |3    16| A8
-     A3 |4    15| A9
-     A0 |5    14| D0
-     A1 |6    13| D1
-     A2 |7    12| D2
-    _CS |8    11| D3
-    GND |9    10| _WE
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     A6 |1  +--+ 18| Vcc
+     A5 |2       17| A7
+     A4 |3       16| A8
+     A3 |4       15| A9
+     A0 |5  2114 14| D0
+     A1 |6       13| D1
+     A2 |7       12| D2
+    _CS |8       11| D3
+    GND |9       10| _WE
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
@@ -1117,15 +1117,15 @@ arrangement (if not the pin names) is taken from the datasheet for
 the Texas Instruments CD4066B.</p>
 <p>The chip comes in a 14-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-     A1 |1    14| Vdd
-     B1 |2    13| X1
-     B2 |3    12| X4
-     A2 |4    11| A4
-     X2 |5    10| B4
-     X3 |6     9| B3
-    Vss |7     8| A3
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     A1 |1  +--+ 14| Vdd
+     B1 |2       13| X1
+     B2 |3       12| X4
+     A2 |4  4066 11| A4
+     X2 |5       10| B4
+     X3 |6        9| B3
+    Vss |7        8| A3
+        +----------+
 </code></pre>
 <p><em>(Vdd and Vss are power supply pins and are not emulated.)</em></p>
 <p>This chip is unusual in that it's the only analog chip in the system
@@ -1140,6 +1140,542 @@ control which game port is providing paddle data to the
 6581 SID.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic4066">Ic4066</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Ic4164">Ic4164</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-4164.js.html">ic-4164.js</a>, <a href="ic-4164.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_RAS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] The active-low row address strobe pin. When
+this pin transitions to low, the value on the 8 address pins is
+latched and remembered as 8 bits of the final address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_CAS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] The active-low column address strobe pin.
+When this pin transitions to low, the value on the 8 address pins
+is latched and remembered as other 8 bits of the final address.
+If the <code>_WE</code> is high at this time, a bit is read from the final
+address and put onto the <code>Q</code> pin; if <code>_WE is low, the value on     the </code>D` pin is stored at the final address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_WE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] The active-low write enable pin. If this pin
+is low when <code>_CAS</code> goes low, the bit on the <code>D</code> pin will be
+written to memory. If it's high, a bit read from memory will be
+put on the <code>Q</code> pin.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] The data input pin.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Q</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] The data output pin.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] Address pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] Address pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] Address pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] Address pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] Address pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] Address pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] Address pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] Address pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>NC</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] No contact. This pin is not connected to
+anything internally; the chip only needs 15 pins and this one is
+included to make the physical package a 16-pin DIP.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vss</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 4164 64k x 1 bit dynamic RAM.</p>
+<p>The 4164 is a basic DRAM chip that was used in a wide variety of home
+computers in the 1980's: the Apple IIe, IIc, and 128k Macintosh; the
+Atari 800XL; the Commodore 64 and 128; and the Radio Shack Color
+Computer 2. Later editions of the Apple IIc, Commodore 64, Commodore
+128, and COCO2 switched to the 4464.</p>
+<p>This chip has a memory array of 65,536 bits, each associated with an
+individual memory address. Therefore, to use a 4164 in an 8-bit
+computer, 8 chips would be required to provide 64k of memory (128k
+Macintosh and Commodore 128 would therefore use 16 of these chips).
+Each chip was used for a single bit in the target address; bit 0
+would be stored in the first 4164, bit 1 in the second 4164, and so
+on.</p>
+<p>Since the chip has only 8 address pins, an address has to be split
+into two parts, representing a row and a column (presenting the
+memory array as a physical 256-bit x 256-bit array). These row and
+column addresses are provided to the chip sequentially; the row
+address is put onto the address pins and  the active-low row address
+strobe pin <code>_RAS</code> is set low, then the column address is put onto the
+address pins and the active-low column address strobe pin <code>_CAS</code> is
+set low.</p>
+<p>The chip has three basic modes of operation, controlled by the
+active-low write-enable (<code>_WE</code>) pin with some help from <code>_CAS</code>. If
+<code>_WE</code> is high, then the chip is in read mode after the address is
+set. If <code>_WE</code> is low, the mode depends on whether <code>_WE</code> went low
+before the address was set by putting <code>_CAS</code> low; if <code>_CAS</code> went low
+first, (meaning the chip was initially in read mode), setting <code>_WE</code>
+low will start read-modify-write mode, where the value at that
+address is still available on the data-out pin (<code>Q</code>) even as the new
+value is set from the data-in pin (<code>D</code>). If <code>_WE</code> goes low before
+<code>_CAS</code>, then read mode is never entered and write mode is enabled
+instead. The value of <code>D</code> is still written to memory, but <code>Q</code> is
+disconnected and no data is available there.</p>
+<p>The Commodore 64 does not use read-modify-write mode. The <code>_WE</code> pin
+is always set to its proper level before the <code>_CAS</code> pin goes low.</p>
+<p>While <code>_WE</code> and <code>_CAS</code> control what is read from and/or written to
+the chip's memory, <code>_RAS</code> is not needed for anything other than
+setting the row address. Hence <code>_RAS</code> can remain low through multiple
+memory accesses, as long as its address is valid for all of them,
+allowing reads and writes to happen within a single 256-address page
+of memory without incurring the cost of resetting the row address.</p>
+<p>Unlike most other non-logic chips in the system, there is no
+dedicated chip-select pin. The combination of <code>_RAS</code> and <code>_CAS</code> can
+be regarded as such a pin, and it is used that way in the Commodore
+64.</p>
+<p>The chip comes in a 16-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     NC |1  +--+ 16| Vss
+      D |2       15| _CAS
+    _WE |3       14| Q
+   _RAS |4       13| A6
+     A0 |5  4164 12| A3
+     A2 |6       11| A4
+     A1 |7       10| A5
+    Vcc |8        9| A7
+        +----------+
+</code></pre>
+<p><em>(<code>Vss</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated. <code>NC</code> stands for &quot;no contact&quot; and is not
+connected to anything internally.)</em></p>
+<p>In the Commodore 64, U9, U10, U11, U12, U21, U22, U23, and U24 are
+4164's, one for each of the 8 bits on the data bus.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic4164">Ic4164</a></code> function.</p>
 </div>
 
 
@@ -1578,15 +2114,15 @@ if the input is low, the output is high, and vice versa.</p>
 </table>
 <p>The chip comes in a 14-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-     A1 |1    14| Vcc
-     Y1 |2    13| A6
-     A2 |3    12| Y6
-     Y2 |4    11| A5
-     A3 |5    10| Y5
-     Y3 |6     9| A4
-    GND |7     8| Y4
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     A1 |1  +--+ 14| Vcc
+     Y1 |2       13| A6
+     A2 |3       12| Y6
+     Y2 |4  7406 11| A5
+     A3 |5       10| Y5
+     Y3 |6        9| A4
+    GND |7        8| Y4
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
@@ -2048,15 +2584,15 @@ all of its outputs are high; otherwise the output is low.</p>
 </table>
 <p>The chip comes in a 14-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-     A1 |1    14| Vcc
-     B1 |2    13| B4
-     Y1 |3    12| A4
-     A2 |4    11| Y4
-     B2 |5    10| B3
-     Y2 |6     9| A3
-    GND |7     8| Y3
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     A1 |1  +--+ 14| Vcc
+     B1 |2       13| B4
+     Y1 |3       12| A4
+     A2 |4  7408 11| Y4
+     B2 |5       10| B3
+     Y2 |6        9| A3
+    GND |7        8| Y3
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
@@ -2613,16 +3149,16 @@ outputs whose names start with <code>_Y</code>.</p>
 </table>
 <p>The chip comes in a 16-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-    _G1 |1    16| Vcc
-     A1 |2    15| _G2
-     B1 |3    14| A2
-   _Y10 |4    13| B2
-   _Y11 |5    12| _Y20
-   _Y12 |6    11| _Y21
-   _Y13 |7    10| _Y22
-    GND |8     9| _Y23
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+    _G1 |1  +--+ 16| Vcc
+     A1 |2       15| _G2
+     B1 |3       14| A2
+   _Y10 |4       13| B2
+   _Y11 |5 74139 12| _Y20
+   _Y12 |6       11| _Y21
+   _Y13 |7       10| _Y22
+    GND |8        9| _Y23
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
@@ -3160,23 +3696,23 @@ all four outputs when it's set high.</p>
 </table>
 <p>The chip comes in a 16-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-    SEL |1    16| Vcc
-     A1 |2    15| _OE
-     B1 |3    14| A4
-     Y1 |4    13| B4
-     A2 |5    12| Y4
-     B2 |6    11| A3
-     Y2 |7    10| B3
-    GND |8     9| Y3
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+    SEL |1  +--+ 16| Vcc
+     A1 |2       15| _OE
+     B1 |3       14| A4
+     Y1 |4       13| B4
+     A2 |5 74257 12| Y4
+     B2 |6       11| A3
+     Y2 |7       10| B3
+    GND |8        9| Y3
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
 <p>In the Commodore 64, both U13 and U25 are 74LS257 chips (a
 lower-power, faster variant whose emulation is the same). They are
 used together to multiplex the CPU's 16 address lines into the 8
-lines expected by the 4164 DRAM chips.</p>
+lines expected by the <a href="global.html#Ic4164">4164</a> DRAM chips.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic74257">Ic74257</a></code> function.</p>
 </div>
@@ -3707,16 +4243,16 @@ all four outputs when it's set high.</p>
 </table>
 <p>The chip comes in a 16-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-    SEL |1    16| Vcc
-     A1 |2    15| _OE
-     B1 |3    14| A4
-    _Y1 |4    13| B4
-     A2 |5    12| _Y4
-     B2 |6    11| A3
-    _Y2 |7    10| B3
-    GND |8     9| _Y3
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+    SEL |1  +--+ 16| Vcc
+     A1 |2       15| _OE
+     B1 |3       14| A4
+    _Y1 |4       13| B4
+     A2 |5 74258 12| _Y4
+     B2 |6       11| A3
+    _Y2 |7       10| B3
+    GND |8        9| _Y3
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
@@ -4337,18 +4873,18 @@ high, all outputs are set to a high impedance state.</p>
 pin was high, then it remains high. If it was low, it remains low.)</em></p>
 <p>The chip comes in a 20-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---U---+
-    _OE |1    20| Vcc
-     Q0 |2    19| Q7
-     D0 |3    18| D7
-     D1 |4    17| D6
-     Q1 |5    16| Q6
-     Q2 |6    15| Q5
-     D2 |7    14| D5
-     D3 |8    13| D4
-     Q3 |9    12| Q4
-    GND |10   11| LE
-        +-------+
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+    _OE |1  +--+ 20| Vcc
+     Q0 |2       19| Q7
+     D0 |3       18| D7
+     D1 |4       17| D6
+     Q1 |5       16| Q6
+     Q2 |6 74373 15| Q5
+     D2 |7       14| D5
+     D3 |8       13| D4
+     Q3 |9       12| Q4
+    GND |10      11| LE
+        +----------+
 </code></pre>
 <p><em>(GND and Vcc are ground and power supply pins respectively, and they
 are not emulated.)</em></p>
