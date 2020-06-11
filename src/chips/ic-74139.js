@@ -29,6 +29,40 @@
  * | L      | L      | H      | **H**  | **H**  | **L**  | **H**  |
  * | L      | H      | H      | **H**  | **H**  | **H**  | **L**  |
  *
+ * In the Commodore 64, the two demultiplexers are chained together by
+ * connecting one of the outputs from demux 1 to the enable pin of demux
+ * 2. The inputs are the address lines `A8`-`A11`, and the enable pin of
+ *    demux 1 comes directly from the PLA's `_IO` output. Thus the
+ *    demultiplexers only do work when `_IO` is selected, which requires
+ *    that the address be from 0xD000 - 0xDFFF, among other things. A
+ *    more specific table for this setup can thus be created.
+ *
+ * | _IO   | A8    | A9    | A10   | A11   | Address | Active Output |
+ * | :---: | :---: | :---: | :---: | :---: | :------ | :------------ |
+ * | H     | X     | X     | X     | X     | N/A     | None          |
+ * | L     | X     | X     | L     | L     | 0xD000 - 0xD3FF | VIC   |
+ * | L     | X     | X     | H     | L     | 0xD400 - 0xD7FF | SID   |
+ * | L     | X     | X     | L     | H   | 0xD800 - 0xDBFF | Color RAM |
+ * | L     | L     | L     | H     | H     | 0xDC00 - 0xDCFF | CIA 1 |
+ * | L     | H     | L     | H     | H     | 0xDD00 - 0xDDFF | CIA 2 |
+ * | L     | L     | H     | H     | H     | 0xDE00 - 0xDEFF | I/O 1 |
+ * | L     | H     | H     | H     | H     | 0xDF00 - 0xDFFF | I/O 2 |
+ *
+ * The decoding resolution is only 2 hexadecimal digits for the VIC,
+ * SID, and color RAM and 3 hexadecimal digits for the CIAs and I/Os.
+ * This means that there will be memory locations that repeat. For
+ * example, the VIC only uses 64 addressable locations for its registers
+ * (47 registers and 17 more unused addresses) but gets a 1024-address
+ * block. The decoding can't tell the difference between 0xD000, 0xD040,
+ * 0xD080, and so on because it can only resolve the first two digits,
+ * so using any of those addresses will access the VIC's first register,
+ * meaning that it's mirrored 16 times. The same goes for the SID (29
+ * registers and 3 usused addresses, mirrored in 1024 addresses 32
+ * times) and the CIAs (16 registers mirrored in 256 addresses 16
+ * times). The color RAM is not mirrored at all (though it does use only
+ * 1000 of its 1024 addresses) and the I/O blocks are free to be managed
+ * by cartridges as they like.
+ *
  * The chip comes in a 16-pin dual in-line package with the following
  * pin assignments.
  * ```txt

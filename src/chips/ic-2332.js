@@ -21,20 +21,20 @@
  * The chip comes in a 24-pin dual in-line package with the following
  * pin assignments.
  * ```txt
- *         +---+--+---+
- *      A7 |1  +--+ 24| Vcc
- *      A6 |2       23| A8
- *      A5 |3       22| A9
- *      A4 |4       21| _CS2
- *      A3 |5       20| _CS1
- *      A2 |6       19| A10
- *      A1 |7  2332 18| A11
- *      A0 |8       17| D7
- *      D0 |9       16| D6
- *      D1 |10      15| D5
- *      D2 |11      14| D4
- *     GND |12      13| D3
- *         +----------+
+ *         +-----+--+-----+
+ *      A7 |1    +--+   24| Vcc
+ *      A6 |2           23| A8
+ *      A5 |3           22| A9
+ *      A4 |4           21| _CS2
+ *      A3 |5           20| _CS1
+ *      A2 |6           19| A10
+ *      A1 |7    2332   18| A11
+ *      A0 |8           17| D7
+ *      D0 |9           16| D6
+ *      D1 |10          15| D5
+ *      D2 |11          14| D4
+ *     GND |12          13| D3
+ *         +--------------+
  * ```
  * *(`GND` and `Vcc` are ground and power supply pins respectively, and
  * they are not emulated.)*

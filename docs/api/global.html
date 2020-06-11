@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic2332">Ic2332</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic82S100">Ic82S100</a></li><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic2332">Ic2332</a></li><li data-type='method'><a href="module-chips.html#.Ic2364">Ic2364</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -122,6 +122,921 @@
         <h3 class="subsection-title">Type Definitions</h3>
 
         
+                
+<h4 class="name" id="Ic82S100">Ic82S100</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-82S100.js.html">ic-82S100.js</a>, <a href="ic-82S100.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_CE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[19] The active-low chip enable pin. This is
+unused in the Commodore 64; it is tied directly to ground so that
+the chip is always enabled.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>FE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] The field programming pin. This is unusued in
+the Commodore 64 because the programming is done in the factory.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] Input pin 0. This pin is tied to <code>_CAS</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] Input pin 1. This pin is tied to <code>_LORAM</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] Input pin 2. This pin is tied to <code>_HIRAM</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] Input pin 3. This pin is tied to <code>_CHAREN</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] Input pin 4. This pin is tied to <code>_VA14</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] Input pin 5. This pin is tied to <code>A15</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] Input pin 6. This pin is tied to <code>A14</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] Input pin 7. This pin is tied to <code>A13</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I8</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[27] Input pin 8. This pin is tied to <code>A12</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I9</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[26] Input pin 9. This pin is tied to <code>BA</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I10</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[25] Input pin 10. This pin is tied to <code>_AEC</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I11</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[24] Input pin 11. This pin is tied to <code>R__W</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I12</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[23] Input pin 12. This pin is tied to <code>_EXROM</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I13</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[22] Input pin 13. This pin is tied to <code>_GAME</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I14</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[21] Input pin 14. This pin is tied to <code>VA13</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I15</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[20] Input pin 15. This pin is tied to <code>VA12</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_CASRAM</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_BASIC</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_KERNAL</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_CHAROM</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>GR__W</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_IO</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_ROML</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>F7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Output pin 0. This pin is tied to <code>_ROMH</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[28] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vss</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 82S100 Programmable Logic Array, as it was
+programmed for early Commodore 64's.</p>
+<p>The 82S100 is a programmable logic chip made by Signetics and is
+regarded as the very first programmable logic device, first released
+in 1975. It took 16 inputs and could form up to 48 product terms
+(P-terms) by logically ANDind and NOTing selections of the 16 inputs.
+These P-terms were then fed to another array that would logically OR
+them selectively, producing up to 8 sum terms (S-terms) that were
+ultimately sent to the output pins (possibly after NOTing them
+first). The programming for these P- and S-terms could be done in the
+field in a similar manner to that of a PROM (programmable read-only
+memory), and Commodore would program them as a part of production of
+the C64.</p>
+<p>A single 82S100 could therefore serve the same function as a large
+number of 7400-series logic devices, for instance. It was used in a
+vast array of machines, including other Commodore computers and disk
+drives and those from several other companies. The differences
+between the 82S100's used in each would be the programming of the
+logic arrays.</p>
+<p>CBM eventually created their own hard-coded versions of the 82S100,
+which were faster and were cheaper for CBM to produce than it was for
+them to buy and program 82S100's. The schematic from which this
+emulation is being produced is an early one, from July, 1982, and at
+that time the C64 was still using the Signetics device.</p>
+<p>The input pins of the 82S100 were generically named I0-I15, and the
+output pins were similarly named F0-F7. That has been maintained
+here, though constants are provided to be able to use the more
+C64-centric names that reflect the pins' actual functions in that
+computer.</p>
+<p>This chip was tasked with providing the chip enable signals for the
+C64's RAM and color RAM; BASIC, kernal, and character ROM; registers
+from the 6526 CIAs, 6567 VIC, and
+6581 SID; and two banks of cartridge ROM and two banks
+of cartridge I/O memory. The 6510 processor, having a 16-bit address
+bus, could access 64k of memory, but all of this RAM and ROM together
+added up to closer to 84k. Therefore the PLA used a combination of
+inputs, including some of the address bus, the specialized 6510 I/O
+port bus, and signals from the VIC and cartridge ROMs to determine
+which memory was trying to be accessed at any given time, and then
+provide chip enable signals for that memory (turning it on and
+turning other memory that could be at the same address off). It would
+do this for every memory access, which would happen twice per cycle
+(half the cycle was used by the CPU, half by the VIC). Thus bank
+switching actually happened at a frequency of 2MHz, twice the CPU
+clock frequency, and the chip generated a fair bit of heat.</p>
+<p>The purpose of the logic in the PLA is to take the current state of
+the system during a memory access and produce a single output
+enabling the one device (memory chip, processor chip with register,
+cartridge, etc.) that will handle that memory access. (If the
+selected output is _IO, that indicates that the I/O block of memory
+is being accessed, but the PLA cannot determine <em>which</em> device is
+being accessed from this information alone. When that happens, a
+separate demultiplexer uses <code>A8</code>-<code>A11</code> to determine which device it
+is.)</p>
+<h3>Input pin assignments</h3>
+<ul>
+<li><strong><code>I0</code>: <code>_CAS</code>,</strong> This is the control line from the VIC that
+enables access to RAM. Instead of going directly to RAM, this
+line comes to the PLA and if RAM access is selected, the _CASRAM
+output is sent to the RAM chips.</li>
+<li><strong><code>I1</code>: <code>_LORAM</code>.</strong> This line controls the memory block from 0xA000
+<ul>
+<li>0xBFFF. When high (normal), the BASIC ROM is available in this
+memory block. When low, it's switched out for RAM.</li>
+</ul>
+</li>
+<li><strong><code>I2</code>: <code>_HIRAM</code>.</strong> This line controls the memory area from
+$E000...$FFFF. When high (normal), the KERNAL ROM is available in
+this memory block. When low, it's switched out for RAM.</li>
+<li><strong><code>I3</code>: <code>_CHAREN</code>.</strong> This line partially controls the memory block
+from $D000...$DFFF. When high (normal), the I/O devices appear in
+this memory block. When low, the character ROM appears here
+instead. This line can be overridden by other signals, including
+those allowing this memory block to contain RAM instead.</li>
+<li><strong><code>I4</code>, <code>I14-I15</code>: <code>_VA14</code>, <code>VA13</code>, and <code>VA12</code>.</strong> When the VIC is
+active, these are used to determine which block of memory the VIC
+is trying to access. <code>_VA14</code> is active low because that's the way
+it's generated by CIA2; it's inverted back into active high
+before being used to access memory but not for use with the PLA.</li>
+<li><strong><code>I5</code>-<code>I8</code>: <code>A15</code>-<code>A12</code>.</strong> Used to determine which block of memory
+the CPU wishes to access while the CPU is active.</li>
+<li><strong><code>I9</code>: <code>BA</code>.</strong> The VIC sets this &quot;Bus Available&quot; line high to
+indicate normal bus operation, switching between VIC and CPU each
+cycle. The VIC sets it low when it intends to take exclusive
+access of the address bus.</li>
+<li><strong><code>I10</code>: <code>_AEC</code>.</strong> This inverse of the VIC's &quot;Address Enable
+Control&quot; signal indicates which of the CPU (low) or VIC (high) is
+in control of the data bus.</li>
+<li><strong><code>I11</code>: <code>R__W</code>.</strong> This is generally written <code>R/_W</code>, but the slash
+is not a character that can be used in property names without
+quoting it. A high signal means that memory is being read, while
+a low means memory is being written. This makes a difference to
+what memory is being accessed. For example, ROM cannot be
+written; if an attempt is made to write to a ROM address while
+ROM is banked in, the write will happen to RAM instead.</li>
+<li><strong><code>I12</code>-<code>I13</code>: <code>_GAME</code> and <code>_EXROM</code>.</strong> These are used by cartridges
+to indicate the presence of addressable memory within them. There
+are two for-sure states for these two signals: if both are high
+(the normal state), there is no cartridge; and if <code>_EXROM</code> is
+high and <code>_GAME</code> is low, there is an Ultimax cartridge. Further
+mapping to cartridge ROM depends not only on these two signals
+but also on <code>_LORAM</code>, <code>_HIRAM</code>, and <code>_CHAREN</code>; <a href="https://www.c64-wiki.com/wiki/Bank_Switching#Mode_Table">there is a nice
+table here</a>.</li>
+</ul>
+<h3>Output pin assignments</h3>
+<p>Since the outputs are fed to chip select pins, which are universally
+active low, all of these are programmed to be inverted. Thus, at last
+seven of them will be high at any given time and at most one will be
+low.</p>
+<ul>
+<li><strong><code>F0</code>: <code>_CASRAM</code>.</strong> This is the signal that ultimately enables
+RAM. The production of this signal is very different from the
+others. For all other output, if one of their terms is selected,
+that output will be selected. For <code>_CASRAM</code>, its terms are
+combined with the terms from all other outputs (except for
+<code>GR/_W</code>), and if any of the terms are selected, then <code>_CASRAM</code>
+will be <em>de</em>selected. (Even if all of those other outputs are
+deselected, <code>_CASRAM</code> will be deselected if <code>_CAS</code> is high or if
+certain addresses are accessed while an Ultimax cartridge is
+plugged in. In these cases, no PLA outputs will be selected.)</li>
+<li><strong><code>F1</code>: <code>_BASIC</code>.</strong> Enables the BASIC ROM.</li>
+<li><strong><code>F2</code>: <code>_KERNAL</code>.</strong> Enables the KERNAL ROM.</li>
+<li><strong><code>F3</code>: <code>_CHAROM</code>.</strong> Enables the Character ROM.</li>
+<li><strong><code>F4</code>: <code>GR__W</code>.</strong> (written <code>GR/_W</code> where slashes are legal.)
+Indicates that the static color RAM is being written to. Note
+that this is the only output that is not actually a chip enable
+signal; color RAM is possibly enabled if the <code>_IO</code> output is
+selected (see <code><a href="global.html#Ic74139">Ic74139</a></code> for details).</li>
+<li><strong><code>F5</code>: <code>_IO</code>.</strong> Indicates that one of the following are going to
+be enabled: CIA1 registers, CIA2 registers, VIC registers, SID
+registers, color RAM, expansion port I/O from address 0xDE00 -
+0xDEFF, or expansion port I/O from address 0xDF00 - 0xDFFF. Which
+of these is actually enabled is done by decoding <code>A8</code>-<code>A11</code>,
+which is done by the <a href="global.html#Ic74139">74139</a>.</li>
+<li><strong><code>F6</code>: <code>_ROML</code>.</strong> Enables expansion port ROM from 0x8000 - 0x9FFF.</li>
+<li><strong><code>F7</code>: <code>_ROMH</code>.</strong> Enables expansion port ROM from 0xE000 - 0xEFFF.</li>
+</ul>
+<p>There is a ton of information about the internal workings of the
+C64's version of the 82S100 in <a href="http://skoe.de/docs/c64-dissected/pla/c64_pla_dissected_a4ds.pdf">The C64 PLA Dissected</a>. This
+document was used to derive all of the logic in this object and has a
+number of interesting stories besides (if you find that sort of thing
+interesting).</p>
+<p>Additionally, the 82S100 has an active-low chip enable pin <code>_CE</code>
+which is not used in the Commodore 64 (it is tied directly to ground
+and therefore is always low, so the chip is always enabled). There is
+also an <code>FE</code> pin that was used for programming the chip in the field;
+the emulated chip from the C64 doesn't use this as the chip was
+programmed during manufacturing.</p>
+<p>The chip comes in a 28-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +-----+--+-----+
+     FE |1    +--+   28| Vcc
+     I7 |2           27| I8
+     I6 |3           26| I9
+     I5 |4           25| I10
+     I4 |5           24| I11
+     I3 |6           23| I12
+     I2 |7           22| I13
+     I1 |8   82S100  21| I14
+     I0 |9           20| I15
+     F7 |10          19| _CE
+     F6 |11          18| F0
+     F5 |12          17| F1
+     F4 |13          16| F2
+    Vss |14          15| F3
+        +--------------+
+</code></pre>
+<p><em>(<code>Vss</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated. <code>FE</code> is the field programming pin; this chip
+was not programmed in the field for the Commodore 64, and it is not
+emulated either.)</em></p>
+<p>In the Commodore 64, U17 is an 82S100. As detailed extensively above,
+it was used to decode signals to determine which chip would receive a
+particular read or write.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic82S100">Ic82S100</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
                 
 <h4 class="name" id="Ic2114">Ic2114</h4>
 
@@ -1337,20 +2252,20 @@ data pins. In the C64, <code>_CS2</code> is tied to ground, meaning <code>CS1</c
 only pin that needs to be manipulated.</p>
 <p>The chip comes in a 24-pin dual in-line package with the following
 pin assignments.</p>
-<pre class="prettyprint source lang-txt"><code>        +---+--+---+
-     A7 |1  +--+ 24| Vcc
-     A6 |2       23| A8
-     A5 |3       22| A9
-     A4 |4       21| _CS2
-     A3 |5       20| _CS1
-     A2 |6       19| A10
-     A1 |7  2332 18| A11
-     A0 |8       17| D7
-     D0 |9       16| D6
-     D1 |10      15| D5
-     D2 |11      14| D4
-    GND |12      13| D3
-        +----------+
+<pre class="prettyprint source lang-txt"><code>        +-----+--+-----+
+     A7 |1    +--+   24| Vcc
+     A6 |2           23| A8
+     A5 |3           22| A9
+     A4 |4           21| _CS2
+     A3 |5           20| _CS1
+     A2 |6           19| A10
+     A1 |7    2332   18| A11
+     A0 |8           17| D7
+     D0 |9           16| D6
+     D1 |10          15| D5
+     D2 |11          14| D4
+    GND |12          13| D3
+        +--------------+
 </code></pre>
 <p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
 they are not emulated.)</em></p>
@@ -1359,6 +2274,685 @@ data access). It's used to store information on how to display
 characters to the screen.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic2332">Ic2332</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Ic2364">Ic2364</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-2364.js.html">ic-2364.js</a>, <a href="ic-2364.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_CS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[20] The active-low chip select pin. When this
+goes low, the chip reads the address and sends the data at that
+address to the data pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] Address pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] Address pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] Address pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] Address pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] Address pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] Address pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] Address pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] Address pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A8</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[23] Address pin 8.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A9</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[22] Address pin 9.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A10</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[19] Address pin 10.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A11</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Address pin 11.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A12</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[21] Address pin 11.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] Data pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] Data pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] Data pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] Data pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] Data pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] Data pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] Data pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[17] Data pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[24] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>GND</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 2364 8k x 8-bit ROM.</p>
+<p>This, along with the similar 23632, is far and away the simplest
+memory chip in the Commodore 64. With its full complement of address
+pins and full 8 data pins, there is no need to use multiple chips or
+to multiplex addresses.</p>
+<p>Timing of the read cycle (there is, of course, no write cycle in a
+read-only memory chip) is based solely on the chip select pin <code>_CS</code>.
+When this pin goes low, the chip reads its address pins and makes the
+value at that location available on its data pins.</p>
+<p>The chip comes in a 24-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +-----+--+-----+
+     A7 |1    +--+   24| Vcc
+     A6 |2           23| A8
+     A5 |3           22| A9
+     A4 |4           21| A12
+     A3 |5           20| _CS
+     A2 |6           19| A10
+     A1 |7    2364   18| A11
+     A0 |8           17| D7
+     D0 |9           16| D6
+     D1 |10          15| D5
+     D2 |11          14| D4
+    GND |12          13| D3
+        +--------------+
+</code></pre>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
+<p>In the Commodore 64, U3 and U4 are both 2364A's (a variant with
+slightly faster data access). U3 stores the BASIC interpreter and U4
+stores the kernal.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic2364">Ic2364</a></code> function.</p>
 </div>
 
 
@@ -3830,6 +5424,114 @@ outputs whose names start with <code>_Y</code>.</p>
 </tr>
 </tbody>
 </table>
+<p>In the Commodore 64, the two demultiplexers are chained together by
+connecting one of the outputs from demux 1 to the enable pin of demux
+2. The inputs are the address lines <code>A8</code>-<code>A11</code>, and the enable pin of
+demux 1 comes directly from the PLA's <code>_IO</code> output. Thus the
+demultiplexers only do work when <code>_IO</code> is selected, which requires
+that the address be from 0xD000 - 0xDFFF, among other things. A
+more specific table for this setup can thus be created.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">_IO</th>
+<th style="text-align:center">A8</th>
+<th style="text-align:center">A9</th>
+<th style="text-align:center">A10</th>
+<th style="text-align:center">A11</th>
+<th style="text-align:left">Address</th>
+<th style="text-align:left">Active Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:left">N/A</td>
+<td style="text-align:left">None</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:left">0xD000 - 0xD3FF</td>
+<td style="text-align:left">VIC</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">L</td>
+<td style="text-align:left">0xD400 - 0xD7FF</td>
+<td style="text-align:left">SID</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:left">0xD800 - 0xDBFF</td>
+<td style="text-align:left">Color RAM</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:left">0xDC00 - 0xDCFF</td>
+<td style="text-align:left">CIA 1</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:left">0xDD00 - 0xDDFF</td>
+<td style="text-align:left">CIA 2</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:left">0xDE00 - 0xDEFF</td>
+<td style="text-align:left">I/O 1</td>
+</tr>
+<tr>
+<td style="text-align:center">L</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">H</td>
+<td style="text-align:left">0xDF00 - 0xDFFF</td>
+<td style="text-align:left">I/O 2</td>
+</tr>
+</tbody>
+</table>
+<p>The decoding resolution is only 2 hexadecimal digits for the VIC,
+SID, and color RAM and 3 hexadecimal digits for the CIAs and I/Os.
+This means that there will be memory locations that repeat. For
+example, the VIC only uses 64 addressable locations for its registers
+(47 registers and 17 more unused addresses) but gets a 1024-address
+block. The decoding can't tell the difference between 0xD000, 0xD040,
+0xD080, and so on because it can only resolve the first two digits,
+so using any of those addresses will access the VIC's first register,
+meaning that it's mirrored 16 times. The same goes for the SID (29
+registers and 3 usused addresses, mirrored in 1024 addresses 32
+times) and the CIAs (16 registers mirrored in 256 addresses 16
+times). The color RAM is not mirrored at all (though it does use only
+1000 of its 1024 addresses) and the I/O blocks are free to be managed
+by cartridges as they like.</p>
 <p>The chip comes in a 16-pin dual in-line package with the following
 pin assignments.</p>
 <pre class="prettyprint source lang-txt"><code>        +---+--+---+

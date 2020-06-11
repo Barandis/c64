@@ -1,4 +1,48 @@
-// Copyright (c) 2020 Thomas J. Otterson
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ic-82S100.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic82S100">Ic82S100</a></li><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic2332">Ic2332</a></li><li data-type='method'><a href="module-chips.html#.Ic2364">Ic2364</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ic-82S100.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Copyright (c) 2020 Thomas J. Otterson
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
@@ -411,150 +455,150 @@ function Ic82S100() {
     // _LORAM deselected, _HIRAM deselected
     // $A000...$BFFF
     // CPU active, Read, No cartridge or 8k cartridge
-    const p0 = i1 & i2 & i5 & !i6 & i7 & !i10 & i11 & i13
+    const p0 = i1 &amp; i2 &amp; i5 &amp; !i6 &amp; i7 &amp; !i10 &amp; i11 &amp; i13
 
     // _HIRAM deselected
     // $E000...$FFFF
     // CPU active, Read, No cartridge or 8k cartridge
-    const p1 = i2 && i5 && i6 && i7 && !i10 && i11 && i13
+    const p1 = i2 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; i7 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; i13
 
     // _HIRAM deselected
     // $E000...$FFFF
     // CPU active, Read, 16k cartridge
-    const p2 = i2 && i5 && i6 && i7 && !i10 && i11 && !i12 && !i13
+    const p2 = i2 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; i7 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; !i12 &amp;&amp; !i13
 
     // _HIRAM deselected, _CHAREN selected
     // $D000...$DFFF
     // CPU active, Read, No cartridge or 8k cartridge
-    const p3 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
+    const p3 = i2 &amp;&amp; !i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; i13
 
     // _LORAM deselected, _CHAREN selected
     // $D000...$DFFF
     // CPU active, Read, No cartridge or 8k cartridge
-    const p4 = i1 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
+    const p4 = i1 &amp;&amp; !i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; i13
 
     // _HIRAM deselected, _CHAREN selected
     // $D000...$DFFF
     // CPU active, Read, 16k cartridge
-    const p5 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && !i12 && !i13
+    const p5 = i2 &amp;&amp; !i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; !i12 &amp;&amp; !i13
 
     //
     // $1000...$1FFF or $9000...$9FFF
     // VIC active, No cartridge or 8k cartridge
-    const p6 = i4 && !i14 && i15 && i10 && i13
+    const p6 = i4 &amp;&amp; !i14 &amp;&amp; i15 &amp;&amp; i10 &amp;&amp; i13
 
     //
     // $1000...$1FFF or $9000...$9FFF
     // VIC active, 16k cartridge
-    const p7 = i4 && !i14 && i15 && i10 && !i12 && !i13
+    const p7 = i4 &amp;&amp; !i14 &amp;&amp; i15 &amp;&amp; i10 &amp;&amp; !i12 &amp;&amp; !i13
 
     // Unused. May be a relic from earlier design in C64 prototypes that
     // never got removed.
-    // const p8 = i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
+    // const p8 = i0 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11
 
     // _HIRAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Bus available, Read, No cartridge or 8k cartridge
-    const p9 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
+    const p9 = i2 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i9 &amp;&amp; i11 &amp;&amp; i13
 
     // _HIRAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Write, No cartridge or 8k cartridge
-    const p10 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+    const p10 = i2 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11 &amp;&amp; i13
 
     // _LORAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Bus available, Read, No cartridge or 8k cartridge
-    const p11 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
+    const p11 = i1 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i9 &amp;&amp; i11 &amp;&amp; i13
 
     // _LORAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Write, No cartridge or 8k cartridge
-    const p12 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+    const p12 = i1 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11 &amp;&amp; i13
 
     // _HIRAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Bus available, Read, 16k cartridge
-    const p13 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
-                   && !i13
+    const p13 = i2 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i9 &amp;&amp; i11 &amp;&amp; !i12
+                   &amp;&amp; !i13
 
     // _HIRAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Write, 16k cartridge
-    const p14 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
-                   && !i13
+    const p14 = i2 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11 &amp;&amp; !i12
+                   &amp;&amp; !i13
 
     // _LORAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Bus available, Read, 16k cartridge
-    const p15 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
-      && !i13
+    const p15 = i1 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i9 &amp;&amp; i11 &amp;&amp; !i12
+      &amp;&amp; !i13
 
     // _LORAM deselected, _CHAREN deselected
     // $D000...$DFFF
     // CPU active, Write, 16k cartridge
-    const p16 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
-                   && !i13
+    const p16 = i1 &amp;&amp; i3 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11 &amp;&amp; !i12
+                   &amp;&amp; !i13
 
     //
     // $D000...$DFFF
     // CPU active, Bus available, Read, Ultimax cartridge
-    const p17 = i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i12 && !i13
+    const p17 = i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; i9 &amp;&amp; i11 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $D000...$DFFF
     // CPU active, Write, Ultimax cartridge
-    const p18 = i5 && i6 && !i7 && i8 && !i10 && !i11 && i12 && !i13
+    const p18 = i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11 &amp;&amp; i12 &amp;&amp; !i13
 
     // _LORAM deselected, _HIRAM deselected
     // $8000...$9FFF
     // CPU active, Read, 8k or 16k cartridge
-    const p19 = i1 && i2 && i5 && !i6 && !i7 && !i10 && i11 && !i12
+    const p19 = i1 &amp;&amp; i2 &amp;&amp; i5 &amp;&amp; !i6 &amp;&amp; !i7 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; !i12
 
     //
     // $8000...$9FFF
     // CPU active, Ultimax cartridge
-    const p20 = i5 && !i6 && !i7 && !i10 && i12 && !i13
+    const p20 = i5 &amp;&amp; !i6 &amp;&amp; !i7 &amp;&amp; !i10 &amp;&amp; i12 &amp;&amp; !i13
 
     // _HIRAM deselected
     // $A000...$BFFF
     // CPU active, Read, 16k cartridge
-    const p21 = i2 && i5 && !i6 && i7 && !i10 && i11 && !i12 && !i13
+    const p21 = i2 &amp;&amp; i5 &amp;&amp; !i6 &amp;&amp; i7 &amp;&amp; !i10 &amp;&amp; i11 &amp;&amp; !i12 &amp;&amp; !i13
 
     //
     // $E000...$EFFF
     // CPU active, Ultimax cartridge
-    const p22 = i5 && i6 && i7 && !i10 && i12 && !i13
+    const p22 = i5 &amp;&amp; i6 &amp;&amp; i7 &amp;&amp; !i10 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $3000...$3FFF, $7000...$7FFF, $B000...$BFFF, or $E000...$EFFF
     // VIC active, Ultimax cartridge
-    const p23 = i14 && i15 && i10 && i12 && !i13
+    const p23 = i14 &amp;&amp; i15 &amp;&amp; i10 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $1000...$1FFF or $3000...$3FFF
     // Ultimax cartridge
-    const p24 = !i5 && !i6 && i8 && i12 && !i13
+    const p24 = !i5 &amp;&amp; !i6 &amp;&amp; i8 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $2000...$3FFF
     // Ultimax cartridge
-    const p25 = !i5 && !i6 && i7 && i12 && !i13
+    const p25 = !i5 &amp;&amp; !i6 &amp;&amp; i7 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $4000...$7FFF
     // Ultimax cartridge
-    const p26 = !i5 && i6 && i12 && !i13
+    const p26 = !i5 &amp;&amp; i6 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $A000...$BFFF
     // Ultimax cartridge
-    const p27 = i5 && !i6 && i7 && i12 && !i13
+    const p27 = i5 &amp;&amp; !i6 &amp;&amp; i7 &amp;&amp; i12 &amp;&amp; !i13
 
     //
     // $C000...$CFFF
     // Ultimax cartridge
-    const p28 = i5 && i6 && !i7 && !i8 && i12 && !i13
+    const p28 = i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; !i8 &amp;&amp; i12 &amp;&amp; !i13
 
     // Unused.
     // const p29 = !i1
@@ -567,7 +611,7 @@ function Ic82S100() {
     // _CAS selected
     // $D000...$DFFF
     // CPU access, Write
-    const p31 = !i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
+    const p31 = !i0 &amp;&amp; i5 &amp;&amp; i6 &amp;&amp; !i7 &amp;&amp; i8 &amp;&amp; !i10 &amp;&amp; !i11
 
     // This is the sum-term (S-term) portion of the logic, where the
     // P-terms calculated above are logically ORed to poroduce a single
@@ -636,3 +680,28 @@ function Ic82S100() {
 }
 
 export { Ic82S100 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
