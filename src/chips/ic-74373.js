@@ -48,8 +48,7 @@
  *         +----------+
  * ```
  * *(`GND` and `Vcc` are ground and power supply pins respectively, and
- * they
- * are not emulated.)*
+ * they are not emulated.)*
  *
  * In the Commodore 64, U26 is a 74LS373 (a lower-power, faster variant
  * whose emulation is the same). It's used to connect the multiplexed

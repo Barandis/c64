@@ -70,9 +70,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
   }
 
   describe("reading and writing", () => {
-    const blocks = [...range(0x0000, 0xffff, 0x1000)]
-
-    blocks.forEach(base => {
+    for (const base of range(0x0000, 0xffff, 0x1000)) {
       it(`writes and reads correctly from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
       }`, () => {
@@ -113,7 +111,7 @@ describe("4164 64k x 1 bit dynamic RAM", () => {
           traces._CAS.set()
         }
       })
-    })
+    }
 
     it(
       "reads and writes within the same page without resetting row addresses",

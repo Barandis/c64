@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-chips.html">chips</a><ul class='methods'><li data-type='method'><a href="module-chips.html#.Ic2114">Ic2114</a></li><li data-type='method'><a href="module-chips.html#.Ic2332">Ic2332</a></li><li data-type='method'><a href="module-chips.html#.Ic4066">Ic4066</a></li><li data-type='method'><a href="module-chips.html#.Ic4164">Ic4164</a></li><li data-type='method'><a href="module-chips.html#.Ic7406">Ic7406</a></li><li data-type='method'><a href="module-chips.html#.Ic7408">Ic7408</a></li><li data-type='method'><a href="module-chips.html#.Ic74139">Ic74139</a></li><li data-type='method'><a href="module-chips.html#.Ic74257">Ic74257</a></li><li data-type='method'><a href="module-chips.html#.Ic74258">Ic74258</a></li><li data-type='method'><a href="module-chips.html#.Ic74373">Ic74373</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -670,12 +670,695 @@ and the four necessary bidirectional data pins. It's packages in an
     GND |9       10| _WE
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U6 is a 2114. As explained above, it was used
 strictly as RAM for storing graphics colors.</p>
 <p>This chip is produced by calling the
 <code><a href="module-chips.html#.Ic2114">Ic2114</a></code> function.</p>
+</div>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Ic2332">Ic2332</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ic-2332.js.html">ic-2332.js</a>, <a href="ic-2332.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_CS1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[20] One of the two active-low chip select pins.
+When the second of these goes low, the chip reads the address and
+sends the data at that address to the data pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_CS2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[21] One of the two active-low chip select pins.
+When the second of these goes low, the chip reads the address and
+sends the data at that address to the data pins.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[8] Address pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[7] Address pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[6] Address pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[5] Address pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[4] Address pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[3] Address pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[2] Address pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[1] Address pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A8</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[23] Address pin 8.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A9</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[22] Address pin 9.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A10</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[19] Address pin 10.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A11</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[18] Address pin 11.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[9] Data pin 0.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[10] Data pin 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[11] Data pin 2.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D3</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[13] Data pin 3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D4</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[14] Data pin 4.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D5</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[15] Data pin 5.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[16] Data pin 6.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>D7</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[17] Data pin 7.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Vcc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[24] The positive power supply. This pin is not
+emulated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>GND</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Pin</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>[12] The ground. This pin is not emulated.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>An emulation of the 2332 4k x 8-bit ROM.</p>
+<p>This, along with the similar 2364, is far and away the simplest
+memory chip in the Commodore 64. With its full complement of address
+pins and full 8 data pins, there is no need to use multiple chips or
+to multiplex addresses.</p>
+<p>Timing of the read cycle (there is, of course, no write cycle in a
+read-only memory chip) is done with a pair of active-low chip select
+pins, <code>_CS1</code> and <code>_CS2</code>. When both are low, the chip reads its
+address pins and makes the value at that location available on its
+data pins. In the C64, <code>_CS2</code> is tied to ground, meaning <code>CS1</code> is the
+only pin that needs to be manipulated.</p>
+<p>The chip comes in a 24-pin dual in-line package with the following
+pin assignments.</p>
+<pre class="prettyprint source lang-txt"><code>        +---+--+---+
+     A7 |1  +--+ 24| Vcc
+     A6 |2       23| A8
+     A5 |3       22| A9
+     A4 |4       21| _CS2
+     A3 |5       20| _CS1
+     A2 |6       19| A10
+     A1 |7  2332 18| A11
+     A0 |8       17| D7
+     D0 |9       16| D6
+     D1 |10      15| D5
+     D2 |11      14| D4
+    GND |12      13| D3
+        +----------+
+</code></pre>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
+<p>In the Commodore 64, U5 is a 2332A (a variant with slightly faster
+data access). It's used to store information on how to display
+characters to the screen.</p>
+<p>This chip is produced by calling the
+<code><a href="module-chips.html#.Ic2332">Ic2332</a></code> function.</p>
 </div>
 
 
@@ -1127,7 +1810,7 @@ pin assignments.</p>
     Vss |7        8| A3
         +----------+
 </code></pre>
-<p><em>(Vdd and Vss are power supply pins and are not emulated.)</em></p>
+<p><em>(<code>Vdd</code> and <code>Vss</code> are power supply pins and are not emulated.)</em></p>
 <p>This chip is unusual in that it's the only analog chip in the system
 as emulated (with the exception of the filter portion of the
 6581). Even so, it works fine for switching digital
@@ -2124,8 +2807,8 @@ pin assignments.</p>
     GND |7        8| Y4
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U8 is a 7406. It's responsible for inverting
 logic signals that are expected in the inverse they're given, such as
 the 6567's <code>AEC</code> signal being turned into the inverse <code>_AEC</code> signal
@@ -2594,8 +3277,8 @@ pin assignments.</p>
     GND |7        8| Y3
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U27 is a 74LS08 (a lower-power, faster variant
 whose emulation is the same). It's used for combining control signals
 from various sources, such as the <code>BA</code> signal from the
@@ -3160,8 +3843,8 @@ pin assignments.</p>
     GND |8        9| _Y23
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U15 is a 74LS139 (a lower-power, faster variant
 whose emulation is the same). Its two demultiplexers are chained
 together to provide additional address decoding when the PLA's <code>_IO</code>
@@ -3707,8 +4390,8 @@ pin assignments.</p>
     GND |8        9| Y3
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, both U13 and U25 are 74LS257 chips (a
 lower-power, faster variant whose emulation is the same). They are
 used together to multiplex the CPU's 16 address lines into the 8
@@ -4254,8 +4937,8 @@ pin assignments.</p>
     GND |8        9| _Y3
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U14 is a 74LS258 (a lower-power, faster variant
 whose emulation is the same). It's used to multiplex the upper two
 lines of the multiplexed address bus from the <code>A6</code> and <code>A7</code> lines
@@ -4886,8 +5569,8 @@ pin assignments.</p>
     GND |10      11| LE
         +----------+
 </code></pre>
-<p><em>(GND and Vcc are ground and power supply pins respectively, and they
-are not emulated.)</em></p>
+<p><em>(<code>GND</code> and <code>Vcc</code> are ground and power supply pins respectively, and
+they are not emulated.)</em></p>
 <p>In the Commodore 64, U26 is a 74LS373 (a lower-power, faster variant
 whose emulation is the same). It's used to connect the multiplexed
 address bus to the lower 8 bits of the main address bus. It latches
