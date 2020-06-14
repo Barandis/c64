@@ -478,21 +478,21 @@
  *     one bit at a time, clocked either by Timer A (if sending) or the
  *     `CNT` pin (if receiving).
  * @property {Pin} PA0 [2] Parallel port A pin 0.
- * @property {Pin} PA0 [3] Parallel port A pin 1.
- * @property {Pin} PA0 [4] Parallel port A pin 2.
- * @property {Pin} PA0 [5] Parallel port A pin 3.
- * @property {Pin} PA0 [6] Parallel port A pin 4.
- * @property {Pin} PA0 [7] Parallel port A pin 5.
- * @property {Pin} PA0 [8] Parallel port A pin 6.
- * @property {Pin} PA0 [9] Parallel port A pin 7.
- * @property {Pin} PA0 [10] Parallel port B pin 0.
- * @property {Pin} PA0 [11] Parallel port B pin 1.
- * @property {Pin} PA0 [12] Parallel port B pin 2.
- * @property {Pin} PA0 [13] Parallel port B pin 3.
- * @property {Pin} PA0 [14] Parallel port B pin 4.
- * @property {Pin} PA0 [15] Parallel port B pin 5.
- * @property {Pin} PA0 [16] Parallel port B pin 6.
- * @property {Pin} PA0 [17] Parallel port B pin 7.
+ * @property {Pin} PA1 [3] Parallel port A pin 1.
+ * @property {Pin} PA2 [4] Parallel port A pin 2.
+ * @property {Pin} PA3 [5] Parallel port A pin 3.
+ * @property {Pin} PA4 [6] Parallel port A pin 4.
+ * @property {Pin} PA5 [7] Parallel port A pin 5.
+ * @property {Pin} PA6 [8] Parallel port A pin 6.
+ * @property {Pin} PA7 [9] Parallel port A pin 7.
+ * @property {Pin} PB0 [10] Parallel port B pin 0.
+ * @property {Pin} PB1 [11] Parallel port B pin 1.
+ * @property {Pin} PB2 [12] Parallel port B pin 2.
+ * @property {Pin} PB3 [13] Parallel port B pin 3.
+ * @property {Pin} PB4 [14] Parallel port B pin 4.
+ * @property {Pin} PB5 [15] Parallel port B pin 5.
+ * @property {Pin} PB6 [16] Parallel port B pin 6.
+ * @property {Pin} PB7 [17] Parallel port B pin 7.
  * @property {Pin} A0 [38] Register address pin 0.
  * @property {Pin} A1 [37] Register address pin 1.
  * @property {Pin} A2 [36] Register address pin 2.
