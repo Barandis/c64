@@ -5,8 +5,7 @@
 
 import { assert } from "test/helper"
 import {
-  CIASDR, TIMALO, TIMAHI, CIACRA, CRA_LOAD, CRA_SP, CRA_START, CIAICR, ICR_SP,
-  ICR_IR,
+  SDR, TALO, TAHI, CRA, LOAD, SPMODE, START, ICR, SP, IR,
 } from "chips/ic-6526/constants"
 import { bitSet, bitClear, range } from "utils"
 
@@ -19,12 +18,12 @@ export function spInput({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(readRegister(CIASDR) === 0x2f)
+  assert(readRegister(SDR) === 0x2f)
 }
 
 export function spInputWrite({ tr, writeRegister, readRegister }) {
   const data = 0x2f
-  writeRegister(CIASDR, 0xa9)
+  writeRegister(SDR, 0xa9)
 
   for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
@@ -32,17 +31,17 @@ export function spInputWrite({ tr, writeRegister, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(readRegister(CIASDR) === 0x2f)
+  assert(readRegister(SDR) === 0x2f)
 }
 
 export function spOutput({ tr, writeRegister }) {
   const data = 0xaf
 
-  writeRegister(TIMALO, 2)
-  writeRegister(TIMAHI, 0)
-  writeRegister(CIACRA, 1 << CRA_SP | 1 << CRA_LOAD | 1 << CRA_START)
+  writeRegister(TALO, 2)
+  writeRegister(TAHI, 0)
+  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
 
-  writeRegister(CIASDR, data)
+  writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
   tr.φ2.set()
@@ -74,11 +73,11 @@ export function spOutput({ tr, writeRegister }) {
 export function spReady({ tr, writeRegister }) {
   const data = 0xaf
 
-  writeRegister(TIMALO, 2)
-  writeRegister(TIMAHI, 0)
-  writeRegister(CIACRA, 1 << CRA_SP | 1 << CRA_LOAD | 1 << CRA_START)
+  writeRegister(TALO, 2)
+  writeRegister(TAHI, 0)
+  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
 
-  writeRegister(CIASDR, 0x00)
+  writeRegister(SDR, 0x00)
 
   // Initial clock, before first timer underflow
   tr.φ2.set()
@@ -89,7 +88,7 @@ export function spReady({ tr, writeRegister }) {
   // Dropping a new value into the SDR as the old one is being
   // transmitted; this one will automatically begin when the first one
   // finishes
-  writeRegister(CIASDR, data)
+  writeRegister(SDR, data)
 
   // pulse clock 32 times to shift out 8 bits from first value
   for (const _ of range(32)) {
@@ -128,19 +127,19 @@ export function spIrqRxDefault({ tr, readRegister }) {
   }
 
   assert(!tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_SP))
-  assert(bitClear(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, SP))
+  assert(bitClear(icr, IR))
 }
 
 export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   const data = 0xaf
 
-  writeRegister(TIMALO, 2)
-  writeRegister(TIMAHI, 0)
-  writeRegister(CIACRA, 1 << CRA_SP | 1 << CRA_LOAD | 1 << CRA_START)
+  writeRegister(TALO, 2)
+  writeRegister(TAHI, 0)
+  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
 
-  writeRegister(CIASDR, data)
+  writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
   tr.φ2.set()
@@ -154,14 +153,14 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   }
 
   assert(!tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_SP))
-  assert(bitClear(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, SP))
+  assert(bitClear(icr, IR))
 }
 
 export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
   const data = 0x2f
-  writeRegister(CIAICR, 1 << ICR_IR | 1 << ICR_SP)
+  writeRegister(ICR, 1 << IR | 1 << SP)
 
   for (const i of range(7, 0, true)) {
     tr.SP.level = data >> i & 1
@@ -170,20 +169,20 @@ export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
   }
 
   assert(tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_SP))
-  assert(bitSet(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, SP))
+  assert(bitSet(icr, IR))
 }
 
 export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   const data = 0xaf
-  writeRegister(CIAICR, 1 << ICR_IR | 1 << ICR_SP)
+  writeRegister(ICR, 1 << IR | 1 << SP)
 
-  writeRegister(TIMALO, 2)
-  writeRegister(TIMAHI, 0)
-  writeRegister(CIACRA, 1 << CRA_SP | 1 << CRA_LOAD | 1 << CRA_START)
+  writeRegister(TALO, 2)
+  writeRegister(TAHI, 0)
+  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
 
-  writeRegister(CIASDR, data)
+  writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
   tr.φ2.set()
@@ -197,7 +196,7 @@ export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   }
 
   assert(tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_SP))
-  assert(bitSet(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, SP))
+  assert(bitSet(icr, IR))
 }

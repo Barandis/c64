@@ -28,7 +28,7 @@ import {
 import { reset, flagFlagReset, flagDefault, flagFlagSet } from "./ic-6526/misc"
 
 import { Ic6526 } from "chips"
-import { valueToPins, pinsToValue } from "utils"
+import { valueToPins, pinsToValue, range } from "utils"
 import { deviceTraces } from "test/helper"
 
 describe("6526 CIA", () => {
@@ -43,10 +43,10 @@ describe("6526 CIA", () => {
     chip = Ic6526()
     tr = deviceTraces(chip)
 
-    addrTraces = [tr.RS0, tr.RS1, tr.RS2, tr.RS3]
-    dataTraces = [tr.D0, tr.D1, tr.D2, tr.D3, tr.D4, tr.D5, tr.D6, tr.D7]
-    paTraces = [tr.PA0, tr.PA1, tr.PA2, tr.PA3, tr.PA4, tr.PA5, tr.PA6, tr.PA7]
-    pbTraces = [tr.PB0, tr.PB1, tr.PB2, tr.PB3, tr.PB4, tr.PB5, tr.PB6, tr.PB7]
+    addrTraces = [...range(4)].map(i => tr[`A${i}`])
+    dataTraces = [...range(8)].map(i => tr[`D${i}`])
+    paTraces = [...range(8)].map(i => tr[`PA${i}`])
+    pbTraces = [...range(8)].map(i => tr[`PB${i}`])
 
     tr.R__W.set()
     tr._CS.set()

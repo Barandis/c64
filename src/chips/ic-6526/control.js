@@ -4,8 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import {
-  CIAICR, ICR_SC, CIACRA, CRA_LOAD, CRA_PBON, CIDDRA, TIMALO, TIMAHI, CRA_SP,
-  CIACRB, CRB_LOAD, CRB_PBON, CIDDRB, TIMBLO, TIMBHI,
+  ICR, SC, CRA, LOAD, PBON, DDRA, TALO, TAHI, SPMODE, CRB, DDRB, TBLO, TBHI,
 } from "./constants"
 
 import { bitSet } from "utils"
@@ -37,18 +36,18 @@ export function control(chip, registers, latches) {
   // it needs it. Reading the register also resets the _IRQ pin.
 
   function readIcr() {
-    const result = registers[CIAICR]
-    registers[CIAICR] = 0
+    const result = registers[ICR]
+    registers[ICR] = 0
     chip._IRQ.float()
     return result
   }
 
   function writeIcr(value) {
     const mask = value & 0x1f
-    if (bitSet(value, ICR_SC)) {
-      latches[CIAICR] |= mask
+    if (bitSet(value, SC)) {
+      latches[ICR] |= mask
     } else {
-      latches[CIAICR] &= ~mask
+      latches[ICR] &= ~mask
     }
   }
 
@@ -60,28 +59,28 @@ export function control(chip, registers, latches) {
 
   function writeCra(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CIACRA] = value & ~(1 << CRA_LOAD)
+    registers[CRA] = value & ~(1 << LOAD)
 
     // If bit 1 is set, PB6 becomes an output for Timer A, otherwise bit
     // 6 of the DDR controls it
-    if (bitSet(value, CRA_PBON)) {
+    if (bitSet(value, PBON)) {
       chip.PB6.mode = OUTPUT
       chip.PB6.level = 0
     } else {
-      chip.PB6.mode = bitSet(registers[CIDDRA], 6) ? OUTPUT : INPUT
+      chip.PB6.mode = bitSet(registers[DDRA], 6) ? OUTPUT : INPUT
     }
 
     // If bit 4 is set, the contents of the timer latch are forced into
     // the timer register immediately (normally the latches are loaded
     // into the register on underflow)
-    if (bitSet(value, CRA_LOAD)) {
-      registers[TIMALO] = latches[TIMALO]
-      registers[TIMAHI] = latches[TIMAHI]
+    if (bitSet(value, LOAD)) {
+      registers[TALO] = latches[TALO]
+      registers[TAHI] = latches[TAHI]
     }
 
     // If bit 6 is set, SP is set to output. Since CNT is then used to
     // signal new data, it must also be set to output.
-    if (bitSet(value, CRA_SP)) {
+    if (bitSet(value, SPMODE)) {
       chip.SP.mode = OUTPUT
       chip.CNT.mode = OUTPUT
       chip.SP.level = 0
@@ -94,23 +93,23 @@ export function control(chip, registers, latches) {
 
   function writeCrb(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CIACRB] = value & ~(1 << CRB_LOAD)
+    registers[CRB] = value & ~(1 << LOAD)
 
     // If bit 1 is set, PB7 becomes an output for Timer B, otherwise bit
     // 6 of the DDR controls it
-    if (bitSet(value, CRB_PBON)) {
+    if (bitSet(value, PBON)) {
       chip.PB7.mode = OUTPUT
       chip.PB7.level = 0
     } else {
-      chip.PB7.mode = bitSet(registers[CIDDRB], 7) ? OUTPUT : INPUT
+      chip.PB7.mode = bitSet(registers[DDRB], 7) ? OUTPUT : INPUT
     }
 
     // If bit 4 is set, the contents of the timer latch are forced into
     // the timer register immediately (normally the latches are loaded
     // into the register on underflow)
-    if (bitSet(value, CRB_LOAD)) {
-      registers[TIMBLO] = latches[TIMBLO]
-      registers[TIMBHI] = latches[TIMBHI]
+    if (bitSet(value, LOAD)) {
+      registers[TBLO] = latches[TBLO]
+      registers[TBHI] = latches[TBHI]
     }
   }
 

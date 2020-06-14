@@ -4,9 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import {
-  CIACRA, CIACRB, CRA_START, CRA_IN, CRB_START, CRB_IN0, CRB_IN1, CRA_PBON,
-  CRA_OUT, CRB_PBON, CRB_OUT, TIMALO, TIMAHI, TIMBLO, TIMBHI, CIAICR, ICR_TA,
-  CRA_RUN, ICR_TB, CRB_RUN, CRA_SP, CIASDR, ICR_SP, ICR_IR,
+  CRA, CRB, START, INMODE, INMODE0, INMODE1, PBON, OUTMODE, TALO, TAHI, TBLO,
+  TBHI, ICR, TA, RUNMODE, TB, SPMODE, SDR, SP, IR,
 } from "./constants"
 
 import { bitSet, bitClear, setBit, clearBit } from "utils"
@@ -30,28 +29,28 @@ export function timers(chip, registers, latches) {
 
   chip.φ2.addListener(pin => {
     if (pin.high) {
-      const cra = registers[CIACRA]
-      const crb = registers[CIACRB]
+      const cra = registers[CRA]
+      const crb = registers[CRB]
 
       // Reset PB6 if on and output mode = pulse
-      if (bitSet(cra, CRA_PBON) && bitClear(cra, CRA_OUT)) {
+      if (bitSet(cra, PBON) && bitClear(cra, OUTMODE)) {
         chip.PB6.clear()
       }
       // Reset PB7 if on and output mode = pulse
-      if (bitSet(crb, CRB_PBON) && bitClear(crb, CRB_OUT)) {
+      if (bitSet(crb, PBON) && bitClear(crb, OUTMODE)) {
         chip.PB7.clear()
       }
 
       // Decrement Timer A if its input is clock pulses and timer is
       // started
-      if (bitSet(cra, CRA_START) && bitClear(cra, CRA_IN)) {
+      if (bitSet(cra, START) && bitClear(cra, INMODE)) {
         decrementTimerA()
       }
       // Decrement Timer B if its input is clock pulses and timer is
       // started
-      if (bitSet(crb, CRB_START)
-          && bitClear(crb, CRB_IN0)
-          && bitClear(crb, CRB_IN1)) {
+      if (bitSet(crb, START)
+          && bitClear(crb, INMODE0)
+          && bitClear(crb, INMODE1)) {
         decrementTimerB()
       }
     }
@@ -59,47 +58,47 @@ export function timers(chip, registers, latches) {
 
   chip.CNT.addListener(pin => {
     if (pin.high) {
-      const cra = registers[CIACRA]
-      const crb = registers[CIACRB]
+      const cra = registers[CRA]
+      const crb = registers[CRB]
 
       // Decrement Timer A if its input is CNT pulses
-      if (bitSet(cra, CRA_START) && bitSet(cra, CRA_IN)) {
+      if (bitSet(cra, START) && bitSet(cra, INMODE)) {
         decrementTimerA()
       }
       // Decrement Timer B if its input is CNT pulses
-      if (bitSet(crb, CRB_START)
-          && bitSet(crb, CRB_IN0)
-          && bitClear(crb, CRB_IN1)) {
+      if (bitSet(crb, START)
+          && bitSet(crb, INMODE0)
+          && bitClear(crb, INMODE1)) {
         decrementTimerB()
       }
     }
   })
 
   function decrementTimerA() {
-    registers[TIMALO]--
-    if (registers[TIMALO] === 0 && registers[TIMAHI] === 0) {
+    registers[TALO]--
+    if (registers[TALO] === 0 && registers[TAHI] === 0) {
       underflowTimerA()
-    } else if (registers[TIMALO] === 255) {
-      registers[TIMAHI]--
+    } else if (registers[TALO] === 255) {
+      registers[TAHI]--
     }
   }
 
   function decrementTimerB() {
-    registers[TIMBLO]--
-    if (registers[TIMBLO] === 0 && registers[TIMBHI] === 0) {
+    registers[TBLO]--
+    if (registers[TBLO] === 0 && registers[TBHI] === 0) {
       underflowTimerB()
-    } else if (registers[TIMBLO] === 255) {
-      registers[TIMBHI]--
+    } else if (registers[TBLO] === 255) {
+      registers[TBHI]--
     }
   }
 
   function underflowTimerA() {
-    const cra = registers[CIACRA]
-    const crb = registers[CIACRB]
+    const cra = registers[CRA]
+    const crb = registers[CRB]
 
     // Set PB6 to appropriate level if on
-    if (bitSet(cra, CRA_PBON)) {
-      if (bitSet(cra, CRA_OUT)) {
+    if (bitSet(cra, PBON)) {
+      if (bitSet(cra, OUTMODE)) {
         chip.PB6.toggle()
       } else {
         chip.PB6.set()
@@ -107,41 +106,41 @@ export function timers(chip, registers, latches) {
     }
 
     // Decrement Timer B if CRB says so
-    if (bitSet(crb, CRB_IN1)) {
-      if (bitSet(crb, CRB_IN0) ? chip.CNT.high : true) {
+    if (bitSet(crb, INMODE1)) {
+      if (bitSet(crb, INMODE0) ? chip.CNT.high : true) {
         decrementTimerB()
       }
     }
 
     // Potentially send a bit out the serial port if it is set to output
     // mode and if the timer is set to run continuously
-    if (bitSet(cra, CRA_SP) && bitClear(cra, CRA_RUN)) {
+    if (bitSet(cra, SPMODE) && bitClear(cra, RUNMODE)) {
       handleSpOut()
     }
 
     // Set the ICR bit, and fire interrupt if the ICR says so
-    registers[CIAICR] = setBit(registers[CIAICR], ICR_TA)
-    if (bitSet(latches[CIAICR], ICR_TA)) {
-      registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
+    registers[ICR] = setBit(registers[ICR], TA)
+    if (bitSet(latches[ICR], TA)) {
+      registers[ICR] = setBit(registers[ICR], IR)
       chip._IRQ.clear()
     }
 
     // Reset value to that in latch
-    registers[TIMALO] = latches[TIMALO]
-    registers[TIMAHI] = latches[TIMAHI]
+    registers[TALO] = latches[TALO]
+    registers[TAHI] = latches[TAHI]
 
     // Clear start bit if in one-shot mode
-    if (bitSet(cra, CRA_RUN)) {
-      registers[CIACRA] = clearBit(registers[CIACRA], CRA_START)
+    if (bitSet(cra, RUNMODE)) {
+      registers[CRA] = clearBit(registers[CRA], START)
     }
   }
 
   function underflowTimerB() {
-    const crb = registers[CIACRB]
+    const crb = registers[CRB]
 
     // Set PB7 to appropriate value if on
-    if (bitSet(crb, CRB_PBON)) {
-      if (bitSet(crb, CRB_OUT)) {
+    if (bitSet(crb, PBON)) {
+      if (bitSet(crb, OUTMODE)) {
         chip.PB7.toggle()
       } else {
         chip.PB7.set()
@@ -149,19 +148,19 @@ export function timers(chip, registers, latches) {
     }
 
     // Set the interrupt bit, and fire interrupt if the ICR says so
-    registers[CIAICR] = setBit(registers[CIAICR], ICR_TB)
-    if (bitSet(latches[CIAICR], ICR_TB)) {
-      registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
+    registers[ICR] = setBit(registers[ICR], TB)
+    if (bitSet(latches[ICR], TB)) {
+      registers[ICR] = setBit(registers[ICR], IR)
       chip._IRQ.clear()
     }
 
     // Reset value to that in latch
-    registers[TIMBLO] = latches[TIMBLO]
-    registers[TIMBHI] = latches[TIMBHI]
+    registers[TBLO] = latches[TBLO]
+    registers[TBHI] = latches[TBHI]
 
     // Clear start bit if in one-shot mode
-    if (bitSet(crb, CRB_RUN)) {
-      registers[CIACRB] = clearBit(registers[CIACRB], CRB_START)
+    if (bitSet(crb, RUNMODE)) {
+      registers[CRB] = clearBit(registers[CRB], START)
     }
   }
 
@@ -208,7 +207,7 @@ export function timers(chip, registers, latches) {
   chip.CNT.addListener(pin => {
     // Only do anything if CNT is transitioning high and the serial port
     // is set to input
-    if (pin.high && bitClear(registers[CIACRA], CRA_SP)) {
+    if (pin.high && bitClear(registers[CRA], SPMODE)) {
       if (bit === 0) {
         bit = 8
       }
@@ -219,11 +218,11 @@ export function timers(chip, registers, latches) {
       // If the last bit of the byte has been read, push the byte to the
       // SP register and, if the ICR says so, fire off an IRQ
       if (bit === 0) {
-        registers[CIASDR] = shift
+        registers[SDR] = shift
         shift = 0
-        registers[CIAICR] = setBit(registers[CIAICR], ICR_SP)
-        if (bitSet(latches[CIAICR], ICR_SP)) {
-          registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
+        registers[ICR] = setBit(registers[ICR], SP)
+        if (bitSet(latches[ICR], SP)) {
+          registers[ICR] = setBit(registers[ICR], IR)
           chip._IRQ.clear()
         }
       }
@@ -253,7 +252,7 @@ export function timers(chip, registers, latches) {
             // If there is a new value ready to be loaded into the shift
             // register, do it
             ready = false
-            shift = registers[CIASDR]
+            shift = registers[SDR]
           } else {
             // Otherwise clear the shift register and record that there
             // is nothing new to send
@@ -263,9 +262,9 @@ export function timers(chip, registers, latches) {
 
           // Set the interrupt bit and then fire off an interrupt if the
           // ICR says to
-          registers[CIAICR] = setBit(registers[CIAICR], ICR_SP)
-          if (bitSet(latches[CIAICR], ICR_SP)) {
-            registers[CIAICR] = setBit(registers[CIAICR], ICR_IR)
+          registers[ICR] = setBit(registers[ICR], SP)
+          if (bitSet(latches[ICR], SP)) {
+            registers[ICR] = setBit(registers[ICR], IR)
             chip._IRQ.clear()
           }
         }
@@ -275,11 +274,11 @@ export function timers(chip, registers, latches) {
   }
 
   function writeSdr(value) {
-    registers[CIASDR] = value
+    registers[SDR] = value
     // If the serial port is configured to send (i.e., if it's set to
     // output mode and if Timer A is set to continuous mode)
-    if (bitSet(registers[CIACRA], CRA_SP)
-        && bitClear(registers[CIACRA], CRA_RUN)) {
+    if (bitSet(registers[CRA], SPMODE)
+        && bitClear(registers[CRA], RUNMODE)) {
       if (done) {
         done = false
         shift = value

@@ -5,9 +5,7 @@
 
 import { rand, assert } from "test/helper"
 import { INPUT, OUTPUT } from "components"
-import {
-  TIMBHI, TIMALO, CIAICR, ICR_FLG, ICR_IR, ICR_SC, CIAPRB,
-} from "chips/ic-6526/constants"
+import { TBHI, TALO, ICR, FLG, IR, SC, PRB } from "chips/ic-6526/constants"
 import { bitSet, bitClear, range } from "utils"
 
 export function reset({ chip, tr, writeRegister, readRegister }) {
@@ -18,7 +16,7 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   tr._RES.set()
   for (const i of range(16)) {
     assert(
-      readRegister(i) === (i <= CIAPRB || i >= TIMALO && i <= TIMBHI ? 255 : 0)
+      readRegister(i) === (i <= PRB || i >= TALO && i <= TBHI ? 255 : 0)
     )
   }
   assert(chip.CNT.mode === INPUT)
@@ -33,28 +31,28 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
 export function flagDefault({ tr, readRegister }) {
   tr._FLAG.clear()
   assert(!tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_FLG))
-  assert(bitClear(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, FLG))
+  assert(bitClear(icr, IR))
 }
 
 export function flagFlagSet({ tr, readRegister, writeRegister }) {
-  writeRegister(CIAICR, 1 << ICR_SC | 1 << ICR_FLG)
+  writeRegister(ICR, 1 << SC | 1 << FLG)
 
   tr._FLAG.clear()
   assert(tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_FLG))
-  assert(bitSet(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, FLG))
+  assert(bitSet(icr, IR))
 }
 
 export function flagFlagReset({ tr, readRegister, writeRegister }) {
-  writeRegister(CIAICR, 1 << ICR_SC | 1 << ICR_FLG)
-  writeRegister(CIAICR, 1 << ICR_FLG)
+  writeRegister(ICR, 1 << SC | 1 << FLG)
+  writeRegister(ICR, 1 << FLG)
 
   tr._FLAG.clear()
   assert(!tr._IRQ.low)
-  const icr = readRegister(CIAICR)
-  assert(bitSet(icr, ICR_FLG))
-  assert(bitClear(icr, ICR_IR))
+  const icr = readRegister(ICR)
+  assert(bitSet(icr, FLG))
+  assert(bitClear(icr, IR))
 }

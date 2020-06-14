@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import {
-  CIAPRA, CIAPRB, CIDDRA, CIACRA, CRA_PBON, CIDDRB, CIACRB, CRB_PBON,
-} from "./constants"
+import { PRA, PRB, DDRA, CRA, PBON, DDRB, CRB } from "./constants"
 
 import { setBit, clearBit, bitSet, range } from "utils"
 import { OUTPUT, INPUT } from "components"
@@ -18,7 +16,7 @@ export function ports(chip, registers) {
   // it fires off a listener that changes the data in the register as
   // well. Similarly, when data is pushed into a register, the output
   // pins associated with the register are changed to reflect that new
-  // state. In other words, the contents of CIAPRA and CIAPRB are kept
+  // state. In other words, the contents of PRA and PRB are kept
   // synched with PA0...PA7 and PB0...PB7, respectively.
   //
   // Because of this, nothing special has to be done when reading a data
@@ -81,8 +79,8 @@ export function ports(chip, registers) {
     }
   }
   for (const i of range(8)) {
-    chip[`PA${i}`].addListener(portListener(CIAPRA, i))
-    chip[`PB${i}`].addListener(portListener(CIAPRB, i))
+    chip[`PA${i}`].addListener(portListener(PRA, i))
+    chip[`PB${i}`].addListener(portListener(PRB, i))
   }
 
   // The write functions have to set the values in the registers but
@@ -92,17 +90,17 @@ export function ports(chip, registers) {
   // pins by the control registers - are not modified one way or the
   // other.
   function writePra(value) {
-    const mask = registers[CIDDRA]
-    registers[CIAPRA] = registers[CIAPRA] & ~mask | value & mask
+    const mask = registers[DDRA]
+    registers[PRA] = registers[PRA] & ~mask | value & mask
     setPortPins(value, mask, paPins)
   }
 
   function writePrb(value) {
     const mask
-      = registers[CIDDRB]
-      & (bitSet(registers[CIACRB], CRB_PBON) ? 0x7f : 0xff)
-      & (bitSet(registers[CIACRA], CRA_PBON) ? 0xbf : 0xff)
-    registers[CIAPRB] = registers[CIAPRB] & ~mask | value & mask
+      = registers[DDRB]
+      & (bitSet(registers[CRB], PBON) ? 0x7f : 0xff)
+      & (bitSet(registers[CRA], PBON) ? 0xbf : 0xff)
+    registers[PRB] = registers[PRB] & ~mask | value & mask
     setPortPins(value, mask, pbPins)
     chip._PC.clear()
   }
@@ -111,7 +109,7 @@ export function ports(chip, registers) {
   // reading the register lowers the _PC pin for a cycle.
   function readPrb() {
     chip._PC.clear()
-    return registers[CIAPRB]
+    return registers[PRB]
   }
 
   function setPortPins(value, mask, pins) {
@@ -144,19 +142,19 @@ export function ports(chip, registers) {
   // one of the timers.
 
   function writeDdra(value) {
-    registers[CIDDRA] = value
+    registers[DDRA] = value
     for (const bit of range(8)) {
       chip[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
     }
   }
 
   function writeDdrb(value) {
-    registers[CIDDRB] = value
+    registers[DDRB] = value
     for (const bit of range(8)) {
       if (
         !(
-          bit === 6 && bitSet(registers[CIACRA], CRA_PBON)
-          || bit === 7 && bitSet(registers[CIACRB], CRB_PBON)
+          bit === 6 && bitSet(registers[CRA], PBON)
+          || bit === 7 && bitSet(registers[CRB], PBON)
         )
       ) {
         chip[`PB${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT

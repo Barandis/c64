@@ -85,10 +85,10 @@ function FullBus(
   // full bus's A12...A15. Thus, when the VIC is active and the CPU is
   // not connected to the bus, there is nothing driving those four
   // lines.
-  const A0 = Trace(U7.A0, U1.RS0, U2.RS0, U18.A0)
-  const A1 = Trace(U7.A1, U1.RS1, U2.RS1, U18.A1)
-  const A2 = Trace(U7.A2, U1.RS2, U2.RS2, U18.A2)
-  const A3 = Trace(U7.A3, U1.RS3, U2.RS3, U18.A3)
+  const A0 = Trace(U7.A0, U1.A0, U2.A0, U18.A0)
+  const A1 = Trace(U7.A1, U1.A1, U2.A1, U18.A1)
+  const A2 = Trace(U7.A2, U1.A2, U2.A2, U18.A2)
+  const A3 = Trace(U7.A3, U1.A3, U2.A3, U18.A3)
   const A4 = Trace(U7.A4, U18.A4)
   const A5 = Trace(U7.A5)
   const A6 = Trace(U7.A6)
