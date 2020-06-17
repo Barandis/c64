@@ -66,8 +66,8 @@ export function Ic6581() {
     Pin(4, "CAP2B"),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(25, "VCC"),
-    Pin(28, "VDD"),
+    Pin(25, "Vcc"),
+    Pin(28, "Vdd"),
     Pin(14, "GND"),
   )
 

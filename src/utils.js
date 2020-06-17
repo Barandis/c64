@@ -72,6 +72,10 @@ export function bitClear(value, bit) {
   return (value & 1 << bit) === 0
 }
 
+export function bitValue(value, bit) {
+  return (value & 1 << bit) >> bit
+}
+
 export function setBit(value, bit) {
   return value | 1 << bit
 }
@@ -82,6 +86,10 @@ export function clearBit(value, bit) {
 
 export function toggleBit(value, bit) {
   return value ^ 1 << bit
+}
+
+export function word(lobyte, hibyte) {
+  return lobyte + 256 * hibyte
 }
 
 export function *range(start, end, step, inclusive) {
