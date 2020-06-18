@@ -17,12 +17,29 @@
   <div id="triangle"></div>
   <div id="pulse"></div>
   <div id="noise"></div>
+  <div id="pulse1000"></div>
+  <div id="pulse2000"></div>
+  <div id="pulse3000"></div>
+  <div id="pulse4000"></div>
+  <div id="sawtri"></div>
+  <div id="sawpul"></div>
+  <div id="tripul"></div>
+  <div id="sync"></div>
+  <div id="ring"></div>
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="./sawtooth.js"></script>
   <script src="./triangle.js"></script>
   <script src="./pulse.js"></script>
   <script src="./noise.js"></script>
+  <script src="./pulse1000.js"></script>
+  <script src="./pulse2000.js"></script>
+  <script src="./pulse3000.js"></script>
+  <script src="./sawtri.js"></script>
+  <script src="./sawpul.js"></script>
+  <script src="./tripul.js"></script>
+  <script src="./sync.js"></script>
+  <script src="./ring.js"></script>
   <script>
     function* range(start, end, step, inclusive) {
       const s = typeof end === "number" ? start : 0
@@ -57,31 +74,75 @@
       x: [...range(500)],
       y: sawtooth,
       mode: "lines",
-      name: "Sawtooth"
     }
     const tri = {
       x: [...range(500)],
       y: triangle,
       mode: "lines",
-      name: "Triangle"
     }
     const pul = {
       x: [...range(500)],
       y: pulse,
       mode: "lines",
-      name: "Pulse"
     }
     const noi = {
       x: [...range(500)],
       y: noise,
       mode: "lines",
-      name: "Noise"
+    }
+    const pul1k = {
+      x: [...range(500)],
+      y: pulse1000,
+      mode: "lines",
+    }
+    const pul2k = {
+      x: [...range(500)],
+      y: pulse2000,
+      mode: "lines",
+    }
+    const pul3k = {
+      x: [...range(500)],
+      y: pulse3000,
+      mode: "lines",
+    }
+    const spt = {
+      x: [...range(500)],
+      y: sawtri,
+      mode: "lines",
+    }
+    const spp = {
+      x: [...range(500)],
+      y: sawpul,
+      mode: "lines",
+    }
+    const tpp = {
+      x: [...range(500)],
+      y: tripul,
+      mode: "lines",
+    }
+    const syn = {
+      x: [...range(500)],
+      y: sync,
+      mode: "lines",
+    }
+    const rin = {
+      x: [...range(500)],
+      y: ring,
+      mode: "lines",
     }
 
     Plotly.newPlot("sawtooth", [saw], { title: "Sawtooth" })
     Plotly.newPlot("triangle", [tri], { title: "Triangle" })
-    Plotly.newPlot("pulse", [pul], { title: "Pulse" })
+    Plotly.newPlot("pulse", [pul], { title: "Pulse (width = 2048)" })
     Plotly.newPlot("noise", [noi], { title: "Noise" })
+    Plotly.newPlot("pulse1000", [pul1k], { title: "Pulse (width = 1000)" })
+    Plotly.newPlot("pulse2000", [pul2k], { title: "Pulse (width = 2000)" })
+    Plotly.newPlot("pulse3000", [pul3k], { title: "Pulse (width = 3000)" })
+    Plotly.newPlot("sawtri", [spt], { title: "Sawtooth + Triangle" })
+    Plotly.newPlot("sawpul", [spp], { title: "Sawtooth + Pulse", yaxis: { autorange: false, range: [0, 4095] } })
+    Plotly.newPlot("tripul", [tpp], { title: "Triangle + Pulse" })
+    Plotly.newPlot("sync", [syn], { title: "Sawtooth synched with C4" })
+    Plotly.newPlot("ring", [rin], { title: "Triangle ring modulated with C4" })
   </script>
 </body>
 

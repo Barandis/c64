@@ -24,7 +24,7 @@ export function WaveformGenerator(chip, base, readRegister) {
   let prevMsb = false
   let lastClock = false
 
-  let sync = null
+  let syncOsc = null
 
   function top12() {
     return acc >> 12 & 0xfff
@@ -35,7 +35,7 @@ export function WaveformGenerator(chip, base, readRegister) {
       const ctrl = readRegister(VCREG)
       const test = bitSet(ctrl, TEST)
       const sync = bitSet(ctrl, SYNC)
-      const currMsb = bitSet(sync.acc, ACC_MSB)
+      const currMsb = bitSet(syncOsc.acc, ACC_MSB)
       const reset = test || sync && currMsb && !prevMsb
       prevMsb = currMsb
 
@@ -77,7 +77,7 @@ export function WaveformGenerator(chip, base, readRegister) {
   function triangle() {
     const ring = bitSet(readRegister(VCREG), RING)
     const msb = bitSet(acc, ACC_MSB)
-    const syncMsb = bitSet(sync.acc, ACC_MSB)
+    const syncMsb = bitSet(syncOsc.acc, ACC_MSB)
     // logical XOR of (!syncMsb & ring) and msb
     const xor = (!syncMsb && ring ? !msb : msb) ? 0x7ff : 0x000
 
@@ -87,7 +87,7 @@ export function WaveformGenerator(chip, base, readRegister) {
   function pulse() {
     const test = bitSet(readRegister(VCREG), TEST)
     const pulseWidth = word(readRegister(PWLO), readRegister(PWHI))
-    return test || top12() > pulseWidth ? 0xfff : 0x000
+    return test || top12() < pulseWidth ? 0xfff : 0x000
   }
 
   function noise() {
@@ -120,7 +120,7 @@ export function WaveformGenerator(chip, base, readRegister) {
     },
 
     sync(wg) {
-      sync = wg
+      syncOsc = wg
       return this
     },
   }
