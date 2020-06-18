@@ -20,14 +20,14 @@ export function WaveformGenerator(chip, base, readRegister) {
   const VCREG = base + 4
 
   let acc = 0
-  let lfsr = 0x7fffff
+  let lfsr = 0x13579b
   let prevMsb = false
   let lastClock = false
 
   let sync = null
 
   function top12() {
-    return (acc & 0xfff000) >> 12
+    return acc >> 12 & 0xfff
   }
 
   function accumulate(pin) {
@@ -59,7 +59,7 @@ export function WaveformGenerator(chip, base, readRegister) {
         lfsr <<= 1
         lfsr |= bitValue(lfsr, LFSR_TAP_1)
             ^ (reset | test | bitValue(lfsr, LFSR_TAP_2))
-        lfsr &= 0x7ff
+        lfsr &= 0x7fffff
       }
       lastClock = clock
     }
@@ -102,10 +102,10 @@ export function WaveformGenerator(chip, base, readRegister) {
   }
 
   function output() {
-    const saw = bitSet(VCREG, SAWTOOTH) ? sawtooth() : 0xfff
-    const tri = bitSet(VCREG, TRIANGLE) ? triangle() : 0xfff
-    const pul = bitSet(VCREG, PULSE) ? pulse() : 0xfff
-    const noi = bitSet(VCREG, NOISE) ? noise() : 0xfff
+    const saw = bitSet(readRegister(VCREG), SAWTOOTH) ? sawtooth() : 0xfff
+    const tri = bitSet(readRegister(VCREG), TRIANGLE) ? triangle() : 0xfff
+    const pul = bitSet(readRegister(VCREG), PULSE) ? pulse() : 0xfff
+    const noi = bitSet(readRegister(VCREG), NOISE) ? noise() : 0xfff
 
     return saw & tri & pul & noi
   }
