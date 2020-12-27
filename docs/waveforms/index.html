@@ -14,9 +14,13 @@
 
 <body>
   <div id="sawtooth"></div>
+  <div id="sawtoothhigh"></div>
   <div id="triangle"></div>
+  <div id="trianglehigh"></div>
   <div id="pulse"></div>
+  <div id="pulsehigh"></div>
   <div id="noise"></div>
+  <div id="noisehigh"></div>
   <div id="pulse1000"></div>
   <div id="pulse2000"></div>
   <div id="pulse3000"></div>
@@ -29,9 +33,13 @@
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="./sawtooth.js"></script>
+  <script src="./sawtoothhigh.js"></script>
   <script src="./triangle.js"></script>
+  <script src="./trianglehigh.js"></script>
   <script src="./pulse.js"></script>
+  <script src="./pulsehigh.js"></script>
   <script src="./noise.js"></script>
+  <script src="./noisehigh.js"></script>
   <script src="./pulse1000.js"></script>
   <script src="./pulse2000.js"></script>
   <script src="./pulse3000.js"></script>
@@ -75,9 +83,19 @@
       y: sawtooth,
       mode: "lines",
     }
+    const shi = {
+      x: [...range(500)],
+      y: sawtoothhigh,
+      mode: "lines",
+    }
     const tri = {
       x: [...range(500)],
       y: triangle,
+      mode: "lines",
+    }
+    const thi = {
+      x: [...range(500)],
+      y: trianglehigh,
       mode: "lines",
     }
     const pul = {
@@ -85,9 +103,19 @@
       y: pulse,
       mode: "lines",
     }
+    const phi = {
+      x: [...range(500)],
+      y: pulsehigh,
+      mode: "lines",
+    }
     const noi = {
       x: [...range(500)],
       y: noise,
+      mode: "lines",
+    }
+    const nhi = {
+      x: [...range(500)],
+      y: noisehigh,
       mode: "lines",
     }
     const pul1k = {
@@ -132,9 +160,13 @@
     }
 
     Plotly.newPlot("sawtooth", [saw], { title: "Sawtooth" })
+    Plotly.newPlot("sawtoothhigh", [shi], { title: "Sawtooth (A7)" })
     Plotly.newPlot("triangle", [tri], { title: "Triangle" })
-    Plotly.newPlot("pulse", [pul], { title: "Pulse (width = 2048)" })
+    Plotly.newPlot("trianglehigh", [thi], { title: "Triangle (A7)" })
+    Plotly.newPlot("pulse", [pul], { title: "Pulse" })
+    Plotly.newPlot("pulsehigh", [phi], { title: "Pulse (A7)" })
     Plotly.newPlot("noise", [noi], { title: "Noise" })
+    Plotly.newPlot("noisehigh", [nhi], { title: "Noise (A7)" })
     Plotly.newPlot("pulse1000", [pul1k], { title: "Pulse (width = 1000)" })
     Plotly.newPlot("pulse2000", [pul2k], { title: "Pulse (width = 2000)" })
     Plotly.newPlot("pulse3000", [pul3k], { title: "Pulse (width = 3000)" })

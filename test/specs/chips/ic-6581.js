@@ -10,7 +10,9 @@ import { resolve } from "path"
 import { WaveformGenerator } from "chips/ic-6581/waveform"
 import { Ic6581 } from "chips/index"
 import { deviceTraces } from "test/helper"
-import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from "chips/ic-6581/constants"
+import {
+  SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING,
+} from "chips/ic-6581/constants"
 import { range } from "utils"
 
 function write(path, name, value) {
@@ -66,7 +68,7 @@ describe("6581 SID", () => {
       tr.R__W.set()
     })
 
-    describe.only("graph production", () => {
+    describe.skip("graph production", () => {
       it("produces a sawtooth waveform", () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
@@ -78,6 +80,17 @@ describe("6581 SID", () => {
         write(path, "sawtooth", values)
       })
 
+      it("produces a high-frequency sawtooth waveform", () => {
+        registers[0] = 0xb0
+        registers[1] = 0xe6
+        registers[4] = 1 << SAWTOOTH
+
+        const values = produceValues()
+
+        const path = "../../../docs/waveforms/sawtoothhigh.js"
+        write(path, "sawtoothhigh", values)
+      })
+
       it("produces a triangle waveform", () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
@@ -87,6 +100,17 @@ describe("6581 SID", () => {
 
         const path = "../../../docs/waveforms/triangle.js"
         write(path, "triangle", values)
+      })
+
+      it("produces a high-frequency triangle waveform", () => {
+        registers[0] = 0xb0
+        registers[1] = 0xe6
+        registers[4] = 1 << TRIANGLE
+
+        const values = produceValues()
+
+        const path = "../../../docs/waveforms/trianglehigh.js"
+        write(path, "trianglehigh", values)
       })
 
       it("produces a pulse waveform", () => {
@@ -102,6 +126,19 @@ describe("6581 SID", () => {
         write(path, "pulse", values)
       })
 
+      it("produces a pulse waveform", () => {
+        registers[0] = 0xb0
+        registers[1] = 0xe6
+        registers[2] = 0x00
+        registers[3] = 0x08
+        registers[4] = 1 << PULSE
+
+        const values = produceValues()
+
+        const path = "../../../docs/waveforms/pulsehigh.js"
+        write(path, "pulsehigh", values)
+      })
+
       it("produces a noise waveform", () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
@@ -111,6 +148,17 @@ describe("6581 SID", () => {
 
         const path = "../../../docs/waveforms/noise.js"
         write(path, "noise", values)
+      })
+
+      it("produces a higher-frequency noise waveform", () => {
+        registers[0] = 0xb0
+        registers[1] = 0xe6
+        registers[4] = 1 << NOISE
+
+        const values = produceValues()
+
+        const path = "../../../docs/waveforms/noisehigh.js"
+        write(path, "noisehigh", values)
       })
 
       for (const pw of range(1000, 3001, 1000)) {
