@@ -31,6 +31,7 @@ export default class Chip extends Array {
         this[pin.number] = pin
         Object.defineProperty(this, pin.name, {
           get: () => pin,
+          enumerable: true,
         })
       }
     }

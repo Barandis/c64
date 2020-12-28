@@ -27,6 +27,7 @@ export default class Port extends Array {
         this[pin.number] = pin
         Object.defineProperty(this, pin.name, {
           get: () => pin,
+          enumerable: true,
         })
       }
     }
