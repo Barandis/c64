@@ -3,14 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
 export function Ic6510() {
-  const chip = Chip(
+  const chip = new Chip(
     // Address bus pins A0...A15.
     new Pin(7, 'A0', OUTPUT),
     new Pin(8, 'A1', OUTPUT),

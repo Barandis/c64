@@ -3,14 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
 export function Ic6567() {
-  const chip = Chip(
+  const chip = new Chip(
     // Address pins. The VIC can address 16k of memory, though the lower
     // and upper 6 bits of the address bus are multiplexed. There are
     // duplicates here; A8, for example, is multiplexed with A0 on pin

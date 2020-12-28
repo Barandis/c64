@@ -113,7 +113,7 @@
  * @property {Pin} Vss [16] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { pinsToValue, range } from 'utils'
 
@@ -127,7 +127,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic4164() {
-  const chip = Chip(
+  const chip = new Chip(
     // The row address strobe. Setting this low latches the values of
     // A0-A7, saving them to be part of the address used to access the
     // memory array.

@@ -82,7 +82,7 @@
  * @property {Pin} Vss [7] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
@@ -96,7 +96,7 @@ const BIDIRECTIONAL = Pin.BIDIRECTIONAL
  * @memberof module:chips
  */
 function Ic4066() {
-  const chip = Chip(
+  const chip = new Chip(
     // I/O and control pins for switch 1
     new Pin(1, 'A1', BIDIRECTIONAL),
     new Pin(2, 'B1', BIDIRECTIONAL),

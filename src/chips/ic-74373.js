@@ -89,7 +89,7 @@
  * @property {Pin} GND [10] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
@@ -103,7 +103,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic74373() {
-  const chip = Chip(
+  const chip = new Chip(
     // Input pins.
     new Pin(3, 'D0', INPUT),
     new Pin(4, 'D1', INPUT),

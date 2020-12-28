@@ -57,7 +57,7 @@
  * @property {Pin} GND [7] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
@@ -71,7 +71,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic7406() {
-  const chip = Chip(
+  const chip = new Chip(
     // Input pins. In the TI data sheet, these are named "1A", "2A",
     // etc., and the C64 schematic does not suggest named for them.
     // Since these names are not legal JS variable names, I've switched

@@ -28,6 +28,7 @@ export default class Port extends Array {
         this[pin.number] = pin
       }
     }
+
     Object.freeze(this.#connectors)
     Object.freeze(this)
   }

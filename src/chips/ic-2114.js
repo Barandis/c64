@@ -94,7 +94,7 @@
  * @property {Pin} GND [9] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { pinsToValue, valueToPins, range } from 'utils'
 
@@ -108,7 +108,7 @@ const BIDIRECTIONAL = Pin.BIDIRECTIONAL
  * @memberof module:chips
  */
 function Ic2114() {
-  const chip = Chip(
+  const chip = new Chip(
     // Address pins A0...A9
     new Pin(5, 'A0', INPUT),
     new Pin(6, 'A1', INPUT),

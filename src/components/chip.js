@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+/** @typedef {import('./pin').default} Pin */
+
 // Represents a generic semiconductor chip. In this scheme, a chip is
 // defined by its connections to the outside world, which provide its
 // only interface, just like in the real thing. Anything that the chip
@@ -17,15 +19,20 @@
 // chance of conflict since a chip isn't meant to have any properties
 // other than the pins themselves.
 
-export function Chip(...pins) {
-  const chip = []
+export default class Chip extends Array {
+  /**
+   * @param {...Pin} pins
+   */
+  constructor(...pins) {
+    super()
 
-  for (const pin of pins) {
-    if (pin) {
-      chip[pin.name] = pin
-      chip[pin.number] = pin
+    for (const pin of pins) {
+      if (pin) {
+        this[pin.name] = pin
+        this[pin.number] = pin
+      }
     }
-  }
 
-  return Object.freeze(chip)
+    Object.freeze(this)
+  }
 }

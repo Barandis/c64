@@ -519,7 +519,7 @@ import { timers } from './timers'
 import { tod } from './tod'
 import { control } from './control'
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
 
@@ -533,7 +533,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic6526() {
-  const chip = Chip(
+  const chip = new Chip(
     // Register address pins. The 6526 has 16 addressable 8-bit
     // registers, which requires four pins.
     new Pin(38, 'A0', INPUT),

@@ -74,7 +74,7 @@
  * @property {Pin} GND [12] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { pinsToValue, valueToPins, range } from 'utils'
 
@@ -95,7 +95,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic2364(buffer) {
-  const chip = Chip(
+  const chip = new Chip(
     // Address pins A0...A12
     new Pin(8, 'A0', INPUT),
     new Pin(7, 'A1', INPUT),

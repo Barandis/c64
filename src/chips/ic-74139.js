@@ -118,7 +118,7 @@
  * @property {Pin} GND [8] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
@@ -132,7 +132,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic74139() {
-  const chip = Chip(
+  const chip = new Chip(
     // Demultiplexer 1
     new Pin(2, 'A1', INPUT),
     new Pin(3, 'B1', INPUT),

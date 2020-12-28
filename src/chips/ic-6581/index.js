@@ -7,7 +7,7 @@ import {
   UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
 } from './constants'
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { setMode, valueToPins, pinsToValue, range } from 'utils'
 
@@ -15,7 +15,7 @@ const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
 export function Ic6581() {
-  const chip = Chip(
+  const chip = new Chip(
     // Address pins to access internal registers
     new Pin(9, 'A0', INPUT),
     new Pin(10, 'A1', INPUT),

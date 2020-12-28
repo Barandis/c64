@@ -230,7 +230,7 @@
  * @property {Pin} Vss [14] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 
 const INPUT = Pin.INPUT
@@ -276,7 +276,7 @@ export const F7 = '_ROMH'
  * @memberof module:chips
  */
 function Ic82S100() {
-  const chip = Chip(
+  const chip = new Chip(
     // Input pins. In the 82S100, these were generically named I0
     // through I15, since each pin could serve any function depending on
     // the programming applies.

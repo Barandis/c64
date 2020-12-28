@@ -79,7 +79,7 @@
  * @property {Pin} GND [8] The ground. This pin is not emulated.
  */
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
@@ -93,7 +93,7 @@ const OUTPUT = Pin.OUTPUT
  * @memberof module:chips
  */
 function Ic74257() {
-  const chip = Chip(
+  const chip = new Chip(
     // Select. When this is low, the Y output pins will take on the same
     // value as their A input pins. When this is high, the Y output pins
     // will instead take on the value of their B input pins.

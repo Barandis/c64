@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Chip } from 'components'
+import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { assert } from 'test/helper'
 
@@ -31,7 +31,7 @@ describe('Chip', () => {
   for (const pin of Object.values(pins)) {
     pinArray[pin.number] = pin
   }
-  const chip = Chip(...pinArray)
+  const chip = new Chip(...pinArray)
 
   it('has properties named after each of its pins', () => {
     for (const [name, pin] of Object.entries(pins)) {
