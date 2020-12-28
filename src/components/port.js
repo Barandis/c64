@@ -24,8 +24,10 @@ export default class Port extends Array {
     for (const pin of pins) {
       if (pin) {
         this.#connectors[pin.number] = new Connector(pin)
-        this[pin.name] = pin
         this[pin.number] = pin
+        Object.defineProperty(this, pin.name, {
+          get: () => pin,
+        })
       }
     }
 
