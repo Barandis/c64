@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert } from 'test/helper'
-import { Connector } from 'components'
+import Connector from 'components/connector'
 import Pin from 'components/pin'
 import Trace from 'components/trace'
 
@@ -18,8 +18,8 @@ describe('Connector', () => {
     const pin2 = new Pin(1, 'B', OUTPUT)
     pin1.level = 1
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con2.connect(con1)
     assert(pin2.high)
@@ -30,8 +30,8 @@ describe('Connector', () => {
     const pin2 = new Pin(1, 'B', OUTPUT)
     pin1.level = 1
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
     assert(pin2.high)
@@ -45,8 +45,8 @@ describe('Connector', () => {
     trace1.level = 1
     const trace2 = new Trace(pin2)
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
     assert(trace2.high)
@@ -62,8 +62,8 @@ describe('Connector', () => {
     const trace1 = new Trace(pin1)
     const trace2 = new Trace(pin2).pullDown()
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
 
@@ -86,8 +86,8 @@ describe('Connector', () => {
     const trace2 = new Trace(pin2)
     trace2.level = 0
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
 
@@ -110,8 +110,8 @@ describe('Connector', () => {
     const trace1 = new Trace(pin1)
     const trace2 = new Trace(pin2)
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
 
@@ -134,8 +134,8 @@ describe('Connector', () => {
     const trace2 = new Trace(pin2)
     trace2.level = 0
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
 
@@ -160,8 +160,8 @@ describe('Connector', () => {
     const trace2 = new Trace(pin2)
     trace2.level = 0
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
 
     con1.connect(con2)
 
@@ -184,9 +184,9 @@ describe('Connector', () => {
     const trace3 = new Trace(pin3)
     trace3.level = 0
 
-    const con1 = Connector(pin1)
-    const con2 = Connector(pin2)
-    const con3 = Connector(pin3)
+    const con1 = new Connector(pin1)
+    const con2 = new Connector(pin2)
+    const con3 = new Connector(pin3)
 
     con1.connect(con2)
     con1.connect(con3)

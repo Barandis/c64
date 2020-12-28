@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Connector } from 'components/connector'
+import Connector from 'components/connector'
 import { enumerate } from 'utils'
 
 // Represents an external port on a computer, consisting of a number of
@@ -13,9 +13,7 @@ import { enumerate } from 'utils'
 export function Port(...pins) {
   const connectors = []
   for (const pin of pins) {
-    if (pin) {
-      connectors[pin.number] = Connector(pin)
-    }
+    if (pin) connectors[pin.number] = new Connector(pin)
   }
 
   const port = Object.assign([], {
@@ -31,9 +29,7 @@ export function Port(...pins) {
       for (const [i, connector] of enumerate(connectors)) {
         const con1 = connector
         const con2 = port.connectors[i]
-        if (con1 && con2) {
-          con1.connect(con2)
-        }
+        if (con1 && con2) con1.connect(con2)
       }
     },
 
@@ -41,9 +37,7 @@ export function Port(...pins) {
     // connected to.
     disconnect() {
       for (const con of connectors) {
-        if (con) {
-          con.disconnect()
-        }
+        if (con) con.disconnect()
       }
     },
   })
