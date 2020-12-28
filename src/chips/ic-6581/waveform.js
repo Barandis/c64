@@ -3,9 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { TEST, SYNC, RING, SAWTOOTH, TRIANGLE, NOISE, PULSE } from "./constants"
+import { TEST, SYNC, RING, SAWTOOTH, TRIANGLE, NOISE, PULSE } from './constants'
 
-import { bitSet, word, bitValue } from "utils"
+import { bitSet, word, bitValue } from 'utils'
 
 const ACC_MSB = 23
 const LFSR_CLOCK = 19

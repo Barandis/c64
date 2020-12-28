@@ -5,70 +5,74 @@
 
 import {
   UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
-} from "./constants"
+} from './constants'
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { setMode, valueToPins, pinsToValue, range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { setMode, valueToPins, pinsToValue, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function Ic6581() {
   const chip = Chip(
     // Address pins to access internal registers
-    Pin(9, "A0", INPUT),
-    Pin(10, "A1", INPUT),
-    Pin(11, "A2", INPUT),
-    Pin(12, "A3", INPUT),
-    Pin(13, "A4", INPUT),
+    new Pin(9, 'A0', INPUT),
+    new Pin(10, 'A1', INPUT),
+    new Pin(11, 'A2', INPUT),
+    new Pin(12, 'A3', INPUT),
+    new Pin(13, 'A4', INPUT),
 
     // Data bus pins D0...D7. These are bidirectional but the direction
     // is set by the R__W pin.
-    Pin(15, "D0", INPUT),
-    Pin(16, "D1", INPUT),
-    Pin(17, "D2", INPUT),
-    Pin(18, "D3", INPUT),
-    Pin(19, "D4", INPUT),
-    Pin(20, "D5", INPUT),
-    Pin(21, "D6", INPUT),
-    Pin(22, "D7", INPUT),
+    new Pin(15, 'D0', INPUT),
+    new Pin(16, 'D1', INPUT),
+    new Pin(17, 'D2', INPUT),
+    new Pin(18, 'D3', INPUT),
+    new Pin(19, 'D4', INPUT),
+    new Pin(20, 'D5', INPUT),
+    new Pin(21, 'D6', INPUT),
+    new Pin(22, 'D7', INPUT),
 
     // Potentiometer pins. These are analog inputs that are fed to the
     // A/D converters.
-    Pin(24, "POTX", INPUT),
-    Pin(23, "POTY", INPUT),
+    new Pin(24, 'POTX', INPUT),
+    new Pin(23, 'POTY', INPUT),
 
     // Audio input and output. These are obviously analog and are mostly
     // given names that have spaces in them such as "AUDIO OUT" and "EXT
     // IN"; since that is more difficult to work with the names here are
     // without spaces.
-    Pin(27, "AUDIO", OUTPUT),
-    Pin(26, "EXT", INPUT),
+    new Pin(27, 'AUDIO', OUTPUT),
+    new Pin(26, 'EXT', INPUT),
 
     // Clock input.
-    Pin(6, "φ2", INPUT),
+    new Pin(6, 'φ2', INPUT),
 
     // Read/write control pin. If this is high then data is being read
     // from the SID, else data is being written to it.
-    Pin(7, "R__W", INPUT),
+    new Pin(7, 'R__W', INPUT),
 
     // Chip select pin. If this is high then the data bus is hi-Z stated
     // and no response is made to address pins.
-    Pin(8, "_CS", INPUT),
+    new Pin(8, '_CS', INPUT),
 
     // Resets the chip when it goes low.
-    Pin(5, "_RES", INPUT),
+    new Pin(5, '_RES', INPUT),
 
     // Filter capacitor connections. Larger capacitors, necessary for
     // the proper operation of the on-board filters, are connected
     // across these pairs of pins. There is no need to emulate them
     // here.
-    Pin(1, "CAP1A"),
-    Pin(2, "CAP1B"),
-    Pin(3, "CAP2A"),
-    Pin(4, "CAP2B"),
+    new Pin(1, 'CAP1A'),
+    new Pin(2, 'CAP1B'),
+    new Pin(3, 'CAP2A'),
+    new Pin(4, 'CAP2B'),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(25, "Vcc"),
-    Pin(28, "Vdd"),
-    Pin(14, "GND"),
+    new Pin(25, 'Vcc'),
+    new Pin(28, 'Vdd'),
+    new Pin(14, 'GND'),
   )
 
   const addrPins = [...range(5)].map(pin => chip[`A${pin}`])

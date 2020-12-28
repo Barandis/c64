@@ -62,8 +62,12 @@
  * @property {Pin} GND [7] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 7408 quad two-input AND gate.
@@ -74,28 +78,28 @@ import { range } from "utils"
 function Ic7408() {
   const chip = Chip(
     // Gate 1 inputs and output
-    Pin(1, "A1", INPUT),
-    Pin(2, "B1", INPUT),
-    Pin(3, "Y1", OUTPUT).clear(),
+    new Pin(1, 'A1', INPUT),
+    new Pin(2, 'B1', INPUT),
+    new Pin(3, 'Y1', OUTPUT).clear(),
 
     // Gate 2 inputs and output
-    Pin(4, "A2", INPUT),
-    Pin(5, "B2", INPUT),
-    Pin(6, "Y2", OUTPUT).clear(),
+    new Pin(4, 'A2', INPUT),
+    new Pin(5, 'B2', INPUT),
+    new Pin(6, 'Y2', OUTPUT).clear(),
 
     // Gate 3 inputs and output
-    Pin(9, "A3", INPUT),
-    Pin(10, "B3", INPUT),
-    Pin(8, "Y3", OUTPUT).clear(),
+    new Pin(9, 'A3', INPUT),
+    new Pin(10, 'B3', INPUT),
+    new Pin(8, 'Y3', OUTPUT).clear(),
 
     // Gate 4 inputs and output
-    Pin(12, "A4", INPUT),
-    Pin(13, "B4", INPUT),
-    Pin(11, "Y4", OUTPUT).clear(),
+    new Pin(12, 'A4', INPUT),
+    new Pin(13, 'B4', INPUT),
+    new Pin(11, 'Y4', OUTPUT).clear(),
 
     // Power supply and ground pins, not emulated
-    Pin(14, "Vcc"),
-    Pin(7, "GND"),
+    new Pin(14, 'Vcc'),
+    new Pin(7, 'GND'),
   )
 
   function listener(gate) {

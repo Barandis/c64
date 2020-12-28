@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Trace } from "components"
+import Trace from 'components/trace'
 
 export function ControlCircuit(
   {
@@ -43,35 +43,35 @@ export function ControlCircuit(
   // should be enabled. A8...A11 are connected to U15 and A12...A15,
   // VA12...VA13, and _VA14 are already connected U17 in the address bus
   // definitions.
-  const _CAS = Trace(U19._CAS, U17.I0)
-  const _LORAM = Trace(U7.P0, U17.I1).pullUp()
-  const _HIRAM = Trace(U7.P1, U17.I2).pullUp()
-  const _CHAREN = Trace(U7.P2, U17.I3).pullUp()
-  const BA = Trace(U19.BA, U17.I9)
-  const _AEC = Trace(U8.Y5, U17.I10)
-  const R__W = Trace(U7.R__W, U17.I11).pullUp()
-  const _EXROM = Trace(CN6._EXROM, U17.I12).pullUp()
-  const _GAME = Trace(CN6._GAME, U17.I13).pullUp()
-  const _CASRAM = Trace(U17.F0, U9._CAS, U10._CAS, U11._CAS, U12._CAS)
+  const _CAS = new Trace(U19._CAS, U17.I0)
+  const _LORAM = new Trace(U7.P0, U17.I1).pullUp()
+  const _HIRAM = new Trace(U7.P1, U17.I2).pullUp()
+  const _CHAREN = new Trace(U7.P2, U17.I3).pullUp()
+  const BA = new Trace(U19.BA, U17.I9)
+  const _AEC = new Trace(U8.Y5, U17.I10)
+  const R__W = new Trace(U7.R__W, U17.I11).pullUp()
+  const _EXROM = new Trace(CN6._EXROM, U17.I12).pullUp()
+  const _GAME = new Trace(CN6._GAME, U17.I13).pullUp()
+  const _CASRAM = new Trace(U17.F0, U9._CAS, U10._CAS, U11._CAS, U12._CAS)
   _CASRAM.addPins(U21._CAS, U22._CAS, U23._CAS, U24._CAS)
-  const _BASIC = Trace(U17.F1, U3._CS)
-  const _KERNAL = Trace(U17.F2, U4._CS)
-  const _CHAROM = Trace(U17.F3, U5._CS1)
-  const _CHAROM2 = Trace(U5._CS2).pullUp() // _CS2 always high
-  const GR__W = Trace(U17.F4, U6._WE)
-  const _IO = Trace(U17.F5, U15._G1)
-  const _ROML = Trace(U17.F6, CN6._ROML)
-  const _ROMH = Trace(U17.F7, CN6._ROMH)
-  const _VIC = Trace(U15._Y10, U19._CS)
-  const _SID = Trace(U15._Y11, U18._CS)
-  const _COLOR = Trace(U15._Y12, U27.A3)
-  const _SRAM = Trace(U27.Y3, U6._CS)
-  const _CIAS = Trace(U15._Y13, U15._G2)
-  const _CIA1 = Trace(U15._Y20, U1._CS)
-  const _CIA2 = Trace(U15._Y21, U2._CS)
-  const _IO1 = Trace(U15._Y22, CN6._IO1)
-  const _IO2 = Trace(U15._Y23, CN6._IO2)
-  const _PLA = Trace(U17._OE).pullDown() // PLA out always enabled
+  const _BASIC = new Trace(U17.F1, U3._CS)
+  const _KERNAL = new Trace(U17.F2, U4._CS)
+  const _CHAROM = new Trace(U17.F3, U5._CS1)
+  const _CHAROM2 = new Trace(U5._CS2).pullUp() // _CS2 always high
+  const GR__W = new Trace(U17.F4, U6._WE)
+  const _IO = new Trace(U17.F5, U15._G1)
+  const _ROML = new Trace(U17.F6, CN6._ROML)
+  const _ROMH = new Trace(U17.F7, CN6._ROMH)
+  const _VIC = new Trace(U15._Y10, U19._CS)
+  const _SID = new Trace(U15._Y11, U18._CS)
+  const _COLOR = new Trace(U15._Y12, U27.A3)
+  const _SRAM = new Trace(U27.Y3, U6._CS)
+  const _CIAS = new Trace(U15._Y13, U15._G2)
+  const _CIA1 = new Trace(U15._Y20, U1._CS)
+  const _CIA2 = new Trace(U15._Y21, U2._CS)
+  const _IO1 = new Trace(U15._Y22, CN6._IO1)
+  const _IO2 = new Trace(U15._Y23, CN6._IO2)
+  const _PLA = new Trace(U17._OE).pullDown() // PLA out always enabled
 
   // Non-PLA-based chip control
 
@@ -107,13 +107,15 @@ export function ControlCircuit(
   R__W.addPins(U1.R__W, U2.R__W, U18.R__W, U19.R__W, CN6.R__W)
   R__W.addPins(U9._WE, U10._WE, U11._WE, U12._WE)
   R__W.addPins(U21._WE, U22._WE, U23._WE, U24._WE)
-  const _RAS = Trace(U19._RAS, U26.LE, U9._RAS, U10._RAS, U11._RAS, U12._RAS)
+  const _RAS = new Trace(
+    U19._RAS, U26.LE, U9._RAS, U10._RAS, U11._RAS, U12._RAS,
+  )
   _RAS.addPins(U21._RAS, U22._RAS, U23._RAS)
-  const AEC = Trace(U19.AEC, U16.X1, U16.X2, U16.X3, U16.X4)
+  const AEC = new Trace(U19.AEC, U16.X1, U16.X2, U16.X3, U16.X4)
   AEC.addPins(U27.B3, U26._OE, U14._OE, U8.A5, U27.A2)
-  const _DMA = Trace(CN6._DMA, U27.B1, U27.B2).pullUp()
-  const RDY = Trace(U27.Y1, U7.RDY)
-  const CAEC = Trace(U27.Y2, U7.AEC)
+  const _DMA = new Trace(CN6._DMA, U27.B1, U27.B2).pullUp()
+  const RDY = new Trace(U27.Y1, U7.RDY)
+  const CAEC = new Trace(U27.Y2, U7.AEC)
 
   // Reset, IRQ, and NMI
 
@@ -126,10 +128,10 @@ export function ControlCircuit(
   // CN2: User port (provides _RES)
   // CN4: Serial port (provides _RES)
   // CN6: Expansion port (receives _RES, provides _NMI, _IRQ)
-  const _RES = Trace(CN2._RESET, CN4._RESET).pullUp()
+  const _RES = new Trace(CN2._RESET, CN4._RESET).pullUp()
   _RES.addPins(U7._RES, U1._RES, U2._RES, U18._RES, CN6._RESET)
-  const _NMI = Trace(U2._IRQ, CN1._RESTORE, CN6._NMI, U7._NMI).pullUp()
-  const _IRQ = Trace(U1._IRQ, U19._IRQ, CN6._IRQ, U7._IRQ).pullUp()
+  const _NMI = new Trace(U2._IRQ, CN1._RESTORE, CN6._NMI, U7._NMI).pullUp()
+  const _IRQ = new Trace(U1._IRQ, U19._IRQ, CN6._IRQ, U7._IRQ).pullUp()
 
   // Clocks
 
@@ -146,10 +148,10 @@ export function ControlCircuit(
   // signals. (In fact, since we're also not emulating VIC output RF
   // signals, there's no *purpose* for OCOLOR and the only purpose for
   // ODOT is providing it to the expansion port.)
-  const φCOLOR = Trace(U19.φCOLOR)
-  const φDOT = Trace(U19.φIN, CN6.φDOT)
-  const φ0 = Trace(U19.φ0, U7.φ0)
-  const φ2 = Trace(U7.φ2, U1.φ2, U2.φ2, U18.φ2, CN6.φ2)
+  const φCOLOR = new Trace(U19.φCOLOR)
+  const φDOT = new Trace(U19.φIN, CN6.φDOT)
+  const φ0 = new Trace(U19.φ0, U7.φ0)
+  const φ2 = new Trace(U7.φ2, U1.φ2, U2.φ2, U18.φ2, CN6.φ2)
 
   return {
     _CAS, _LORAM, _HIRAM, _CHAREN, BA, _AEC, R__W, _EXROM, _GAME, _CASRAM,

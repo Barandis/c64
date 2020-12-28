@@ -3,13 +3,17 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert } from "test/helper"
-import {
-  Trace, Pin, INPUT, UNCONNECTED, OUTPUT, BIDIRECTIONAL,
-} from "components"
+import { assert } from 'test/helper'
+import Pin from 'components/pin'
+import Trace from 'components/trace'
+
+const UNCONNECTED = Pin.UNCONNECTED
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export function levelNoTrace() {
-  const p = Pin(1, "A", INPUT)
+  const p = new Pin(1, 'A', INPUT)
   assert(p.level === null)
   assert(!p.high)
   assert(!p.low)
@@ -35,15 +39,15 @@ export function levelNoTrace() {
 }
 
 export function levelUpdateNoTrace() {
-  const p = Pin(1, "A", INPUT)
+  const p = new Pin(1, 'A', INPUT)
   p.level = 1
   p.updateLevel()
   assert(p.level === 1)
 }
 
 export function levelUnconnected() {
-  const p = Pin(1, "A", UNCONNECTED)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', UNCONNECTED)
+  const t = new Trace(p)
 
   t.level = 1
   assert(p.level === null)
@@ -67,8 +71,8 @@ export function levelUnconnected() {
 }
 
 export function levelInput() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
 
   t.level = 1
   assert(p.level === 1)
@@ -92,8 +96,8 @@ export function levelInput() {
 }
 
 export function levelOutput() {
-  const p = Pin(1, "A", OUTPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', OUTPUT)
+  const t = new Trace(p)
 
   t.level = 1
   assert(p.level === null)
@@ -117,8 +121,8 @@ export function levelOutput() {
 }
 
 export function levelBidirectional() {
-  const p = Pin(1, "A", BIDIRECTIONAL)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', BIDIRECTIONAL)
+  const t = new Trace(p)
 
   t.level = 1
   assert(p.level === 1)
@@ -138,8 +142,8 @@ export function levelBidirectional() {
 }
 
 export function levelOptions() {
-  const p = Pin(1, "A", BIDIRECTIONAL)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', BIDIRECTIONAL)
+  const t = new Trace(p)
 
   t.set()
   assert(p.level === 1)
@@ -163,21 +167,21 @@ export function levelOptions() {
 }
 
 export function levelToggleHigh() {
-  const p = Pin(1, "A")
+  const p = new Pin(1, 'A')
   p.level = 0
   p.toggle()
   assert(p.level === 1)
 }
 
 export function levelToggleLow() {
-  const p = Pin(1, "A")
+  const p = new Pin(1, 'A')
   p.level = 1
   p.toggle()
   assert(p.level === 0)
 }
 
 export function levelToggleNone() {
-  const p = Pin(1, "A")
+  const p = new Pin(1, 'A')
   p.level = null
   p.toggle()
   assert(p.level === null)

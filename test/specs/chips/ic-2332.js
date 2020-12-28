@@ -3,13 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces, DEBUG, hex } from "test/helper"
-import { Ic2332 } from "chips"
-import { character } from "rom/character"
-import { range, valueToPins, pinsToValue } from "utils"
+import { assert, deviceTraces, DEBUG, hex } from 'test/helper'
+import { Ic2332 } from 'chips'
+import { character } from 'rom/character'
+import { range, valueToPins, pinsToValue } from 'utils'
 
-describe("2332 4k x 8-bit ROM", () => {
-  describe("Character ROM", () => {
+describe('2332 4k x 8-bit ROM', () => {
+  describe('Character ROM', () => {
     const expected = new Uint8Array(character)
     let chip, traces, addrTraces, dataTraces
 
@@ -23,7 +23,7 @@ describe("2332 4k x 8-bit ROM", () => {
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
     })
 
-    it("reads correctly from 0x0000 to 0x0fff", () => {
+    it('reads correctly from 0x0000 to 0x0fff', () => {
       for (const addr of range(0x1000)) {
         valueToPins(addr, ...addrTraces)
         traces._CS1.clear()
@@ -41,7 +41,7 @@ describe("2332 4k x 8-bit ROM", () => {
           data === expected[addr],
           `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${
             hex(expected[addr], 2)
-          }, actual 0x${hex(data, 2)}`
+          }, actual 0x${hex(data, 2)}`,
         )
         traces._CS1.set()
       }

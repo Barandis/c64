@@ -8,9 +8,9 @@
 
 import {
   assert, deviceTraces, portCable, portMessage, cableMessage,
-} from "test/helper"
-import { SerialPort } from "ports"
-import { range } from "utils"
+} from 'test/helper'
+import { SerialPort } from 'ports'
+import { range } from 'utils'
 
 function disconnectMessage(name) {
   return (
@@ -18,7 +18,7 @@ function disconnectMessage(name) {
   )
 }
 
-describe("Serial port", () => {
+describe('Serial port', () => {
   let port, cable, p, c
 
   beforeEach(() => {
@@ -34,82 +34,82 @@ describe("Serial port", () => {
     }
   })
 
-  it("does not pass data through unconnected pins", () => {
+  it('does not pass data through unconnected pins', () => {
     cable.connect(port)
 
     p.GND.level = 1
     assert(
       c.GND.level === 0,
-      "Cable GND should not change when port one does"
+      'Cable GND should not change when port one does',
     )
 
     p.GND.level = 0
     c.GND.level = 1
     assert(
       p.GND.level === 0,
-      "Port GND should not change when cable one does"
+      'Port GND should not change when cable one does',
     )
   })
 
-  it("allows data to pass through ports in the correct direction", () => {
+  it('allows data to pass through ports in the correct direction', () => {
     cable.connect(port)
 
     c._SRQ.level = 1
-    assert(p._SRQ.level === 1, portMessage("_SRQ"))
+    assert(p._SRQ.level === 1, portMessage('_SRQ'))
     p._SRQ.level = 0
     assert(
       c._SRQ.level === 1,
-      "Cable _SRQ should not change when port _SRQ does"
+      'Cable _SRQ should not change when port _SRQ does',
     )
 
     p.ATN.level = 1
-    assert(c.ATN.level === 1, cableMessage("ATN"))
+    assert(c.ATN.level === 1, cableMessage('ATN'))
     c.ATN.level = 0
     assert(
       p.ATN.level === 1,
-      "Port ATN should not change when port ATN does"
+      'Port ATN should not change when port ATN does',
     )
   })
 
-  it("allows data to pass both ways through a bidirectional port", () => {
+  it('allows data to pass both ways through a bidirectional port', () => {
     cable.connect(port)
 
     c.CLK.level = 1
-    assert(p.CLK.level === 1, portMessage("CLK"))
+    assert(p.CLK.level === 1, portMessage('CLK'))
     p.CLK.level = 0
-    assert(c.CLK.level === 0, cableMessage("CLK"))
+    assert(c.CLK.level === 0, cableMessage('CLK'))
 
     c.DATA.level = 1
-    assert(p.DATA.level === 1, portMessage("DATA"))
+    assert(p.DATA.level === 1, portMessage('DATA'))
     p.DATA.level = 0
-    assert(c.DATA.level === 0, cableMessage("DATA"))
+    assert(c.DATA.level === 0, cableMessage('DATA'))
 
     c._RESET.level = 1
-    assert(p._RESET.level === 1, portMessage("_RESET"))
+    assert(p._RESET.level === 1, portMessage('_RESET'))
     p._RESET.level = 0
-    assert(c._RESET.level === 0, cableMessage("_RESET"))
+    assert(c._RESET.level === 0, cableMessage('_RESET'))
   })
 
-  it("stops passing data when the port is disconnected", () => {
+  it('stops passing data when the port is disconnected', () => {
     cable.connect(port)
     cable.disconnect()
 
     p.GND.level = 1
-    assert(c.GND.low, disconnectMessage("GND"))
+    assert(c.GND.low, disconnectMessage('GND'))
 
     c._SRQ.level = 1
-    assert(p._SRQ.floating, disconnectMessage("_SRQ"))
+    assert(p._SRQ.floating, disconnectMessage('_SRQ'))
 
     p.ATN.level = 1
-    assert(c.ATN.floating, disconnectMessage("ATN"))
+    assert(c.ATN.floating, disconnectMessage('ATN'))
 
     c.CLK.level = 1
-    assert(p.CLK.floating, disconnectMessage("CLK"))
+    assert(p.CLK.floating, disconnectMessage('CLK'))
 
     c.DATA.level = 1
-    assert(p.DATA.floating, disconnectMessage("DATA"))
+    assert(p.DATA.floating, disconnectMessage('DATA'))
 
     c._RESET.level = 1
-    assert(p._RESET.floating, disconnectMessage("_RESET"))
+    assert(p._RESET.floating, disconnectMessage('_RESET'))
   })
 })

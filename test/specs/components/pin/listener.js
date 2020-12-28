@@ -3,16 +3,20 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Sinon from "sinon"
+import Sinon from 'sinon'
 
-import { assert } from "test/helper"
-import {
-  Trace, Pin, INPUT, OUTPUT, UNCONNECTED, BIDIRECTIONAL,
-} from "components"
+import { assert } from 'test/helper'
+import Pin from 'components/pin'
+import Trace from 'components/trace'
+
+const UNCONNECTED = Pin.UNCONNECTED
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export function listenerUnconnected() {
-  const p = Pin(1, "A", UNCONNECTED)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', UNCONNECTED)
+  const t = new Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -22,8 +26,8 @@ export function listenerUnconnected() {
 }
 
 export function listenerInput() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -33,8 +37,8 @@ export function listenerInput() {
 }
 
 export function listenerOutput() {
-  const p = Pin(1, "A", OUTPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', OUTPUT)
+  const t = new Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -44,8 +48,8 @@ export function listenerOutput() {
 }
 
 export function listenerBidirectional() {
-  const p = Pin(1, "A", BIDIRECTIONAL)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', BIDIRECTIONAL)
+  const t = new Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -55,7 +59,7 @@ export function listenerBidirectional() {
 }
 
 export function listenerDirect() {
-  const p = Pin(1, "A", INPUT)
+  const p = new Pin(1, 'A', INPUT)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -64,8 +68,8 @@ export function listenerDirect() {
 }
 
 export function listenerRemove() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -85,8 +89,8 @@ export function listenerRemove() {
 }
 
 export function listenerNonexistent() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -105,8 +109,8 @@ export function listenerNonexistent() {
 }
 
 export function listenerDouble() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)

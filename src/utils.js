@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 const lookup = new Uint8Array(256)
 for (const i of range(chars.length)) {
@@ -20,9 +20,9 @@ export function decode(base64) {
   // All three end with at least one `=`, so the else here will never
   // execute.
   /* istanbul ignore else */
-  if (base64[base64.length - 1] === "=") {
+  if (base64[base64.length - 1] === '=') {
     bufferLength--
-    if (base64[base64.length - 2] === "=") {
+    if (base64[base64.length - 2] === '=') {
       bufferLength--
     }
   }
@@ -93,11 +93,11 @@ export function word(lobyte, hibyte) {
 }
 
 export function *range(start, end, step, inclusive) {
-  const s = typeof end === "number" ? start : 0
-  const e = typeof end === "number" ? end : start
-  const p = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
-  const i = typeof step === "number"
-    ? !!inclusive : typeof end === "number"
+  const s = typeof end === 'number' ? start : 0
+  const e = typeof end === 'number' ? end : start
+  const p = typeof step === 'number' ? step === 0 ? 1 : Math.abs(step) : 1
+  const i = typeof step === 'number'
+    ? !!inclusive : typeof end === 'number'
       ? !!step : !!end
 
   const forward = s < e

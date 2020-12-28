@@ -513,14 +513,18 @@
 import {
   PRA, PRB, DDRA, DDRB, TALO, TBHI, TAHI, TBLO, TOD10TH, TODSEC, TODMIN, TODHR,
   SDR, ICR, CRA, CRB, FLG, IR, LOAD, ALARM,
-} from "./constants"
-import { ports } from "./ports"
-import { timers } from "./timers"
-import { tod } from "./tod"
-import { control } from "./control"
+} from './constants'
+import { ports } from './ports'
+import { timers } from './timers'
+import { tod } from './tod'
+import { control } from './control'
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 6526 Complex Interface Adapter.
@@ -532,55 +536,55 @@ function Ic6526() {
   const chip = Chip(
     // Register address pins. The 6526 has 16 addressable 8-bit
     // registers, which requires four pins.
-    Pin(38, "A0", INPUT),
-    Pin(37, "A1", INPUT),
-    Pin(36, "A2", INPUT),
-    Pin(35, "A3", INPUT),
+    new Pin(38, 'A0', INPUT),
+    new Pin(37, 'A1', INPUT),
+    new Pin(36, 'A2', INPUT),
+    new Pin(35, 'A3', INPUT),
 
     // Data bus pins. These are input OR output pins, not both at the
     // same time.
-    Pin(33, "D0", OUTPUT),
-    Pin(32, "D1", OUTPUT),
-    Pin(31, "D2", OUTPUT),
-    Pin(30, "D3", OUTPUT),
-    Pin(29, "D4", OUTPUT),
-    Pin(28, "D5", OUTPUT),
-    Pin(27, "D6", OUTPUT),
-    Pin(26, "D7", OUTPUT),
+    new Pin(33, 'D0', OUTPUT),
+    new Pin(32, 'D1', OUTPUT),
+    new Pin(31, 'D2', OUTPUT),
+    new Pin(30, 'D3', OUTPUT),
+    new Pin(29, 'D4', OUTPUT),
+    new Pin(28, 'D5', OUTPUT),
+    new Pin(27, 'D6', OUTPUT),
+    new Pin(26, 'D7', OUTPUT),
 
     // Parallel Port A pins. These are bidirectional but the direction
     // is switchable via register.
-    Pin(2, "PA0", INPUT).pullUp(),
-    Pin(3, "PA1", INPUT).pullUp(),
-    Pin(4, "PA2", INPUT).pullUp(),
-    Pin(5, "PA3", INPUT).pullUp(),
-    Pin(6, "PA4", INPUT).pullUp(),
-    Pin(7, "PA5", INPUT).pullUp(),
-    Pin(8, "PA6", INPUT).pullUp(),
-    Pin(9, "PA7", INPUT).pullUp(),
+    new Pin(2, 'PA0', INPUT).pullUp(),
+    new Pin(3, 'PA1', INPUT).pullUp(),
+    new Pin(4, 'PA2', INPUT).pullUp(),
+    new Pin(5, 'PA3', INPUT).pullUp(),
+    new Pin(6, 'PA4', INPUT).pullUp(),
+    new Pin(7, 'PA5', INPUT).pullUp(),
+    new Pin(8, 'PA6', INPUT).pullUp(),
+    new Pin(9, 'PA7', INPUT).pullUp(),
 
     // Parallel Port B pins. These are bidirectional but the direction
     // is switchable via register.
-    Pin(10, "PB0", INPUT).pullUp(),
-    Pin(11, "PB1", INPUT).pullUp(),
-    Pin(12, "PB2", INPUT).pullUp(),
-    Pin(13, "PB3", INPUT).pullUp(),
-    Pin(14, "PB4", INPUT).pullUp(),
-    Pin(15, "PB5", INPUT).pullUp(),
-    Pin(16, "PB6", INPUT).pullUp(),
-    Pin(17, "PB7", INPUT).pullUp(),
+    new Pin(10, 'PB0', INPUT).pullUp(),
+    new Pin(11, 'PB1', INPUT).pullUp(),
+    new Pin(12, 'PB2', INPUT).pullUp(),
+    new Pin(13, 'PB3', INPUT).pullUp(),
+    new Pin(14, 'PB4', INPUT).pullUp(),
+    new Pin(15, 'PB5', INPUT).pullUp(),
+    new Pin(16, 'PB6', INPUT).pullUp(),
+    new Pin(17, 'PB7', INPUT).pullUp(),
 
     // Port control pin. Pulses low after a read or write on port B, can
     // be used for handshaking.
-    Pin(18, "_PC", OUTPUT).set(),
+    new Pin(18, '_PC', OUTPUT).set(),
 
     // IRQ input, maskable to fire hardware interrupt. Often used for
     // handshaking.
-    Pin(24, "_FLAG", INPUT),
+    new Pin(24, '_FLAG', INPUT),
 
     // Determines whether data is being read from (1) or written to (0)
     // the chip
-    Pin(22, "R__W", INPUT),
+    new Pin(22, 'R__W', INPUT),
 
     // Interrupt request output. When low, this signals an interrupt to
     // the CPU. There can be several sources of interrupts connected to
@@ -588,11 +592,11 @@ function Ic6526() {
     // interrupt and `0` if there is. Setting the trace that connects
     // these interrupts to PULL_UP will cause the trace to be high
     // unless one or more IRQ pins lower it.
-    Pin(21, "_IRQ", OUTPUT),
+    new Pin(21, '_IRQ', OUTPUT),
 
     // Serial port. This is bidirectional but the direction is chosen by
     // a control bit.
-    Pin(39, "SP", INPUT),
+    new Pin(39, 'SP', INPUT),
 
     // Count pin. This is used for a couple of different purposes. As an
     // input (its default state), it can provide pulses for the interval
@@ -600,27 +604,27 @@ function Ic6526() {
     // available to receive on the serial port. It can serve as an
     // output as well; in that case the 6526 uses it to signal to the
     // outside that an outgoing bit is ready on the serial port pin.
-    Pin(40, "CNT", INPUT),
+    new Pin(40, 'CNT', INPUT),
 
     // System clock input. In the 6526 this is expected to be a 1 MHz
     // clock.
-    Pin(25, "φ2", INPUT),
+    new Pin(25, 'φ2', INPUT),
 
     // TOD clock input. This can be either 50Hz or 60Hz, selectable from
     // a control register.
-    Pin(19, "TOD", INPUT),
+    new Pin(19, 'TOD', INPUT),
 
     // Chip select pin. When this is low, the chip responds to R/W and
     // register select signals. When it's high, the data pins go high
     // impedance.
-    Pin(23, "_CS", INPUT),
+    new Pin(23, '_CS', INPUT),
 
     // Resets the chip on a low signal.
-    Pin(34, "_RES", INPUT),
+    new Pin(34, '_RES', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(20, "VCC"),
-    Pin(1, "VSS"),
+    new Pin(20, 'VCC'),
+    new Pin(1, 'VSS'),
   )
 
   const addrPins = [...range(4)].map(pin => chip[`A${pin}`])

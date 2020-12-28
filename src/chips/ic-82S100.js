@@ -230,7 +230,11 @@
  * @property {Pin} Vss [14] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 // These are alternate names for the input (I) and output (F) pins,
 // matching purpose of each pin in the Commodore 64. They can be used to
@@ -238,31 +242,31 @@ import { Chip, Pin, INPUT, OUTPUT } from "components"
 // the I0 pin, which accepts the _CAS signal from the VIC, can be
 // accessed regularly with `chip.I0` or `chip[9]`. With these constants,
 // if so desired, it can also be accessed as `chip[_CAS]`.
-export const _CAS = "I0"
-export const _LORAM = "I1"
-export const _HIRAM = "I2"
-export const _CHAREN = "I3"
-export const _VA14 = "I4"
-export const A15 = "I5"
-export const A14 = "I6"
-export const A13 = "I7"
-export const A12 = "I8"
-export const BA = "I9"
-export const _AEC = "I10"
-export const R__W = "I11"
-export const _EXROM = "I12"
-export const _GAME = "I13"
-export const VA13 = "I14"
-export const VA12 = "I15"
+export const _CAS = 'I0'
+export const _LORAM = 'I1'
+export const _HIRAM = 'I2'
+export const _CHAREN = 'I3'
+export const _VA14 = 'I4'
+export const A15 = 'I5'
+export const A14 = 'I6'
+export const A13 = 'I7'
+export const A12 = 'I8'
+export const BA = 'I9'
+export const _AEC = 'I10'
+export const R__W = 'I11'
+export const _EXROM = 'I12'
+export const _GAME = 'I13'
+export const VA13 = 'I14'
+export const VA12 = 'I15'
 
-export const F0 = "_CASRAM"
-export const F1 = "_BASIC"
-export const F2 = "_KERNAL"
-export const F3 = "_CHAROM"
-export const F4 = "GR__W"
-export const F5 = "_IO"
-export const F6 = "_ROML"
-export const F7 = "_ROMH"
+export const F0 = '_CASRAM'
+export const F1 = '_BASIC'
+export const F2 = '_KERNAL'
+export const F3 = '_CHAROM'
+export const F4 = 'GR__W'
+export const F5 = '_IO'
+export const F6 = '_ROML'
+export const F7 = '_ROMH'
 
 /**
  * Creates an emulation of the 82S100 programmable logic array, as it
@@ -276,44 +280,44 @@ function Ic82S100() {
     // Input pins. In the 82S100, these were generically named I0
     // through I15, since each pin could serve any function depending on
     // the programming applies.
-    Pin(9, "I0", INPUT),
-    Pin(8, "I1", INPUT),
-    Pin(7, "I2", INPUT),
-    Pin(6, "I3", INPUT),
-    Pin(5, "I4", INPUT),
-    Pin(4, "I5", INPUT),
-    Pin(3, "I6", INPUT),
-    Pin(2, "I7", INPUT),
-    Pin(27, "I8", INPUT),
-    Pin(26, "I9", INPUT),
-    Pin(25, "I10", INPUT),
-    Pin(24, "I11", INPUT),
-    Pin(23, "I12", INPUT),
-    Pin(22, "I13", INPUT),
-    Pin(21, "I14", INPUT),
-    Pin(20, "I15", INPUT),
+    new Pin(9, 'I0', INPUT),
+    new Pin(8, 'I1', INPUT),
+    new Pin(7, 'I2', INPUT),
+    new Pin(6, 'I3', INPUT),
+    new Pin(5, 'I4', INPUT),
+    new Pin(4, 'I5', INPUT),
+    new Pin(3, 'I6', INPUT),
+    new Pin(2, 'I7', INPUT),
+    new Pin(27, 'I8', INPUT),
+    new Pin(26, 'I9', INPUT),
+    new Pin(25, 'I10', INPUT),
+    new Pin(24, 'I11', INPUT),
+    new Pin(23, 'I12', INPUT),
+    new Pin(22, 'I13', INPUT),
+    new Pin(21, 'I14', INPUT),
+    new Pin(20, 'I15', INPUT),
 
     // Output pins. Similar to the input pins, these were named
     // generically on the 82S100.
-    Pin(18, "F0", OUTPUT).clear(),
-    Pin(17, "F1", OUTPUT).set(),
-    Pin(16, "F2", OUTPUT).set(),
-    Pin(15, "F3", OUTPUT).set(),
-    Pin(13, "F4", OUTPUT).set(),
-    Pin(12, "F5", OUTPUT).set(),
-    Pin(11, "F6", OUTPUT).set(),
-    Pin(10, "F7", OUTPUT).set(),
+    new Pin(18, 'F0', OUTPUT).clear(),
+    new Pin(17, 'F1', OUTPUT).set(),
+    new Pin(16, 'F2', OUTPUT).set(),
+    new Pin(15, 'F3', OUTPUT).set(),
+    new Pin(13, 'F4', OUTPUT).set(),
+    new Pin(12, 'F5', OUTPUT).set(),
+    new Pin(11, 'F6', OUTPUT).set(),
+    new Pin(10, 'F7', OUTPUT).set(),
 
     // Output enable, disables all outputs when set HIGH
-    Pin(19, "_OE", INPUT),
+    new Pin(19, '_OE', INPUT),
 
     // Field programming pin, not used in mask programmed parts and not
     // emulated
-    Pin(1, "FE"),
+    new Pin(1, 'FE'),
 
     // Power supply pins, not emulated
-    Pin(28, "VCC"),
-    Pin(14, "GND"),
+    new Pin(28, 'VCC'),
+    new Pin(14, 'GND'),
   )
 
   // One listener to rule them all

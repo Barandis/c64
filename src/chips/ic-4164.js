@@ -113,13 +113,17 @@
  * @property {Pin} Vss [16] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { pinsToValue, range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { pinsToValue, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 4164 64k x 1 bit dynamic RAM`.
  *
- * @returns {Ic4164} A new 4164 64k x 1 bit dynamic RAM`.
+ * @returns {Ic4164} A new 4164 64k x 1 bit dynamic RAM.
  * @memberof module:chips
  */
 function Ic4164() {
@@ -127,42 +131,42 @@ function Ic4164() {
     // The row address strobe. Setting this low latches the values of
     // A0-A7, saving them to be part of the address used to access the
     // memory array.
-    Pin(4, "_RAS", INPUT),
+    new Pin(4, '_RAS', INPUT),
 
     // The column address strobe. Setting this low latches A0-A7 into
     // the second part of the memory address. It also initiates read or
     // write mode, depending on the value of _WE.
-    Pin(15, "_CAS", INPUT),
+    new Pin(15, '_CAS', INPUT),
 
     // The write-enable pin. If this is high, the chip is in read mode;
     // if it and _CAS are low, the chip is in either write or
     // read-modify-write mode, depending on which pin went low first.
-    Pin(3, "_WE", INPUT),
+    new Pin(3, '_WE', INPUT),
 
     // Address pins 0-7
-    Pin(5, "A0", INPUT),
-    Pin(7, "A1", INPUT),
-    Pin(6, "A2", INPUT),
-    Pin(12, "A3", INPUT),
-    Pin(11, "A4", INPUT),
-    Pin(10, "A5", INPUT),
-    Pin(13, "A6", INPUT),
-    Pin(9, "A7", INPUT),
+    new Pin(5, 'A0', INPUT),
+    new Pin(7, 'A1', INPUT),
+    new Pin(6, 'A2', INPUT),
+    new Pin(12, 'A3', INPUT),
+    new Pin(11, 'A4', INPUT),
+    new Pin(10, 'A5', INPUT),
+    new Pin(13, 'A6', INPUT),
+    new Pin(9, 'A7', INPUT),
 
     // The data input pin. When the chip is in write or
     // read-modify-write mode, the value of this pin will be written to
     // the appropriate bit in the memory array.
-    Pin(2, "D", INPUT),
+    new Pin(2, 'D', INPUT),
 
     // The data output pin. This is active in read and read-modify-write
     // mode, set to the value of the bit at the address latched by _RAS
     // and _CAS. In write mode, it is hi-z.
-    Pin(14, "Q", OUTPUT),
+    new Pin(14, 'Q', OUTPUT),
 
     // Power supply and no-contact pins. These are not emulated.
-    Pin(1, "NC"),
-    Pin(8, "Vcc"),
-    Pin(16, "Vss"),
+    new Pin(1, 'NC'),
+    new Pin(8, 'Vcc'),
+    new Pin(16, 'Vss'),
   )
 
   const addrPins = [...range(8)].map(pin => chip[`A${pin}`])

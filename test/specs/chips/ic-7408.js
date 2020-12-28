@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces } from "test/helper"
-import { Ic7408 } from "chips"
+import { assert, deviceTraces } from 'test/helper'
+import { Ic7408 } from 'chips'
 
 const llMessage = num =>
   `Y${num} should be low when A${num} and B${num} are both low`
@@ -15,7 +15,7 @@ const hlMessage = num =>
 const hhMessage = num =>
   `Y${num} should be high when A${num} and B${num} are both high`
 
-describe("7408 quad 2-input AND gate", () => {
+describe('7408 quad 2-input AND gate', () => {
   let chip, traces
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe("7408 quad 2-input AND gate", () => {
     traces = deviceTraces(chip)
   })
 
-  it("properly ANDs on gate 1", () => {
+  it('properly ANDs on gate 1', () => {
     traces.A1.clear()
     traces.B1.clear()
     assert(traces.Y1.low, llMessage(1))
@@ -41,7 +41,7 @@ describe("7408 quad 2-input AND gate", () => {
     assert(traces.Y1.high, hhMessage(1))
   })
 
-  it("properly ANDs on gate 2", () => {
+  it('properly ANDs on gate 2', () => {
     traces.A2.clear()
     traces.B2.clear()
     assert(traces.Y2.low, llMessage(2))
@@ -59,7 +59,7 @@ describe("7408 quad 2-input AND gate", () => {
     assert(traces.Y2.high, hhMessage(2))
   })
 
-  it("properly ANDs on gate 3", () => {
+  it('properly ANDs on gate 3', () => {
     traces.A3.clear()
     traces.B3.clear()
     assert(traces.Y3.low, llMessage(3))
@@ -77,7 +77,7 @@ describe("7408 quad 2-input AND gate", () => {
     assert(traces.Y3.high, hhMessage(3))
   })
 
-  it("properly ANDs on gate 4", () => {
+  it('properly ANDs on gate 4', () => {
     traces.A4.clear()
     traces.B4.clear()
     assert(traces.Y4.low, llMessage(4))

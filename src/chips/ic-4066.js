@@ -82,8 +82,12 @@
  * @property {Pin} Vss [7] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 /**
  * Creates an emulation of the 4066 quad bilateral switch.
@@ -94,28 +98,28 @@ import { range } from "utils"
 function Ic4066() {
   const chip = Chip(
     // I/O and control pins for switch 1
-    Pin(1, "A1", BIDIRECTIONAL),
-    Pin(2, "B1", BIDIRECTIONAL),
-    Pin(13, "X1", INPUT),
+    new Pin(1, 'A1', BIDIRECTIONAL),
+    new Pin(2, 'B1', BIDIRECTIONAL),
+    new Pin(13, 'X1', INPUT),
 
     // I/O and control pins for switch 2
-    Pin(3, "A2", BIDIRECTIONAL),
-    Pin(4, "B2", BIDIRECTIONAL),
-    Pin(5, "X2", INPUT),
+    new Pin(3, 'A2', BIDIRECTIONAL),
+    new Pin(4, 'B2', BIDIRECTIONAL),
+    new Pin(5, 'X2', INPUT),
 
     // I/O and control pins for switch 3
-    Pin(9, "A3", BIDIRECTIONAL),
-    Pin(8, "B3", BIDIRECTIONAL),
-    Pin(6, "X3", INPUT),
+    new Pin(9, 'A3', BIDIRECTIONAL),
+    new Pin(8, 'B3', BIDIRECTIONAL),
+    new Pin(6, 'X3', INPUT),
 
     // I/O and control pins for switch 4
-    Pin(11, "A4", BIDIRECTIONAL),
-    Pin(10, "B4", BIDIRECTIONAL),
-    Pin(12, "X4", INPUT),
+    new Pin(11, 'A4', BIDIRECTIONAL),
+    new Pin(10, 'B4', BIDIRECTIONAL),
+    new Pin(12, 'X4', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(14, "Vdd"),
-    Pin(7, "GND"),
+    new Pin(14, 'Vdd'),
+    new Pin(7, 'GND'),
   )
 
   const last = [null, null, null, null]

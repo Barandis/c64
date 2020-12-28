@@ -5,11 +5,11 @@
 
 import {
   assert, deviceTraces, portCable, cableMessage, portMessage,
-} from "test/helper"
-import { CassettePort } from "ports"
-import { range } from "utils"
+} from 'test/helper'
+import { CassettePort } from 'ports'
+import { range } from 'utils'
 
-describe("Cassette port", () => {
+describe('Cassette port', () => {
   let port, cable, p, c
 
   beforeEach(() => {
@@ -27,19 +27,19 @@ describe("Cassette port", () => {
     cable.connect(port)
   })
 
-  it("writes data to MOTOR and WRITE", () => {
+  it('writes data to MOTOR and WRITE', () => {
     p.MOTOR.set()
-    assert(c.MOTOR.high, cableMessage("MOTOR"))
+    assert(c.MOTOR.high, cableMessage('MOTOR'))
 
     p.WRITE.set()
-    assert(c.WRITE.high, cableMessage("WRITE"))
+    assert(c.WRITE.high, cableMessage('WRITE'))
   })
 
-  it("reads data from READ and SENSE", () => {
+  it('reads data from READ and SENSE', () => {
     c.READ.set()
-    assert(p.READ.high, portMessage("READ"))
+    assert(p.READ.high, portMessage('READ'))
 
     c.SENSE.set()
-    assert(p.SENSE.high, portMessage("SENSE"))
+    assert(p.SENSE.high, portMessage('SENSE'))
   })
 })

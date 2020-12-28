@@ -5,9 +5,9 @@
 
 import {
   CRB, ALARM, TOD10TH, CRA, TODIN, TODMIN, TODSEC, TODHR, ICR, ALRM, IR, PM,
-} from "./constants"
+} from './constants'
 
-import { bitSet, toggleBit, setBit } from "utils"
+import { bitSet, toggleBit, setBit } from 'utils'
 
 export function tod(chip, registers, latches) {
   // -------------------------------------------------------------------

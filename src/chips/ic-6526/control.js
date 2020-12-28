@@ -5,10 +5,13 @@
 
 import {
   ICR, SC, CRA, LOAD, PBON, DDRA, TALO, TAHI, SPMODE, CRB, DDRB, TBLO, TBHI,
-} from "./constants"
+} from './constants'
 
-import { bitSet } from "utils"
-import { OUTPUT, INPUT } from "components"
+import { bitSet } from 'utils'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function control(chip, registers, latches) {
   // -------------------------------------------------------------------

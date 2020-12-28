@@ -3,16 +3,16 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces, hex } from "test/helper"
-import { Ic2114 } from "chips/"
-import { range, valueToPins, pinsToValue } from "utils"
+import { assert, deviceTraces, hex } from 'test/helper'
+import { Ic2114 } from 'chips/'
+import { range, valueToPins, pinsToValue } from 'utils'
 
 const message = (addr, expected, actual) =>
   `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${
     hex(expected, 1)
   }, actual 0x${hex(actual, 1)}`
 
-describe("2114 1024 x 4-bit static RAM", () => {
+describe('2114 1024 x 4-bit static RAM', () => {
   let chip, traces, addrTraces, dataTraces
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
     }
   })
 
-  it("reads and writes correctly from 0x000 to 0x3ff", () => {
+  it('reads and writes correctly from 0x000 to 0x3ff', () => {
     for (const addr of range(0x000, 0x400)) {
       const expected = addr & 0xf
       valueToPins(addr, ...addrTraces)
@@ -48,7 +48,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
     }
   })
 
-  it("reads and writes on a single select cycle", () => {
+  it('reads and writes on a single select cycle', () => {
     for (const addr of range(0x000, 0x400)) {
       const expected = ~addr & 0xf
       valueToPins(addr, ...addrTraces)
@@ -66,7 +66,7 @@ describe("2114 1024 x 4-bit static RAM", () => {
     }
   })
 
-  it("responds to address pin changes alone", () => {
+  it('responds to address pin changes alone', () => {
     valueToPins(0, ...dataTraces)
     valueToPins(0, ...addrTraces)
 

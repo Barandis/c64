@@ -3,7 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port, Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components"
+import { Port } from 'components'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export const A = 13
 export const B = 14
@@ -20,33 +25,33 @@ export const N = 24
 
 export function UserPort() {
   return Port(
-    Pin(M, "PA2", BIDIRECTIONAL),
+    new Pin(M, 'PA2', BIDIRECTIONAL),
 
-    Pin(C, "PB0", BIDIRECTIONAL),
-    Pin(D, "PB1", BIDIRECTIONAL),
-    Pin(E, "PB2", BIDIRECTIONAL),
-    Pin(F, "PB3", BIDIRECTIONAL),
-    Pin(H, "PB4", BIDIRECTIONAL),
-    Pin(J, "PB5", BIDIRECTIONAL),
-    Pin(K, "PB6", BIDIRECTIONAL),
-    Pin(L, "PB7", BIDIRECTIONAL),
+    new Pin(C, 'PB0', BIDIRECTIONAL),
+    new Pin(D, 'PB1', BIDIRECTIONAL),
+    new Pin(E, 'PB2', BIDIRECTIONAL),
+    new Pin(F, 'PB3', BIDIRECTIONAL),
+    new Pin(H, 'PB4', BIDIRECTIONAL),
+    new Pin(J, 'PB5', BIDIRECTIONAL),
+    new Pin(K, 'PB6', BIDIRECTIONAL),
+    new Pin(L, 'PB7', BIDIRECTIONAL),
 
-    Pin(5, "SP1", BIDIRECTIONAL),
-    Pin(7, "SP2", BIDIRECTIONAL),
+    new Pin(5, 'SP1', BIDIRECTIONAL),
+    new Pin(7, 'SP2', BIDIRECTIONAL),
 
-    Pin(4, "CNT1", BIDIRECTIONAL),
-    Pin(6, "CNT2", BIDIRECTIONAL),
-    Pin(9, "ATN", OUTPUT),
-    Pin(8, "_PC2", INPUT),
-    Pin(B, "_FLAG2", OUTPUT),
-    Pin(3, "_RESET", BIDIRECTIONAL),
+    new Pin(4, 'CNT1', BIDIRECTIONAL),
+    new Pin(6, 'CNT2', BIDIRECTIONAL),
+    new Pin(9, 'ATN', OUTPUT),
+    new Pin(8, '_PC2', INPUT),
+    new Pin(B, '_FLAG2', OUTPUT),
+    new Pin(3, '_RESET', BIDIRECTIONAL),
 
-    Pin(2, "VCC"),
-    Pin(10, "VAC1"),
-    Pin(11, "VAC2"),
-    Pin(1, "GND1"),
-    Pin(12, "GND2"),
-    Pin(A, "GND3"),
-    Pin(N, "GND4"),
+    new Pin(2, 'VCC'),
+    new Pin(10, 'VAC1'),
+    new Pin(11, 'VAC2'),
+    new Pin(1, 'GND1'),
+    new Pin(12, 'GND2'),
+    new Pin(A, 'GND3'),
+    new Pin(N, 'GND4'),
   )
 }

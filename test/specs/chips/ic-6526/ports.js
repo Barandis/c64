@@ -3,10 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, rand } from "test/helper"
-import { DDRA, DDRB, CRA, CRB, PRA, PRB } from "chips/ic-6526/constants"
-import { INPUT, OUTPUT } from "components"
-import { bitSet, valueToPins, pinsToValue, range } from "utils"
+import { assert, rand } from 'test/helper'
+import { DDRA, DDRB, CRA, CRB, PRA, PRB } from 'chips/ic-6526/constants'
+import Pin from 'components/pin'
+import { bitSet, valueToPins, pinsToValue, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(DDRA, 0)
@@ -68,7 +71,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
 }
 
 export function pdrReceive(
-  { writeRegister, readRegister, paTraces, pbTraces }
+  { writeRegister, readRegister, paTraces, pbTraces },
 ) {
   const paValue = rand(256)
 
@@ -143,7 +146,7 @@ export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
 }
 
 export function pdrTriggerPc(
-  { tr, readRegister, writeRegister, paTraces, pbTraces }
+  { tr, readRegister, writeRegister, paTraces, pbTraces },
 ) {
   // Reading port A does not trigger _PC
   writeRegister(DDRA, 0x00)

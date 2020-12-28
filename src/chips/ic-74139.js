@@ -118,8 +118,12 @@
  * @property {Pin} GND [8] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 74139 dual 2-to-4 demultiplexer.
@@ -130,26 +134,26 @@ import { range } from "utils"
 function Ic74139() {
   const chip = Chip(
     // Demultiplexer 1
-    Pin(2, "A1", INPUT),
-    Pin(3, "B1", INPUT),
-    Pin(4, "_Y10", OUTPUT).clear(),
-    Pin(5, "_Y11", OUTPUT).set(),
-    Pin(6, "_Y12", OUTPUT).set(),
-    Pin(7, "_Y13", OUTPUT).set(),
-    Pin(1, "_G1", INPUT),
+    new Pin(2, 'A1', INPUT),
+    new Pin(3, 'B1', INPUT),
+    new Pin(4, '_Y10', OUTPUT).clear(),
+    new Pin(5, '_Y11', OUTPUT).set(),
+    new Pin(6, '_Y12', OUTPUT).set(),
+    new Pin(7, '_Y13', OUTPUT).set(),
+    new Pin(1, '_G1', INPUT),
 
     // Demultiplexer 2
-    Pin(14, "A2", INPUT),
-    Pin(13, "B2", INPUT),
-    Pin(12, "_Y20", OUTPUT).clear(),
-    Pin(11, "_Y21", OUTPUT).set(),
-    Pin(10, "_Y22", OUTPUT).set(),
-    Pin(9, "_Y23", OUTPUT).set(),
-    Pin(15, "_G2", INPUT),
+    new Pin(14, 'A2', INPUT),
+    new Pin(13, 'B2', INPUT),
+    new Pin(12, '_Y20', OUTPUT).clear(),
+    new Pin(11, '_Y21', OUTPUT).set(),
+    new Pin(10, '_Y22', OUTPUT).set(),
+    new Pin(9, '_Y23', OUTPUT).set(),
+    new Pin(15, '_G2', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(16, "Vcc"),
-    Pin(8, "GND"),
+    new Pin(16, 'Vcc'),
+    new Pin(8, 'GND'),
   )
 
   function listener(demux) {

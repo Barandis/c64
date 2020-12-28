@@ -3,16 +3,20 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port, Pin, INPUT, OUTPUT } from "components"
+import { Port } from 'components'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function CassettePort() {
   return Port(
-    Pin(4, "READ", OUTPUT),
-    Pin(5, "WRITE", INPUT),
-    Pin(6, "SENSE", OUTPUT),
-    Pin(3, "MOTOR", INPUT),
+    new Pin(4, 'READ', OUTPUT),
+    new Pin(5, 'WRITE', INPUT),
+    new Pin(6, 'SENSE', OUTPUT),
+    new Pin(3, 'MOTOR', INPUT),
 
-    Pin(2, "VCC"),
-    Pin(1, "GND"),
+    new Pin(2, 'VCC'),
+    new Pin(1, 'GND'),
   )
 }

@@ -3,12 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Board } from "circuits/board"
-import { assert } from "test/helper"
-import { valueToPins, pinsToValue, setMode } from "utils"
-import { INPUT } from "components"
+import { Board } from 'circuits/board'
+import { assert } from 'test/helper'
+import { valueToPins, pinsToValue, setMode } from 'utils'
+import Pin from 'components/pin'
 
-describe("Memory reading/writing", () => {
+const INPUT = Pin.INPUT
+
+describe('Memory reading/writing', () => {
   let board
 
   beforeEach(() => {
@@ -24,8 +26,8 @@ describe("Memory reading/writing", () => {
     U19.AEC.set()
   })
 
-  describe("CIA 1, address $DC00...$DCFF", () => {
-    it("reads a value out of the correct register", () => {
+  describe('CIA 1, address $DC00...$DCFF', () => {
+    it('reads a value out of the correct register', () => {
       const {
         A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15,
       } = board.U7

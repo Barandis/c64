@@ -57,8 +57,12 @@
  * @property {Pin} GND [7] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 7406 hex inverter.
@@ -72,25 +76,25 @@ function Ic7406() {
     // etc., and the C64 schematic does not suggest named for them.
     // Since these names are not legal JS variable names, I've switched
     // the letter and number.
-    Pin(1, "A1", INPUT),
-    Pin(3, "A2", INPUT),
-    Pin(5, "A3", INPUT),
-    Pin(9, "A4", INPUT),
-    Pin(11, "A5", INPUT),
-    Pin(13, "A6", INPUT),
+    new Pin(1, 'A1', INPUT),
+    new Pin(3, 'A2', INPUT),
+    new Pin(5, 'A3', INPUT),
+    new Pin(9, 'A4', INPUT),
+    new Pin(11, 'A5', INPUT),
+    new Pin(13, 'A6', INPUT),
 
     // Output pins. Similarly, the TI data sheet refers to these as
     // "1Y", "2Y", etc.
-    Pin(2, "Y1", OUTPUT).set(),
-    Pin(4, "Y2", OUTPUT).set(),
-    Pin(6, "Y3", OUTPUT).set(),
-    Pin(8, "Y4", OUTPUT).set(),
-    Pin(10, "Y5", OUTPUT).set(),
-    Pin(12, "Y6", OUTPUT).set(),
+    new Pin(2, 'Y1', OUTPUT).set(),
+    new Pin(4, 'Y2', OUTPUT).set(),
+    new Pin(6, 'Y3', OUTPUT).set(),
+    new Pin(8, 'Y4', OUTPUT).set(),
+    new Pin(10, 'Y5', OUTPUT).set(),
+    new Pin(12, 'Y6', OUTPUT).set(),
 
     // Power supply and ground pins, not emulated
-    Pin(14, "Vcc"),
-    Pin(7, "GND"),
+    new Pin(14, 'Vcc'),
+    new Pin(7, 'GND'),
   )
 
   function listener(gate) {

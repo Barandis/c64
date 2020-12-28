@@ -94,8 +94,12 @@
  * @property {Pin} GND [9] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, BIDIRECTIONAL } from "components"
-import { pinsToValue, valueToPins, range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { pinsToValue, valueToPins, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 /**
  * Creates an emulation of the 2114 1k x 4 static RAM.
@@ -106,34 +110,34 @@ import { pinsToValue, valueToPins, range } from "utils"
 function Ic2114() {
   const chip = Chip(
     // Address pins A0...A9
-    Pin(5, "A0", INPUT),
-    Pin(6, "A1", INPUT),
-    Pin(7, "A2", INPUT),
-    Pin(4, "A3", INPUT),
-    Pin(3, "A4", INPUT),
-    Pin(2, "A5", INPUT),
-    Pin(1, "A6", INPUT),
-    Pin(17, "A7", INPUT),
-    Pin(16, "A8", INPUT),
-    Pin(15, "A9", INPUT),
+    new Pin(5, 'A0', INPUT),
+    new Pin(6, 'A1', INPUT),
+    new Pin(7, 'A2', INPUT),
+    new Pin(4, 'A3', INPUT),
+    new Pin(3, 'A4', INPUT),
+    new Pin(2, 'A5', INPUT),
+    new Pin(1, 'A6', INPUT),
+    new Pin(17, 'A7', INPUT),
+    new Pin(16, 'A8', INPUT),
+    new Pin(15, 'A9', INPUT),
 
     // Data pins D0...D3
-    Pin(14, "D0", BIDIRECTIONAL),
-    Pin(13, "D1", BIDIRECTIONAL),
-    Pin(12, "D2", BIDIRECTIONAL),
-    Pin(11, "D3", BIDIRECTIONAL),
+    new Pin(14, 'D0', BIDIRECTIONAL),
+    new Pin(13, 'D1', BIDIRECTIONAL),
+    new Pin(12, 'D2', BIDIRECTIONAL),
+    new Pin(11, 'D3', BIDIRECTIONAL),
 
     // Chip select pin. Setting this to low is what begins a read or
     // write cycle.
-    Pin(8, "_CS", INPUT),
+    new Pin(8, '_CS', INPUT),
 
     // Write enable pin. If this is low when _CE goes low, then the
     // cycle is a write cycle, otherwise it's a read cycle.
-    Pin(10, "_WE", INPUT),
+    new Pin(10, '_WE', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(18, "Vcc"),
-    Pin(9, "GND"),
+    new Pin(18, 'Vcc'),
+    new Pin(9, 'GND'),
   )
 
   const addrPins = [...range(10)].map(pin => chip[`A${pin}`])

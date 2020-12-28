@@ -10,9 +10,16 @@ module.exports = {
     browser: true,
   },
   extends: ["eslint:recommended", "plugin:import/errors"],
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   parserOptions: {
+    ecmaVersion: "2020",
     sourceType: "module",
+    babelOptions: {
+      plugins: [
+        "@babel/plugin-proposal-private-methods",
+        "@babel/plugin-proposal-class-properties"
+      ],
+    }
   },
   plugins: ["import"],
   settings: {
@@ -117,7 +124,7 @@ module.exports = {
     "operator-linebreak": [ERROR, "before"],
     "prefer-object-spread": [ERROR],
     "quote-props": [ERROR, "consistent-as-needed"],
-    "quotes": [ERROR],
+    "quotes": [ERROR, 'single'],
     "semi": [ERROR, "never"],
     "semi-spacing": [ERROR],
     "semi-style": [ERROR],

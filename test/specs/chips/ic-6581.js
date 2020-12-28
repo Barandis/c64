@@ -3,20 +3,20 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { writeFile } from "fs"
+import { writeFile } from 'fs'
 
-import { resolve } from "path"
+import { resolve } from 'path'
 
-import { WaveformGenerator } from "chips/ic-6581/waveform"
-import { Ic6581 } from "chips/index"
-import { deviceTraces } from "test/helper"
+import { WaveformGenerator } from 'chips/ic-6581/waveform'
+import { Ic6581 } from 'chips/index'
+import { deviceTraces } from 'test/helper'
 import {
   SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING,
-} from "chips/ic-6581/constants"
-import { range } from "utils"
+} from 'chips/ic-6581/constants'
+import { range } from 'utils'
 
 function write(path, name, value) {
-  const text = `const ${name} = [${value.join(",")}]`
+  const text = `const ${name} = [${value.join(',')}]`
   writeFile(resolve(__dirname, path), text, err => {
     if (err) {
       console.log(err)
@@ -26,8 +26,8 @@ function write(path, name, value) {
   })
 }
 
-describe("6581 SID", () => {
-  describe("waveform generator", () => {
+describe('6581 SID', () => {
+  describe('waveform generator', () => {
     let chip, tr, registers, gen1, gen2, gen3
 
     function readRegister(index) {
@@ -68,52 +68,52 @@ describe("6581 SID", () => {
       tr.R__W.set()
     })
 
-    describe.skip("graph production", () => {
-      it("produces a sawtooth waveform", () => {
+    describe.skip('graph production', () => {
+      it('produces a sawtooth waveform', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << SAWTOOTH
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/sawtooth.js"
-        write(path, "sawtooth", values)
+        const path = '../../../docs/waveforms/sawtooth.js'
+        write(path, 'sawtooth', values)
       })
 
-      it("produces a high-frequency sawtooth waveform", () => {
+      it('produces a high-frequency sawtooth waveform', () => {
         registers[0] = 0xb0
         registers[1] = 0xe6
         registers[4] = 1 << SAWTOOTH
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/sawtoothhigh.js"
-        write(path, "sawtoothhigh", values)
+        const path = '../../../docs/waveforms/sawtoothhigh.js'
+        write(path, 'sawtoothhigh', values)
       })
 
-      it("produces a triangle waveform", () => {
+      it('produces a triangle waveform', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << TRIANGLE
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/triangle.js"
-        write(path, "triangle", values)
+        const path = '../../../docs/waveforms/triangle.js'
+        write(path, 'triangle', values)
       })
 
-      it("produces a high-frequency triangle waveform", () => {
+      it('produces a high-frequency triangle waveform', () => {
         registers[0] = 0xb0
         registers[1] = 0xe6
         registers[4] = 1 << TRIANGLE
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/trianglehigh.js"
-        write(path, "trianglehigh", values)
+        const path = '../../../docs/waveforms/trianglehigh.js'
+        write(path, 'trianglehigh', values)
       })
 
-      it("produces a pulse waveform", () => {
+      it('produces a pulse waveform', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[2] = 0x00
@@ -122,11 +122,11 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/pulse.js"
-        write(path, "pulse", values)
+        const path = '../../../docs/waveforms/pulse.js'
+        write(path, 'pulse', values)
       })
 
-      it("produces a pulse waveform", () => {
+      it('produces a pulse waveform', () => {
         registers[0] = 0xb0
         registers[1] = 0xe6
         registers[2] = 0x00
@@ -135,30 +135,30 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/pulsehigh.js"
-        write(path, "pulsehigh", values)
+        const path = '../../../docs/waveforms/pulsehigh.js'
+        write(path, 'pulsehigh', values)
       })
 
-      it("produces a noise waveform", () => {
+      it('produces a noise waveform', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << NOISE
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/noise.js"
-        write(path, "noise", values)
+        const path = '../../../docs/waveforms/noise.js'
+        write(path, 'noise', values)
       })
 
-      it("produces a higher-frequency noise waveform", () => {
+      it('produces a higher-frequency noise waveform', () => {
         registers[0] = 0xb0
         registers[1] = 0xe6
         registers[4] = 1 << NOISE
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/noisehigh.js"
-        write(path, "noisehigh", values)
+        const path = '../../../docs/waveforms/noisehigh.js'
+        write(path, 'noisehigh', values)
       })
 
       for (const pw of range(1000, 3001, 1000)) {
@@ -176,18 +176,18 @@ describe("6581 SID", () => {
         })
       }
 
-      it("produces sawtooth + triangle", () => {
+      it('produces sawtooth + triangle', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << SAWTOOTH | 1 << TRIANGLE
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/sawtri.js"
-        write(path, "sawtri", values)
+        const path = '../../../docs/waveforms/sawtri.js'
+        write(path, 'sawtri', values)
       })
 
-      it("produces sawtooth + pulse", () => {
+      it('produces sawtooth + pulse', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[2] = 0x00
@@ -196,11 +196,11 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/sawpul.js"
-        write(path, "sawpul", values)
+        const path = '../../../docs/waveforms/sawpul.js'
+        write(path, 'sawpul', values)
       })
 
-      it("produces triangle + pulse", () => {
+      it('produces triangle + pulse', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[2] = 0x00
@@ -209,11 +209,11 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/tripul.js"
-        write(path, "tripul", values)
+        const path = '../../../docs/waveforms/tripul.js'
+        write(path, 'tripul', values)
       })
 
-      it("produces a hard sync with osc 3", () => {
+      it('produces a hard sync with osc 3', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << SAWTOOTH | 1 << SYNC
@@ -222,11 +222,11 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/sync.js"
-        write(path, "sync", values)
+        const path = '../../../docs/waveforms/sync.js'
+        write(path, 'sync', values)
       })
 
-      it("produces ring modulation with osc 3", () => {
+      it('produces ring modulation with osc 3', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
         registers[4] = 1 << TRIANGLE | 1 << RING
@@ -235,8 +235,8 @@ describe("6581 SID", () => {
 
         const values = produceValues()
 
-        const path = "../../../docs/waveforms/ring.js"
-        write(path, "ring", values)
+        const path = '../../../docs/waveforms/ring.js'
+        write(path, 'ring', values)
       })
     })
   })

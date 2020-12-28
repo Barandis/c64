@@ -3,36 +3,40 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert } from "test/helper"
-import {
-  Trace, Pin, UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL,
-} from "components"
+import { assert } from 'test/helper'
+import Pin from 'components/pin'
+import Trace from 'components/trace'
+
+const UNCONNECTED = Pin.UNCONNECTED
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export function modeInitial() {
-  const p1 = Pin(1, "A", UNCONNECTED)
-  const p2 = Pin(2, "B", INPUT)
-  const p3 = Pin(3, "C", OUTPUT)
-  const p4 = Pin(4, "D", BIDIRECTIONAL)
+  const p1 = new Pin(1, 'A', UNCONNECTED)
+  const p2 = new Pin(2, 'B', INPUT)
+  const p3 = new Pin(3, 'C', OUTPUT)
+  const p4 = new Pin(4, 'D', BIDIRECTIONAL)
 
-  assert(p1.mode === UNCONNECTED)
+  assert(p1.mode === Pin.UNCONNECTED)
   assert(!p1.input)
   assert(!p1.output)
 
-  assert(p2.mode === INPUT)
+  assert(p2.mode === Pin.INPUT)
   assert(p2.input)
   assert(!p2.output)
 
-  assert(p3.mode === OUTPUT)
+  assert(p3.mode === Pin.OUTPUT)
   assert(!p3.input)
   assert(p3.output)
 
-  assert(p4.mode === BIDIRECTIONAL)
+  assert(p4.mode === Pin.BIDIRECTIONAL)
   assert(p4.input)
   assert(p4.output)
 }
 
 export function modeChange() {
-  const p = Pin(1, "A", UNCONNECTED)
+  const p = new Pin(1, 'A', UNCONNECTED)
   assert(p.mode === UNCONNECTED)
   p.mode = INPUT
   assert(p.mode === INPUT)
@@ -43,8 +47,8 @@ export function modeChange() {
 }
 
 export function modeOutToIn() {
-  const p = Pin(1, "A", OUTPUT)
-  const t = Trace(p, Pin(2, "B", INPUT))
+  const p = new Pin(1, 'A', OUTPUT)
+  const t = new Trace(p, new Pin(2, 'B', INPUT))
   p.level = 1
   assert(t.high)
   p.mode = INPUT
@@ -52,8 +56,8 @@ export function modeOutToIn() {
 }
 
 export function modeBidiToIn() {
-  const p = Pin(1, "A", BIDIRECTIONAL)
-  const t = Trace(p, Pin(2, "B", INPUT))
+  const p = new Pin(1, 'A', BIDIRECTIONAL)
+  const t = new Trace(p, new Pin(2, 'B', INPUT))
   p.level = 1
   assert(t.high)
   p.mode = INPUT
@@ -61,8 +65,8 @@ export function modeBidiToIn() {
 }
 
 export function modeUncToIn() {
-  const p = Pin(1, "A", UNCONNECTED)
-  const t = Trace(p, Pin(2, "B", INPUT))
+  const p = new Pin(1, 'A', UNCONNECTED)
+  const t = new Trace(p, new Pin(2, 'B', INPUT))
   p.level = 1
   assert(t.floating)
   p.mode = INPUT
@@ -70,8 +74,8 @@ export function modeUncToIn() {
 }
 
 export function modeBidiToOut() {
-  const p = Pin(1, "A", BIDIRECTIONAL)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', BIDIRECTIONAL)
+  const t = new Trace(p)
   p.level = 1
   assert(t.high)
   p.mode = OUTPUT
@@ -79,8 +83,8 @@ export function modeBidiToOut() {
 }
 
 export function modeUncToOut() {
-  const p = Pin(1, "A", UNCONNECTED)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', UNCONNECTED)
+  const t = new Trace(p)
   p.level = 1
   assert(t.floating)
   p.mode = OUTPUT
@@ -88,8 +92,8 @@ export function modeUncToOut() {
 }
 
 export function modeInToUnc() {
-  const p = Pin(1, "A", INPUT)
-  const t = Trace(p)
+  const p = new Pin(1, 'A', INPUT)
+  const t = new Trace(p)
   t.level = 1
   assert(p.high)
   p.mode = UNCONNECTED
@@ -98,7 +102,7 @@ export function modeInToUnc() {
 }
 
 export function incorrectMode() {
-  const p = Pin(1, "A", INPUT)
+  const p = new Pin(1, 'A', INPUT)
   p.mode = 1729
   assert(p.mode === INPUT)
 }

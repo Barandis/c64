@@ -5,14 +5,14 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { assert, deviceTraces, DEBUG, hex } from "test/helper"
-import { Ic2364 } from "chips"
-import { kernal } from "rom/kernal"
-import { basic } from "rom/basic"
-import { range, valueToPins, pinsToValue } from "utils"
+import { assert, deviceTraces, DEBUG, hex } from 'test/helper'
+import { Ic2364 } from 'chips'
+import { kernal } from 'rom/kernal'
+import { basic } from 'rom/basic'
+import { range, valueToPins, pinsToValue } from 'utils'
 
-describe("2364 8k x 8-bit ROM", () => {
-  describe("KERNAL ROM", () => {
+describe('2364 8k x 8-bit ROM', () => {
+  describe('KERNAL ROM', () => {
     let chip, traces, addrTraces, dataTraces
     const expected = new Uint8Array(kernal)
 
@@ -46,7 +46,7 @@ describe("2364 8k x 8-bit ROM", () => {
             data === expected[addr],
             `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${
               hex(expected[addr], 2)
-            }, actual 0x${hex(data, 2)}`
+            }, actual 0x${hex(data, 2)}`,
           )
           traces._CS.set()
         }
@@ -54,7 +54,7 @@ describe("2364 8k x 8-bit ROM", () => {
     }
   })
 
-  describe("BASIC ROM", () => {
+  describe('BASIC ROM', () => {
     let chip, traces, addrTraces, dataTraces
     const expected = new Uint8Array(basic)
 
@@ -90,7 +90,7 @@ describe("2364 8k x 8-bit ROM", () => {
             data === expected[addr],
             `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${
               hex(expected[addr], 2)
-            }, actual 0x${hex(data, 2)}`
+            }, actual 0x${hex(data, 2)}`,
           )
           traces._CS.set()
         }

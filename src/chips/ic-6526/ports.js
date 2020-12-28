@@ -3,10 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { PRA, PRB, DDRA, CRA, PBON, DDRB, CRB } from "./constants"
+import { PRA, PRB, DDRA, CRA, PBON, DDRB, CRB } from './constants'
 
-import { setBit, clearBit, bitSet, range } from "utils"
-import { OUTPUT, INPUT } from "components"
+import { setBit, clearBit, bitSet, range } from 'utils'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function ports(chip, registers) {
   // -------------------------------------------------------------------

@@ -3,11 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert } from "test/helper"
+import { assert } from 'test/helper'
 import {
   TOD10TH, CRA, TODIN, TODSEC, TODMIN, TODHR, ICR, ALRM, IR, CRB, ALARM, SC, PM,
-} from "chips/ic-6526/constants"
-import { bitSet, bitClear, range } from "utils"
+} from 'chips/ic-6526/constants'
+import { bitSet, bitClear, range } from 'utils'
 
 export function todAdvance({ tr, readRegister }) {
   assert(readRegister(TOD10TH) === 0)

@@ -3,9 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, bin, deviceTraces, hex } from "test/helper"
-import { Ic82S100 } from "chips"
-import { range, valueToPins, pinsToValue } from "utils"
+import { assert, bin, deviceTraces, hex } from 'test/helper'
+import { Ic82S100 } from 'chips'
+import { range, valueToPins, pinsToValue } from 'utils'
 
 // This program was adapted from a C program that provides a 64k table
 // of outputs for PLA based on all of the possible inputs. The original
@@ -124,14 +124,14 @@ function getExpected(input) {
 }
 /* eslint-enable complexity, camelcase */
 
-describe("82S100 Programmable Logic Array", () => {
+describe('82S100 Programmable Logic Array', () => {
   const chip = Ic82S100()
   const traces = deviceTraces(chip)
 
   const inTraces = [...range(0, 16)].map(pin => traces[`I${pin}`])
   const outTraces = [...range(0, 8)].map(pin => traces[`F${pin}`])
 
-  it("disables all outputs if _OE is set high", () => {
+  it('disables all outputs if _OE is set high', () => {
     traces._OE.set()
     assert(traces.F0.floating)
     assert(traces.F1.floating)
@@ -144,7 +144,7 @@ describe("82S100 Programmable Logic Array", () => {
     traces._OE.clear()
   })
 
-  describe("logic combinations", () => {
+  describe('logic combinations', () => {
     for (const base of range(0x0000, 0xffff, 0x1000)) {
       it(`produces the correct output from 0x${hex(base, 4)} to 0x${
         hex(base + 0x0fff, 4)
@@ -158,7 +158,7 @@ describe("82S100 Programmable Logic Array", () => {
             actual === expected,
             `Incorrect output for input ${bin(addr, 16)}: expected: ${
               bin(expected, 8)
-            }, actual ${bin(actual, 8)}`
+            }, actual ${bin(actual, 8)}`,
           )
         }
       })

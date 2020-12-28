@@ -6,9 +6,9 @@
 import {
   CRA, CRB, START, INMODE, INMODE0, INMODE1, PBON, OUTMODE, TALO, TAHI, TBLO,
   TBHI, ICR, TA, RUNMODE, TB, SPMODE, SDR, SP, IR,
-} from "./constants"
+} from './constants'
 
-import { bitSet, bitClear, setBit, clearBit } from "utils"
+import { bitSet, bitClear, setBit, clearBit } from 'utils'
 
 export function timers(chip, registers, latches) {
   // -------------------------------------------------------------------

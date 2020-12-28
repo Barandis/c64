@@ -3,19 +3,22 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port, Pin, OUTPUT } from "components"
+import { Port } from 'components'
+import Pin from 'components/pin'
+
+const OUTPUT = Pin.OUTPUT
 
 export function Control1Port() {
   return Port(
-    Pin(1, "JOYA0", OUTPUT),
-    Pin(2, "JOYA1", OUTPUT),
-    Pin(3, "JOYA2", OUTPUT),
-    Pin(4, "JOYA3", OUTPUT),
-    Pin(9, "POTAX", OUTPUT),
-    Pin(5, "POTAY", OUTPUT),
-    Pin(6, "BTNA_LP", OUTPUT),
+    new Pin(1, 'JOYA0', OUTPUT),
+    new Pin(2, 'JOYA1', OUTPUT),
+    new Pin(3, 'JOYA2', OUTPUT),
+    new Pin(4, 'JOYA3', OUTPUT),
+    new Pin(9, 'POTAX', OUTPUT),
+    new Pin(5, 'POTAY', OUTPUT),
+    new Pin(6, 'BTNA_LP', OUTPUT),
 
-    Pin(7, "VCC"),
-    Pin(8, "GND"),
+    new Pin(7, 'VCC'),
+    new Pin(8, 'GND'),
   )
 }

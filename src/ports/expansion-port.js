@@ -3,7 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port, Pin, BIDIRECTIONAL, INPUT, OUTPUT } from "components"
+import { Port } from 'components'
+import Pin from 'components/pin'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
+const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export const A = 23
 export const B = 24
@@ -30,57 +35,57 @@ export const Z = 44
 
 export function ExpansionPort() {
   return Port(
-    Pin(Y, "A0", INPUT),
-    Pin(X, "A1", INPUT),
-    Pin(W, "A2", INPUT),
-    Pin(V, "A3", INPUT),
-    Pin(U, "A4", INPUT),
-    Pin(T, "A5", INPUT),
-    Pin(S, "A6", INPUT),
-    Pin(R, "A7", INPUT),
-    Pin(P, "A8", INPUT),
-    Pin(N, "A9", INPUT),
-    Pin(M, "A10", INPUT),
-    Pin(L, "A11", INPUT),
-    Pin(K, "A12", INPUT),
-    Pin(J, "A13", INPUT),
-    Pin(H, "A14", INPUT),
-    Pin(F, "A15", INPUT),
+    new Pin(Y, 'A0', INPUT),
+    new Pin(X, 'A1', INPUT),
+    new Pin(W, 'A2', INPUT),
+    new Pin(V, 'A3', INPUT),
+    new Pin(U, 'A4', INPUT),
+    new Pin(T, 'A5', INPUT),
+    new Pin(S, 'A6', INPUT),
+    new Pin(R, 'A7', INPUT),
+    new Pin(P, 'A8', INPUT),
+    new Pin(N, 'A9', INPUT),
+    new Pin(M, 'A10', INPUT),
+    new Pin(L, 'A11', INPUT),
+    new Pin(K, 'A12', INPUT),
+    new Pin(J, 'A13', INPUT),
+    new Pin(H, 'A14', INPUT),
+    new Pin(F, 'A15', INPUT),
 
-    Pin(21, "D0", BIDIRECTIONAL),
-    Pin(20, "D1", BIDIRECTIONAL),
-    Pin(19, "D2", BIDIRECTIONAL),
-    Pin(18, "D3", BIDIRECTIONAL),
-    Pin(17, "D4", BIDIRECTIONAL),
-    Pin(16, "D5", BIDIRECTIONAL),
-    Pin(15, "D6", BIDIRECTIONAL),
-    Pin(14, "D7", BIDIRECTIONAL),
+    new Pin(21, 'D0', BIDIRECTIONAL),
+    new Pin(20, 'D1', BIDIRECTIONAL),
+    new Pin(19, 'D2', BIDIRECTIONAL),
+    new Pin(18, 'D3', BIDIRECTIONAL),
+    new Pin(17, 'D4', BIDIRECTIONAL),
+    new Pin(16, 'D5', BIDIRECTIONAL),
+    new Pin(15, 'D6', BIDIRECTIONAL),
+    new Pin(14, 'D7', BIDIRECTIONAL),
 
-    Pin(5, "R__W", INPUT),
-    Pin(8, "_GAME", OUTPUT),
-    Pin(9, "_EXROM", OUTPUT),
-    Pin(12, "BA", INPUT),
-    Pin(13, "_DMA", OUTPUT),
+    new Pin(5, 'R__W', INPUT),
+    new Pin(8, '_GAME', OUTPUT),
+    new Pin(9, '_EXROM', OUTPUT),
+    new Pin(12, 'BA', INPUT),
+    new Pin(13, '_DMA', OUTPUT),
 
-    Pin(7, "_IO1", INPUT),
-    Pin(10, "_IO2", INPUT),
-    Pin(11, "_ROML", INPUT),
-    Pin(B, "_ROMH", INPUT),
+    new Pin(7, '_IO1', INPUT),
+    new Pin(10, '_IO2', INPUT),
+    new Pin(11, '_ROML', INPUT),
+    new Pin(B, '_ROMH', INPUT),
 
-    Pin(4, "_IRQ", OUTPUT),
-    Pin(D, "_NMI", OUTPUT),
+    new Pin(4, '_IRQ', OUTPUT),
+    new Pin(D, '_NMI', OUTPUT),
 
-    Pin(6, "φDOT", INPUT),
-    Pin(E, "φ2", INPUT),
+    new Pin(6, 'φDOT', INPUT),
+    new Pin(E, 'φ2', INPUT),
 
-    Pin(C, "_RESET", OUTPUT),
+    new Pin(C, '_RESET', OUTPUT),
 
-    Pin(2, "VCC1"),
-    Pin(3, "VCC2"),
+    new Pin(2, 'VCC1'),
+    new Pin(3, 'VCC2'),
 
-    Pin(1, "GND1"),
-    Pin(22, "GND2"),
-    Pin(A, "GND3"),
-    Pin(Z, "GND4"),
+    new Pin(1, 'GND1'),
+    new Pin(22, 'GND2'),
+    new Pin(A, 'GND3'),
+    new Pin(Z, 'GND4'),
   )
 }

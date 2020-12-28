@@ -3,10 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { rand, assert } from "test/helper"
-import { INPUT, OUTPUT } from "components"
-import { TBHI, TALO, ICR, FLG, IR, SC, PRB } from "chips/ic-6526/constants"
-import { bitSet, bitClear, range } from "utils"
+import { rand, assert } from 'test/helper'
+import Pin from 'components/pin'
+import { TBHI, TALO, ICR, FLG, IR, SC, PRB } from 'chips/ic-6526/constants'
+import { bitSet, bitClear, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export function reset({ chip, tr, writeRegister, readRegister }) {
   for (const i of range(16)) {
@@ -16,7 +19,7 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   tr._RES.set()
   for (const i of range(16)) {
     assert(
-      readRegister(i) === (i <= PRB || i >= TALO && i <= TBHI ? 255 : 0)
+      readRegister(i) === (i <= PRB || i >= TALO && i <= TBHI ? 255 : 0),
     )
   }
   assert(chip.CNT.mode === INPUT)

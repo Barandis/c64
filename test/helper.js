@@ -3,52 +3,77 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import chai from "chai"
+import chai from 'chai'
 
-import { OUTPUT, INPUT, Pin, Port, Trace } from "components"
-import { range } from "utils"
+import { Port } from 'components'
+import Pin from 'components/pin'
+import Trace from 'components/trace'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 export const assert = chai.assert
 
 export const DEBUG = process.env.DEBUG || false
 
+/**
+ * @param {number} min
+ * @param {number} max
+ */
 export function rand(min, max = null) {
   const [lo, hi] = max === null ? [0, min] : [min, max]
   return Math.floor(Math.random() * (hi - lo)) + lo
 }
 
+/**
+ * @param {[]} actual
+ * @param {[]} expected
+ */
 export function assertArray(actual, expected) {
   assert(actual.length === expected.length)
   for (const i of range(actual.length)) {
     assert(
       actual[i] === expected[i],
-      `Expected: ${expected[i]}, Actual: ${actual[i]}`
+      `Expected: ${expected[i]}, Actual: ${actual[i]}`,
     )
   }
 }
 
+/**
+ * @param {number} value
+ * @param {number} digits
+ */
 export function hex(value, digits = 2) {
   if (value === null) {
-    return "null"
+    return 'null'
   }
-  return ("0000000000000000" + value.toString(16).toLowerCase()).substr(-digits)
+  return ('0000000000000000' + value.toString(16).toLowerCase()).substr(-digits)
 }
 
+/**
+ * @param {number} value
+ * @param {number} digits
+ */
 export function bin(value, digits = 8) {
   if (value === null) {
-    return "null"
+    return 'null'
   }
-  return ("0000000000000000" + value.toString(2)).substr(-digits)
+  return ('0000000000000000' + value.toString(2)).substr(-digits)
 }
 
+/**
+ * @param {[]} chip
+ * @param {string} name
+ */
 export function chipState(chip, name) {
   const terms = []
   for (const pin of Object.values(chip.pins).sort(
-    (a, b) => a.num - b.num
+    (a, b) => a.num - b.num,
   )) {
-    terms.push(`${pin.name}: ${pin.level === null ? "z" : pin.level}`)
+    terms.push(`${pin.name}: ${pin.level === null ? 'z' : pin.level}`)
   }
-  return `${name}: [${terms.join(", ")}]`
+  return `${name}: [${terms.join(', ')}]`
 }
 
 export function deviceTraces(device) {
@@ -56,7 +81,7 @@ export function deviceTraces(device) {
 
   for (const pin of device) {
     if (pin) {
-      const trace = Trace(pin)
+      const trace = new Trace(pin)
       traces[pin.number] = trace
       traces[pin.name] = trace
     }
@@ -75,7 +100,7 @@ export function portCable(port) {
         : pin.mode === OUTPUT
           ? INPUT
           : pin.mode
-      pins[pin.number] = Pin(pin.number, pin.name, mode)
+      pins[pin.number] = new Pin(pin.number, pin.name, mode)
     }
   }
 

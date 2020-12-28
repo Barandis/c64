@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Connector } from "components/connector"
-import { enumerate } from "utils"
+import { Connector } from 'components/connector'
+import { enumerate } from 'utils'
 
 // Represents an external port on a computer, consisting of a number of
 // pins to connect to the electronics behind it and a matching number of

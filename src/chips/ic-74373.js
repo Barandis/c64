@@ -89,8 +89,12 @@
  * @property {Pin} GND [10] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 74373 octal transparent latch.
@@ -101,39 +105,39 @@ import { range } from "utils"
 function Ic74373() {
   const chip = Chip(
     // Input pins.
-    Pin(3, "D0", INPUT),
-    Pin(4, "D1", INPUT),
-    Pin(7, "D2", INPUT),
-    Pin(8, "D3", INPUT),
-    Pin(13, "D4", INPUT),
-    Pin(14, "D5", INPUT),
-    Pin(17, "D6", INPUT),
-    Pin(18, "D7", INPUT),
+    new Pin(3, 'D0', INPUT),
+    new Pin(4, 'D1', INPUT),
+    new Pin(7, 'D2', INPUT),
+    new Pin(8, 'D3', INPUT),
+    new Pin(13, 'D4', INPUT),
+    new Pin(14, 'D5', INPUT),
+    new Pin(17, 'D6', INPUT),
+    new Pin(18, 'D7', INPUT),
 
     // Output pins.
-    Pin(2, "Q0", OUTPUT).clear(),
-    Pin(5, "Q1", OUTPUT).clear(),
-    Pin(6, "Q2", OUTPUT).clear(),
-    Pin(9, "Q3", OUTPUT).clear(),
-    Pin(12, "Q4", OUTPUT).clear(),
-    Pin(15, "Q5", OUTPUT).clear(),
-    Pin(16, "Q6", OUTPUT).clear(),
-    Pin(19, "Q7", OUTPUT).clear(),
+    new Pin(2, 'Q0', OUTPUT).clear(),
+    new Pin(5, 'Q1', OUTPUT).clear(),
+    new Pin(6, 'Q2', OUTPUT).clear(),
+    new Pin(9, 'Q3', OUTPUT).clear(),
+    new Pin(12, 'Q4', OUTPUT).clear(),
+    new Pin(15, 'Q5', OUTPUT).clear(),
+    new Pin(16, 'Q6', OUTPUT).clear(),
+    new Pin(19, 'Q7', OUTPUT).clear(),
 
     // Output enable. When this is high, the outputs function normally
     // according to their inputs and LE. When this is low, the outputs
     // are all hi-Z.
-    Pin(1, "_OE", INPUT),
+    new Pin(1, '_OE', INPUT),
 
     // Latch enable. When set high, data flows transparently through the
     // device, with output pins matching their input pins. When it goes
     // low, the output pins remain in their current state for as long as
     // LE is low, no matter what the inputs do.
-    Pin(11, "LE", INPUT),
+    new Pin(11, 'LE', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(10, "GND"),
-    Pin(20, "Vcc"),
+    new Pin(10, 'GND'),
+    new Pin(20, 'Vcc'),
   )
 
   // "Memory" for the latched values. When _OE returns high while LE is

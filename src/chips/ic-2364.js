@@ -74,8 +74,12 @@
  * @property {Pin} GND [12] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { pinsToValue, valueToPins, range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { pinsToValue, valueToPins, range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 2364 8k x 8-bit ROM.
@@ -93,38 +97,38 @@ import { pinsToValue, valueToPins, range } from "utils"
 function Ic2364(buffer) {
   const chip = Chip(
     // Address pins A0...A12
-    Pin(8, "A0", INPUT),
-    Pin(7, "A1", INPUT),
-    Pin(6, "A2", INPUT),
-    Pin(5, "A3", INPUT),
-    Pin(4, "A4", INPUT),
-    Pin(3, "A5", INPUT),
-    Pin(2, "A6", INPUT),
-    Pin(1, "A7", INPUT),
-    Pin(23, "A8", INPUT),
-    Pin(22, "A9", INPUT),
-    Pin(18, "A10", INPUT),
-    Pin(19, "A11", INPUT),
-    Pin(21, "A12", INPUT),
+    new Pin(8, 'A0', INPUT),
+    new Pin(7, 'A1', INPUT),
+    new Pin(6, 'A2', INPUT),
+    new Pin(5, 'A3', INPUT),
+    new Pin(4, 'A4', INPUT),
+    new Pin(3, 'A5', INPUT),
+    new Pin(2, 'A6', INPUT),
+    new Pin(1, 'A7', INPUT),
+    new Pin(23, 'A8', INPUT),
+    new Pin(22, 'A9', INPUT),
+    new Pin(18, 'A10', INPUT),
+    new Pin(19, 'A11', INPUT),
+    new Pin(21, 'A12', INPUT),
 
     // Data pins D0...D7
-    Pin(9, "D0", OUTPUT),
-    Pin(10, "D1", OUTPUT),
-    Pin(11, "D2", OUTPUT),
-    Pin(13, "D3", OUTPUT),
-    Pin(14, "D4", OUTPUT),
-    Pin(15, "D5", OUTPUT),
-    Pin(16, "D6", OUTPUT),
-    Pin(17, "D7", OUTPUT),
+    new Pin(9, 'D0', OUTPUT),
+    new Pin(10, 'D1', OUTPUT),
+    new Pin(11, 'D2', OUTPUT),
+    new Pin(13, 'D3', OUTPUT),
+    new Pin(14, 'D4', OUTPUT),
+    new Pin(15, 'D5', OUTPUT),
+    new Pin(16, 'D6', OUTPUT),
+    new Pin(17, 'D7', OUTPUT),
 
     // Chip select pin. When this goes low, a read cycle is executed
     // based on the address on pins A0...A12. When it's high, the data
     // pins are put into hi-Z.
-    Pin(20, "_CS", INPUT),
+    new Pin(20, '_CS', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(24, "VCC"),
-    Pin(12, "GND"),
+    new Pin(24, 'VCC'),
+    new Pin(12, 'GND'),
   )
 
   const addrPins = [...range(13)].map(pin => chip[`A${pin}`])

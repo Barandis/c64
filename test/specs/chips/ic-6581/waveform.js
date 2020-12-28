@@ -3,14 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { SAWTOOTH } from "chips/ic-6581/constants"
-import { range } from "utils"
-import { assert } from "test/helper"
+import { SAWTOOTH } from 'chips/ic-6581/constants'
+import { range } from 'utils'
+import { assert } from 'test/helper'
 
 const FRELO = 0
 const FREHI = 1
-const PWLO = 2
-const PWHI = 3
 const VCREG = 4
 
 // Frequency of A7 is 3520 Hz

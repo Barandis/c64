@@ -3,7 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { OUTPUT } from "components/pin"
+import Pin from 'components/pin'
+
+const OUTPUT = Pin.OUTPUT
 
 // When a trace's level is set directly, its actual value is chosen
 // according to the following rules:
@@ -22,126 +24,103 @@ import { OUTPUT } from "components/pin"
 // value is simply set *unless* the value it's being set to is `null`.
 // In that case the same rules as direct setting apply.
 
-export function Trace(...pins) {
-  const _pins = []
-  let _float = null
-  let _level = null
+export default class Trace {
+  /** @type {Pin[]} */
+  #pins = []
+  /** @type {null|0|1} */
+  #float = null
+  /** @type {number|null} */
+  #level = null
 
-  function addPin(pin) {
-    if (!pin.connected) {
-      _pins.push(pin)
-      pin.setTrace(trace)
-    }
-  }
-
-  function addPins(...pins) {
-    for (const p of pins) {
-      addPin(p)
-    }
-    return trace
-  }
-
-  function normalize(level) {
+  /** @param {number|null} level */
+  #normalize (level) {
     return level === null ? null : Number(level)
   }
 
-  function calculateLevel(level) {
-    const hi = _pins.find(p => p.mode === OUTPUT && p.high)
-    if (hi) {
-      return hi.level
-    }
+  /** @param {number|null} level */
+  #calculate (level) {
+    const hi = this.#pins.find(p => p.mode === OUTPUT && p.high)
+    if (hi) return hi.level
 
-    const lo = _pins.find(p => p.mode === OUTPUT && p.low)
-    if (lo) {
-      return lo.level
-    }
+    const lo = this.#pins.find(p => p.mode === OUTPUT && p.low)
+    if (lo) return lo.level
 
-    if (level === null) {
-      return _float
-    }
+    if (level === null) return this.#float
 
     return level
   }
 
-  // This is called by the trace's output pins changing values or by
-  // unconnected pins becoming output or bidirectional pins.
-  function updateLevel(level) {
-    const normalized = normalize(level)
-    if (normalized !== null) {
-      _level = normalized
-    } else {
-      _level = calculateLevel(null)
+  /**
+   * @param {...Pin} pins
+   */
+  constructor(...pins) {
+    this.addPins(...pins)
+    this.updateLevel(null)
+  }
+
+  get level() { return this.#level }
+
+  set level(value) {
+    this.#level = this.#calculate(this.#normalize(value))
+    this.#pins.forEach(p => p.updateLevel())
+  }
+
+  get high() { return this.#level >= 0.5 }
+
+  get low() { return this.#level < 0.5 && this.level !== null }
+
+  get floating() { return this.#level === null }
+
+  /**
+   * @param {...Pin} pins
+   */
+  addPins(...pins) {
+    for (const p of pins) {
+      if (!p.connected) {
+        this.#pins.push(p)
+        p.trace = this
+      }
     }
-    _pins.forEach(p => p.updateLevel())
+    return this
   }
 
-  // This is called from outside the trace and its pins.
-  function setLevel(level) {
-    _level = calculateLevel(normalize(level))
-    _pins.forEach(p => p.updateLevel())
+  /** @param {number} level */
+  updateLevel(level) {
+    const normalized = this.#normalize(level)
+    this.#level = normalized === null ? this.#calculate(null) : normalized
+    this.#pins.forEach(p => p.updateLevel())
   }
 
-  function set() {
-    setLevel(1)
-    return trace
+  set() {
+    this.level = 1
+    return this
   }
 
-  function clear() {
-    setLevel(0)
-    return trace
+  clear() {
+    this.level = 0
+    return this
   }
 
-  function float() {
-    setLevel(null)
-    return trace
+  float() {
+    this.level = null
+    return this
   }
 
-  function pullUp() {
-    _float = 1
-    setLevel(_level)
-    return trace
+  pullUp() {
+    this.#float = 1
+    this.level = this.#level
+    return this
   }
 
-  function pullDown() {
-    _float = 0
-    setLevel(_level)
-    return trace
+  pullDown() {
+    this.#float = 0
+    this.level = this.#level
+    return this
   }
 
-  function noPull() {
-    _float = null
-    setLevel(_level)
-    return trace
+  noPull() {
+    this.#float = null
+    this.level = this.#level
+    return this
   }
-
-  const trace = {
-    get high() {
-      return _level >= 0.5
-    },
-    get low() {
-      return _level < 0.5 && _level !== null
-    },
-    get floating() {
-      return _level === null
-    },
-    get level() {
-      return _level
-    },
-    set level(level) {
-      setLevel(level)
-    },
-
-    set,
-    clear,
-    float,
-    pullUp,
-    pullDown,
-    noPull,
-    updateLevel,
-    addPins,
-  }
-
-  trace.addPins(...pins)
-  trace.updateLevel(null)
-  return trace
 }

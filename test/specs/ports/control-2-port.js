@@ -3,11 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces, portCable, portMessage } from "test/helper"
-import { Control2Port } from "ports"
-import { range } from "utils"
+import { assert, deviceTraces, portCable, portMessage } from 'test/helper'
+import { Control2Port } from 'ports'
+import { range } from 'utils'
 
-describe("Control port 1", () => {
+describe('Control port 1', () => {
   let port, cable, p, c
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe("Control port 1", () => {
     cable.connect(port)
   })
 
-  it("reads data from 7 pins", () => {
+  it('reads data from 7 pins', () => {
     c.JOYB0.level = 0.9
     c.JOYB1.level = 0.8
     c.JOYB2.level = 0.7
@@ -34,12 +34,12 @@ describe("Control port 1", () => {
     c.BTNB.level = 1
     c.POTBX.level = 0.4
 
-    assert(p.JOYB0.level === 0.9, portMessage("JOYB0"))
-    assert(p.JOYB1.level === 0.8, portMessage("JOYB1"))
-    assert(p.JOYB2.level === 0.7, portMessage("JOYB2"))
-    assert(p.JOYB3.level === 0.6, portMessage("JOYB3"))
-    assert(p.POTBY.level === 0.5, portMessage("POTBY"))
-    assert(p.BTNB.level === 1, portMessage("BTNB"))
-    assert(p.POTBX.level === 0.4, portMessage("POTBX"))
+    assert(p.JOYB0.level === 0.9, portMessage('JOYB0'))
+    assert(p.JOYB1.level === 0.8, portMessage('JOYB1'))
+    assert(p.JOYB2.level === 0.7, portMessage('JOYB2'))
+    assert(p.JOYB3.level === 0.6, portMessage('JOYB3'))
+    assert(p.POTBY.level === 0.5, portMessage('POTBY'))
+    assert(p.BTNB.level === 1, portMessage('BTNB'))
+    assert(p.POTBX.level === 0.4, portMessage('POTBX'))
   })
 })

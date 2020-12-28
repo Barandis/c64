@@ -3,11 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert } from "test/helper"
+import { assert } from 'test/helper'
 import {
   SDR, TALO, TAHI, CRA, LOAD, SPMODE, START, ICR, SP, IR,
-} from "chips/ic-6526/constants"
-import { bitSet, bitClear, range } from "utils"
+} from 'chips/ic-6526/constants'
+import { bitSet, bitClear, range } from 'utils'
 
 export function spInput({ tr, readRegister }) {
   const data = 0x2f

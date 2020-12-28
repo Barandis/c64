@@ -3,13 +3,15 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert } from "test/helper"
+import { assert } from 'test/helper'
 import {
   TBHI, TBLO, CRB, LOAD, START, RUNMODE, PBON, OUTMODE, INMODE0, TALO, TAHI,
   CRA, INMODE1, ICR, TB, IR, SC, DDRB,
-} from "chips/ic-6526/constants"
-import { OUTPUT } from "components"
-import { bitSet, bitClear, range } from "utils"
+} from 'chips/ic-6526/constants'
+import Pin from 'components/pin'
+import { bitSet, bitClear, range } from 'utils'
+
+const OUTPUT = Pin.OUTPUT
 
 export function tbDefault({ readRegister }) {
   assert(readRegister(TBHI) === 0xff)
@@ -179,7 +181,7 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
   writeRegister(TBHI, 0)
   writeRegister(
     CRB,
-    1 << LOAD | 1 << OUTMODE | 1 << PBON | 1 << START
+    1 << LOAD | 1 << OUTMODE | 1 << PBON | 1 << START,
   )
 
   assert(readRegister(TBLO) === 5)

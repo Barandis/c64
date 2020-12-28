@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+/** @typedef {import('./trace').default} Trace */
+
 // A pin on an IC package or a port.
 //
 // This is the sole interface between these devices and the outside
@@ -42,182 +44,182 @@
 // The possible directions that a pin can have. These are chosen so that
 // bit 0 of the constant determines whether it's an input and bit 1
 // whether it's an output (hence bidrectional pins have both bits set).
-export const UNCONNECTED = 0b00
-export const INPUT = 0b01
-export const OUTPUT = 0b10
-export const BIDIRECTIONAL = 0b11
+const UNCONNECTED = 0b00
+const INPUT = 0b01
+const OUTPUT = 0b10
+const BIDIRECTIONAL = 0b11
 
-export function Pin(number, name, mode = UNCONNECTED) {
-  const _listeners = []
-  let _trace = null
-  let _float = null
-  let _level = normalize(null)
-  let _mode = UNCONNECTED
-  setMode(mode)
+export default class Pin {
+  /** @type {0} */
+  static get UNCONNECTED() { return UNCONNECTED }
+  /** @type {1} */
+  static get INPUT() { return INPUT }
+  /** @type {2} */
+  static get OUTPUT() { return OUTPUT }
+  /** @type {3} */
+  static get BIDIRECTIONAL() { return BIDIRECTIONAL }
 
-  function setTrace(trace) {
-    _trace = trace
-    if (_mode === INPUT || _mode === BIDIRECTIONAL && _level === null) {
-      _level = _trace.level
-    } else if (_mode & OUTPUT) {
-      _trace.updateLevel()
-    }
+  /** @type {function(Pin):void} */
+  #listeners = []
+  /** @type {number} */
+  #number = 0
+  /** @type {string} */
+  #name = ''
+  /** @type {Trace} */
+  #trace = null
+  /** @type {null|0|1} */
+  #float = null
+  /** @type {number|null} */
+  #level = null
+  /** @type {0|1|2|3} */
+  #mode = UNCONNECTED
+
+  /**
+   * @param {number} number
+   * @param {string} name
+   * @param {0|1|2|3} mode
+   */
+  constructor(number, name, mode = UNCONNECTED) {
+    this.#number = number
+    this.#name = name
+    this.#mode = mode
+    this.#level = this.#normalize(null)
   }
 
-  function normalize(level) {
-    return level === null ? _float : Number(level)
+  /**
+   * @param {number|null} level
+   */
+  #normalize (level) {
+    return level === null ? this.#float : Number(level)
   }
 
-  function setLevel(level) {
-    if (_trace) {
-      if (_mode !== INPUT) {
-        _level = normalize(level)
-        if (_mode !== UNCONNECTED) {
-          _trace.updateLevel(_level)
+  get number() { return this.#number }
+
+  get name() { return this.#name }
+
+  get level() { return this.#level }
+
+  set level(value) {
+    if (this.#trace) {
+      if (this.#mode !== INPUT) {
+        this.#level = this.#normalize(value)
+        if (this.#mode !== UNCONNECTED) {
+          this.#trace.updateLevel(this.#level)
         }
       }
     } else {
-      _level = normalize(level)
+      this.#level = this.#normalize(value)
     }
   }
 
-  function updateLevel() {
-    if (_trace) {
-      const newLevel = normalize(_trace.level)
-      if (_mode & INPUT && _level !== newLevel) {
-        _level = newLevel
-        _listeners.forEach(listener => listener(pin))
-      }
-    }
-  }
+  get high() { return this.#level >= 0.5 }
 
-  function setMode(mode) {
-    if ([UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL].includes(mode)) {
-      const oldMode = _mode
-      const oldLevel = _level
-      _mode = mode
+  get low() { return this.#level < 0.5 && this.#level !== null }
 
-      if (_trace) {
-        if (_mode & OUTPUT) {
-          _trace.updateLevel(_level)
+  get floating() { return this.#level === null }
+
+  get mode() { return this.#mode }
+
+  set mode(value) {
+    if ([UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL].includes(value)) {
+      const oldMode = this.#mode
+      const oldLevel = this.#level
+      this.#mode = value
+
+      if (this.#trace) {
+        if (this.#mode & OUTPUT) {
+          this.#trace.updateLevel(this.#level)
         } else {
-          if (_mode === INPUT) {
-            _level = normalize(_trace.level)
+          if (this.#mode === INPUT) {
+            this.#level = this.#normalize(this.#trace.level)
           }
           if (oldMode & OUTPUT && oldLevel !== null) {
-            _trace.updateLevel(null)
+            this.#trace.updateLevel(null)
           }
         }
       }
     }
   }
 
-  function set() {
-    setLevel(1)
-    return pin
-  }
+  get input() { return (this.#mode & INPUT) !== 0 }
 
-  function clear() {
-    setLevel(0)
-    return pin
-  }
+  get output() { return (this.#mode & OUTPUT) !== 0 }
 
-  function float() {
-    setLevel(null)
-    return pin
-  }
-
-  function toggle() {
-    setLevel(_level === null ? null : 1 - _level)
-    return pin
-  }
-
-  function addListener(listener) {
-    if (!_listeners.includes(listener)) {
-      _listeners.push(listener)
+  /** @param {Trace} value */
+  set trace(value) {
+    this.#trace = value
+    if (this.#mode === INPUT
+      || this.#mode === BIDIRECTIONAL && this.#level === null) {
+      this.#level = value.level
+    } else if (this.#mode & OUTPUT) {
+      value.updateLevel()
     }
-    return pin
   }
 
-  function removeListener(listener) {
-    const index = _listeners.indexOf(listener)
+  get connected() { return this.#trace !== null }
+
+  updateLevel() {
+    if (this.#trace) {
+      const newLevel = this.#normalize(this.#trace.level)
+      if (this.#mode & INPUT && this.#level !== newLevel) {
+        this.#level = newLevel
+        this.#listeners.forEach(listener => listener(this))
+      }
+    }
+  }
+
+  set() {
+    this.level = 1
+    return this
+  }
+
+  clear() {
+    this.level = 0
+    return this
+  }
+
+  float() {
+    this.level = null
+    return this
+  }
+
+  toggle() {
+    this.level = this.level === null ? null : 1 - this.level
+    return this
+  }
+
+  /** @param {function(Pin):void} listener */
+  addListener(listener) {
+    if (!this.#listeners.includes(listener)) {
+      this.#listeners.push(listener)
+    }
+    return this
+  }
+
+  /** @param {function(Pin):void} listener */
+  removeListener(listener) {
+    const index = this.#listeners.indexOf(listener)
     if (index !== -1) {
-      _listeners.splice(index, 1)
+      this.#listeners.splice(index, 1)
     }
-    return pin
+    return this
   }
 
-  function pullUp() {
-    _float = 1
-    _level = normalize(_level)
-    return pin
+  pullUp() {
+    this.#float = 1
+    this.#level = this.#normalize(this.#level)
+    return this
   }
 
-  function pullDown() {
-    _float = 0
-    _level = normalize(_level)
-    return pin
+  pullDown() {
+    this.#float = 0
+    this.#level = this.#normalize(this.#level)
+    return this
   }
 
-  function noPull() {
-    _float = null
-    _level = normalize(_level)
-    return pin
+  noPull() {
+    this.#float = null
+    this.#level = this.#normalize(this.#level)
+    return this
   }
-
-  const pin = {
-    get number() {
-      return number
-    },
-    get name() {
-      return name
-    },
-
-    get input() {
-      return (_mode & INPUT) > 0
-    },
-    get output() {
-      return (_mode & OUTPUT) > 0
-    },
-    get mode() {
-      return _mode
-    },
-    set mode(mode) {
-      setMode(mode)
-    },
-
-    get high() {
-      return _level >= 0.5
-    },
-    get low() {
-      return _level < 0.5 && _level !== null
-    },
-    get floating() {
-      return _level === null
-    },
-    get level() {
-      return _level
-    },
-    set level(level) {
-      setLevel(level)
-    },
-
-    get connected() {
-      return _trace !== null
-    },
-
-    set,
-    clear,
-    float,
-    toggle,
-    pullUp,
-    pullDown,
-    noPull,
-    setTrace,
-    updateLevel,
-    addListener,
-    removeListener,
-  }
-
-  return pin
 }

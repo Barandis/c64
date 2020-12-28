@@ -79,8 +79,12 @@
  * @property {Pin} GND [8] The ground. This pin is not emulated.
  */
 
-import { Chip, Pin, INPUT, OUTPUT } from "components"
-import { range } from "utils"
+import { Chip } from 'components'
+import Pin from 'components/pin'
+import { range } from 'utils'
+
+const INPUT = Pin.INPUT
+const OUTPUT = Pin.OUTPUT
 
 /**
  * Creates an emulation of the 74257 quad 2-to-1 multiplexer.
@@ -93,35 +97,35 @@ function Ic74257() {
     // Select. When this is low, the Y output pins will take on the same
     // value as their A input pins. When this is high, the Y output pins
     // will instead take on the value of their B input pins.
-    Pin(1, "SEL", INPUT),
+    new Pin(1, 'SEL', INPUT),
 
     // Output enable. When this is high, all of the Y output pins will
     // be forced into hi-z, whatever the values of their input pins.
-    Pin(15, "_OE", INPUT),
+    new Pin(15, '_OE', INPUT),
 
     // Group 1 inputs and output
-    Pin(2, "A1", INPUT),
-    Pin(3, "B1", INPUT),
-    Pin(4, "Y1", OUTPUT).clear(),
+    new Pin(2, 'A1', INPUT),
+    new Pin(3, 'B1', INPUT),
+    new Pin(4, 'Y1', OUTPUT).clear(),
 
     // Group 2 input and output
-    Pin(5, "A2", INPUT),
-    Pin(6, "B2", INPUT),
-    Pin(7, "Y2", OUTPUT).clear(),
+    new Pin(5, 'A2', INPUT),
+    new Pin(6, 'B2', INPUT),
+    new Pin(7, 'Y2', OUTPUT).clear(),
 
     // Group 3 inputs and output
-    Pin(11, "A3", INPUT),
-    Pin(10, "B3", INPUT),
-    Pin(9, "Y3", OUTPUT).clear(),
+    new Pin(11, 'A3', INPUT),
+    new Pin(10, 'B3', INPUT),
+    new Pin(9, 'Y3', OUTPUT).clear(),
 
     // Group 4 inputs and output
-    Pin(14, "A4", INPUT),
-    Pin(13, "B4", INPUT),
-    Pin(12, "Y4", OUTPUT).clear(),
+    new Pin(14, 'A4', INPUT),
+    new Pin(13, 'B4', INPUT),
+    new Pin(12, 'Y4', OUTPUT).clear(),
 
     // Power supply pins. These are not emulated.
-    Pin(8, "GND"),
-    Pin(16, "Vcc"),
+    new Pin(8, 'GND'),
+    new Pin(16, 'Vcc'),
   )
 
   function dataListener(mux) {
