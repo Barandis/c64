@@ -96,103 +96,96 @@ import { range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 74373 octal transparent latch.
- *
- * @returns {Ic74373} A new 74373 octal transparent latch.
- * @memberof module:chips
- */
-function Ic74373() {
-  const chip = new Chip(
-    // Input pins.
-    new Pin(3, 'D0', INPUT),
-    new Pin(4, 'D1', INPUT),
-    new Pin(7, 'D2', INPUT),
-    new Pin(8, 'D3', INPUT),
-    new Pin(13, 'D4', INPUT),
-    new Pin(14, 'D5', INPUT),
-    new Pin(17, 'D6', INPUT),
-    new Pin(18, 'D7', INPUT),
-
-    // Output pins.
-    new Pin(2, 'Q0', OUTPUT).clear(),
-    new Pin(5, 'Q1', OUTPUT).clear(),
-    new Pin(6, 'Q2', OUTPUT).clear(),
-    new Pin(9, 'Q3', OUTPUT).clear(),
-    new Pin(12, 'Q4', OUTPUT).clear(),
-    new Pin(15, 'Q5', OUTPUT).clear(),
-    new Pin(16, 'Q6', OUTPUT).clear(),
-    new Pin(19, 'Q7', OUTPUT).clear(),
-
-    // Output enable. When this is high, the outputs function normally
-    // according to their inputs and LE. When this is low, the outputs
-    // are all hi-Z.
-    new Pin(1, '_OE', INPUT),
-
-    // Latch enable. When set high, data flows transparently through the
-    // device, with output pins matching their input pins. When it goes
-    // low, the output pins remain in their current state for as long as
-    // LE is low, no matter what the inputs do.
-    new Pin(11, 'LE', INPUT),
-
-    // Power supply and ground pins. These are not emulated.
-    new Pin(10, 'GND'),
-    new Pin(20, 'Vcc'),
-  )
-
+export class Ic74373 extends Chip {
   // "Memory" for the latched values. When _OE returns high while LE is
   // low, these values will be put onto the output pins. (Otherwise, if
   // LE is high, the output pins just get the values of the input pins
   // like normal.)
-  const latches = [null, null, null, null, null, null, null, null]
+  /** @type {number[]} */
+  #latches = [null, null, null, null, null, null, null, null]
 
-  function dataListener(latch) {
-    const qpin = chip[`Q${latch}`]
+  constructor() {
+    super(
+      // Input pins.
+      new Pin(3, 'D0', INPUT),
+      new Pin(4, 'D1', INPUT),
+      new Pin(7, 'D2', INPUT),
+      new Pin(8, 'D3', INPUT),
+      new Pin(13, 'D4', INPUT),
+      new Pin(14, 'D5', INPUT),
+      new Pin(17, 'D6', INPUT),
+      new Pin(18, 'D7', INPUT),
+
+      // Output pins.
+      new Pin(2, 'Q0', OUTPUT).clear(),
+      new Pin(5, 'Q1', OUTPUT).clear(),
+      new Pin(6, 'Q2', OUTPUT).clear(),
+      new Pin(9, 'Q3', OUTPUT).clear(),
+      new Pin(12, 'Q4', OUTPUT).clear(),
+      new Pin(15, 'Q5', OUTPUT).clear(),
+      new Pin(16, 'Q6', OUTPUT).clear(),
+      new Pin(19, 'Q7', OUTPUT).clear(),
+
+      // Output enable. When this is high, the outputs function normally
+      // according to their inputs and LE. When this is low, the outputs
+      // are all hi-Z.
+      new Pin(1, '_OE', INPUT),
+
+      // Latch enable. When set high, data flows transparently through
+      // the device, with output pins matching their input pins. When it
+      // goes low, the output pins remain in their current state for as
+      // long as LE is low, no matter what the inputs do.
+      new Pin(11, 'LE', INPUT),
+
+      // Power supply and ground pins. These are not emulated.
+      new Pin(10, 'GND'),
+      new Pin(20, 'Vcc'),
+    )
+
+    for (const i of range(8)) {
+      this[`D${i}`].addListener(this.#dataListener(i))
+    }
+    this.LE.addListener(this.#latchListener())
+    this._OE.addListener(this.#enableListener())
+  }
+
+  #dataListener (latch) {
+    const qpin = this[`Q${latch}`]
 
     return pin => {
-      if (chip.LE.high && chip._OE.low) {
+      if (this.LE.high && this._OE.low) {
         qpin.level = pin.level
       }
     }
   }
 
-  function latchListener() {
+  #latchListener () {
     return pin => {
       if (pin.low) {
         for (const i of range(8)) {
-          latches[i] = chip[`D${i}`].level
+          this.#latches[i] = this[`D${i}`].level
         }
       } else {
         for (const i of range(8)) {
-          chip[`Q${i}`].level = chip[`D${i}`].level
-          latches[i] = null
+          this[`Q${i}`].level = this[`D${i}`].level
+          this.#latches[i] = null
         }
       }
     }
   }
 
-  function enableListener() {
+  #enableListener () {
     return pin => {
       if (pin.high) {
         for (const i of range(8)) {
-          chip[`Q${i}`].float()
+          this[`Q${i}`].float()
         }
       } else {
-        const le = chip.LE.low
+        const le = this.LE.low
         for (const i of range(8)) {
-          chip[`Q${i}`].level = le ? latches[i] : chip[`D${i}`].level
+          this[`Q${i}`].level = le ? this.#latches[i] : this[`D${i}`].level
         }
       }
     }
   }
-
-  for (const i of range(8)) {
-    chip[`D${i}`].addListener(dataListener(i))
-  }
-  chip.LE.addListener(latchListener())
-  chip._OE.addListener(enableListener())
-
-  return chip
 }
-
-export { Ic74373 }

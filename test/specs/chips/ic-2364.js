@@ -17,7 +17,7 @@ describe('2364 8k x 8-bit ROM', () => {
     const expected = new Uint8Array(kernal)
 
     before(() => {
-      chip = Ic2364(kernal)
+      chip = new Ic2364(kernal)
       traces = deviceTraces(chip)
       traces._CS.set()
 
@@ -59,7 +59,7 @@ describe('2364 8k x 8-bit ROM', () => {
     const expected = new Uint8Array(basic)
 
     before(() => {
-      chip = Ic2364(basic)
+      chip = new Ic2364(basic)
       traces = deviceTraces(chip)
       traces._CS.set()
 

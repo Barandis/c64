@@ -69,53 +69,45 @@ import { range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 7408 quad two-input AND gate.
- *
- * @returns {Ic7408} A new 7408 quad two-input AND gate.
- * @memberof module:chips
- */
-function Ic7408() {
-  const chip = new Chip(
+export class Ic7408 extends Chip {
+  constructor() {
+    super(
     // Gate 1 inputs and output
-    new Pin(1, 'A1', INPUT),
-    new Pin(2, 'B1', INPUT),
-    new Pin(3, 'Y1', OUTPUT).clear(),
+      new Pin(1, 'A1', INPUT),
+      new Pin(2, 'B1', INPUT),
+      new Pin(3, 'Y1', OUTPUT).clear(),
 
-    // Gate 2 inputs and output
-    new Pin(4, 'A2', INPUT),
-    new Pin(5, 'B2', INPUT),
-    new Pin(6, 'Y2', OUTPUT).clear(),
+      // Gate 2 inputs and output
+      new Pin(4, 'A2', INPUT),
+      new Pin(5, 'B2', INPUT),
+      new Pin(6, 'Y2', OUTPUT).clear(),
 
-    // Gate 3 inputs and output
-    new Pin(9, 'A3', INPUT),
-    new Pin(10, 'B3', INPUT),
-    new Pin(8, 'Y3', OUTPUT).clear(),
+      // Gate 3 inputs and output
+      new Pin(9, 'A3', INPUT),
+      new Pin(10, 'B3', INPUT),
+      new Pin(8, 'Y3', OUTPUT).clear(),
 
-    // Gate 4 inputs and output
-    new Pin(12, 'A4', INPUT),
-    new Pin(13, 'B4', INPUT),
-    new Pin(11, 'Y4', OUTPUT).clear(),
+      // Gate 4 inputs and output
+      new Pin(12, 'A4', INPUT),
+      new Pin(13, 'B4', INPUT),
+      new Pin(11, 'Y4', OUTPUT).clear(),
 
-    // Power supply and ground pins, not emulated
-    new Pin(14, 'Vcc'),
-    new Pin(7, 'GND'),
-  )
+      // Power supply and ground pins, not emulated
+      new Pin(14, 'Vcc'),
+      new Pin(7, 'GND'),
+    )
 
-  function listener(gate) {
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
-    const ypin = chip[`Y${gate}`]
+    for (const i of range(1, 4, true)) {
+      this[`A${i}`].addListener(this.#dataListener(i))
+      this[`B${i}`].addListener(this.#dataListener(i))
+    }
+  }
+
+  #dataListener (gate) {
+    const apin = this[`A${gate}`]
+    const bpin = this[`B${gate}`]
+    const ypin = this[`Y${gate}`]
 
     return () => (ypin.level = apin.level && bpin.level)
   }
-
-  for (const i of range(1, 4, true)) {
-    chip[`A${i}`].addListener(listener(i))
-    chip[`B${i}`].addListener(listener(i))
-  }
-
-  return chip
 }
-
-export { Ic7408 }

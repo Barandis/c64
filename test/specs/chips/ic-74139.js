@@ -21,7 +21,7 @@ describe('74139 dual 2-line to 4-line demultiplexer', () => {
   let chip, traces
 
   beforeEach(() => {
-    chip = Ic74139()
+    chip = new Ic74139()
     traces = deviceTraces(chip)
   })
 

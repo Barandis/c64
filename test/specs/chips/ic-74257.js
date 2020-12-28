@@ -17,7 +17,7 @@ describe('74257 3-State Quad 2-to-1 Multiplexers', () => {
   let traces
 
   beforeEach(() => {
-    chip = Ic74257()
+    chip = new Ic74257()
     traces = deviceTraces(chip)
   })
 

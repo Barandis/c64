@@ -14,7 +14,7 @@ describe('2332 4k x 8-bit ROM', () => {
     let chip, traces, addrTraces, dataTraces
 
     before(() => {
-      chip = Ic2332(character)
+      chip = new Ic2332(character)
       traces = deviceTraces(chip)
       traces._CS2.clear()
       traces._CS1.set()

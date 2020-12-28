@@ -43,10 +43,7 @@
  * data access). It's used to store information on how to display
  * characters to the screen.
  *
- * This chip is produced by calling the
- * `{@link module:chips.Ic2332|Ic2332}` function.
- *
- * @typedef Ic2332
+ * @class Ic2332
  * @property {Pin} _CS1 [20] One of the two active-low chip select pins.
  *     When the second of these goes low, the chip reads the address and
  *     sends the data at that address to the data pins.
@@ -85,81 +82,74 @@ import { pinsToValue, valueToPins, range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 2332 4k x 8-bit ROM.
- *
- * Unlike most chip creation functions, this one takes a parameter.
- * Since there is no way to write to the contents of a ROM chip, the
- * full contents is instead provided to the creation function.
- *
- * @param {ArrayBuffer} buffer An array buffer containing the contents
- *     of the memory stored in this chip. Only the first 4096 bytes of
- *     this buffer is used.
- * @returns {Ic2332} A new 2332 4k x 8-bit ROM.
- * @memberof module:chips
- */
-function Ic2332(buffer) {
-  const chip = new Chip(
-    // Address pins A0...A11
-    new Pin(8, 'A0', INPUT),
-    new Pin(7, 'A1', INPUT),
-    new Pin(6, 'A2', INPUT),
-    new Pin(5, 'A3', INPUT),
-    new Pin(4, 'A4', INPUT),
-    new Pin(3, 'A5', INPUT),
-    new Pin(2, 'A6', INPUT),
-    new Pin(1, 'A7', INPUT),
-    new Pin(23, 'A8', INPUT),
-    new Pin(22, 'A9', INPUT),
-    new Pin(18, 'A10', INPUT),
-    new Pin(19, 'A11', INPUT),
+export class Ic2332 extends Chip {
+  /** @type {Pin[]} */
+  #addrPins
+  /** @type {Pin[]} */
+  #dataPins
+  /** @type {Uint8Array} */
+  #memory
 
-    // Data pins D0...D7
-    new Pin(9, 'D0', OUTPUT),
-    new Pin(10, 'D1', OUTPUT),
-    new Pin(11, 'D2', OUTPUT),
-    new Pin(13, 'D3', OUTPUT),
-    new Pin(14, 'D4', OUTPUT),
-    new Pin(15, 'D5', OUTPUT),
-    new Pin(16, 'D6', OUTPUT),
-    new Pin(17, 'D7', OUTPUT),
+  constructor(buffer) {
+    super(
+      // Address pins A0...A11
+      new Pin(8, 'A0', INPUT),
+      new Pin(7, 'A1', INPUT),
+      new Pin(6, 'A2', INPUT),
+      new Pin(5, 'A3', INPUT),
+      new Pin(4, 'A4', INPUT),
+      new Pin(3, 'A5', INPUT),
+      new Pin(2, 'A6', INPUT),
+      new Pin(1, 'A7', INPUT),
+      new Pin(23, 'A8', INPUT),
+      new Pin(22, 'A9', INPUT),
+      new Pin(18, 'A10', INPUT),
+      new Pin(19, 'A11', INPUT),
 
-    // Chip select pins. When these are both low, a read cycle is
-    // executed based on the address on pins A0...A11. When they're
-    // high, the data pins are put into hi-Z.
-    new Pin(20, '_CS1', INPUT),
-    new Pin(21, '_CS2', INPUT),
+      // Data pins D0...D7
+      new Pin(9, 'D0', OUTPUT),
+      new Pin(10, 'D1', OUTPUT),
+      new Pin(11, 'D2', OUTPUT),
+      new Pin(13, 'D3', OUTPUT),
+      new Pin(14, 'D4', OUTPUT),
+      new Pin(15, 'D5', OUTPUT),
+      new Pin(16, 'D6', OUTPUT),
+      new Pin(17, 'D7', OUTPUT),
 
-    // Power supply and ground pins. These are not emulated.
-    new Pin(24, 'Vcc'),
-    new Pin(12, 'GND'),
-  )
+      // Chip select pins. When these are both low, a read cycle is
+      // executed based on the address on pins A0...A11. When they're
+      // high, the data pins are put into hi-Z.
+      new Pin(20, '_CS1', INPUT),
+      new Pin(21, '_CS2', INPUT),
 
-  const addrPins = [...range(12)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+      // Power supply and ground pins. These are not emulated.
+      new Pin(24, 'Vcc'),
+      new Pin(12, 'GND'),
+    )
 
-  const memory = new Uint8Array(buffer)
+    this.#addrPins = [...range(12)].map(pin => this[`A${pin}`])
+    this.#dataPins = [...range(8)].map(pin => this[`D${pin}`])
+    this.#memory = new Uint8Array(buffer)
+
+    this._CS1.addListener(this.#enableListener())
+    this._CS2.addListener(this.#enableListener())
+  }
 
   // Reads the 8-bit value at the location indicated by the address pins
   // and puts that value on the data pins.
-  function read() {
-    const address = pinsToValue(...addrPins)
-    const value = memory[address]
-    valueToPins(value, ...dataPins)
+  #read () {
+    const address = pinsToValue(...this.#addrPins)
+    const value = this.#memory[address]
+    valueToPins(value, ...this.#dataPins)
   }
 
-  function enableListener() {
-    if (chip._CS1.low && chip._CS2.low) {
-      read()
-    } else {
-      valueToPins(null, ...dataPins)
+  #enableListener () {
+    return () => {
+      if (this._CS1.low ** this._CS2.low) {
+        this.#read()
+      } else {
+        valueToPins(null, ...this.#dataPins)
+      }
     }
   }
-
-  chip._CS1.addListener(enableListener)
-  chip._CS2.addListener(enableListener)
-
-  return chip
 }
-
-export { Ic2332 }

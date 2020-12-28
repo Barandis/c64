@@ -120,108 +120,106 @@ import { pinsToValue, range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 4164 64k x 1 bit dynamic RAM`.
- *
- * @returns {Ic4164} A new 4164 64k x 1 bit dynamic RAM.
- * @memberof module:chips
- */
-function Ic4164() {
-  const chip = new Chip(
-    // The row address strobe. Setting this low latches the values of
-    // A0-A7, saving them to be part of the address used to access the
-    // memory array.
-    new Pin(4, '_RAS', INPUT),
+export class Ic4164 extends Chip {
+  /** @type {Pin[]} */
+  #addrPins
+  /** @type {Uint32Array} */
+  #memory
 
-    // The column address strobe. Setting this low latches A0-A7 into
-    // the second part of the memory address. It also initiates read or
-    // write mode, depending on the value of _WE.
-    new Pin(15, '_CAS', INPUT),
+  /** @type {number} */
+  #row = null
+  /** @type {number} */
+  #col = null
+  /** @type {0|1} */
+  #data = null
 
-    // The write-enable pin. If this is high, the chip is in read mode;
-    // if it and _CAS are low, the chip is in either write or
-    // read-modify-write mode, depending on which pin went low first.
-    new Pin(3, '_WE', INPUT),
+  constructor() {
+    super(
+      // The row address strobe. Setting this low latches the values of
+      // A0-A7, saving them to be part of the address used to access the
+      // memory array.
+      new Pin(4, '_RAS', INPUT),
 
-    // Address pins 0-7
-    new Pin(5, 'A0', INPUT),
-    new Pin(7, 'A1', INPUT),
-    new Pin(6, 'A2', INPUT),
-    new Pin(12, 'A3', INPUT),
-    new Pin(11, 'A4', INPUT),
-    new Pin(10, 'A5', INPUT),
-    new Pin(13, 'A6', INPUT),
-    new Pin(9, 'A7', INPUT),
+      // The column address strobe. Setting this low latches A0-A7 into
+      // the second part of the memory address. It also initiates read
+      // or write mode, depending on the value of _WE.
+      new Pin(15, '_CAS', INPUT),
 
-    // The data input pin. When the chip is in write or
-    // read-modify-write mode, the value of this pin will be written to
-    // the appropriate bit in the memory array.
-    new Pin(2, 'D', INPUT),
+      // The write-enable pin. If this is high, the chip is in read
+      // mode; if it and _CAS are low, the chip is in either write or
+      // read-modify-write mode, depending on which pin went low first.
+      new Pin(3, '_WE', INPUT),
 
-    // The data output pin. This is active in read and read-modify-write
-    // mode, set to the value of the bit at the address latched by _RAS
-    // and _CAS. In write mode, it is hi-z.
-    new Pin(14, 'Q', OUTPUT),
+      // Address pins 0-7
+      new Pin(5, 'A0', INPUT),
+      new Pin(7, 'A1', INPUT),
+      new Pin(6, 'A2', INPUT),
+      new Pin(12, 'A3', INPUT),
+      new Pin(11, 'A4', INPUT),
+      new Pin(10, 'A5', INPUT),
+      new Pin(13, 'A6', INPUT),
+      new Pin(9, 'A7', INPUT),
 
-    // Power supply and no-contact pins. These are not emulated.
-    new Pin(1, 'NC'),
-    new Pin(8, 'Vcc'),
-    new Pin(16, 'Vss'),
-  )
+      // The data input pin. When the chip is in write or
+      // read-modify-write mode, the value of this pin will be written
+      // to the appropriate bit in the memory array.
+      new Pin(2, 'D', INPUT),
 
-  const addrPins = [...range(8)].map(pin => chip[`A${pin}`])
+      // The data output pin. This is active in read and
+      // read-modify-write mode, set to the value of the bit at the
+      // address latched by _RAS and _CAS. In write mode, it is hi-z.
+      new Pin(14, 'Q', OUTPUT),
 
-  // 2048 32-bit unsigned integers is 65,536 bits.
-  const memory = new Uint32Array(2048)
+      // Power supply and no-contact pins. These are not emulated.
+      new Pin(1, 'NC'),
+      new Pin(8, 'Vcc'),
+      new Pin(16, 'Vss'),
+    )
 
-  // The row is 8 bits of the address and is set here (latched) when the
-  // _RAS pin goes low. It is cleared again when _RAS goes high.
-  let row = null
+    this.#addrPins = [...range(8)].map(pin => this[`A${pin}`])
 
-  // The col is the other 8 bits of the address and is set here
-  // (latched) when the _CAS pin goes low. It is cleared again when _CAS
-  // goes high.
-  let col = null
+    // 2048 32-bit unsigned integers is 65,536 bits.
+    this.#memory = new Uint32Array(2048)
 
-  // The single bit of input data. This is set (latched) when the second
-  // of the _CAS and _WE pins goes low. It is cleared when _WE goes back
-  // high.
-  let data = null
+    this._RAS.addListener(this.#rasListener())
+    this._CAS.addListener(this.#casListener())
+    this._WE.addListener(this.#writeListener())
+  }
 
   // Reads the row and col and calculates the specific bit in the memory
   // array to which this row/col combination refers. The first element
   // of the return value is the index of the 32-bit number in the memory
   // array where that bit resides; the second element is the index of
   // the bit within that 32-bit number.
-  function resolve() {
-    const rowIndex = row << 3
-    const colIndex = (col & 0b11100000) >> 5
-    const bitIndex = col & 0b00011111
+  #resolve () {
+    const rowIndex = this.#row << 3
+    const colIndex = (this.#col & 0b11100000) >> 5
+    const bitIndex = this.#col & 0b00011111
 
     return [rowIndex | colIndex, bitIndex]
   }
 
   // Retrieves a single bit from the memory array and sets the state of
   // the Q pin to the value of that bit.
-  function read() {
-    const [index, bit] = resolve()
-    const value = (memory[index] & 1 << bit) >> bit
-    chip.Q.level = value
+  #read () {
+    const [index, bit] = this.#resolve()
+    const value = (this.#memory[index] & 1 << bit) >> bit
+    this.Q.level = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array.
   // If the Q pin is also connected, the value is also sent to it; this
   // happens only in RMW mode and keeps the input and output data pins
   // synched.
-  function write() {
-    const [index, bit] = resolve()
-    if (data === 1) {
-      memory[index] |= 1 << bit
+  #write () {
+    const [index, bit] = this.#resolve()
+    if (this.#data === 1) {
+      this.#memory[index] |= 1 << bit
     } else {
-      memory[index] &= ~(1 << bit)
+      this.#memory[index] &= ~(1 << bit)
     }
-    if (!chip.Q.floating) {
-      chip.Q.level = data
+    if (!this.Q.floating) {
+      this.Q.level = this.#data
     }
   }
 
@@ -234,11 +232,13 @@ function Ic4164() {
   // the same for those accesses. This can speed up reads and writes
   // within the same page by reducing the amount of setup needed for
   // those reads and writes.
-  function rasListener(pin) {
-    if (pin.low) {
-      row = pinsToValue(...addrPins)
-    } else {
-      row = null
+  #rasListener () {
+    return pin => {
+      if (pin.low) {
+        this.#row = pinsToValue(...this.#addrPins)
+      } else {
+        this.#row = null
+      }
     }
   }
 
@@ -256,19 +256,21 @@ function Ic4164() {
   //
   // When _CAS goes high, the Q pin is disconnected and the latched
   // column and data (if there is one) values are cleared.
-  function casListener(pin) {
-    if (pin.low) {
-      col = pinsToValue(...addrPins)
-      if (chip._WE.low) {
-        data = chip.D.level
-        write()
+  #casListener () {
+    return pin => {
+      if (pin.low) {
+        this.#col = pinsToValue(...this.#addrPins)
+        if (this._WE.low) {
+          this.#data = this.D.level
+          this.#write()
+        } else {
+          this.#read()
+        }
       } else {
-        read()
+        this.Q.float()
+        this.#col = null
+        this.#data = null
       }
-    } else {
-      chip.Q.float()
-      col = null
-      data = null
     }
   }
 
@@ -289,25 +291,19 @@ function Ic4164() {
   // Nothing further happens until _CAS goes low; at that point, the
   // chip goes into write mode (data is written to memory but nothing is
   // available to be read).
-  function writeListener(pin) {
-    if (pin.low) {
-      chip.D.clear()
-      if (chip._CAS.low) {
-        data = chip.D.level
-        write()
+  #writeListener () {
+    return pin => {
+      if (pin.low) {
+        this.D.clear()
+        if (this._CAS.low) {
+          this.#data = this.D.level
+          this.#write()
+        } else {
+          this.Q.float()
+        }
       } else {
-        chip.Q.float()
+        this.#data = null
       }
-    } else {
-      data = null
     }
   }
-
-  chip._RAS.addListener(rasListener)
-  chip._CAS.addListener(casListener)
-  chip._WE.addListener(writeListener)
-
-  return chip
 }
-
-export { Ic4164 }

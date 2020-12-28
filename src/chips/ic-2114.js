@@ -101,117 +101,111 @@ import { pinsToValue, valueToPins, range } from 'utils'
 const INPUT = Pin.INPUT
 const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
-/**
- * Creates an emulation of the 2114 1k x 4 static RAM.
- *
- * @returns {Ic2114} A new 2114 1k x 4 static RAM.
- * @memberof module:chips
- */
-function Ic2114() {
-  const chip = new Chip(
-    // Address pins A0...A9
-    new Pin(5, 'A0', INPUT),
-    new Pin(6, 'A1', INPUT),
-    new Pin(7, 'A2', INPUT),
-    new Pin(4, 'A3', INPUT),
-    new Pin(3, 'A4', INPUT),
-    new Pin(2, 'A5', INPUT),
-    new Pin(1, 'A6', INPUT),
-    new Pin(17, 'A7', INPUT),
-    new Pin(16, 'A8', INPUT),
-    new Pin(15, 'A9', INPUT),
+export class Ic2114 extends Chip {
+  /** @type {Pin[]} */
+  #addrPins
+  /** @type {Pin[]} */
+  #dataPins
+  /** @type {Uint32Array} */
+  #memory
 
-    // Data pins D0...D3
-    new Pin(14, 'D0', BIDIRECTIONAL),
-    new Pin(13, 'D1', BIDIRECTIONAL),
-    new Pin(12, 'D2', BIDIRECTIONAL),
-    new Pin(11, 'D3', BIDIRECTIONAL),
+  constructor() {
+    super(
+      // Address pins A0...A9
+      new Pin(5, 'A0', INPUT),
+      new Pin(6, 'A1', INPUT),
+      new Pin(7, 'A2', INPUT),
+      new Pin(4, 'A3', INPUT),
+      new Pin(3, 'A4', INPUT),
+      new Pin(2, 'A5', INPUT),
+      new Pin(1, 'A6', INPUT),
+      new Pin(17, 'A7', INPUT),
+      new Pin(16, 'A8', INPUT),
+      new Pin(15, 'A9', INPUT),
 
-    // Chip select pin. Setting this to low is what begins a read or
-    // write cycle.
-    new Pin(8, '_CS', INPUT),
+      // Data pins D0...D3
+      new Pin(14, 'D0', BIDIRECTIONAL),
+      new Pin(13, 'D1', BIDIRECTIONAL),
+      new Pin(12, 'D2', BIDIRECTIONAL),
+      new Pin(11, 'D3', BIDIRECTIONAL),
 
-    // Write enable pin. If this is low when _CE goes low, then the
-    // cycle is a write cycle, otherwise it's a read cycle.
-    new Pin(10, '_WE', INPUT),
+      // Chip select pin. Setting this to low is what begins a read or
+      // write cycle.
+      new Pin(8, '_CS', INPUT),
 
-    // Power supply and ground pins. These are not emulated.
-    new Pin(18, 'Vcc'),
-    new Pin(9, 'GND'),
-  )
+      // Write enable pin. If this is low when _CE goes low, then the
+      // cycle is a write cycle, otherwise it's a read cycle.
+      new Pin(10, '_WE', INPUT),
 
-  const addrPins = [...range(10)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(4)].map(pin => chip[`D${pin}`])
+      // Power supply and ground pins. These are not emulated.
+      new Pin(18, 'Vcc'),
+      new Pin(9, 'GND'),
+    )
 
-  const memory = new Uint32Array(128)
+    this.#addrPins = [...range(10)].map(pin => this[`A${pin}`])
+    this.#dataPins = [...range(4)].map(pin => this[`D${pin}`])
+    this.#memory = new Uint32Array(128)
 
-  // Turns the address currently on the address pins into an index and
-  // shift amount for the internal memory array. The index is the array
-  // index for that location in the memory array, while the shift amount
-  // is the number of bits that a 4-bit value would have to be shifted
-  // to be in the right position to write those bits in that array
-  // index.
-  function resolve() {
-    const addr = pinsToValue(...addrPins)
+    for (const i of range(10)) {
+      this[`A${i}`].addListener(this.#addressListener())
+    }
+    this._CS.addListener(this.#selectListener())
+    this._WE.addListener(this.#writeListener())
+  }
+
+  #resolve () {
+    const addr = pinsToValue(...this.#addrPins)
     const arrayIndex = addr >> 3
     const bitIndex = addr & 0x07
     return [arrayIndex, bitIndex * 4]
   }
 
-  // Reads the 4-bit value at the location indicated by the address pins
-  // and puts that value on the data pins.
-  function read() {
-    const [index, shift] = resolve()
-    const value = (memory[index] & 0b1111 << shift) >> shift
-    valueToPins(value, ...dataPins)
+  #read () {
+    const [index, shift] = this.#resolve()
+    const value = (this.#memory[index] & 0b1111 << shift) >> shift
+    valueToPins(value, ...this.#dataPins)
   }
 
-  // Writes the 4-bit value currently on the data pins to the location
-  // indicated by the address pins.
-  function write() {
-    const value = pinsToValue(...dataPins)
-    const [index, shift] = resolve()
-    const current = memory[index] & ~(0b1111 << shift)
-    memory[index] = current | value << shift
+  #write () {
+    const value = pinsToValue(...this.#dataPins)
+    const [index, shift] = this.#resolve()
+    const current = this.#memory[index] & ~(0b1111 << shift)
+    this.#memory[index] = current | value << shift
   }
 
-  function addressListener() {
-    if (chip._CS.low) {
-      if (chip._WE.high) {
-        read()
-      } else {
-        write()
+  #addressListener () {
+    return () => {
+      if (this._CS.low) {
+        if (this._WE.high) {
+          this.#read()
+        } else {
+          this.#write()
+        }
       }
     }
   }
 
-  function selectListener(pin) {
-    if (pin.high) {
-      valueToPins(null, ...dataPins)
-    } else if (chip._WE.low) {
-      write()
-    } else {
-      read()
-    }
-  }
-
-  function writeListener(pin) {
-    if (chip._CS.low) {
-      if (pin.low) {
-        write()
+  #selectListener () {
+    return pin => {
+      if (pin.high) {
+        valueToPins(null, ...this.#dataPins)
+      } else if (this._WE.low) {
+        this.#write()
       } else {
-        read()
+        this.#read()
       }
     }
   }
 
-  for (const i of range(10)) {
-    chip[`A${i}`].addListener(addressListener)
+  #writeListener () {
+    return pin => {
+      if (this._CS.low) {
+        if (pin.low) {
+          this.#write()
+        } else {
+          this.#read()
+        }
+      }
+    }
   }
-  chip._CS.addListener(selectListener)
-  chip._WE.addListener(writeListener)
-
-  return chip
 }
-
-export { Ic2114 }

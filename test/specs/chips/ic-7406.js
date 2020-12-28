@@ -3,15 +3,17 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { assert, deviceTraces } from 'test/helper'
 import { Ic7406 } from 'chips'
+import { assert, deviceTraces } from 'test/helper'
 import { range } from 'utils'
 
 describe('7406 hex inverter', () => {
-  let chip, traces
+  /** @type {Ic7406} */
+  let chip
+  let traces
 
   beforeEach(() => {
-    chip = Ic7406()
+    chip = new Ic7406()
     traces = deviceTraces(chip)
   })
 

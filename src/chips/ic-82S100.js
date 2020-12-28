@@ -236,38 +236,6 @@ import Pin from 'components/pin'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-// These are alternate names for the input (I) and output (F) pins,
-// matching purpose of each pin in the Commodore 64. They can be used to
-// access the same pins with a different naming convention. For example,
-// the I0 pin, which accepts the _CAS signal from the VIC, can be
-// accessed regularly with `chip.I0` or `chip[9]`. With these constants,
-// if so desired, it can also be accessed as `chip[_CAS]`.
-export const _CAS = 'I0'
-export const _LORAM = 'I1'
-export const _HIRAM = 'I2'
-export const _CHAREN = 'I3'
-export const _VA14 = 'I4'
-export const A15 = 'I5'
-export const A14 = 'I6'
-export const A13 = 'I7'
-export const A12 = 'I8'
-export const BA = 'I9'
-export const _AEC = 'I10'
-export const R__W = 'I11'
-export const _EXROM = 'I12'
-export const _GAME = 'I13'
-export const VA13 = 'I14'
-export const VA12 = 'I15'
-
-export const F0 = '_CASRAM'
-export const F1 = '_BASIC'
-export const F2 = '_KERNAL'
-export const F3 = '_CHAROM'
-export const F4 = 'GR__W'
-export const F5 = '_IO'
-export const F6 = '_ROML'
-export const F7 = '_ROMH'
-
 /**
  * Creates an emulation of the 82S100 programmable logic array, as it
  * was programmed for the Commodore 64.
@@ -275,368 +243,402 @@ export const F7 = '_ROMH'
  * @returns {Ic82S100} A new 82S100 programmable logic array.
  * @memberof module:chips
  */
-function Ic82S100() {
-  const chip = new Chip(
-    // Input pins. In the 82S100, these were generically named I0
-    // through I15, since each pin could serve any function depending on
-    // the programming applies.
-    new Pin(9, 'I0', INPUT),
-    new Pin(8, 'I1', INPUT),
-    new Pin(7, 'I2', INPUT),
-    new Pin(6, 'I3', INPUT),
-    new Pin(5, 'I4', INPUT),
-    new Pin(4, 'I5', INPUT),
-    new Pin(3, 'I6', INPUT),
-    new Pin(2, 'I7', INPUT),
-    new Pin(27, 'I8', INPUT),
-    new Pin(26, 'I9', INPUT),
-    new Pin(25, 'I10', INPUT),
-    new Pin(24, 'I11', INPUT),
-    new Pin(23, 'I12', INPUT),
-    new Pin(22, 'I13', INPUT),
-    new Pin(21, 'I14', INPUT),
-    new Pin(20, 'I15', INPUT),
+export class Ic82S100 extends Chip {
+  // These are alternate names for the input (I) and output (F) pins,
+  // matching purpose of each pin in the Commodore 64. They can be used
+  // to access the same pins with a different naming convention. For
+  // example, the I0 pin, which accepts the _CAS signal from the VIC,
+  // can be accessed regularly with `chip.I0` or `chip[9]`. With these
+  // constants, if so desired, it can also be accessed as `chip[_CAS]`.
+  static get _CAS() { return 'I0' }
+  static get _LORAM() { return 'I1' }
+  static get _HIRAM() { return 'I2' }
+  static get _CHAREN() { return 'I3' }
+  static get _VA14() { return 'I4' }
+  static get A15() { return 'I5' }
+  static get A14() { return 'I6' }
+  static get A13() { return 'I7' }
+  static get A12() { return 'I8' }
+  static get BA() { return 'I9' }
+  static get _AEC() { return 'I10' }
+  static get R__W() { return 'I11' }
+  static get _EXROM() { return 'I12' }
+  static get _GAME() { return 'I13' }
+  static get VA13() { return 'I14' }
+  static get VA12() { return 'I15' }
 
-    // Output pins. Similar to the input pins, these were named
-    // generically on the 82S100.
-    new Pin(18, 'F0', OUTPUT).clear(),
-    new Pin(17, 'F1', OUTPUT).set(),
-    new Pin(16, 'F2', OUTPUT).set(),
-    new Pin(15, 'F3', OUTPUT).set(),
-    new Pin(13, 'F4', OUTPUT).set(),
-    new Pin(12, 'F5', OUTPUT).set(),
-    new Pin(11, 'F6', OUTPUT).set(),
-    new Pin(10, 'F7', OUTPUT).set(),
+  static get _CASRAM() { return 'F0' }
+  static get _BASIC() { return 'F1' }
+  static get _KERNAL() { return 'F2' }
+  static get _CHAROM() { return 'F3' }
+  static get GR__W() { return 'F4' }
+  static get _IO() { return 'F5' }
+  static get _ROML() { return 'F6' }
+  static get _ROMH() { return 'F7' }
 
-    // Output enable, disables all outputs when set HIGH
-    new Pin(19, '_OE', INPUT),
+  constructor() {
+    super(
+      // Input pins. In the 82S100, these were generically named I0
+      // through I15, since each pin could serve any function depending
+      // on the programming applies.
+      new Pin(9, 'I0', INPUT),
+      new Pin(8, 'I1', INPUT),
+      new Pin(7, 'I2', INPUT),
+      new Pin(6, 'I3', INPUT),
+      new Pin(5, 'I4', INPUT),
+      new Pin(4, 'I5', INPUT),
+      new Pin(3, 'I6', INPUT),
+      new Pin(2, 'I7', INPUT),
+      new Pin(27, 'I8', INPUT),
+      new Pin(26, 'I9', INPUT),
+      new Pin(25, 'I10', INPUT),
+      new Pin(24, 'I11', INPUT),
+      new Pin(23, 'I12', INPUT),
+      new Pin(22, 'I13', INPUT),
+      new Pin(21, 'I14', INPUT),
+      new Pin(20, 'I15', INPUT),
 
-    // Field programming pin, not used in mask programmed parts and not
-    // emulated
-    new Pin(1, 'FE'),
+      // Output pins. Similar to the input pins, these were named
+      // generically on the 82S100.
+      new Pin(18, 'F0', OUTPUT).clear(),
+      new Pin(17, 'F1', OUTPUT).set(),
+      new Pin(16, 'F2', OUTPUT).set(),
+      new Pin(15, 'F3', OUTPUT).set(),
+      new Pin(13, 'F4', OUTPUT).set(),
+      new Pin(12, 'F5', OUTPUT).set(),
+      new Pin(11, 'F6', OUTPUT).set(),
+      new Pin(10, 'F7', OUTPUT).set(),
 
-    // Power supply pins, not emulated
-    new Pin(28, 'VCC'),
-    new Pin(14, 'GND'),
-  )
+      // Output enable, disables all outputs when set HIGH
+      new Pin(19, '_OE', INPUT),
 
-  // One listener to rule them all
-  //
-  // In fact it rules them all so much that it violate's ESLint's
-  // complexity lint. This is chiefly because logical and and or
-  // operators add to cyclomatic complexity because they offer short-
-  // circuiting, and short-circuiting is a flow-control mechanism since
-  // it creates a choce between executing the second term or not.
-  // Short-circuiting in this function serves only as an optimization.
-  // It is only used in the production of Boolean values, not in making
-  // choices about one result or another. Therefore I find it safe to
-  // disable the complexity check for this function.
-  //
-  // Besides, any other way of performing this logic will involve
-  // function calls, whereas keeping everything - input pin reading,
-  // logic, and output driving - within this function keeps function
-  // calls from being necessary. Since I expect this code to be run
-  // early and often (it ran enough on the original C64 to make chip
-  // temperature a concern, leading to a lot of failures of early
-  // PLA's), it seems alright to optimize a little early.
-  //
-  /* eslint-disable complexity */
-  function oneListener() {
-    if (chip._OE.high) {
-      chip.F0.float()
-      chip.F1.float()
-      chip.F2.float()
-      chip.F3.float()
-      chip.F4.float()
-      chip.F5.float()
-      chip.F6.float()
-      chip.F7.float()
+      // Field programming pin, not used in mask programmed parts and
+      // not emulated
+      new Pin(1, 'FE'),
 
-      return
-    }
+      // Power supply pins, not emulated
+      new Pin(28, 'VCC'),
+      new Pin(14, 'GND'),
+    )
 
-    const i0 = chip.I0.high
-    const i1 = chip.I1.high
-    const i2 = chip.I2.high
-    const i3 = chip.I3.high
-    const i4 = chip.I4.high
-    const i5 = chip.I5.high
-    const i6 = chip.I6.high
-    const i7 = chip.I7.high
-    const i8 = chip.I8.high
-    const i9 = chip.I9.high
-    const i10 = chip.I10.high
-    const i11 = chip.I11.high
-    const i12 = chip.I12.high
-    const i13 = chip.I13.high
-    const i14 = chip.I14.high
-    const i15 = chip.I15.high
-
-    // These are the product term equations programmed into the PLA for
-    // use in a Commodore 64. The names for each signal reflect the
-    // names of the pins that those signals come from, and while that is
-    // an excellent way to make long and complex code succinct, it
-    // doesn't do much for the human reader. For that reason, each term
-    // has a comment to describe in more human terms what is happening
-    // with that piece of the algorithm.
+    // One listener to rule them all
     //
-    // Each P-term below has a comment with three lines. The first line
-    // describes the state of the three 6510 I/O port lines that are
-    // used for bank switching (_LORAM, _HIRAM, and _CHAREN). The second
-    // line is the memory address that needs to be accessed to select
-    // that P-term (this is from either the regular address bus when the
-    // CPU is active or the VIC address bus when the VIC is active). The
-    // final line gives information about whether the CPU or the VIC is
-    // active, whether the memory access is a read or a write, and what
-    // type (if any) of cartridge must be plugged into the expansion
-    // port (the cartridge informaion takes into account the values of
-    // _LORAM, _HIRAM, and _CHAREN already).
+    // In fact it rules them all so much that it violate's ESLint's
+    // complexity lint. This is chiefly because logical and and or
+    // operators add to cyclomatic complexity because they offer short-
+    // circuiting, and short-circuiting is a flow-control mechanism
+    // since it creates a choce between executing the second term or
+    // not. Short-circuiting in this function serves only as an
+    // optimization. It is only used in the production of Boolean
+    // values, not in making choices about one result or another.
+    // Therefore I find it safe to disable the complexity check for this
+    // function.
     //
-    // If any piece of information is not given, its value doesn't
-    // matter to that P-term. For example, in p0, the comment says that
-    // _LORAM and _HIRAM must both be deselected. _CHAREN isn't
-    // mentioned because whether it is selected or not doesn't change
-    // whether that P-term is selected or not.
+    // Besides, any other way of performing this logic will involve
+    // function calls, whereas keeping everything - input pin reading,
+    // logic, and output driving - within this function keeps function
+    // calls from being necessary. Since I expect this code to be run
+    // early and often (it ran enough on the original C64 to make chip
+    // temperature a concern, leading to a lot of failures of early
+    // PLA's), it seems alright to optimize a little early.
     //
-    // Oftentimes, the reason for multiple terms for one output
-    // selection is the limitation on what can be checked in a single
-    // logic term, given that no ORs are possible in the production of
-    // P-terms. For example, it is very common to see two terms that are
-    // identical except that one indicates "no cartridge or 8k
-    // cartridge" while the other has "16k cartridge". These two terms
-    // together really mean "anything but an Ultimax cartridge", but
-    // there's no way to do that in a single term with only AND and NOT.
-    //
-    // This information comes from the excellent paper available at
-    // http://skoe.de/docs/c64-dissected/pla/c64_pla_dissected_a4ds.pdf.
-    // If this sort of thing interests you, there's no better place for
-    // information about the C64 PLA.
+    /* eslint-disable complexity */
+    const oneListener = () => {
+      if (this._OE.high) {
+        this.F0.float()
+        this.F1.float()
+        this.F2.float()
+        this.F3.float()
+        this.F4.float()
+        this.F5.float()
+        this.F6.float()
+        this.F7.float()
 
-    // _LORAM deselected, _HIRAM deselected
-    // $A000...$BFFF
-    // CPU active, Read, No cartridge or 8k cartridge
-    const p0 = i1 & i2 & i5 & !i6 & i7 & !i10 & i11 & i13
+        return
+      }
 
-    // _HIRAM deselected
-    // $E000...$FFFF
-    // CPU active, Read, No cartridge or 8k cartridge
-    const p1 = i2 && i5 && i6 && i7 && !i10 && i11 && i13
+      const i0 = this.I0.high
+      const i1 = this.I1.high
+      const i2 = this.I2.high
+      const i3 = this.I3.high
+      const i4 = this.I4.high
+      const i5 = this.I5.high
+      const i6 = this.I6.high
+      const i7 = this.I7.high
+      const i8 = this.I8.high
+      const i9 = this.I9.high
+      const i10 = this.I10.high
+      const i11 = this.I11.high
+      const i12 = this.I12.high
+      const i13 = this.I13.high
+      const i14 = this.I14.high
+      const i15 = this.I15.high
 
-    // _HIRAM deselected
-    // $E000...$FFFF
-    // CPU active, Read, 16k cartridge
-    const p2 = i2 && i5 && i6 && i7 && !i10 && i11 && !i12 && !i13
+      // These are the product term equations programmed into the PLA
+      // for use in a Commodore 64. The names for each signal reflect
+      // the names of the pins that those signals come from, and while
+      // that is an excellent way to make long and complex code
+      // succinct, it doesn't do much for the human reader. For that
+      // reason, each term has a comment to describe in more human terms
+      // what is happening with that piece of the algorithm.
+      //
+      // Each P-term below has a comment with three lines. The first
+      // line describes the state of the three 6510 I/O port lines that
+      // are used for bank switching (_LORAM, _HIRAM, and _CHAREN). The
+      // second line is the memory address that needs to be accessed to
+      // select that P-term (this is from either the regular address bus
+      // when the CPU is active or the VIC address bus when the VIC is
+      // active). The final line gives information about whether the CPU
+      // or the VIC is active, whether the memory access is a read or a
+      // write, and what type (if any) of cartridge must be plugged into
+      // the expansion port (the cartridge informaion takes into account
+      // the values of _LORAM, _HIRAM, and _CHAREN already).
+      //
+      // If any piece of information is not given, its value doesn't
+      // matter to that P-term. For example, in p0, the comment says
+      // that _LORAM and _HIRAM must both be deselected. _CHAREN isn't
+      // mentioned because whether it is selected or not doesn't change
+      // whether that P-term is selected or not.
+      //
+      // Oftentimes, the reason for multiple terms for one output
+      // selection is the limitation on what can be checked in a single
+      // logic term, given that no ORs are possible in the production of
+      // P-terms. For example, it is very common to see two terms that
+      // are identical except that one indicates "no cartridge or 8k
+      // cartridge" while the other has "16k cartridge". These two terms
+      // together really mean "anything but an Ultimax cartridge", but
+      // there's no way to do that in a single term with only AND and
+      // NOT.
+      //
+      // This information comes from the excellent paper available at
+      // skoe.de/docs/c64-dissected/pla/c64_pla_dissected_a4ds.pdf.
+      // If this sort of thing interests you, there's no better place
+      // for information about the C64 PLA.
 
-    // _HIRAM deselected, _CHAREN selected
-    // $D000...$DFFF
-    // CPU active, Read, No cartridge or 8k cartridge
-    const p3 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
+      // _LORAM deselected, _HIRAM deselected
+      // $A000...$BFFF
+      // CPU active, Read, No cartridge or 8k cartridge
+      const p0 = i1 & i2 & i5 & !i6 & i7 & !i10 & i11 & i13
 
-    // _LORAM deselected, _CHAREN selected
-    // $D000...$DFFF
-    // CPU active, Read, No cartridge or 8k cartridge
-    const p4 = i1 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
+      // _HIRAM deselected
+      // $E000...$FFFF
+      // CPU active, Read, No cartridge or 8k cartridge
+      const p1 = i2 && i5 && i6 && i7 && !i10 && i11 && i13
 
-    // _HIRAM deselected, _CHAREN selected
-    // $D000...$DFFF
-    // CPU active, Read, 16k cartridge
-    const p5 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && !i12 && !i13
+      // _HIRAM deselected
+      // $E000...$FFFF
+      // CPU active, Read, 16k cartridge
+      const p2 = i2 && i5 && i6 && i7 && !i10 && i11 && !i12 && !i13
 
-    //
-    // $1000...$1FFF or $9000...$9FFF
-    // VIC active, No cartridge or 8k cartridge
-    const p6 = i4 && !i14 && i15 && i10 && i13
+      // _HIRAM deselected, _CHAREN selected
+      // $D000...$DFFF
+      // CPU active, Read, No cartridge or 8k cartridge
+      const p3 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
 
-    //
-    // $1000...$1FFF or $9000...$9FFF
-    // VIC active, 16k cartridge
-    const p7 = i4 && !i14 && i15 && i10 && !i12 && !i13
+      // _LORAM deselected, _CHAREN selected
+      // $D000...$DFFF
+      // CPU active, Read, No cartridge or 8k cartridge
+      const p4 = i1 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && i13
 
-    // Unused. May be a relic from earlier design in C64 prototypes that
-    // never got removed.
-    // const p8 = i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
+      // _HIRAM deselected, _CHAREN selected
+      // $D000...$DFFF
+      // CPU active, Read, 16k cartridge
+      const p5 = i2 && !i3 && i5 && i6 && !i7 && i8 && !i10 && i11 && !i12
+              && !i13
 
-    // _HIRAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Bus available, Read, No cartridge or 8k cartridge
-    const p9 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
+      //
+      // $1000...$1FFF or $9000...$9FFF
+      // VIC active, No cartridge or 8k cartridge
+      const p6 = i4 && !i14 && i15 && i10 && i13
 
-    // _HIRAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Write, No cartridge or 8k cartridge
-    const p10 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+      //
+      // $1000...$1FFF or $9000...$9FFF
+      // VIC active, 16k cartridge
+      const p7 = i4 && !i14 && i15 && i10 && !i12 && !i13
 
-    // _LORAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Bus available, Read, No cartridge or 8k cartridge
-    const p11 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
+      // Unused. May be a relic from earlier design in C64 prototypes
+      // that never got removed.
+      // const p8 = i0 && i5 && i6 && !i7 && i8 // && !i10 && !i11
 
-    // _LORAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Write, No cartridge or 8k cartridge
-    const p12 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+      // _HIRAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Bus available, Read, No cartridge or 8k cartridge
+      const p9 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
 
-    // _HIRAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Bus available, Read, 16k cartridge
-    const p13 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
+      // _HIRAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Write, No cartridge or 8k cartridge
+      const p10 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+
+      // _LORAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Bus available, Read, No cartridge or 8k cartridge
+      const p11 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i13
+
+      // _LORAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Write, No cartridge or 8k cartridge
+      const p12 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && i13
+
+      // _HIRAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Bus available, Read, 16k cartridge
+      const p13 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
                    && !i13
 
-    // _HIRAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Write, 16k cartridge
-    const p14 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
-                   && !i13
+      // _HIRAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Write, 16k cartridge
+      const p14 = i2 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
+               && !i13
 
-    // _LORAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Bus available, Read, 16k cartridge
-    const p15 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
+      // _LORAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Bus available, Read, 16k cartridge
+      const p15 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && !i12
       && !i13
 
-    // _LORAM deselected, _CHAREN deselected
-    // $D000...$DFFF
-    // CPU active, Write, 16k cartridge
-    const p16 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
-                   && !i13
+      // _LORAM deselected, _CHAREN deselected
+      // $D000...$DFFF
+      // CPU active, Write, 16k cartridge
+      const p16 = i1 && i3 && i5 && i6 && !i7 && i8 && !i10 && !i11 && !i12
+               && !i13
 
-    //
-    // $D000...$DFFF
-    // CPU active, Bus available, Read, Ultimax cartridge
-    const p17 = i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i12 && !i13
+      //
+      // $D000...$DFFF
+      // CPU active, Bus available, Read, Ultimax cartridge
+      const p17 = i5 && i6 && !i7 && i8 && !i10 && i9 && i11 && i12 && !i13
 
-    //
-    // $D000...$DFFF
-    // CPU active, Write, Ultimax cartridge
-    const p18 = i5 && i6 && !i7 && i8 && !i10 && !i11 && i12 && !i13
+      //
+      // $D000...$DFFF
+      // CPU active, Write, Ultimax cartridge
+      const p18 = i5 && i6 && !i7 && i8 && !i10 && !i11 && i12 && !i13
 
-    // _LORAM deselected, _HIRAM deselected
-    // $8000...$9FFF
-    // CPU active, Read, 8k or 16k cartridge
-    const p19 = i1 && i2 && i5 && !i6 && !i7 && !i10 && i11 && !i12
+      // _LORAM deselected, _HIRAM deselected
+      // $8000...$9FFF
+      // CPU active, Read, 8k or 16k cartridge
+      const p19 = i1 && i2 && i5 && !i6 && !i7 && !i10 && i11 && !i12
 
-    //
-    // $8000...$9FFF
-    // CPU active, Ultimax cartridge
-    const p20 = i5 && !i6 && !i7 && !i10 && i12 && !i13
+      //
+      // $8000...$9FFF
+      // CPU active, Ultimax cartridge
+      const p20 = i5 && !i6 && !i7 && !i10 && i12 && !i13
 
-    // _HIRAM deselected
-    // $A000...$BFFF
-    // CPU active, Read, 16k cartridge
-    const p21 = i2 && i5 && !i6 && i7 && !i10 && i11 && !i12 && !i13
+      // _HIRAM deselected
+      // $A000...$BFFF
+      // CPU active, Read, 16k cartridge
+      const p21 = i2 && i5 && !i6 && i7 && !i10 && i11 && !i12 && !i13
 
-    //
-    // $E000...$EFFF
-    // CPU active, Ultimax cartridge
-    const p22 = i5 && i6 && i7 && !i10 && i12 && !i13
+      //
+      // $E000...$EFFF
+      // CPU active, Ultimax cartridge
+      const p22 = i5 && i6 && i7 && !i10 && i12 && !i13
 
-    //
-    // $3000...$3FFF, $7000...$7FFF, $B000...$BFFF, or $E000...$EFFF
-    // VIC active, Ultimax cartridge
-    const p23 = i14 && i15 && i10 && i12 && !i13
+      //
+      // $3000...$3FFF, $7000...$7FFF, $B000...$BFFF, or $E000...$EFFF
+      // VIC active, Ultimax cartridge
+      const p23 = i14 && i15 && i10 && i12 && !i13
 
-    //
-    // $1000...$1FFF or $3000...$3FFF
-    // Ultimax cartridge
-    const p24 = !i5 && !i6 && i8 && i12 && !i13
+      //
+      // $1000...$1FFF or $3000...$3FFF
+      // Ultimax cartridge
+      const p24 = !i5 && !i6 && i8 && i12 && !i13
 
-    //
-    // $2000...$3FFF
-    // Ultimax cartridge
-    const p25 = !i5 && !i6 && i7 && i12 && !i13
+      //
+      // $2000...$3FFF
+      // Ultimax cartridge
+      const p25 = !i5 && !i6 && i7 && i12 && !i13
 
-    //
-    // $4000...$7FFF
-    // Ultimax cartridge
-    const p26 = !i5 && i6 && i12 && !i13
+      //
+      // $4000...$7FFF
+      // Ultimax cartridge
+      const p26 = !i5 && i6 && i12 && !i13
 
-    //
-    // $A000...$BFFF
-    // Ultimax cartridge
-    const p27 = i5 && !i6 && i7 && i12 && !i13
+      //
+      // $A000...$BFFF
+      // Ultimax cartridge
+      const p27 = i5 && !i6 && i7 && i12 && !i13
 
-    //
-    // $C000...$CFFF
-    // Ultimax cartridge
-    const p28 = i5 && i6 && !i7 && !i8 && i12 && !i13
+      //
+      // $C000...$CFFF
+      // Ultimax cartridge
+      const p28 = i5 && i6 && !i7 && !i8 && i12 && !i13
 
-    // Unused.
-    // const p29 = !i1
+      // Unused.
+      // const p29 = !i1
 
-    // _CAS deselected
-    //
-    //
-    const p30 = i0
+      // _CAS deselected
+      //
+      //
+      const p30 = i0
 
-    // _CAS selected
-    // $D000...$DFFF
-    // CPU access, Write
-    const p31 = !i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
+      // _CAS selected
+      // $D000...$DFFF
+      // CPU access, Write
+      const p31 = !i0 && i5 && i6 && !i7 && i8 && !i10 && !i11
 
-    // This is the sum-term (S-term) portion of the logic, where the
-    // P-terms calculated above are logically ORed to poroduce a single
-    // output. This is much simpler than P-term production because the
-    // P-terms handle everything about chip selection, except that each
-    // chip may be the choice of several different P-terms. That's the
-    // role of the S-term logic, to combine P-terms to come up with
-    // single outputs.
+      // This is the sum-term (S-term) portion of the logic, where the
+      // P-terms calculated above are logically ORed to poroduce a
+      // single output. This is much simpler than P-term production
+      // because the P-terms handle everything about chip selection,
+      // except that each chip may be the choice of several different
+      // P-terms. That's the role of the S-term logic, to combine
+      // P-terms to come up with single outputs.
 
-    // Selects BASIC ROM.
-    const s1 = p0
+      // Selects BASIC ROM.
+      const s1 = p0
 
-    // Selects KERNAL ROM.
-    const s2 = p1 || p2
+      // Selects KERNAL ROM.
+      const s2 = p1 || p2
 
-    // Selects Character ROM.
-    const s3 = p3 || p4 || p5 || p6 || p7
+      // Selects Character ROM.
+      const s3 = p3 || p4 || p5 || p6 || p7
 
-    // Selects I/O, color RAM, or processor registers.
-    const s4 = p9 || p10 || p11 || p12 || p13 || p14 || p15 || p16 || p17 || p18
+      // Selects I/O, color RAM, or processor registers.
+      const s4 = p9 || p10 || p11 || p12 || p13 || p14 || p15 || p16 || p17
+              || p18
 
-    // Selects low cartridge ROM.
-    const s5 = p19 || p20
+      // Selects low cartridge ROM.
+      const s5 = p19 || p20
 
-    // Selects high cartridge ROM.
-    const s6 = p21 || p22 || p23
+      // Selects high cartridge ROM.
+      const s6 = p21 || p22 || p23
 
-    // Selects write mode for color RAM.
-    const s7 = p31
+      // Selects write mode for color RAM.
+      const s7 = p31
 
-    // Deselects RAM. This is the only *de*selection, which is why it is
-    // the only one not inverted in the state assignment below.
-    const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27
-                  || p28 || p30
+      // Deselects RAM. This is the only *de*selection, which is why it
+      // is the only one not inverted in the state assignment below.
+      const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27
+              || p28 || p30
 
-    chip.F0.level = s0
-    chip.F1.level = !s1
-    chip.F2.level = !s2
-    chip.F3.level = !s3
-    chip.F4.level = !s7
-    chip.F5.level = !s4
-    chip.F6.level = !s5
-    chip.F7.level = !s6
+      this.F0.level = s0
+      this.F1.level = !s1
+      this.F2.level = !s2
+      this.F3.level = !s3
+      this.F4.level = !s7
+      this.F5.level = !s4
+      this.F6.level = !s5
+      this.F7.level = !s6
+    }
+    /* eslint-enable complexity */
+
+    this._OE.addListener(oneListener)
+    this.I0.addListener(oneListener)
+    this.I1.addListener(oneListener)
+    this.I2.addListener(oneListener)
+    this.I3.addListener(oneListener)
+    this.I4.addListener(oneListener)
+    this.I5.addListener(oneListener)
+    this.I6.addListener(oneListener)
+    this.I7.addListener(oneListener)
+    this.I8.addListener(oneListener)
+    this.I9.addListener(oneListener)
+    this.I10.addListener(oneListener)
+    this.I11.addListener(oneListener)
+    this.I12.addListener(oneListener)
+    this.I13.addListener(oneListener)
+    this.I14.addListener(oneListener)
+    this.I15.addListener(oneListener)
   }
-  /* eslint-enable complexity */
-
-  chip._OE.addListener(oneListener)
-  chip.I0.addListener(oneListener)
-  chip.I1.addListener(oneListener)
-  chip.I2.addListener(oneListener)
-  chip.I3.addListener(oneListener)
-  chip.I4.addListener(oneListener)
-  chip.I5.addListener(oneListener)
-  chip.I6.addListener(oneListener)
-  chip.I7.addListener(oneListener)
-  chip.I8.addListener(oneListener)
-  chip.I9.addListener(oneListener)
-  chip.I10.addListener(oneListener)
-  chip.I11.addListener(oneListener)
-  chip.I12.addListener(oneListener)
-  chip.I13.addListener(oneListener)
-  chip.I14.addListener(oneListener)
-  chip.I15.addListener(oneListener)
-
-  return chip
 }
-
-export { Ic82S100 }

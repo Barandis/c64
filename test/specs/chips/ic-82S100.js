@@ -125,7 +125,7 @@ function getExpected(input) {
 /* eslint-enable complexity, camelcase */
 
 describe('82S100 Programmable Logic Array', () => {
-  const chip = Ic82S100()
+  const chip = new Ic82S100()
   const traces = deviceTraces(chip)
 
   const inTraces = [...range(0, 16)].map(pin => traces[`I${pin}`])

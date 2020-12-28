@@ -19,7 +19,7 @@ describe('7408 quad 2-input AND gate', () => {
   let chip, traces
 
   beforeEach(() => {
-    chip = Ic7408()
+    chip = new Ic7408()
     traces = deviceTraces(chip)
   })
 

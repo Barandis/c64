@@ -89,45 +89,48 @@ import { range } from 'utils'
 const INPUT = Pin.INPUT
 const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
-/**
- * Creates an emulation of the 4066 quad bilateral switch.
- *
- * @returns {Ic4066} A new 4066 quad bilateral switch.
- * @memberof module:chips
- */
-function Ic4066() {
-  const chip = new Chip(
-    // I/O and control pins for switch 1
-    new Pin(1, 'A1', BIDIRECTIONAL),
-    new Pin(2, 'B1', BIDIRECTIONAL),
-    new Pin(13, 'X1', INPUT),
+export class Ic4066 extends Chip {
+  /** @type {[Pin, Pin, Pin, Pin]} */
+  #last = [null, null, null, null]
 
-    // I/O and control pins for switch 2
-    new Pin(3, 'A2', BIDIRECTIONAL),
-    new Pin(4, 'B2', BIDIRECTIONAL),
-    new Pin(5, 'X2', INPUT),
+  constructor() {
+    super(
+      // I/O and control pins for switch 1
+      new Pin(1, 'A1', BIDIRECTIONAL),
+      new Pin(2, 'B1', BIDIRECTIONAL),
+      new Pin(13, 'X1', INPUT),
 
-    // I/O and control pins for switch 3
-    new Pin(9, 'A3', BIDIRECTIONAL),
-    new Pin(8, 'B3', BIDIRECTIONAL),
-    new Pin(6, 'X3', INPUT),
+      // I/O and control pins for switch 2
+      new Pin(3, 'A2', BIDIRECTIONAL),
+      new Pin(4, 'B2', BIDIRECTIONAL),
+      new Pin(5, 'X2', INPUT),
 
-    // I/O and control pins for switch 4
-    new Pin(11, 'A4', BIDIRECTIONAL),
-    new Pin(10, 'B4', BIDIRECTIONAL),
-    new Pin(12, 'X4', INPUT),
+      // I/O and control pins for switch 3
+      new Pin(9, 'A3', BIDIRECTIONAL),
+      new Pin(8, 'B3', BIDIRECTIONAL),
+      new Pin(6, 'X3', INPUT),
 
-    // Power supply and ground pins. These are not emulated.
-    new Pin(14, 'Vdd'),
-    new Pin(7, 'GND'),
-  )
+      // I/O and control pins for switch 4
+      new Pin(11, 'A4', BIDIRECTIONAL),
+      new Pin(10, 'B4', BIDIRECTIONAL),
+      new Pin(12, 'X4', INPUT),
 
-  const last = [null, null, null, null]
+      // Power supply and ground pins. These are not emulated.
+      new Pin(14, 'Vdd'),
+      new Pin(7, 'GND'),
+    )
 
-  function controlListener(gate) {
-    const xpin = chip[`X${gate}`]
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
+    for (const i of range(1, 4, true)) {
+      this[`X${i}`].addListener(this.#controlListener(i))
+      this[`A${i}`].addListener(this.#dataListener(i))
+      this[`B${i}`].addListener(this.#dataListener(i))
+    }
+  }
+
+  #controlListener (gate) {
+    const xpin = this[`X${gate}`]
+    const apin = this[`A${gate}`]
+    const bpin = this[`B${gate}`]
 
     return () => {
       if (xpin.high) {
@@ -137,9 +140,9 @@ function Ic4066() {
         apin.mode = BIDIRECTIONAL
         bpin.mode = BIDIRECTIONAL
 
-        if (last[gate - 1] === apin) {
+        if (this.#last[gate - 1] === apin) {
           bpin.level = apin.level
-        } else if (last[gate - 1] === bpin) {
+        } else if (this.#last[gate - 1] === bpin) {
           apin.level = bpin.level
         } else {
           apin.clear()
@@ -149,27 +152,17 @@ function Ic4066() {
     }
   }
 
-  function dataListener(gate) {
-    const xpin = chip[`X${gate}`]
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
+  #dataListener (gate) {
+    const xpin = this[`X${gate}`]
+    const apin = this[`A${gate}`]
+    const bpin = this[`B${gate}`]
 
     return pin => {
       const outpin = pin === apin ? bpin : apin
-      last[gate - 1] = pin
+      this.#last[gate - 1] = pin
       if (xpin.low) {
         outpin.level = pin.level
       }
     }
   }
-
-  for (const i of range(1, 4, true)) {
-    chip[`X${i}`].addListener(controlListener(i))
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
-  }
-
-  return chip
 }
-
-export { Ic4066 }

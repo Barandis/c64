@@ -13,7 +13,7 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
   let addrTraces
 
   beforeEach(() => {
-    chip = Ic4164()
+    chip = new Ic4164()
     traces = deviceTraces(chip)
     traces._WE.set()
     traces._RAS.set()

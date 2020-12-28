@@ -81,79 +81,72 @@ import { pinsToValue, valueToPins, range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 2364 8k x 8-bit ROM.
- *
- * Unlike most chip creation functions, this one takes a parameter.
- * Since there is no way to write to the contents of a ROM chip, the
- * full contents is instead provided to the creation function.
- *
- * @param {ArrayBuffer} buffer An array buffer containing the contents
- *     of the memory stored in this chip. Only the first 8192 bytes of
- *     this buffer is used.
- * @returns {Ic2364} A new 2364 8k x 8-bit ROM.
- * @memberof module:chips
- */
-function Ic2364(buffer) {
-  const chip = new Chip(
-    // Address pins A0...A12
-    new Pin(8, 'A0', INPUT),
-    new Pin(7, 'A1', INPUT),
-    new Pin(6, 'A2', INPUT),
-    new Pin(5, 'A3', INPUT),
-    new Pin(4, 'A4', INPUT),
-    new Pin(3, 'A5', INPUT),
-    new Pin(2, 'A6', INPUT),
-    new Pin(1, 'A7', INPUT),
-    new Pin(23, 'A8', INPUT),
-    new Pin(22, 'A9', INPUT),
-    new Pin(18, 'A10', INPUT),
-    new Pin(19, 'A11', INPUT),
-    new Pin(21, 'A12', INPUT),
+export class Ic2364 extends Chip {
+  /** @type {Pin[]} */
+  #addrPins
+  /** @type {Pin[]} */
+  #dataPins
+  /** @type {Uint8Array} */
+  #memory
 
-    // Data pins D0...D7
-    new Pin(9, 'D0', OUTPUT),
-    new Pin(10, 'D1', OUTPUT),
-    new Pin(11, 'D2', OUTPUT),
-    new Pin(13, 'D3', OUTPUT),
-    new Pin(14, 'D4', OUTPUT),
-    new Pin(15, 'D5', OUTPUT),
-    new Pin(16, 'D6', OUTPUT),
-    new Pin(17, 'D7', OUTPUT),
+  constructor(buffer) {
+    super(
+      // Address pins A0...A12
+      new Pin(8, 'A0', INPUT),
+      new Pin(7, 'A1', INPUT),
+      new Pin(6, 'A2', INPUT),
+      new Pin(5, 'A3', INPUT),
+      new Pin(4, 'A4', INPUT),
+      new Pin(3, 'A5', INPUT),
+      new Pin(2, 'A6', INPUT),
+      new Pin(1, 'A7', INPUT),
+      new Pin(23, 'A8', INPUT),
+      new Pin(22, 'A9', INPUT),
+      new Pin(18, 'A10', INPUT),
+      new Pin(19, 'A11', INPUT),
+      new Pin(21, 'A12', INPUT),
 
-    // Chip select pin. When this goes low, a read cycle is executed
-    // based on the address on pins A0...A12. When it's high, the data
-    // pins are put into hi-Z.
-    new Pin(20, '_CS', INPUT),
+      // Data pins D0...D7
+      new Pin(9, 'D0', OUTPUT),
+      new Pin(10, 'D1', OUTPUT),
+      new Pin(11, 'D2', OUTPUT),
+      new Pin(13, 'D3', OUTPUT),
+      new Pin(14, 'D4', OUTPUT),
+      new Pin(15, 'D5', OUTPUT),
+      new Pin(16, 'D6', OUTPUT),
+      new Pin(17, 'D7', OUTPUT),
 
-    // Power supply and ground pins. These are not emulated.
-    new Pin(24, 'VCC'),
-    new Pin(12, 'GND'),
-  )
+      // Chip select pin. When this goes low, a read cycle is executed
+      // based on the address on pins A0...A12. When it's high, the data
+      // pins are put into hi-Z.
+      new Pin(20, '_CS', INPUT),
 
-  const addrPins = [...range(13)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+      // Power supply and ground pins. These are not emulated.
+      new Pin(24, 'VCC'),
+      new Pin(12, 'GND'),
+    )
 
-  const memory = new Uint8Array(buffer)
+    this.#addrPins = [...range(13)].map(pin => this[`A${pin}`])
+    this.#dataPins = [...range(8)].map(pin => this[`D${pin}`])
+    this.#memory = new Uint8Array(buffer)
+
+    this._CS.addListener(this.#enableListener())
+  }
 
   // Reads the 8-bit value at the location indicated by the address pins
   // and puts that value on the data pins.
-  function read() {
-    const value = memory[pinsToValue(...addrPins)]
-    valueToPins(value, ...dataPins)
+  #read () {
+    const value = this.#memory[pinsToValue(...this.#addrPins)]
+    valueToPins(value, ...this.#dataPins)
   }
 
-  function enableListener(pin) {
-    if (pin.high) {
-      valueToPins(null, ...dataPins)
-    } else {
-      read()
+  #enableListener () {
+    return pin => {
+      if (pin.high) {
+        valueToPins(null, ...this.#dataPins)
+      } else {
+        this.#read()
+      }
     }
   }
-
-  chip._CS.addListener(enableListener)
-
-  return chip
 }
-
-export { Ic2364 }

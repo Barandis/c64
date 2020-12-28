@@ -125,45 +125,47 @@ import { range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 74139 dual 2-to-4 demultiplexer.
- *
- * @returns {Ic74139} A new 74139 dual 2-to-4 demultiplexer.
- * @memberof module:chips
- */
-function Ic74139() {
-  const chip = new Chip(
+export class Ic74139 extends Chip {
+  constructor() {
+    super(
     // Demultiplexer 1
-    new Pin(2, 'A1', INPUT),
-    new Pin(3, 'B1', INPUT),
-    new Pin(4, '_Y10', OUTPUT).clear(),
-    new Pin(5, '_Y11', OUTPUT).set(),
-    new Pin(6, '_Y12', OUTPUT).set(),
-    new Pin(7, '_Y13', OUTPUT).set(),
-    new Pin(1, '_G1', INPUT),
+      new Pin(2, 'A1', INPUT),
+      new Pin(3, 'B1', INPUT),
+      new Pin(4, '_Y10', OUTPUT).clear(),
+      new Pin(5, '_Y11', OUTPUT).set(),
+      new Pin(6, '_Y12', OUTPUT).set(),
+      new Pin(7, '_Y13', OUTPUT).set(),
+      new Pin(1, '_G1', INPUT),
 
-    // Demultiplexer 2
-    new Pin(14, 'A2', INPUT),
-    new Pin(13, 'B2', INPUT),
-    new Pin(12, '_Y20', OUTPUT).clear(),
-    new Pin(11, '_Y21', OUTPUT).set(),
-    new Pin(10, '_Y22', OUTPUT).set(),
-    new Pin(9, '_Y23', OUTPUT).set(),
-    new Pin(15, '_G2', INPUT),
+      // Demultiplexer 2
+      new Pin(14, 'A2', INPUT),
+      new Pin(13, 'B2', INPUT),
+      new Pin(12, '_Y20', OUTPUT).clear(),
+      new Pin(11, '_Y21', OUTPUT).set(),
+      new Pin(10, '_Y22', OUTPUT).set(),
+      new Pin(9, '_Y23', OUTPUT).set(),
+      new Pin(15, '_G2', INPUT),
 
-    // Power supply and ground pins. These are not emulated.
-    new Pin(16, 'Vcc'),
-    new Pin(8, 'GND'),
-  )
+      // Power supply and ground pins. These are not emulated.
+      new Pin(16, 'Vcc'),
+      new Pin(8, 'GND'),
+    )
 
-  function listener(demux) {
-    const gpin = chip[`_G${demux}`]
-    const apin = chip[`A${demux}`]
-    const bpin = chip[`B${demux}`]
-    const y0pin = chip[`_Y${demux}0`]
-    const y1pin = chip[`_Y${demux}1`]
-    const y2pin = chip[`_Y${demux}2`]
-    const y3pin = chip[`_Y${demux}3`]
+    for (const i of range(1, 2, true)) {
+      this[`_G${i}`].addListener(this.#dataListener(i))
+      this[`A${i}`].addListener(this.#dataListener(i))
+      this[`B${i}`].addListener(this.#dataListener(i))
+    }
+  }
+
+  #dataListener (demux) {
+    const gpin = this[`_G${demux}`]
+    const apin = this[`A${demux}`]
+    const bpin = this[`B${demux}`]
+    const y0pin = this[`_Y${demux}0`]
+    const y1pin = this[`_Y${demux}1`]
+    const y2pin = this[`_Y${demux}2`]
+    const y3pin = this[`_Y${demux}3`]
 
     return () => {
       y0pin.level = 1 - (gpin.low && apin.low && bpin.low)
@@ -172,14 +174,4 @@ function Ic74139() {
       y3pin.level = 1 - (gpin.low && apin.high && bpin.high)
     }
   }
-
-  for (const i of range(1, 2, true)) {
-    chip[`_G${i}`].addListener(listener(i))
-    chip[`A${i}`].addListener(listener(i))
-    chip[`B${i}`].addListener(listener(i))
-  }
-
-  return chip
 }
-
-export { Ic74139 }

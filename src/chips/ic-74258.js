@@ -87,57 +87,60 @@ import { range } from 'utils'
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
-/**
- * Creates an emulation of the 74258 quad 2-to-1 multiplexer.
- *
- * @returns {Ic74258} A new 74258 quad 2-to-1 multiplexer.
- * @memberof module:chips
- */
-function Ic74258() {
-  const chip = new Chip(
+export class Ic74258 extends Chip {
+  constructor() {
+    super(
     // Select. When this is low, the Y output pins will take on the same
     // value as their A input pins. When this is high, the Y output pins
     // will instead take on the value of their B input pins.
-    new Pin(1, 'SEL', INPUT),
+      new Pin(1, 'SEL', INPUT),
 
-    // Output enable. When this is high, all of the Y output pins will
-    // be forced into hi-z, whatever the values of their input pins.
-    new Pin(15, '_OE', INPUT),
+      // Output enable. When this is high, all of the Y output pins will
+      // be forced into hi-z, whatever the values of their input pins.
+      new Pin(15, '_OE', INPUT),
 
-    // Group 1 inputs and output
-    new Pin(2, 'A1', INPUT),
-    new Pin(3, 'B1', INPUT),
-    new Pin(4, '_Y1', OUTPUT).set(),
+      // Group 1 inputs and output
+      new Pin(2, 'A1', INPUT),
+      new Pin(3, 'B1', INPUT),
+      new Pin(4, '_Y1', OUTPUT).set(),
 
-    // Group 2 input and output
-    new Pin(5, 'A2', INPUT),
-    new Pin(6, 'B2', INPUT),
-    new Pin(7, '_Y2', OUTPUT).set(),
+      // Group 2 input and output
+      new Pin(5, 'A2', INPUT),
+      new Pin(6, 'B2', INPUT),
+      new Pin(7, '_Y2', OUTPUT).set(),
 
-    // Group 3 inputs and output
-    new Pin(11, 'A3', INPUT),
-    new Pin(10, 'B3', INPUT),
-    new Pin(9, '_Y3', OUTPUT).set(),
+      // Group 3 inputs and output
+      new Pin(11, 'A3', INPUT),
+      new Pin(10, 'B3', INPUT),
+      new Pin(9, '_Y3', OUTPUT).set(),
 
-    // Group 4 inputs and output
-    new Pin(14, 'A4', INPUT),
-    new Pin(13, 'B4', INPUT),
-    new Pin(12, '_Y4', OUTPUT).set(),
+      // Group 4 inputs and output
+      new Pin(14, 'A4', INPUT),
+      new Pin(13, 'B4', INPUT),
+      new Pin(12, '_Y4', OUTPUT).set(),
 
-    // Power supply pins. These are not emulated.
-    new Pin(8, 'GND'),
-    new Pin(16, 'Vcc'),
-  )
+      // Power supply pins. These are not emulated.
+      new Pin(8, 'GND'),
+      new Pin(16, 'Vcc'),
+    )
 
-  function dataListener(mux) {
-    const apin = chip[`A${mux}`]
-    const bpin = chip[`B${mux}`]
-    const ypin = chip[`_Y${mux}`]
+    this.SEL.addListener(this.#controlListener())
+    this._OE.addListener(this.#controlListener())
+    for (const i of range(1, 4, true)) {
+      this[`A${i}`].addListener(this.#dataListener(i))
+      this[`B${i}`].addListener(this.#dataListener(i))
+    }
+  }
+
+  #dataListener (mux) {
+    const apin = this[`A${mux}`]
+    const bpin = this[`B${mux}`]
+    const ypin = this[`_Y${mux}`]
 
     return () => {
-      if (chip._OE.high) {
+      if (this._OE.high) {
         ypin.float()
-      } else if (chip.SEL.low) {
+      } else if (this.SEL.low) {
         ypin.level = +!apin.level
       } else {
         ypin.level = +!bpin.level
@@ -145,19 +148,8 @@ function Ic74258() {
     }
   }
 
-  function controlListener() {
-    const listeners = [...range(1, 4, true)].map(i => dataListener(i))
+  #controlListener () {
+    const listeners = [...range(1, 4, true)].map(i => this.#dataListener(i))
     return () => listeners.forEach(listener => listener())
   }
-
-  chip.SEL.addListener(controlListener())
-  chip._OE.addListener(controlListener())
-  for (const i of range(1, 4, true)) {
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
-  }
-
-  return chip
 }
-
-export { Ic74258 }

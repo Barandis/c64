@@ -17,7 +17,7 @@ describe('74373 Octal tri-state transparent latch', () => {
   let chip, traces
 
   beforeEach(() => {
-    chip = Ic74373()
+    chip = new Ic74373()
     traces = deviceTraces(chip)
     traces._OE.clear()
   })

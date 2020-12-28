@@ -24,7 +24,7 @@ describe('4066 quad bilateral switch', () => {
   let chip, traces
 
   beforeEach(() => {
-    chip = Ic4066()
+    chip = new Ic4066()
     traces = deviceTraces(chip)
   })
 

@@ -16,7 +16,7 @@ describe('2114 1024 x 4-bit static RAM', () => {
   let chip, traces, addrTraces, dataTraces
 
   beforeEach(() => {
-    chip = Ic2114()
+    chip = new Ic2114()
     traces = deviceTraces(chip)
 
     traces._CS.set()
