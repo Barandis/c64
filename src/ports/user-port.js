@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
@@ -24,7 +24,7 @@ export const M = 23
 export const N = 24
 
 export function UserPort() {
-  return Port(
+  return new Port(
     new Pin(M, 'PA2', BIDIRECTIONAL),
 
     new Pin(C, 'PB0', BIDIRECTIONAL),

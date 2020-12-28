@@ -3,15 +3,15 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 export function SerialPort() {
-  return Port(
+  return new Port(
     new Pin(5, 'DATA', BIDIRECTIONAL),
     new Pin(4, 'CLK', BIDIRECTIONAL),
     new Pin(3, 'ATN', INPUT),

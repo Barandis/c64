@@ -3,14 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
 
 export function CassettePort() {
-  return Port(
+  return new Port(
     new Pin(4, 'READ', OUTPUT),
     new Pin(5, 'WRITE', INPUT),
     new Pin(6, 'SENSE', OUTPUT),

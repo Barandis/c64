@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 
 const INPUT = Pin.INPUT
 const OUTPUT = Pin.OUTPUT
@@ -34,7 +34,7 @@ export const Y = 43
 export const Z = 44
 
 export function ExpansionPort() {
-  return Port(
+  return new Port(
     new Pin(Y, 'A0', INPUT),
     new Pin(X, 'A1', INPUT),
     new Pin(W, 'A2', INPUT),

@@ -4,4 +4,3 @@
 // https://opensource.org/licenses/MIT
 
 export { Chip } from './chip'
-export { Port } from './port'

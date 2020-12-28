@@ -3,13 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 
 const OUTPUT = Pin.OUTPUT
 
 export function Control1Port() {
-  return Port(
+  return new Port(
     new Pin(1, 'JOYA0', OUTPUT),
     new Pin(2, 'JOYA1', OUTPUT),
     new Pin(3, 'JOYA2', OUTPUT),

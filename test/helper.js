@@ -5,8 +5,8 @@
 
 import chai from 'chai'
 
-import { Port } from 'components'
 import Pin from 'components/pin'
+import Port from 'components/port'
 import Trace from 'components/trace'
 import { range } from 'utils'
 
@@ -104,7 +104,7 @@ export function portCable(port) {
     }
   }
 
-  return Port(...pins)
+  return new Port(...pins)
 }
 
 export function portMessage(name) {
