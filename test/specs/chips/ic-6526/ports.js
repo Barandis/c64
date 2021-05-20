@@ -70,9 +70,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   }
 }
 
-export function pdrReceive(
-  { writeRegister, readRegister, paTraces, pbTraces },
-) {
+export function pdrReceive({ writeRegister, readRegister, paTraces, pbTraces }) {
   const paValue = rand(256)
 
   writeRegister(DDRA, 0)
@@ -104,7 +102,7 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const paMask = rand(256)
   const paIn = rand(256)
   const paOut = rand(256)
-  const paExp = paMask & paOut | ~paMask & paIn
+  const paExp = (paMask & paOut) | (~paMask & paIn)
 
   writeRegister(DDRA, paMask)
   valueToPins(paIn, ...paTraces)
@@ -118,7 +116,7 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const pbMask = rand(256)
   const pbIn = rand(256)
   const pbOut = rand(256)
-  const pbExp = pbMask & pbOut | ~pbMask & pbIn
+  const pbExp = (pbMask & pbOut) | (~pbMask & pbIn)
 
   writeRegister(DDRB, pbMask)
   valueToPins(pbIn, ...pbTraces)
@@ -145,9 +143,7 @@ export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
   assert(pinsToValue(...pbTraces) === 0b00111111)
 }
 
-export function pdrTriggerPc(
-  { tr, readRegister, writeRegister, paTraces, pbTraces },
-) {
+export function pdrTriggerPc({ tr, readRegister, writeRegister, paTraces, pbTraces }) {
   // Reading port A does not trigger _PC
   writeRegister(DDRA, 0x00)
   valueToPins(0xff, ...paTraces)

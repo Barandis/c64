@@ -7,13 +7,9 @@ import { assert, deviceTraces } from 'test/helper'
 import { Ic74258 } from 'chips'
 
 const selLowMessage = (mux, state) =>
-  `Y${mux} should be ${state} when A${mux} is ${
-    state === 'high' ? 'low' : 'high'
-  } and SEL is low`
+  `Y${mux} should be ${state} when A${mux} is ${state === 'high' ? 'low' : 'high'} and SEL is low`
 const selHighMessage = (mux, state) =>
-  `Y${mux} should be ${state} when B${mux} is ${
-    state === 'high' ? 'low' : 'high'
-  } and SEL is high`
+  `Y${mux} should be ${state} when B${mux} is ${state === 'high' ? 'low' : 'high'} and SEL is high`
 const oeMessage = mux => `Y${mux} should float when _OE is high`
 
 describe('74258 3-State Quad 2-Data Multiplexers', () => {

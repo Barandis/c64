@@ -6,36 +6,31 @@
 /**
  * An emulation of the 4066 quad bilateral switch.
  *
- * The 4066 is one of the 4000-series CMOS logic chips, consisting of
- * four symmetrical analong switches. The data pins transfer data
- * bidirectionally as long as their associated control pin is low. When
- * the control pin goes hish, no data can be passed through the switch.
+ * The 4066 is one of the 4000-series CMOS logic chips, consisting of four symmetrical
+ * analong switches. The data pins transfer data bidirectionally as long as their associated
+ * control pin is low. When the control pin goes hish, no data can be passed through the
+ * switch.
  *
- * When the control pin returns to low, both data pins return to the
- * level of the *last of them to be set*. This is a bit of a compromise
- * necessitated by the fact that this is a digital simulation of an
- * analog circuit, but it should be the most natural. Most use cases do
- * not involve switching the direction that data flows through the
- * switch regularly.
+ * When the control pin returns to low, both data pins return to the level of the *last of
+ * them to be set*. This is a bit of a compromise necessitated by the fact that this is a
+ * digital simulation of an analog circuit, but it should be the most natural. Most use
+ * cases do not involve switching the direction that data flows through the switch
+ * regularly.
  *
- * There is no high-impedance state for the pins of this device. When
- * the control pin his high, the data pins simply take on the level of
- * whatever circuits they're connected to. This is emulated by changing
- * their mode to `{@link module:components.INPUT|INPUT}` so that they do
- * not send signals but can still track changes on their traces.
+ * There is no high-impedance state for the pins of this device. When the control pin his
+ * high, the data pins simply take on the level of whatever circuits they're connected to.
+ * This is emulated by changing their mode to `{@link module:components.INPUT|INPUT}` so
+ * that they do not send signals but can still track changes on their traces.
  *
- * There is no consistency across datahsheets for naming the 4066's
- * pins. Many sheets simply have some data pins marked "IN/OUT" and
- * others marked "OUT/IN", but those don't work well as property names.
- * For consistency with the rest of the logic chips in this module, the
- * data pins have been named `A` and `B`, while thie control pin is
- * named `X`. The `A` and `B` pins are completely interchangeable and do
- * appear in different orders oon many datasheets; this particular
- * arrangement (if not the pin names) is taken from the datasheet for
- * the Texas Instruments CD4066B.
+ * There is no consistency across datahsheets for naming the 4066's pins. Many sheets simply
+ * have some data pins marked "IN/OUT" and others marked "OUT/IN", but those don't work well
+ * as property names. For consistency with the rest of the logic chips in this module, the
+ * data pins have been named `A` and `B`, while thie control pin is named `X`. The `A` and
+ * `B` pins are completely interchangeable and do appear in different orders oon many
+ * datasheets; this particular arrangement (if not the pin names) is taken from the
+ * datasheet for the Texas Instruments CD4066B.
  *
- * The chip comes in a 14-pin dual in-line package with the following
- * pin assignments.
+ * The chip comes in a 14-pin dual in-line package with the following pin assignments.
  * ```txt
  *         +---+--+---+
  *      A1 |1  +--+ 14| Vdd
@@ -49,20 +44,17 @@
  * ```
  * *(`Vdd` and `Vss` are power supply pins and are not emulated.)*
  *
- * This chip is unusual in that it's the only analog chip in the system
- * as emulated (with the exception of the filter portion of the
- * {@link Ic6581|6581}). Even so, it works fine for switching digital
- * signals as well, and one of the Commodore 64's two 4066's is in fact
- * used as a digital switch.
+ * This chip is unusual in that it's the only analog chip in the system as emulated (with
+ * the exception of the filter portion of the {@link Ic6581|6581}). Even so, it works fine
+ * for switching digital signals as well, and one of the Commodore 64's two 4066's is in
+ * fact used as a digital switch.
  *
- * In the Commodore 64, U16 and U28 are 4066's. The former is used as a
- * digital switch to control which processor has access to the color
- * RAM's data pins, while the other is used as an analog switch to
- * control which game port is providing paddle data to the
+ * In the Commodore 64, U16 and U28 are 4066's. The former is used as a digital switch to
+ * control which processor has access to the color RAM's data pins, while the other is used
+ * as an analog switch to control which game port is providing paddle data to the
  * {@link Ic6581|6581} SID.
  *
- * This chip is produced by calling the
- * `{@link module:chips.Ic4066|Ic4066}` function.
+ * This chip is produced by calling the `{@link module:chips.Ic4066|Ic4066}` function.
  *
  * @typedef Ic4066
  * @property {Pin} A1 [1] One of the data pins on switch 1.
@@ -77,8 +69,7 @@
  * @property {Pin} A4 [11] One of the data pins on switch 2.
  * @property {Pin} B4 [10] One of the data pins on switch 2.
  * @property {Pin} X4 [12] The control pin for switch 2.
- * @property {Pin} Vcc [14] The positive power supply. This pin is not
- *     emulated.
+ * @property {Pin} Vcc [14] The positive power supply. This pin is not emulated.
  * @property {Pin} Vss [7] The ground. This pin is not emulated.
  */
 
@@ -127,7 +118,7 @@ export class Ic4066 extends Chip {
     }
   }
 
-  #controlListener (gate) {
+  #controlListener(gate) {
     const xpin = this[`X${gate}`]
     const apin = this[`A${gate}`]
     const bpin = this[`B${gate}`]
@@ -152,7 +143,7 @@ export class Ic4066 extends Chip {
     }
   }
 
-  #dataListener (gate) {
+  #dataListener(gate) {
     const xpin = this[`X${gate}`]
     const apin = this[`A${gate}`]
     const bpin = this[`B${gate}`]

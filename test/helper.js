@@ -33,10 +33,7 @@ export function rand(min, max = null) {
 export function assertArray(actual, expected) {
   assert(actual.length === expected.length)
   for (const i of range(actual.length)) {
-    assert(
-      actual[i] === expected[i],
-      `Expected: ${expected[i]}, Actual: ${actual[i]}`,
-    )
+    assert(actual[i] === expected[i], `Expected: ${expected[i]}, Actual: ${actual[i]}`)
   }
 }
 
@@ -68,9 +65,7 @@ export function bin(value, digits = 8) {
  */
 export function chipState(chip, name) {
   const terms = []
-  for (const pin of Object.values(chip.pins).sort(
-    (a, b) => a.num - b.num,
-  )) {
+  for (const pin of Object.values(chip.pins).sort((a, b) => a.num - b.num)) {
     terms.push(`${pin.name}: ${pin.level === null ? 'z' : pin.level}`)
   }
   return `${name}: [${terms.join(', ')}]`
@@ -95,11 +90,7 @@ export function portCable(port) {
 
   for (const pin of port) {
     if (pin) {
-      const mode = pin.mode === INPUT
-        ? OUTPUT
-        : pin.mode === OUTPUT
-          ? INPUT
-          : pin.mode
+      const mode = pin.mode === INPUT ? OUTPUT : pin.mode === OUTPUT ? INPUT : pin.mode
       pins[pin.number] = new Pin(pin.number, pin.name, mode)
     }
   }

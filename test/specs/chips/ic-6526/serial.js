@@ -4,16 +4,14 @@
 // https://opensource.org/licenses/MIT
 
 import { assert } from 'test/helper'
-import {
-  SDR, TALO, TAHI, CRA, LOAD, SPMODE, START, ICR, SP, IR,
-} from 'chips/ic-6526/constants'
+import { SDR, TALO, TAHI, CRA, LOAD, SPMODE, START, ICR, SP, IR } from 'chips/ic-6526/constants'
 import { bitSet, bitClear, range } from 'utils'
 
 export function spInput({ tr, readRegister }) {
   const data = 0x2f
 
   for (const i of range(7, 0, true)) {
-    tr.SP.level = data >> i & 1
+    tr.SP.level = (data >> i) & 1
     tr.CNT.set()
     tr.CNT.clear()
   }
@@ -26,7 +24,7 @@ export function spInputWrite({ tr, writeRegister, readRegister }) {
   writeRegister(SDR, 0xa9)
 
   for (const i of range(7, 0, true)) {
-    tr.SP.level = data >> i & 1
+    tr.SP.level = (data >> i) & 1
     tr.CNT.set()
     tr.CNT.clear()
   }
@@ -39,7 +37,7 @@ export function spOutput({ tr, writeRegister }) {
 
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << SPMODE) | (1 << LOAD) | (1 << START))
 
   writeRegister(SDR, data)
 
@@ -56,7 +54,7 @@ export function spOutput({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
-      assert(tr.SP.level === (data >> bit & 1))
+      assert(tr.SP.level === ((data >> bit) & 1))
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -65,7 +63,7 @@ export function spOutput({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.level === (bit === 0 ? 1 : 0))
-      assert(tr.SP.level === (data >> bit & 1))
+      assert(tr.SP.level === ((data >> bit) & 1))
     }
   }
 }
@@ -75,7 +73,7 @@ export function spReady({ tr, writeRegister }) {
 
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << SPMODE) | (1 << LOAD) | (1 << START))
 
   writeRegister(SDR, 0x00)
 
@@ -103,7 +101,7 @@ export function spReady({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
-      assert(tr.SP.level === (data >> bit & 1))
+      assert(tr.SP.level === ((data >> bit) & 1))
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -112,7 +110,7 @@ export function spReady({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.level === (bit === 0 ? 1 : 0))
-      assert(tr.SP.level === (data >> bit & 1))
+      assert(tr.SP.level === ((data >> bit) & 1))
     }
   }
 }
@@ -121,7 +119,7 @@ export function spIrqRxDefault({ tr, readRegister }) {
   const data = 0x2f
 
   for (const i of range(7, 0, true)) {
-    tr.SP.level = data >> i & 1
+    tr.SP.level = (data >> i) & 1
     tr.CNT.set()
     tr.CNT.clear()
   }
@@ -137,7 +135,7 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
 
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << SPMODE) | (1 << LOAD) | (1 << START))
 
   writeRegister(SDR, data)
 
@@ -160,10 +158,10 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
 
 export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
   const data = 0x2f
-  writeRegister(ICR, 1 << IR | 1 << SP)
+  writeRegister(ICR, (1 << IR) | (1 << SP))
 
   for (const i of range(7, 0, true)) {
-    tr.SP.level = data >> i & 1
+    tr.SP.level = (data >> i) & 1
     tr.CNT.set()
     tr.CNT.clear()
   }
@@ -176,11 +174,11 @@ export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
 
 export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   const data = 0xaf
-  writeRegister(ICR, 1 << IR | 1 << SP)
+  writeRegister(ICR, (1 << IR) | (1 << SP))
 
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << SPMODE | 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << SPMODE) | (1 << LOAD) | (1 << START))
 
   writeRegister(SDR, data)
 

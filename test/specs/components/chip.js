@@ -27,11 +27,7 @@ describe('Chip', () => {
     Vcc: new Pin(14, 'Vcc'),
     GND: new Pin(7, 'GND'),
   }
-  const pinArray = []
-  for (const pin of Object.values(pins)) {
-    pinArray[pin.number] = pin
-  }
-  const chip = new Chip(...pinArray)
+  const chip = new Chip(...Object.values(pins))
 
   it('has properties named after each of its pins', () => {
     for (const [name, pin] of Object.entries(pins)) {

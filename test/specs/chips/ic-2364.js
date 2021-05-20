@@ -26,9 +26,7 @@ describe('2364 8k x 8-bit ROM', () => {
     })
 
     for (const base of range(0x0000, 0x1fff, 0x1000)) {
-      it(`reads correctly from 0x${hex(base, 4)} to 0x${
-        hex(base + 0x0fff, 4)
-      }`, () => {
+      it(`reads correctly from 0x${hex(base, 4)} to 0x${hex(base + 0x0fff, 4)}`, () => {
         for (const addr of range(base, base + 0x1000)) {
           valueToPins(addr, ...addrTraces)
           traces._CS.clear()
@@ -36,17 +34,19 @@ describe('2364 8k x 8-bit ROM', () => {
 
           if (DEBUG) {
             console.log(
-              `[address: ${hex(addr, 4)}, expected: ${
-                hex(expected[addr], 2)
-              }, actual: ${hex(data, 2)}]`,
+              `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
+                data,
+                2,
+              )}]`,
             )
           }
 
           assert(
             data === expected[addr],
-            `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${
-              hex(expected[addr], 2)
-            }, actual 0x${hex(data, 2)}`,
+            `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${hex(
+              expected[addr],
+              2,
+            )}, actual 0x${hex(data, 2)}`,
           )
           traces._CS.set()
         }
@@ -70,9 +70,7 @@ describe('2364 8k x 8-bit ROM', () => {
     const blocks = [...range(0x0000, 0x1fff, 0x1000)]
 
     blocks.forEach(base => {
-      it(`reads correctly from 0x${hex(base, 4)} to 0x${
-        hex(base + 0x0fff, 4)
-      }`, () => {
+      it(`reads correctly from 0x${hex(base, 4)} to 0x${hex(base + 0x0fff, 4)}`, () => {
         for (const addr of range(base, base + 0x1000)) {
           valueToPins(addr, ...addrTraces)
           traces._CS.clear()
@@ -80,17 +78,19 @@ describe('2364 8k x 8-bit ROM', () => {
 
           if (DEBUG) {
             console.log(
-              `[address: ${hex(addr, 4)}, expected: ${
-                hex(expected[addr], 2)
-              }, actual: ${hex(data, 2)}]`,
+              `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
+                data,
+                2,
+              )}]`,
             )
           }
 
           assert(
             data === expected[addr],
-            `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${
-              hex(expected[addr], 2)
-            }, actual 0x${hex(data, 2)}`,
+            `Incorrect value at address 0x${hex(addr, 4)}: expected: 0x${hex(
+              expected[addr],
+              2,
+            )}, actual 0x${hex(data, 2)}`,
           )
           traces._CS.set()
         }

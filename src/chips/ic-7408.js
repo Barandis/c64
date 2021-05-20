@@ -6,9 +6,9 @@
 /**
  * An emulation of the 7408 quad two-input AND gate.
  *
- * The 7408 is one of the 7400-series TTL logic circuits, consisting of
- * four dual-input AND gates. An AND gate's output is high as long as
- * all of its outputs are high; otherwise the output is low.
+ * The 7408 is one of the 7400-series TTL logic circuits, consisting of four dual-input AND
+ * gates. An AND gate's output is high as long as all of its outputs are high; otherwise the
+ * output is low.
  *
  * The `A` and `B` pins are inputs while the `Y` pins are the outputs.
  *
@@ -19,8 +19,7 @@
  * | H      | L      | **L**  |
  * | H      | H      | **H**  |
  *
- * The chip comes in a 14-pin dual in-line package with the following
- * pin assignments.
+ * The chip comes in a 14-pin dual in-line package with the following pin assignments.
  * ```txt
  *         +---+--+---+
  *      A1 |1  +--+ 14| Vcc
@@ -32,17 +31,15 @@
  *     GND |7        8| Y3
  *         +----------+
  * ```
- * *(`GND` and `Vcc` are ground and power supply pins respectively, and
- * they are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
+ * emulated.)*
  *
- * In the Commodore 64, U27 is a 74LS08 (a lower-power, faster variant
- * whose emulation is the same). It's used for combining control signals
- * from various sources, such as the `BA` signal from the
- * {@link Ic6567|6567} VIC and the `_DMA` signal from the expansion port
+ * In the Commodore 64, U27 is a 74LS08 (a lower-power, faster variant whose emulation is
+ * the same). It's used for combining control signals from various sources, such as the `BA`
+ * signal from the {@link Ic6567|6567} VIC and the `_DMA` signal from the expansion port
  * combining into the `RDY` signal for the {@link Ic6510|6510} CPU.
  *
- * This chip is produced by calling the
- * `{@link module:chips.Ic7408|Ic7408}` function.
+ * This chip is produced by calling the `{@link module:chips.Ic7408|Ic7408}` function.
  *
  * @typedef Ic7408
  * @property {Pin} A1 [1] One of the inputs to gate 1.
@@ -57,8 +54,7 @@
  * @property {Pin} A4 [12] One of the inputs to gate 4.
  * @property {Pin} B4 [13] One of the inputs to gate 4.
  * @property {Pin} Y4 [11] The output from gate 4.
- * @property {Pin} Vcc [14] The positive power supply. This pin is not
- *     emulated.
+ * @property {Pin} Vcc [14] The positive power supply. This pin is not emulated.
  * @property {Pin} GND [7] The ground. This pin is not emulated.
  */
 
@@ -72,7 +68,7 @@ const OUTPUT = Pin.OUTPUT
 export class Ic7408 extends Chip {
   constructor() {
     super(
-    // Gate 1 inputs and output
+      // Gate 1 inputs and output
       new Pin(1, 'A1', INPUT),
       new Pin(2, 'B1', INPUT),
       new Pin(3, 'Y1', OUTPUT).clear(),
@@ -103,7 +99,7 @@ export class Ic7408 extends Chip {
     }
   }
 
-  #dataListener (gate) {
+  #dataListener(gate) {
     const apin = this[`A${gate}`]
     const bpin = this[`B${gate}`]
     const ypin = this[`Y${gate}`]

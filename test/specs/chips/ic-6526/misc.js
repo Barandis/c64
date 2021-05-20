@@ -18,9 +18,7 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   tr._RES.clear()
   tr._RES.set()
   for (const i of range(16)) {
-    assert(
-      readRegister(i) === (i <= PRB || i >= TALO && i <= TBHI ? 255 : 0),
-    )
+    assert(readRegister(i) === (i <= PRB || (i >= TALO && i <= TBHI) ? 255 : 0))
   }
   assert(chip.CNT.mode === INPUT)
   assert(tr._IRQ.floating)
@@ -40,7 +38,7 @@ export function flagDefault({ tr, readRegister }) {
 }
 
 export function flagFlagSet({ tr, readRegister, writeRegister }) {
-  writeRegister(ICR, 1 << SC | 1 << FLG)
+  writeRegister(ICR, (1 << SC) | (1 << FLG))
 
   tr._FLAG.clear()
   assert(tr._IRQ.low)
@@ -50,7 +48,7 @@ export function flagFlagSet({ tr, readRegister, writeRegister }) {
 }
 
 export function flagFlagReset({ tr, readRegister, writeRegister }) {
-  writeRegister(ICR, 1 << SC | 1 << FLG)
+  writeRegister(ICR, (1 << SC) | (1 << FLG))
   writeRegister(ICR, 1 << FLG)
 
   tr._FLAG.clear()

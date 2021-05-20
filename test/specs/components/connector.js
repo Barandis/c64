@@ -13,7 +13,7 @@ const OUTPUT = Pin.OUTPUT
 const BIDIRECTIONAL = Pin.BIDIRECTIONAL
 
 describe('Connector', () => {
-  it('sets an output pin\'s level to an input\'s when connecting to it', () => {
+  it("sets an output pin's level to an input's when connecting to it", () => {
     const pin1 = new Pin(1, 'A', INPUT)
     const pin2 = new Pin(1, 'B', OUTPUT)
     pin1.level = 1
@@ -25,7 +25,7 @@ describe('Connector', () => {
     assert(pin2.high)
   })
 
-  it('sets an input pin\'s level to an output\'s when it connects', () => {
+  it("sets an input pin's level to an output's when it connects", () => {
     const pin1 = new Pin(1, 'A', INPUT)
     const pin2 = new Pin(1, 'B', OUTPUT)
     pin1.level = 1
@@ -55,7 +55,7 @@ describe('Connector', () => {
     assert(trace2.low)
   })
 
-  it('reverts the output pin\'s level to null after disconnect', () => {
+  it("reverts the output pin's level to null after disconnect", () => {
     const pin1 = new Pin(1, 'A', INPUT)
     const pin2 = new Pin(1, 'B', OUTPUT, 0)
 
@@ -77,7 +77,7 @@ describe('Connector', () => {
     assert(trace2.low) // because of PULL_DOWN
   })
 
-  it('doesn\'t do anything if two input pins with traces connect', () => {
+  it("doesn't do anything if two input pins with traces connect", () => {
     const pin1 = new Pin(1, 'A', INPUT)
     const pin2 = new Pin(1, 'A', INPUT)
 
@@ -101,7 +101,7 @@ describe('Connector', () => {
     assert(trace2.low)
   })
 
-  it('doesn\'t do anything if two output pins with traces connect', () => {
+  it("doesn't do anything if two output pins with traces connect", () => {
     const pin1 = new Pin(1, 'A', OUTPUT)
     const pin2 = new Pin(1, 'A', OUTPUT)
     pin1.level = 1

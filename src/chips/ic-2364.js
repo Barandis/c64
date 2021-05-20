@@ -6,18 +6,15 @@
 /**
  * An emulation of the 2364 8k x 8-bit ROM.
  *
- * This, along with the similar 23632, is far and away the simplest
- * memory chip in the Commodore 64. With its full complement of address
- * pins and full 8 data pins, there is no need to use multiple chips or
- * to multiplex addresses.
+ * This, along with the similar 23632, is far and away the simplest memory chip in the
+ * Commodore 64. With its full complement of address pins and full 8 data pins, there is no
+ * need to use multiple chips or to multiplex addresses.
  *
- * Timing of the read cycle (there is, of course, no write cycle in a
- * read-only memory chip) is based solely on the chip select pin `_CS`.
- * When this pin goes low, the chip reads its address pins and makes the
- * value at that location available on its data pins.
+ * Timing of the read cycle (there is, of course, no write cycle in a read-only memory chip)
+ * is based solely on the chip select pin `_CS`. When this pin goes low, the chip reads its
+ * address pins and makes the value at that location available on its data pins.
  *
- * The chip comes in a 24-pin dual in-line package with the following
- * pin assignments.
+ * The chip comes in a 24-pin dual in-line package with the following pin assignments.
  * ```txt
  *         +-----+--+-----+
  *      A7 |1    +--+   24| Vcc
@@ -34,20 +31,17 @@
  *     GND |12          13| D3
  *         +--------------+
  * ```
- * *(`GND` and `Vcc` are ground and power supply pins respectively, and
- * they are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
+ * emulated.)*
  *
- * In the Commodore 64, U3 and U4 are both 2364A's (a variant with
- * slightly faster data access). U3 stores the BASIC interpreter and U4
- * stores the kernal.
+ * In the Commodore 64, U3 and U4 are both 2364A's (a variant with slightly faster data
+ * access). U3 stores the BASIC interpreter and U4 stores the kernal.
  *
- * This chip is produced by calling the
- * `{@link module:chips.Ic2364|Ic2364}` function.
+ * This chip is produced by calling the `{@link module:chips.Ic2364|Ic2364}` function.
  *
  * @typedef Ic2364
- * @property {Pin} _CS [20] The active-low chip select pin. When this
- *     goes low, the chip reads the address and sends the data at that
- *     address to the data pins.
+ * @property {Pin} _CS [20] The active-low chip select pin. When this goes low, the chip
+ *     reads the address and sends the data at that address to the data pins.
  * @property {Pin} A0 [8] Address pin 0.
  * @property {Pin} A1 [7] Address pin 1.
  * @property {Pin} A2 [6] Address pin 2.
@@ -69,8 +63,7 @@
  * @property {Pin} D5 [15] Data pin 5.
  * @property {Pin} D6 [16] Data pin 6.
  * @property {Pin} D7 [17] Data pin 7.
- * @property {Pin} Vcc [24] The positive power supply. This pin is not
- *     emulated.
+ * @property {Pin} Vcc [24] The positive power supply. This pin is not emulated.
  * @property {Pin} GND [12] The ground. This pin is not emulated.
  */
 
@@ -116,9 +109,8 @@ export class Ic2364 extends Chip {
       new Pin(16, 'D6', OUTPUT),
       new Pin(17, 'D7', OUTPUT),
 
-      // Chip select pin. When this goes low, a read cycle is executed
-      // based on the address on pins A0...A12. When it's high, the data
-      // pins are put into hi-Z.
+      // Chip select pin. When this goes low, a read cycle is executed based on the address
+      // on pins A0...A12. When it's high, the data pins are put into hi-Z.
       new Pin(20, '_CS', INPUT),
 
       // Power supply and ground pins. These are not emulated.
@@ -133,14 +125,14 @@ export class Ic2364 extends Chip {
     this._CS.addListener(this.#enableListener())
   }
 
-  // Reads the 8-bit value at the location indicated by the address pins
-  // and puts that value on the data pins.
-  #read () {
+  // Reads the 8-bit value at the location indicated by the address pins and puts that value
+  // on the data pins.
+  #read() {
     const value = this.#memory[pinsToValue(...this.#addrPins)]
     valueToPins(value, ...this.#dataPins)
   }
 
-  #enableListener () {
+  #enableListener() {
     return pin => {
       if (pin.high) {
         valueToPins(null, ...this.#dataPins)

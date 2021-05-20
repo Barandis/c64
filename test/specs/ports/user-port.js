@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import {
-  assert, deviceTraces, portCable, cableMessage, portMessage,
-} from 'test/helper'
+import { assert, deviceTraces, portCable, cableMessage, portMessage } from 'test/helper'
 import { UserPort } from 'ports'
 import { range } from 'utils'
 

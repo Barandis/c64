@@ -66,14 +66,12 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
 
   function bitValue(row, col) {
     const bit = col & 0b00011111
-    return row >> bit & 1
+    return (row >> bit) & 1
   }
 
   describe('reading and writing', () => {
     for (const base of range(0x0000, 0xffff, 0x1000)) {
-      it(`writes and reads correctly from 0x${hex(base, 4)} to 0x${
-        hex(base + 0x0fff, 4)
-      }`, () => {
+      it(`writes and reads correctly from 0x${hex(base, 4)} to 0x${hex(base + 0x0fff, 4)}`, () => {
         for (const addr of range(base, base + 0x1000)) {
           const row = (addr & 0xff00) >> 8
           const col = addr & 0x00ff
@@ -113,39 +111,33 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
       })
     }
 
-    it(
-      'reads and writes within the same page without resetting row addresses',
-      () => {
-        const row = 0x2f // arbitrary
-        valueToPins(row, ...addrTraces)
-        traces._RAS.clear()
+    it('reads and writes within the same page without resetting row addresses', () => {
+      const row = 0x2f // arbitrary
+      valueToPins(row, ...addrTraces)
+      traces._RAS.clear()
 
-        for (const col of range(256)) {
-          valueToPins(col, ...addrTraces)
-          traces._CAS.clear()
+      for (const col of range(256)) {
+        valueToPins(col, ...addrTraces)
+        traces._CAS.clear()
 
-          traces.D.level = bitValue(row, col)
-          traces._WE.clear()
+        traces.D.level = bitValue(row, col)
+        traces._WE.clear()
 
-          traces._CAS.set()
-          traces._WE.set()
-        }
+        traces._CAS.set()
+        traces._WE.set()
+      }
 
-        for (const col of range(256)) {
-          valueToPins(col, ...addrTraces)
-          traces._CAS.clear()
+      for (const col of range(256)) {
+        valueToPins(col, ...addrTraces)
+        traces._CAS.clear()
 
-          assert(
-            traces.Q.level === bitValue(row, col),
-            `Incorrect bit value at column 0x${hex(col)}`,
-          )
+        assert(traces.Q.level === bitValue(row, col), `Incorrect bit value at column 0x${hex(col)}`)
 
-          traces._CAS.set()
-        }
+        traces._CAS.set()
+      }
 
-        traces._RAS.set()
-      },
-    )
+      traces._RAS.set()
+    })
 
     it('updates the output pin on write in RMW mode', () => {
       const row = 0x2f

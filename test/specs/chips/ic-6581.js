@@ -10,9 +10,7 @@ import { resolve } from 'path'
 import { WaveformGenerator } from 'chips/ic-6581/waveform'
 import { Ic6581 } from 'chips/index'
 import { deviceTraces } from 'test/helper'
-import {
-  SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING,
-} from 'chips/ic-6581/constants'
+import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from 'chips/ic-6581/constants'
 import { range } from 'utils'
 
 function write(path, name, value) {
@@ -179,7 +177,7 @@ describe('6581 SID', () => {
       it('produces sawtooth + triangle', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
-        registers[4] = 1 << SAWTOOTH | 1 << TRIANGLE
+        registers[4] = (1 << SAWTOOTH) | (1 << TRIANGLE)
 
         const values = produceValues()
 
@@ -192,7 +190,7 @@ describe('6581 SID', () => {
         registers[1] = 0x1c
         registers[2] = 0x00
         registers[3] = 0x08
-        registers[4] = 1 << SAWTOOTH | 1 << PULSE
+        registers[4] = (1 << SAWTOOTH) | (1 << PULSE)
 
         const values = produceValues()
 
@@ -205,7 +203,7 @@ describe('6581 SID', () => {
         registers[1] = 0x1c
         registers[2] = 0x00
         registers[3] = 0x08
-        registers[4] = 1 << TRIANGLE | 1 << PULSE
+        registers[4] = (1 << TRIANGLE) | (1 << PULSE)
 
         const values = produceValues()
 
@@ -216,7 +214,7 @@ describe('6581 SID', () => {
       it('produces a hard sync with osc 3', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
-        registers[4] = 1 << SAWTOOTH | 1 << SYNC
+        registers[4] = (1 << SAWTOOTH) | (1 << SYNC)
         registers[10] = 0x25
         registers[11] = 0x11
 
@@ -229,7 +227,7 @@ describe('6581 SID', () => {
       it('produces ring modulation with osc 3', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
-        registers[4] = 1 << TRIANGLE | 1 << RING
+        registers[4] = (1 << TRIANGLE) | (1 << RING)
         registers[10] = 0x25
         registers[11] = 0x11
 

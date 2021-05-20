@@ -27,7 +27,7 @@ export function WaveformGenerator(chip, base, readRegister) {
   let syncOsc = null
 
   function top12() {
-    return acc >> 12 & 0xfff
+    return (acc >> 12) & 0xfff
   }
 
   function accumulate(pin) {
@@ -36,7 +36,7 @@ export function WaveformGenerator(chip, base, readRegister) {
       const test = bitSet(ctrl, TEST)
       const sync = bitSet(ctrl, SYNC)
       const currMsb = bitSet(syncOsc.acc, ACC_MSB)
-      const reset = test || sync && currMsb && !prevMsb
+      const reset = test || (sync && currMsb && !prevMsb)
       prevMsb = currMsb
 
       if (reset) {
@@ -57,8 +57,7 @@ export function WaveformGenerator(chip, base, readRegister) {
         const test = bitSet(VCREG, TEST)
 
         lfsr <<= 1
-        lfsr |= bitValue(lfsr, LFSR_TAP_1)
-            ^ (reset | test | bitValue(lfsr, LFSR_TAP_2))
+        lfsr |= bitValue(lfsr, LFSR_TAP_1) ^ (reset | test | bitValue(lfsr, LFSR_TAP_2))
         lfsr &= 0x7fffff
       }
       lastClock = clock
@@ -81,7 +80,7 @@ export function WaveformGenerator(chip, base, readRegister) {
     // logical XOR of (!syncMsb & ring) and msb
     const xor = (!syncMsb && ring ? !msb : msb) ? 0x7ff : 0x000
 
-    return (top12() & 0x7ff ^ xor) << 1
+    return ((top12() & 0x7ff) ^ xor) << 1
   }
 
   function pulse() {
@@ -91,14 +90,16 @@ export function WaveformGenerator(chip, base, readRegister) {
   }
 
   function noise() {
-    return bitValue(lfsr, 0) << 4
-         | bitValue(lfsr, 2) << 5
-         | bitValue(lfsr, 5) << 6
-         | bitValue(lfsr, 9) << 7
-         | bitValue(lfsr, 11) << 8
-         | bitValue(lfsr, 14) << 9
-         | bitValue(lfsr, 18) << 10
-         | bitValue(lfsr, 20) << 11
+    return (
+      (bitValue(lfsr, 0) << 4) |
+      (bitValue(lfsr, 2) << 5) |
+      (bitValue(lfsr, 5) << 6) |
+      (bitValue(lfsr, 9) << 7) |
+      (bitValue(lfsr, 11) << 8) |
+      (bitValue(lfsr, 14) << 9) |
+      (bitValue(lfsr, 18) << 10) |
+      (bitValue(lfsr, 20) << 11)
+    )
   }
 
   function output() {

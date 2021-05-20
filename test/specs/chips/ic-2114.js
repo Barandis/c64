@@ -8,9 +8,10 @@ import { Ic2114 } from 'chips/'
 import { range, valueToPins, pinsToValue } from 'utils'
 
 const message = (addr, expected, actual) =>
-  `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${
-    hex(expected, 1)
-  }, actual 0x${hex(actual, 1)}`
+  `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${hex(expected, 1)}, actual 0x${hex(
+    actual,
+    1,
+  )}`
 
 describe('2114 1024 x 4-bit static RAM', () => {
   let chip, traces, addrTraces, dataTraces

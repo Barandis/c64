@@ -6,8 +6,7 @@
 import { assert, deviceTraces } from 'test/helper'
 import { Ic74139 } from 'chips'
 
-const disableMessage = (pin, demux) =>
-  `${pin} should be high when _G${demux} is high`
+const disableMessage = (pin, demux) => `${pin} should be high when _G${demux} is high`
 const llMessage = (pin, state, demux) =>
   `${pin} should be ${state} when A${demux} and B${demux} are both low`
 const hlMessage = (pin, state, demux) =>

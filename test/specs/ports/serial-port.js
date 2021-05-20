@@ -6,16 +6,12 @@
 // These tests are more numerous (per pin) than others because this one
 // is also testing the functionality of a port in general.
 
-import {
-  assert, deviceTraces, portCable, portMessage, cableMessage,
-} from 'test/helper'
+import { assert, deviceTraces, portCable, portMessage, cableMessage } from 'test/helper'
 import { SerialPort } from 'ports'
 import { range } from 'utils'
 
 function disconnectMessage(name) {
-  return (
-    `${name} of disconnected cable should not change when port ${name} does`
-  )
+  return `${name} of disconnected cable should not change when port ${name} does`
 }
 
 describe('Serial port', () => {
@@ -38,17 +34,11 @@ describe('Serial port', () => {
     cable.connect(port)
 
     p.GND.level = 1
-    assert(
-      c.GND.level === 0,
-      'Cable GND should not change when port one does',
-    )
+    assert(c.GND.level === 0, 'Cable GND should not change when port one does')
 
     p.GND.level = 0
     c.GND.level = 1
-    assert(
-      p.GND.level === 0,
-      'Port GND should not change when cable one does',
-    )
+    assert(p.GND.level === 0, 'Port GND should not change when cable one does')
   })
 
   it('allows data to pass through ports in the correct direction', () => {
@@ -57,18 +47,12 @@ describe('Serial port', () => {
     c._SRQ.level = 1
     assert(p._SRQ.level === 1, portMessage('_SRQ'))
     p._SRQ.level = 0
-    assert(
-      c._SRQ.level === 1,
-      'Cable _SRQ should not change when port _SRQ does',
-    )
+    assert(c._SRQ.level === 1, 'Cable _SRQ should not change when port _SRQ does')
 
     p.ATN.level = 1
     assert(c.ATN.level === 1, cableMessage('ATN'))
     c.ATN.level = 0
-    assert(
-      p.ATN.level === 1,
-      'Port ATN should not change when port ATN does',
-    )
+    assert(p.ATN.level === 1, 'Port ATN should not change when port ATN does')
   })
 
   it('allows data to pass both ways through a bidirectional port', () => {

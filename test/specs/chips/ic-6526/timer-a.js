@@ -5,8 +5,20 @@
 
 import { assert } from 'test/helper'
 import {
-  TAHI, TALO, CRA, LOAD, START, RUNMODE, PBON, OUTMODE, INMODE, ICR, TA, IR,
-  SC, DDRA,
+  TAHI,
+  TALO,
+  CRA,
+  LOAD,
+  START,
+  RUNMODE,
+  PBON,
+  OUTMODE,
+  INMODE,
+  ICR,
+  TA,
+  IR,
+  SC,
+  DDRA,
 } from 'chips/ic-6526/constants'
 import Pin from 'components/pin'
 import { bitSet, bitClear, range } from 'utils'
@@ -30,7 +42,7 @@ export function taClockDec({ tr, writeRegister, readRegister }) {
 }
 
 export function taCntDec({ tr, writeRegister, readRegister }) {
-  writeRegister(CRA, 1 << INMODE | 1 << START)
+  writeRegister(CRA, (1 << INMODE) | (1 << START))
 
   for (const i of range(1, 10, true)) {
     tr.CNT.set()
@@ -80,11 +92,11 @@ export function taStop({ tr, writeRegister, readRegister }) {
 export function taContinue({ tr, writeRegister, readRegister }) {
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << LOAD) | (1 << START))
 
   for (const i of range(4)) {
     tr.φ2.set()
-    assert(readRegister(TALO) === i % 2 + 1)
+    assert(readRegister(TALO) === (i % 2) + 1)
     assert(readRegister(TAHI) === 0)
     tr.φ2.clear()
   }
@@ -93,7 +105,7 @@ export function taContinue({ tr, writeRegister, readRegister }) {
 export function taOneShot({ tr, writeRegister, readRegister }) {
   writeRegister(TALO, 2)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << RUNMODE | 1 << START)
+  writeRegister(CRA, (1 << LOAD) | (1 << RUNMODE) | (1 << START))
 
   tr.φ2.set()
   assert(readRegister(TALO) === 1)
@@ -114,7 +126,7 @@ export function taOneShot({ tr, writeRegister, readRegister }) {
 export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
   writeRegister(TALO, 5)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << PBON | 1 << START)
+  writeRegister(CRA, (1 << LOAD) | (1 << PBON) | (1 << START))
 
   assert(readRegister(TALO) === 5)
   assert(readRegister(TAHI) === 0)
@@ -136,10 +148,7 @@ export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
 export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
   writeRegister(TALO, 5)
   writeRegister(TAHI, 0)
-  writeRegister(
-    CRA,
-    1 << LOAD | 1 << OUTMODE | 1 << PBON | 1 << START,
-  )
+  writeRegister(CRA, (1 << LOAD) | (1 << OUTMODE) | (1 << PBON) | (1 << START))
 
   assert(readRegister(TALO) === 5)
   assert(readRegister(TAHI) === 0)
@@ -161,7 +170,7 @@ export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
 export function taPbRemove({ chip, tr, writeRegister }) {
   writeRegister(TALO, 5)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << PBON)
+  writeRegister(CRA, (1 << LOAD) | (1 << PBON))
 
   assert(chip.PB6.mode === OUTPUT)
   assert(tr.PB6.low)
@@ -175,7 +184,7 @@ export function taPbRemove({ chip, tr, writeRegister }) {
 export function taIrqDefault({ tr, writeRegister, readRegister }) {
   writeRegister(TALO, 1)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << LOAD) | (1 << START))
 
   tr.φ2.set()
   // IRQ line to CPU; low indicates a request, no request made here
@@ -192,10 +201,10 @@ export function taIrqDefault({ tr, writeRegister, readRegister }) {
 }
 
 export function taIrqFlagSet({ tr, writeRegister, readRegister }) {
-  writeRegister(ICR, 1 << SC | 1 << TA)
+  writeRegister(ICR, (1 << SC) | (1 << TA))
   writeRegister(TALO, 1)
   writeRegister(TAHI, 0)
-  writeRegister(CRA, 1 << LOAD | 1 << START)
+  writeRegister(CRA, (1 << LOAD) | (1 << START))
 
   tr.φ2.set()
   // Line low, interrupt requested

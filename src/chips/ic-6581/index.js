@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import {
-  UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME,
-} from './constants'
+import { UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME } from './constants'
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'

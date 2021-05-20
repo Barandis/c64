@@ -9,8 +9,7 @@ import { range } from 'utils'
 
 const highLeMessage = (latch, state) =>
   `Q${latch} should be ${state} when LE is high and D${latch} is ${state}`
-const lowLeMessage = (latch, state) =>
-  `Q${latch} should remain ${state} when LE is low`
+const lowLeMessage = (latch, state) => `Q${latch} should remain ${state} when LE is low`
 const oeMessage = latch => `Q${latch} should float when _OE is high`
 
 describe('74373 Octal tri-state transparent latch', () => {
@@ -49,18 +48,12 @@ describe('74373 Octal tri-state transparent latch', () => {
     for (const i of range(8)) {
       // Odd outputs remain low even when inputs are all set high
       traces[`D${i}`].set()
-      assert(
-        traces[`Q${i}`].level === (i + 1) % 2,
-        lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'),
-      )
+      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
     for (const i of range(8)) {
       // Even outputs remain high even when inputs are all set low
       traces[`D${i}`].clear()
-      assert(
-        traces[`Q${i}`].level === (i + 1) % 2,
-        lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'),
-      )
+      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
   })
 
@@ -76,10 +69,7 @@ describe('74373 Octal tri-state transparent latch', () => {
     for (const i of range(8)) {
       // All inputs set high here
       traces[`D${i}`].set()
-      assert(
-        traces[`Q${i}`].level === (i + 1) % 2,
-        lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'),
-      )
+      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
 
     traces.LE.set()
@@ -127,10 +117,7 @@ describe('74373 Octal tri-state transparent latch', () => {
     traces._OE.clear()
 
     for (const i of range(8)) {
-      assert(
-        traces[`Q${i}`].level === i % 2,
-        lowLeMessage(i, i % 2 === 0 ? 'low' : 'high'),
-      )
+      assert(traces[`Q${i}`].level === i % 2, lowLeMessage(i, i % 2 === 0 ? 'low' : 'high'))
     }
   })
 })

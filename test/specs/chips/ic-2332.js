@@ -31,17 +31,19 @@ describe('2332 4k x 8-bit ROM', () => {
 
         if (DEBUG) {
           console.log(
-            `[address: ${hex(addr, 4)}, expected: ${
-              hex(expected[addr], 2)
-            }, actual: ${hex(data, 2)}]`,
+            `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
+              data,
+              2,
+            )}]`,
           )
         }
 
         assert(
           data === expected[addr],
-          `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${
-            hex(expected[addr], 2)
-          }, actual 0x${hex(data, 2)}`,
+          `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${hex(
+            expected[addr],
+            2,
+          )}, actual 0x${hex(data, 2)}`,
         )
         traces._CS1.set()
       }

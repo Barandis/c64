@@ -6,20 +6,17 @@
 /**
  * An emulation of the 2332 4k x 8-bit ROM.
  *
- * This, along with the similar 2364, is far and away the simplest
- * memory chip in the Commodore 64. With its full complement of address
- * pins and full 8 data pins, there is no need to use multiple chips or
- * to multiplex addresses.
+ * This, along with the similar 2364, is far and away the simplest memory chip in the
+ * Commodore 64. With its full complement of address pins and full 8 data pins, there is no
+ * need to use multiple chips or to multiplex addresses.
  *
- * Timing of the read cycle (there is, of course, no write cycle in a
- * read-only memory chip) is done with a pair of active-low chip select
- * pins, `_CS1` and `_CS2`. When both are low, the chip reads its
- * address pins and makes the value at that location available on its
- * data pins. In the C64, `_CS2` is tied to ground, meaning `CS1` is the
- * only pin that needs to be manipulated.
+ * Timing of the read cycle (there is, of course, no write cycle in a read-only memory chip)
+ * is done with a pair of active-low chip select pins, `_CS1` and `_CS2`. When both are low,
+ * the chip reads its address pins and makes the value at that location available on its
+ * data pins. In the C64, `_CS2` is tied to ground, meaning `CS1` is the only pin that needs
+ * to be manipulated.
  *
- * The chip comes in a 24-pin dual in-line package with the following
- * pin assignments.
+ * The chip comes in a 24-pin dual in-line package with the following pin assignments.
  * ```txt
  *         +-----+--+-----+
  *      A7 |1    +--+   24| Vcc
@@ -36,20 +33,19 @@
  *     GND |12          13| D3
  *         +--------------+
  * ```
- * *(`GND` and `Vcc` are ground and power supply pins respectively, and
- * they are not emulated.)*
+ * *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
+ * emulated.)*
  *
- * In the Commodore 64, U5 is a 2332A (a variant with slightly faster
- * data access). It's used to store information on how to display
- * characters to the screen.
+ * In the Commodore 64, U5 is a 2332A (a variant with slightly faster data access). It's
+ * used to store information on how to display characters to the screen.
  *
  * @class Ic2332
- * @property {Pin} _CS1 [20] One of the two active-low chip select pins.
- *     When the second of these goes low, the chip reads the address and
- *     sends the data at that address to the data pins.
- * @property {Pin} _CS2 [21] One of the two active-low chip select pins.
- *     When the second of these goes low, the chip reads the address and
- *     sends the data at that address to the data pins.
+ * @property {Pin} _CS1 [20] One of the two active-low chip select pins. When the second of
+ *     these goes low, the chip reads the address and sends the data at that address to the
+ *     data pins.
+ * @property {Pin} _CS2 [21] One of the two active-low chip select pins. When the second of
+ *     these goes low, the chip reads the address and sends the data at that address to the
+ *     data pins.
  * @property {Pin} A0 [8] Address pin 0.
  * @property {Pin} A1 [7] Address pin 1.
  * @property {Pin} A2 [6] Address pin 2.
@@ -70,8 +66,7 @@
  * @property {Pin} D5 [15] Data pin 5.
  * @property {Pin} D6 [16] Data pin 6.
  * @property {Pin} D7 [17] Data pin 7.
- * @property {Pin} Vcc [24] The positive power supply. This pin is not
- *     emulated.
+ * @property {Pin} Vcc [24] The positive power supply. This pin is not emulated.
  * @property {Pin} GND [12] The ground. This pin is not emulated.
  */
 
@@ -116,9 +111,8 @@ export class Ic2332 extends Chip {
       new Pin(16, 'D6', OUTPUT),
       new Pin(17, 'D7', OUTPUT),
 
-      // Chip select pins. When these are both low, a read cycle is
-      // executed based on the address on pins A0...A11. When they're
-      // high, the data pins are put into hi-Z.
+      // Chip select pins. When these are both low, a read cycle is executed based on the
+      // address on pins A0...A11. When they're high, the data pins are put into hi-Z.
       new Pin(20, '_CS1', INPUT),
       new Pin(21, '_CS2', INPUT),
 
@@ -135,15 +129,15 @@ export class Ic2332 extends Chip {
     this._CS2.addListener(this.#enableListener())
   }
 
-  // Reads the 8-bit value at the location indicated by the address pins
-  // and puts that value on the data pins.
-  #read () {
+  // Reads the 8-bit value at the location indicated by the address pins and puts that value
+  // on the data pins.
+  #read() {
     const address = pinsToValue(...this.#addrPins)
     const value = this.#memory[address]
     valueToPins(value, ...this.#dataPins)
   }
 
-  #enableListener () {
+  #enableListener() {
     return () => {
       if (this._CS1.low ** this._CS2.low) {
         this.#read()

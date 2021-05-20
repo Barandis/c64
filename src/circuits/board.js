@@ -11,14 +11,31 @@ import { IoCircuit } from './io'
 
 import { basic, kernal, character } from 'rom'
 import {
-  Ic6510, Ic6526, Ic6567, Ic6581,
-  Ic2114, Ic2332, Ic2364, Ic4164,
-  Ic4066, Ic7406, Ic7408, Ic74139, Ic74257, Ic74258, Ic74373,
+  Ic6510,
+  Ic6526,
+  Ic6567,
+  Ic6581,
+  Ic2114,
+  Ic2332,
+  Ic2364,
+  Ic4164,
+  Ic4066,
+  Ic7406,
+  Ic7408,
+  Ic74139,
+  Ic74257,
+  Ic74258,
+  Ic74373,
   Ic82S100,
 } from 'chips'
 import {
-  CassettePort, Control1Port, Control2Port, ExpansionPort, KeyboardPort,
-  SerialPort, UserPort,
+  CassettePort,
+  Control1Port,
+  Control2Port,
+  ExpansionPort,
+  KeyboardPort,
+  SerialPort,
+  UserPort,
 } from 'ports'
 
 export function Board() {

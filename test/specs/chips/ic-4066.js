@@ -6,19 +6,16 @@
 import { assert, deviceTraces } from 'test/helper'
 import { Ic4066 } from 'chips'
 
-const passMessage = (input, output) =>
-  `${output}'s level should match ${input}'s`
+const passMessage = (input, output) => `${output}'s level should match ${input}'s`
 
-const noPassMessage = (input, output) =>
-  `${output}'s level should not be affected by ${input}`
+const noPassMessage = (input, output) => `${output}'s level should not be affected by ${input}`
 
 const discMessage = pin => `${pin} should be disconnected`
 
 const lastSetMessage = (target, last) =>
   `${target}'s level should match ${last}'s since it was last set`
 
-const noSetMessage = target =>
-  `${target} should be low since nothing was last set`
+const noSetMessage = target => `${target} should be low since nothing was last set`
 
 describe('4066 quad bilateral switch', () => {
   let chip, traces
@@ -118,7 +115,7 @@ describe('4066 quad bilateral switch', () => {
     assert(traces.A4.floating, noPassMessage('B4', 'A4'))
   })
 
-  it('sets B to A\'s level after X goes low if A was last set', () => {
+  it("sets B to A's level after X goes low if A was last set", () => {
     traces.X1.set()
     traces.B1.level = 1.5
     traces.A1.level = 0.5
@@ -144,7 +141,7 @@ describe('4066 quad bilateral switch', () => {
     assert(traces.B4.level === 1, lastSetMessage('B4', 'A4'))
   })
 
-  it('sets A to B\'s level after X goes low if B was last set', () => {
+  it("sets A to B's level after X goes low if B was last set", () => {
     traces.X1.set()
     traces.A1.level = 1.5
     traces.B1.level = 0.5

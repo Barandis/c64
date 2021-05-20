@@ -5,18 +5,18 @@
  * https://opensource.org/licenses/MIT
  */
 
-const fs = require("fs")
-const path = require("path")
-const webpack = require("webpack")
-const merge = require("webpack-merge")
-const common = require("./webpack.common")
+const fs = require('fs')
+const path = require('path')
+const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const common = require('./webpack.common')
 
-const banner = fs.readFileSync(path.resolve(__dirname, "LICENSE"), "utf8")
+const banner = fs.readFileSync(path.resolve(__dirname, 'LICENSE'), 'utf8')
 
 module.exports = merge(common, {
-  mode: "production",
+  mode: 'production',
   output: {
-    filename: "c64.min.js",
+    filename: 'c64.min.js',
   },
   plugins: [new webpack.BannerPlugin({ banner, entryOnly: true })],
 })

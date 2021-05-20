@@ -5,7 +5,19 @@
 
 import { assert } from 'test/helper'
 import {
-  TOD10TH, CRA, TODIN, TODSEC, TODMIN, TODHR, ICR, ALRM, IR, CRB, ALARM, SC, PM,
+  TOD10TH,
+  CRA,
+  TODIN,
+  TODSEC,
+  TODMIN,
+  TODHR,
+  ICR,
+  ALRM,
+  IR,
+  CRB,
+  ALARM,
+  SC,
+  PM,
 } from 'chips/ic-6526/constants'
 import { bitSet, bitClear, range } from 'utils'
 
@@ -147,13 +159,13 @@ export function todAmPm({ tr, writeRegister, readRegister }) {
   assert(readRegister(TOD10TH) === 0)
   assert(readRegister(TODSEC) === 0)
   assert(readRegister(TODMIN) === 0)
-  assert(readRegister(TODHR) === (0x12 | 1 << PM))
+  assert(readRegister(TODHR) === (0x12 | (1 << PM)))
 }
 
 export function todPmAm({ tr, writeRegister, readRegister }) {
   writeRegister(TODSEC, 0x59)
   writeRegister(TODMIN, 0x59)
-  writeRegister(TODHR, 0x11 | 1 << PM)
+  writeRegister(TODHR, 0x11 | (1 << PM))
   writeRegister(TOD10TH, 0x09)
 
   for (const _ of range(6)) {
@@ -276,7 +288,7 @@ export function todIrqFlagSet({ tr, writeRegister, readRegister }) {
   writeRegister(TODSEC, 0x00)
   writeRegister(TOD10TH, 0x00)
 
-  writeRegister(ICR, 1 << SC | 1 << ALRM)
+  writeRegister(ICR, (1 << SC) | (1 << ALRM))
 
   for (const _ of range(6)) {
     tr.TOD.set()

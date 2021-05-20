@@ -5,13 +5,13 @@
  * https://opensource.org/licenses/MIT
  */
 
-const merge = require("webpack-merge")
-const common = require("./webpack.common")
+const { merge } = require('webpack-merge')
+const common = require('./webpack.common')
 
 module.exports = merge(common, {
-  mode: "development",
-  devtool: "inline-source-map",
+  mode: 'development',
+  devtool: 'inline-source-map',
   output: {
-    filename: "c64.js",
+    filename: 'c64.js',
   },
 })

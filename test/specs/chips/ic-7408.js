@@ -6,14 +6,10 @@
 import { assert, deviceTraces } from 'test/helper'
 import { Ic7408 } from 'chips'
 
-const llMessage = num =>
-  `Y${num} should be low when A${num} and B${num} are both low`
-const lhMessage = num =>
-  `Y${num} should be low when A${num} is low and B${num} is high`
-const hlMessage = num =>
-  `Y${num} should be low when A${num} is high and B${num} is low`
-const hhMessage = num =>
-  `Y${num} should be high when A${num} and B${num} are both high`
+const llMessage = num => `Y${num} should be low when A${num} and B${num} are both low`
+const lhMessage = num => `Y${num} should be low when A${num} is low and B${num} is high`
+const hlMessage = num => `Y${num} should be low when A${num} is high and B${num} is low`
+const hhMessage = num => `Y${num} should be high when A${num} and B${num} are both high`
 
 describe('7408 quad 2-input AND gate', () => {
   let chip, traces
