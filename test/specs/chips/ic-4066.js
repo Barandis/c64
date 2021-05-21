@@ -18,7 +18,8 @@ const lastSetMessage = (target, last) =>
 const noSetMessage = target => `${target} should be low since nothing was last set`
 
 describe('4066 quad bilateral switch', () => {
-  let chip, traces
+  let chip
+  let traces
 
   beforeEach(() => {
     chip = new Ic4066()
@@ -132,7 +133,7 @@ describe('4066 quad bilateral switch', () => {
     traces.B3.level = 1.5
     traces.A3.level = 0.25
     traces.X3.clear()
-    assert(traces.B3.level === 0.25), lastSetMessage('B3', 'A3')
+    assert(traces.B3.level === 0.25, lastSetMessage('B3', 'A3'))
 
     traces.X4.set()
     traces.B4.level = 1.5

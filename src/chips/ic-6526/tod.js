@@ -3,6 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { bitSet, toggleBit, setBit } from 'utils'
 import {
   CRB,
   ALARM,
@@ -18,9 +19,7 @@ import {
   PM,
 } from './constants'
 
-import { bitSet, toggleBit, setBit } from 'utils'
-
-export function tod(chip, registers, latches) {
+export default function tod(chip, registers, latches) {
   // -------------------------------------------------------------------
   // Time-of-day clock
   //
@@ -61,7 +60,7 @@ export function tod(chip, registers, latches) {
 
   chip.TOD.addListener(pin => {
     if (pin.high && !todHalted) {
-      pulseCount++
+      pulseCount += 1
       // runs if 1/10 second has elapsed, counting pulses for that time at either 50Hz or
       // 60Hz
       if (pulseCount === (bitSet(registers[CRA], TODIN) ? 5 : 6)) {
@@ -134,7 +133,7 @@ export function tod(chip, registers, latches) {
 
     if (digit0 === 0x0a) {
       digit0 = 0
-      digit1++
+      digit1 += 1
     }
 
     return (digit1 << 4) | digit0

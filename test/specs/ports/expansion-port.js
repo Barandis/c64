@@ -8,7 +8,10 @@ import { ExpansionPort } from 'ports'
 import { range } from 'utils'
 
 describe('Expansion port', () => {
-  let port, cable, p, c
+  let port
+  let cable
+  let p
+  let c
 
   beforeEach(() => {
     port = ExpansionPort()
@@ -18,11 +21,10 @@ describe('Expansion port', () => {
     c = deviceTraces(cable)
 
     for (const i of range(1, 20, true)) {
-      if (i === 2) {
-        continue
+      if (i !== 2) {
+        p[i].clear()
+        c[i].clear()
       }
-      p[i].clear()
-      c[i].clear()
     }
 
     cable.connect(port)

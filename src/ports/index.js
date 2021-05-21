@@ -3,10 +3,20 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-export { CassettePort } from './cassette-port'
-export { Control1Port } from './control-1-port'
-export { Control2Port } from './control-2-port'
-export { ExpansionPort } from './expansion-port'
-export { KeyboardPort } from './keyboard-port'
-export { SerialPort } from './serial-port'
-export { UserPort } from './user-port'
+import CassettePort from './cassette-port'
+import Control1Port from './control-1-port'
+import Control2Port from './control-2-port'
+import ExpansionPort from './expansion-port'
+import KeyboardPort from './keyboard-port'
+import SerialPort from './serial-port'
+import UserPort from './user-port'
+
+export {
+  CassettePort,
+  Control1Port,
+  Control2Port,
+  ExpansionPort,
+  KeyboardPort,
+  SerialPort,
+  UserPort,
+}

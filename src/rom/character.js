@@ -64,4 +64,6 @@ const base64 =
   8/Pz8/Pz8/Hx8fHx8fHx/4+Pj4+Pj4+AAA////////AAAA/////////////wAAAP78+ZOHj5///////w8PDw/w8PDw/////+f\
   n5wcH////Dw8PD/////8PDw8P8PDw8A=='
 
-export const character = decode(base64)
+const character = decode(base64)
+
+export default character

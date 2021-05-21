@@ -10,10 +10,9 @@ import Port from 'components/port'
 import Trace from 'components/trace'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export const assert = chai.assert
+export const { assert } = chai
 
 export const DEBUG = process.env.DEBUG || false
 
@@ -45,7 +44,7 @@ export function hex(value, digits = 2) {
   if (value === null) {
     return 'null'
   }
-  return ('0000000000000000' + value.toString(16).toLowerCase()).substr(-digits)
+  return `0000000000000000${value.toString(16).toLowerCase()}`.substr(-digits)
 }
 
 /**
@@ -56,7 +55,7 @@ export function bin(value, digits = 8) {
   if (value === null) {
     return 'null'
   }
-  return ('0000000000000000' + value.toString(2)).substr(-digits)
+  return `0000000000000000${value.toString(2)}`.substr(-digits)
 }
 
 /**

@@ -1,5 +1,4 @@
 const OFF = 0
-const WARN = 1
 const ERROR = 2
 
 module.exports = {
@@ -9,7 +8,7 @@ module.exports = {
     mocha: true,
     browser: true,
   },
-  extends: ['airbnb', 'prettier'],
+  extends: ['airbnb-base', 'prettier'],
   parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: '2020',
@@ -31,5 +30,14 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': [ERROR],
+    'no-bitwise': [OFF],
+    'no-multi-str': [OFF],
+    'no-nested-ternary': [OFF], // yeah right
+    'no-param-reassign': [ERROR, { props: false }],
+    'no-restricted-syntax': [OFF],
+    'no-return-assign': [ERROR, 'except-parens'],
+    'no-underscore-dangle': [OFF],
+    'no-unused-vars': [ERROR, { varsIgnorePattern: '^_' }],
+    'no-use-before-define': [ERROR, { functions: false }],
   },
 }

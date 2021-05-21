@@ -12,7 +12,8 @@ const hlMessage = num => `Y${num} should be low when A${num} is high and B${num}
 const hhMessage = num => `Y${num} should be high when A${num} and B${num} are both high`
 
 describe('7408 quad 2-input AND gate', () => {
-  let chip, traces
+  let chip
+  let traces
 
   beforeEach(() => {
     chip = new Ic7408()

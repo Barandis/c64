@@ -15,7 +15,10 @@ function disconnectMessage(name) {
 }
 
 describe('Serial port', () => {
-  let port, cable, p, c
+  let port
+  let cable
+  let p
+  let c
 
   beforeEach(() => {
     port = SerialPort()

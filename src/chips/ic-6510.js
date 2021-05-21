@@ -6,10 +6,9 @@
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic6510 extends Chip {
+export default class Ic6510 extends Chip {
   constructor() {
     super(
       // Address bus pins A0...A15.

@@ -88,14 +88,14 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { pinsToValue, valueToPins, range } from 'utils'
 
-const INPUT = Pin.INPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
-
-export class Ic2114 extends Chip {
+const { INPUT, BIDIRECTIONAL } = Pin
+export default class Ic2114 extends Chip {
   /** @type {Pin[]} */
   #addrPins
+
   /** @type {Pin[]} */
   #dataPins
+
   /** @type {Uint32Array} */
   #memory
 

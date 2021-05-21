@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-export { basic } from './basic'
-export { character } from './character'
-export { kernal } from './kernal'
+import basic from './basic'
+import character from './character'
+import kernal from './kernal'
+
+export { basic, character, kernal }

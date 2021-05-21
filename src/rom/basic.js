@@ -120,4 +120,6 @@ const base64 =
   ulbhAPIMy8qU6gACBbvNADmKQHIP67mEgg6rmpTqAAICi6IO2/aEqQCqVh8AalZkn/hWZggTiqOykHcTRYPlZ0Fn6zG3cv7uO\
   Feh2EHCp8Y1lYCn51/efGgDFyGBCBAAAAAKm/oL8gKLqlcGlQkAMgI7xMAOA='
 
-export const basic = decode(base64)
+const basic = decode(base64)
+
+export default basic

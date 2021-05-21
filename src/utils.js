@@ -13,16 +13,19 @@ for (const i of range(chars.length)) {
 export function decode(base64) {
   const len = base64.length
   let p = 0
-  let e1, e2, e3, e4
+  let e1
+  let e2
+  let e3
+  let e4
 
   let bufferLength = len * 0.75
   // There are three base-64 files that make up ROM code for the C64. All three end with at
   // least one `=`, so the else here will never execute.
   /* istanbul ignore else */
   if (base64[base64.length - 1] === '=') {
-    bufferLength--
+    bufferLength -= 1
     if (base64[base64.length - 2] === '=') {
-      bufferLength--
+      bufferLength -= 1
     }
   }
 
@@ -35,9 +38,10 @@ export function decode(base64) {
     e3 = lookup[base64.charCodeAt(i + 2)]
     e4 = lookup[base64.charCodeAt(i + 3)]
 
-    bytes[p++] = (e1 << 2) | (e2 >> 4)
-    bytes[p++] = ((e2 & 0x0f) << 4) | (e3 >> 2)
-    bytes[p++] = ((e3 & 0x03) << 6) | (e4 & 0x3f)
+    bytes[p] = (e1 << 2) | (e2 >> 4)
+    bytes[p + 1] = ((e2 & 0x0f) << 4) | (e3 >> 2)
+    bytes[p + 2] = ((e3 & 0x03) << 6) | (e4 & 0x3f)
+    p += 3
   }
 
   return buffer
@@ -123,7 +127,8 @@ export function* enumerate(iterable) {
   let index = 0
 
   while (!result.done) {
-    yield [index++, result.value]
+    yield [index, result.value]
+    index += 1
     result = iterator.next()
   }
 }

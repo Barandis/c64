@@ -9,10 +9,7 @@ import { assert } from 'test/helper'
 import Pin from 'components/pin'
 import Trace from 'components/trace'
 
-const UNCONNECTED = Pin.UNCONNECTED
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
+const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function listenerUnconnected() {
   const p = new Pin(1, 'A', UNCONNECTED)

@@ -78,10 +78,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic74258 extends Chip {
+export default class Ic74258 extends Chip {
   constructor() {
     super(
       // Select. When this is low, the Y output pins will take on the same

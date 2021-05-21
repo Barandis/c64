@@ -57,10 +57,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic7406 extends Chip {
+export default class Ic7406 extends Chip {
   constructor() {
     super(
       // Input pins. In the TI data sheet, these are named "1A", "2A", etc., and the C64

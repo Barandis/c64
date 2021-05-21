@@ -101,10 +101,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic74139 extends Chip {
+export default class Ic74139 extends Chip {
   constructor() {
     super(
       // Demultiplexer 1

@@ -6,10 +6,9 @@
 import Pin from 'components/pin'
 import Port from 'components/port'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export function CassettePort() {
+export default function CassettePort() {
   return new Port(
     new Pin(4, 'READ', OUTPUT),
     new Pin(5, 'WRITE', INPUT),

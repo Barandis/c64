@@ -49,14 +49,17 @@ export default class Pin {
   static get UNCONNECTED() {
     return UNCONNECTED
   }
+
   /** @type {1} */
   static get INPUT() {
     return INPUT
   }
+
   /** @type {2} */
   static get OUTPUT() {
     return OUTPUT
   }
+
   /** @type {3} */
   static get BIDIRECTIONAL() {
     return BIDIRECTIONAL
@@ -64,16 +67,22 @@ export default class Pin {
 
   /** @type {function(Pin):void} */
   #listeners = []
+
   /** @type {number} */
   #number = 0
+
   /** @type {string} */
   #name = ''
+
   /** @type {Trace} */
   #trace = null
+
   /** @type {null|0|1} */
   #float = null
+
   /** @type {number|null} */
   #level = null
+
   /** @type {0|1|2|3} */
   #mode = UNCONNECTED
 

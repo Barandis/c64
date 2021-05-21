@@ -120,4 +120,6 @@ const base64 =
   wV/Uwa/UwY/ky57UzH7Uwl/kw0/kyH6kwh/kwT7kzd7Uzv7Uz+7UwM7UwJ7UwH/kwA/kz5/WwaA2wcA2weA2wgA2wiA2wkA2w\
   mA0ye9Ezd9Uzk9kzd9mwoA2wqA2wsA0yb9kwF5UwK5UwA5VJSQllD/uL8SP8='
 
-export const kernal = decode(base64)
+const kernal = decode(base64)
+
+export default kernal

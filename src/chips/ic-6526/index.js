@@ -439,6 +439,9 @@
  * @property {Pin} Vss [14] The ground. This pin is not emulated.
  */
 
+import Chip from 'components/chip'
+import Pin from 'components/pin'
+import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
 import {
   PRA,
   PRB,
@@ -461,17 +464,12 @@ import {
   LOAD,
   ALARM,
 } from './constants'
-import { ports } from './ports'
-import { timers } from './timers'
-import { tod } from './tod'
-import { control } from './control'
+import ports from './ports'
+import timers from './timers'
+import tod from './tod'
+import control from './control'
 
-import Chip from 'components/chip'
-import Pin from 'components/pin'
-import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
-
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 /**
  * Creates an emulation of the 6526 Complex Interface Adapter.
@@ -479,7 +477,7 @@ const OUTPUT = Pin.OUTPUT
  * @returns {Ic6526} A new 6526 Complex Interface Adapter.
  * @memberof module:chips
  */
-function Ic6526() {
+export default function Ic6526() {
   const chip = new Chip(
     // Register address pins. The 6526 has 16 addressable 8-bit registers, which requires
     // four pins.
@@ -720,6 +718,8 @@ function Ic6526() {
       case CRB:
         writeCrb(value)
         break
+      default:
+        break
     }
   }
 
@@ -740,5 +740,3 @@ function Ic6526() {
 
   return chip
 }
-
-export { Ic6526 }

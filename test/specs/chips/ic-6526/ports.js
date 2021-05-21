@@ -8,8 +8,7 @@ import { DDRA, DDRB, CRA, CRB, PRA, PRB } from 'chips/ic-6526/constants'
 import Pin from 'components/pin'
 import { bitSet, valueToPins, pinsToValue, range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(DDRA, 0)

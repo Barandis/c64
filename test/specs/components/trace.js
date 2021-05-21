@@ -4,20 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import Sinon from 'sinon'
-
-import {
-  levelDirectUnconnected,
-  levelDirectInput,
-  levelDirectHiOutput,
-  levelDirectLoOutput,
-  levelDirectNullOutput,
-  levelPinUnconnected,
-  levelPinInput,
-  levelPinOutput,
-  levelPinBidirectional,
-  levelPinHiOutputs,
-  levelPinLoOutputs,
-} from './trace/level'
+import { assert } from 'test/helper'
+import Pin from 'components/pin'
+import Trace from 'components/trace'
 import {
   puInitial,
   puModeInput,
@@ -38,12 +27,21 @@ import {
   pnLoOutputs,
   pnNullOutputs,
 } from './trace/float'
+import {
+  levelDirectUnconnected,
+  levelDirectInput,
+  levelDirectHiOutput,
+  levelDirectLoOutput,
+  levelDirectNullOutput,
+  levelPinUnconnected,
+  levelPinInput,
+  levelPinOutput,
+  levelPinBidirectional,
+  levelPinHiOutputs,
+  levelPinLoOutputs,
+} from './trace/level'
 
-import { assert } from 'test/helper'
-import Pin from 'components/pin'
-import Trace from 'components/trace'
-
-const INPUT = Pin.INPUT
+const { INPUT } = Pin
 
 describe('Trace', () => {
   const test = fn => () => fn()

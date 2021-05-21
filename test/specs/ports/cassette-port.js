@@ -8,7 +8,10 @@ import { CassettePort } from 'ports'
 import { range } from 'utils'
 
 describe('Cassette port', () => {
-  let port, cable, p, c
+  let port
+  let cable
+  let p
+  let c
 
   beforeEach(() => {
     port = CassettePort()

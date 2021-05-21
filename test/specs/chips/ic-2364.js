@@ -7,13 +7,15 @@
 
 import { assert, deviceTraces, DEBUG, hex } from 'test/helper'
 import { Ic2364 } from 'chips'
-import { kernal } from 'rom/kernal'
-import { basic } from 'rom/basic'
+import { basic, kernal } from 'rom'
 import { range, valueToPins, pinsToValue } from 'utils'
 
 describe('2364 8k x 8-bit ROM', () => {
   describe('KERNAL ROM', () => {
-    let chip, traces, addrTraces, dataTraces
+    let chip
+    let traces
+    let addrTraces
+    let dataTraces
     const expected = new Uint8Array(kernal)
 
     before(() => {
@@ -25,7 +27,9 @@ describe('2364 8k x 8-bit ROM', () => {
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
     })
 
-    for (const base of range(0x0000, 0x1fff, 0x1000)) {
+    const blocks = [...range(0x0000, 0x1fff, 0x1000)]
+
+    blocks.forEach(base => {
       it(`reads correctly from 0x${hex(base, 4)} to 0x${hex(base + 0x0fff, 4)}`, () => {
         for (const addr of range(base, base + 0x1000)) {
           valueToPins(addr, ...addrTraces)
@@ -33,6 +37,7 @@ describe('2364 8k x 8-bit ROM', () => {
           const data = pinsToValue(...dataTraces)
 
           if (DEBUG) {
+            // eslint-disable-next-line no-console
             console.log(
               `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
                 data,
@@ -51,11 +56,14 @@ describe('2364 8k x 8-bit ROM', () => {
           traces._CS.set()
         }
       })
-    }
+    })
   })
 
   describe('BASIC ROM', () => {
-    let chip, traces, addrTraces, dataTraces
+    let chip
+    let traces
+    let addrTraces
+    let dataTraces
     const expected = new Uint8Array(basic)
 
     before(() => {
@@ -77,6 +85,7 @@ describe('2364 8k x 8-bit ROM', () => {
           const data = pinsToValue(...dataTraces)
 
           if (DEBUG) {
+            // eslint-disable-next-line no-console
             console.log(
               `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
                 data,

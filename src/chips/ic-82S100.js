@@ -201,8 +201,7 @@
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 /**
  * Creates an emulation of the 82S100 programmable logic array, as it was programmed for the
@@ -211,7 +210,7 @@ const OUTPUT = Pin.OUTPUT
  * @returns {Ic82S100} A new 82S100 programmable logic array.
  * @memberof module:chips
  */
-export class Ic82S100 extends Chip {
+export default class Ic82S100 extends Chip {
   // These are alternate names for the input (I) and output (F) pins, matching purpose of
   // each pin in the Commodore 64. They can be used to access the same pins with a different
   // naming convention. For example, the I0 pin, which accepts the _CAS signal from the VIC,
@@ -220,48 +219,63 @@ export class Ic82S100 extends Chip {
   static get _CAS() {
     return 'I0'
   }
+
   static get _LORAM() {
     return 'I1'
   }
+
   static get _HIRAM() {
     return 'I2'
   }
+
   static get _CHAREN() {
     return 'I3'
   }
+
   static get _VA14() {
     return 'I4'
   }
+
   static get A15() {
     return 'I5'
   }
+
   static get A14() {
     return 'I6'
   }
+
   static get A13() {
     return 'I7'
   }
+
   static get A12() {
     return 'I8'
   }
+
   static get BA() {
     return 'I9'
   }
+
   static get _AEC() {
     return 'I10'
   }
+
   static get R__W() {
     return 'I11'
   }
+
   static get _EXROM() {
     return 'I12'
   }
+
   static get _GAME() {
     return 'I13'
   }
+
   static get VA13() {
     return 'I14'
   }
+
   static get VA12() {
     return 'I15'
   }
@@ -269,24 +283,31 @@ export class Ic82S100 extends Chip {
   static get _CASRAM() {
     return 'F0'
   }
+
   static get _BASIC() {
     return 'F1'
   }
+
   static get _KERNAL() {
     return 'F2'
   }
+
   static get _CHAROM() {
     return 'F3'
   }
+
   static get GR__W() {
     return 'F4'
   }
+
   static get _IO() {
     return 'F5'
   }
+
   static get _ROML() {
     return 'F6'
   }
+
   static get _ROMH() {
     return 'F7'
   }

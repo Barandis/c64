@@ -17,7 +17,8 @@ const hhMessage = (pin, state, demux) =>
   `${pin} should be ${state} when A${demux} and B${demux} are both high`
 
 describe('74139 dual 2-line to 4-line demultiplexer', () => {
-  let chip, traces
+  let chip
+  let traces
 
   beforeEach(() => {
     chip = new Ic74139()
@@ -134,7 +135,7 @@ describe('74139 dual 2-line to 4-line demultiplexer', () => {
     traces._G2.clear()
     traces.A2.set()
     traces.B2.clear()
-    assert(traces._Y20.high), hlMessage('_Y20', 'high', 2)
+    assert(traces._Y20.high, hlMessage('_Y20', 'high', 2))
     assert(traces._Y21.low, hlMessage('_Y21', 'low', 2))
     assert(traces._Y22.high, hlMessage('_Y22', 'high', 2))
     assert(traces._Y23.high, hlMessage('_Y23', 'high', 2))

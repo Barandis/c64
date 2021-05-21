@@ -13,7 +13,8 @@ const lowLeMessage = (latch, state) => `Q${latch} should remain ${state} when LE
 const oeMessage = latch => `Q${latch} should float when _OE is high`
 
 describe('74373 Octal tri-state transparent latch', () => {
-  let chip, traces
+  let chip
+  let traces
 
   beforeEach(() => {
     chip = new Ic74373()

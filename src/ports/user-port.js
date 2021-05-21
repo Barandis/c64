@@ -6,9 +6,7 @@
 import Pin from 'components/pin'
 import Port from 'components/port'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
+const { INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export const A = 13
 export const B = 14
@@ -23,7 +21,7 @@ export const L = 22
 export const M = 23
 export const N = 24
 
-export function UserPort() {
+export default function UserPort() {
   return new Port(
     new Pin(M, 'PA2', BIDIRECTIONAL),
 

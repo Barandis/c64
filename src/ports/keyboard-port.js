@@ -6,10 +6,9 @@
 import Pin from 'components/pin'
 import Port from 'components/port'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export function KeyboardPort() {
+export default function KeyboardPort() {
   // There is no pin 2; it is used for alignment.
   return new Port(
     new Pin(12, 'ROW0', OUTPUT),

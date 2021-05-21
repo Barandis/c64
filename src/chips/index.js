@@ -75,19 +75,38 @@
  * @module chips
  */
 
-export { Ic2114 } from './ic-2114'
-export { Ic2332 } from './ic-2332'
-export { Ic2364 } from './ic-2364'
-export { Ic4066 } from './ic-4066'
-export { Ic4164 } from './ic-4164'
-export { Ic6510 } from './ic-6510'
-export { Ic6526 } from './ic-6526/index'
-export { Ic6567 } from './ic-6567'
-export { Ic6581 } from './ic-6581/index'
-export { Ic7406 } from './ic-7406'
-export { Ic7408 } from './ic-7408'
-export { Ic74139 } from './ic-74139'
-export { Ic74257 } from './ic-74257'
-export { Ic74258 } from './ic-74258'
-export { Ic74373 } from './ic-74373'
-export { Ic82S100 } from './ic-82S100'
+import Ic2114 from './ic-2114'
+import Ic2332 from './ic-2332'
+import Ic2364 from './ic-2364'
+import Ic4066 from './ic-4066'
+import Ic4164 from './ic-4164'
+import Ic6510 from './ic-6510'
+import Ic6526 from './ic-6526'
+import Ic6567 from './ic-6567'
+import Ic6581 from './ic-6581'
+import Ic7406 from './ic-7406'
+import Ic7408 from './ic-7408'
+import Ic74139 from './ic-74139'
+import Ic74257 from './ic-74257'
+import Ic74258 from './ic-74258'
+import Ic74373 from './ic-74373'
+import Ic82S100 from './ic-82S100'
+
+export {
+  Ic2114,
+  Ic2332,
+  Ic2364,
+  Ic4066,
+  Ic4164,
+  Ic6510,
+  Ic6526,
+  Ic6567,
+  Ic6581,
+  Ic7406,
+  Ic7408,
+  Ic74139,
+  Ic74257,
+  Ic74258,
+  Ic74373,
+  Ic82S100,
+}

@@ -6,11 +6,9 @@
 import Pin from 'components/pin'
 import Port from 'components/port'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
+const { INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
-export function SerialPort() {
+export default function SerialPort() {
   return new Port(
     new Pin(5, 'DATA', BIDIRECTIONAL),
     new Pin(4, 'CLK', BIDIRECTIONAL),

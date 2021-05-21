@@ -7,8 +7,7 @@ import { assert } from 'test/helper'
 import Pin from 'components/pin'
 import Trace from 'components/trace'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 export function puInitial() {
   const t = new Trace().pullUp()

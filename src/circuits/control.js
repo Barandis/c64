@@ -5,7 +5,7 @@
 
 import Trace from 'components/trace'
 
-export function ControlCircuit(
+export default function ControlCircuit(
   {
     U1,
     U2,

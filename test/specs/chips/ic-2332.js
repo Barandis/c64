@@ -5,13 +5,16 @@
 
 import { assert, deviceTraces, DEBUG, hex } from 'test/helper'
 import { Ic2332 } from 'chips'
-import { character } from 'rom/character'
+import { character } from 'rom'
 import { range, valueToPins, pinsToValue } from 'utils'
 
 describe('2332 4k x 8-bit ROM', () => {
   describe('Character ROM', () => {
     const expected = new Uint8Array(character)
-    let chip, traces, addrTraces, dataTraces
+    let chip
+    let traces
+    let addrTraces
+    let dataTraces
 
     before(() => {
       chip = new Ic2332(character)
@@ -30,6 +33,7 @@ describe('2332 4k x 8-bit ROM', () => {
         const data = pinsToValue(...dataTraces)
 
         if (DEBUG) {
+          // eslint-disable-next-line no-console
           console.log(
             `[address: ${hex(addr, 4)}, expected: ${hex(expected[addr], 2)}, actual: ${hex(
               data,

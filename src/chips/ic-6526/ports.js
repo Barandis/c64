@@ -3,15 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import Pin from 'components/pin'
+import { setBit, clearBit, bitSet, range } from 'utils'
 import { PRA, PRB, DDRA, CRA, PBON, DDRB, CRB } from './constants'
 
-import { setBit, clearBit, bitSet, range } from 'utils'
-import Pin from 'components/pin'
+const { INPUT, OUTPUT } = Pin
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-
-export function ports(chip, registers) {
+export default function ports(chip, registers) {
   // -------------------------------------------------------------------
   // Data ports
   //
@@ -74,6 +72,14 @@ export function ports(chip, registers) {
     chip[`PB${i}`].addListener(portListener(PRB, i))
   }
 
+  function setPortPins(value, mask, pins) {
+    for (const bit of range(8)) {
+      if (bitSet(mask, bit)) {
+        pins[bit].level = bitSet(value, bit)
+      }
+    }
+  }
+
   // The write functions have to set the values in the registers but then also set the same
   // values to the associated pins. The masking ensures that pins that should not be
   // writable - meaning pins designated as input by the DDR or pins designated as timer
@@ -99,14 +105,6 @@ export function ports(chip, registers) {
   function readPrb() {
     chip._PC.clear()
     return registers[PRB]
-  }
-
-  function setPortPins(value, mask, pins) {
-    for (const bit of range(8)) {
-      if (bitSet(mask, bit)) {
-        pins[bit].level = bitSet(value, bit)
-      }
-    }
   }
 
   // Raises the _PC pin every cycle, as reading or writing the PB register sets that pin low

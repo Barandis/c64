@@ -3,16 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME } from './constants'
-
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { setMode, valueToPins, pinsToValue, range } from 'utils'
+import { UNUSED1, POTX, PWHI1, PWHI2, PWHI3, MAX_LAST_WRITE_TIME } from './constants'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export function Ic6581() {
+export default function Ic6581() {
   const chip = new Chip(
     // Address pins to access internal registers
     new Pin(9, 'A0', INPUT),
@@ -129,7 +127,7 @@ export function Ic6581() {
 
   chip.φ2.addListener(pin => {
     if (pin.high && chip._RES.low && !hasReset) {
-      resetClock++
+      resetClock += 1
       if (resetClock >= 10) {
         reset()
         hasReset = true
@@ -165,7 +163,7 @@ export function Ic6581() {
   // becomes 0.
   chip.φ2.addListener(pin => {
     if (pin.high) {
-      lastWriteTime++
+      lastWriteTime += 1
       if (lastWriteTime > MAX_LAST_WRITE_TIME) {
         lastWriteValue = 0
       }

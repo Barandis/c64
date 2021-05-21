@@ -8,7 +8,10 @@ import { Control2Port } from 'ports'
 import { range } from 'utils'
 
 describe('Control port 1', () => {
-  let port, cable, p, c
+  let port
+  let cable
+  let p
+  let c
 
   beforeEach(() => {
     port = Control2Port()

@@ -4,11 +4,6 @@
 // https://opensource.org/licenses/MIT
 
 // ROM images
-import { AddressCircuit } from './address'
-import { DataCircuit } from './data'
-import { ControlCircuit } from './control'
-import { IoCircuit } from './io'
-
 import { basic, kernal, character } from 'rom'
 import {
   Ic6510,
@@ -37,8 +32,12 @@ import {
   SerialPort,
   UserPort,
 } from 'ports'
+import AddressCircuit from './address'
+import DataCircuit from './data'
+import ControlCircuit from './control'
+import IoCircuit from './io'
 
-export function Board() {
+export default function Board() {
   const chips = {
     U1: Ic6526(),
     U2: Ic6526(),

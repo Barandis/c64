@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import Pin from 'components/pin'
+import { bitSet } from 'utils'
 import {
   ICR,
   SC,
@@ -19,13 +21,9 @@ import {
   TBHI,
 } from './constants'
 
-import { bitSet } from 'utils'
-import Pin from 'components/pin'
+const { INPUT, OUTPUT } = Pin
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-
-export function control(chip, registers, latches) {
+export default function control(chip, registers, latches) {
   // -------------------------------------------------------------------
   // Interrupt Control Register
   //

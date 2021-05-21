@@ -14,7 +14,10 @@ const message = (addr, expected, actual) =>
   )}`
 
 describe('2114 1024 x 4-bit static RAM', () => {
-  let chip, traces, addrTraces, dataTraces
+  let chip
+  let traces
+  let addrTraces
+  let dataTraces
 
   beforeEach(() => {
     chip = new Ic2114()

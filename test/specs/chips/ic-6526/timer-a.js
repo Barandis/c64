@@ -23,7 +23,7 @@ import {
 import Pin from 'components/pin'
 import { bitSet, bitClear, range } from 'utils'
 
-const OUTPUT = Pin.OUTPUT
+const { OUTPUT } = Pin
 
 export function taDefault({ readRegister }) {
   assert(readRegister(TAHI) === 0xff)
@@ -134,7 +134,7 @@ export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
   assert(tr.PB6.low)
 
   for (const _ of range(3)) {
-    for (const _ of range(4)) {
+    for (const __ of range(4)) {
       tr.φ2.set()
       assert(tr.PB6.low)
       tr.φ2.clear()

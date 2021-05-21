@@ -17,6 +17,7 @@
 export default class Connector {
   /** @type {Connector} */
   #other = null
+
   /** @type {Pin} */
   #pin = null
 

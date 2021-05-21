@@ -74,14 +74,15 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { pinsToValue, valueToPins, range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic2332 extends Chip {
+export default class Ic2332 extends Chip {
   /** @type {Pin[]} */
   #addrPins
+
   /** @type {Pin[]} */
   #dataPins
+
   /** @type {Uint8Array} */
   #memory
 

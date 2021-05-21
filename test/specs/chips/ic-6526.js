@@ -3,6 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { Ic6526 } from 'chips'
+import { valueToPins, pinsToValue, range } from 'utils'
+import { deviceTraces } from 'test/helper'
 import {
   ddrInput,
   ddrOutput,
@@ -71,10 +74,6 @@ import {
   spInputWrite,
 } from './ic-6526/serial'
 import { reset, flagFlagReset, flagDefault, flagFlagSet } from './ic-6526/misc'
-
-import { Ic6526 } from 'chips'
-import { valueToPins, pinsToValue, range } from 'utils'
-import { deviceTraces } from 'test/helper'
 
 describe('6526 CIA', () => {
   let chip

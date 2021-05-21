@@ -8,8 +8,7 @@ import Pin from 'components/pin'
 import { TBHI, TALO, ICR, FLG, IR, SC, PRB } from 'chips/ic-6526/constants'
 import { bitSet, bitClear, range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 export function reset({ chip, tr, writeRegister, readRegister }) {
   for (const i of range(16)) {

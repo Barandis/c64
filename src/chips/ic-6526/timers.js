@@ -3,6 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { bitSet, bitClear, setBit, clearBit } from 'utils'
 import {
   CRA,
   CRB,
@@ -26,9 +27,7 @@ import {
   IR,
 } from './constants'
 
-import { bitSet, bitClear, setBit, clearBit } from 'utils'
-
-export function timers(chip, registers, latches) {
+export default function timers(chip, registers, latches) {
   // -------------------------------------------------------------------
   // Timers
   //
@@ -42,65 +41,6 @@ export function timers(chip, registers, latches) {
   // these registers are written to, the contents of the register don't actually change; the
   // value gets latched and becomes the new value that the timer resets itself to after
   // completion.
-
-  chip.φ2.addListener(pin => {
-    if (pin.high) {
-      const cra = registers[CRA]
-      const crb = registers[CRB]
-
-      // Reset PB6 if on and output mode = pulse
-      if (bitSet(cra, PBON) && bitClear(cra, OUTMODE)) {
-        chip.PB6.clear()
-      }
-      // Reset PB7 if on and output mode = pulse
-      if (bitSet(crb, PBON) && bitClear(crb, OUTMODE)) {
-        chip.PB7.clear()
-      }
-
-      // Decrement Timer A if its input is clock pulses and timer is started
-      if (bitSet(cra, START) && bitClear(cra, INMODE)) {
-        decrementTimerA()
-      }
-      // Decrement Timer B if its input is clock pulses and timer is started
-      if (bitSet(crb, START) && bitClear(crb, INMODE0) && bitClear(crb, INMODE1)) {
-        decrementTimerB()
-      }
-    }
-  })
-
-  chip.CNT.addListener(pin => {
-    if (pin.high) {
-      const cra = registers[CRA]
-      const crb = registers[CRB]
-
-      // Decrement Timer A if its input is CNT pulses
-      if (bitSet(cra, START) && bitSet(cra, INMODE)) {
-        decrementTimerA()
-      }
-      // Decrement Timer B if its input is CNT pulses
-      if (bitSet(crb, START) && bitSet(crb, INMODE0) && bitClear(crb, INMODE1)) {
-        decrementTimerB()
-      }
-    }
-  })
-
-  function decrementTimerA() {
-    registers[TALO]--
-    if (registers[TALO] === 0 && registers[TAHI] === 0) {
-      underflowTimerA()
-    } else if (registers[TALO] === 255) {
-      registers[TAHI]--
-    }
-  }
-
-  function decrementTimerB() {
-    registers[TBLO]--
-    if (registers[TBLO] === 0 && registers[TBHI] === 0) {
-      underflowTimerB()
-    } else if (registers[TBLO] === 255) {
-      registers[TBHI]--
-    }
-  }
 
   function underflowTimerA() {
     const cra = registers[CRA]
@@ -174,6 +114,65 @@ export function timers(chip, registers, latches) {
     }
   }
 
+  function decrementTimerA() {
+    registers[TALO] -= 1
+    if (registers[TALO] === 0 && registers[TAHI] === 0) {
+      underflowTimerA()
+    } else if (registers[TALO] === 255) {
+      registers[TAHI] -= 1
+    }
+  }
+
+  function decrementTimerB() {
+    registers[TBLO] -= 1
+    if (registers[TBLO] === 0 && registers[TBHI] === 0) {
+      underflowTimerB()
+    } else if (registers[TBLO] === 255) {
+      registers[TBHI] -= 1
+    }
+  }
+
+  chip.φ2.addListener(pin => {
+    if (pin.high) {
+      const cra = registers[CRA]
+      const crb = registers[CRB]
+
+      // Reset PB6 if on and output mode = pulse
+      if (bitSet(cra, PBON) && bitClear(cra, OUTMODE)) {
+        chip.PB6.clear()
+      }
+      // Reset PB7 if on and output mode = pulse
+      if (bitSet(crb, PBON) && bitClear(crb, OUTMODE)) {
+        chip.PB7.clear()
+      }
+
+      // Decrement Timer A if its input is clock pulses and timer is started
+      if (bitSet(cra, START) && bitClear(cra, INMODE)) {
+        decrementTimerA()
+      }
+      // Decrement Timer B if its input is clock pulses and timer is started
+      if (bitSet(crb, START) && bitClear(crb, INMODE0) && bitClear(crb, INMODE1)) {
+        decrementTimerB()
+      }
+    }
+  })
+
+  chip.CNT.addListener(pin => {
+    if (pin.high) {
+      const cra = registers[CRA]
+      const crb = registers[CRB]
+
+      // Decrement Timer A if its input is CNT pulses
+      if (bitSet(cra, START) && bitSet(cra, INMODE)) {
+        decrementTimerA()
+      }
+      // Decrement Timer B if its input is CNT pulses
+      if (bitSet(crb, START) && bitSet(crb, INMODE0) && bitClear(crb, INMODE1)) {
+        decrementTimerB()
+      }
+    }
+  })
+
   // -------------------------------------------------------------------
   // Serial port
   //
@@ -216,7 +215,7 @@ export function timers(chip, registers, latches) {
       if (bit === 0) {
         bit = 8
       }
-      bit--
+      bit -= 1
       if (chip.SP.high) {
         shift = setBit(shift, bit)
       }
@@ -244,7 +243,7 @@ export function timers(chip, registers, latches) {
         if (bit === 0) {
           bit = 8
         }
-        bit--
+        bit -= 1
         // Put the next bit of the shift register on the SP pin and set the CNT pin to
         // indicate that new data is available
         chip.SP.level = bitSet(shift, bit)

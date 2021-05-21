@@ -86,10 +86,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic74373 extends Chip {
+export default class Ic74373 extends Chip {
   // "Memory" for the latched values. When _OE returns high while LE is low, these values
   // will be put onto the output pins. (Otherwise, if LE is high, the output pins just get
   // the values of the input pins like normal.)

@@ -3,16 +3,15 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { TEST, SYNC, RING, SAWTOOTH, TRIANGLE, NOISE, PULSE } from './constants'
-
 import { bitSet, word, bitValue } from 'utils'
+import { TEST, SYNC, RING, SAWTOOTH, TRIANGLE, NOISE, PULSE } from './constants'
 
 const ACC_MSB = 23
 const LFSR_CLOCK = 19
 const LFSR_TAP_1 = 17
 const LFSR_TAP_2 = 22
 
-export function WaveformGenerator(chip, base, readRegister) {
+export default function WaveformGenerator(chip, base, readRegister) {
   const FRELO = base
   const FREHI = base + 1
   const PWLO = base + 2

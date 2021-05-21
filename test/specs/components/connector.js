@@ -8,9 +8,7 @@ import Connector from 'components/connector'
 import Pin from 'components/pin'
 import Trace from 'components/trace'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
+const { INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 describe('Connector', () => {
   it("sets an output pin's level to an input's when connecting to it", () => {

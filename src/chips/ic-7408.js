@@ -62,10 +62,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
-export class Ic7408 extends Chip {
+export default class Ic7408 extends Chip {
   constructor() {
     super(
       // Gate 1 inputs and output

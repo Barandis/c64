@@ -77,10 +77,9 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { range } from 'utils'
 
-const INPUT = Pin.INPUT
-const BIDIRECTIONAL = Pin.BIDIRECTIONAL
+const { INPUT, BIDIRECTIONAL } = Pin
 
-export class Ic4066 extends Chip {
+export default class Ic4066 extends Chip {
   /** @type {[Pin, Pin, Pin, Pin]} */
   #last = [null, null, null, null]
 

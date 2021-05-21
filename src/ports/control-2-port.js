@@ -6,9 +6,9 @@
 import Pin from 'components/pin'
 import Port from 'components/port'
 
-const OUTPUT = Pin.OUTPUT
+const { OUTPUT } = Pin
 
-export function Control2Port() {
+export default function Control2Port() {
   return new Port(
     new Pin(1, 'JOYB0', OUTPUT),
     new Pin(2, 'JOYB1', OUTPUT),

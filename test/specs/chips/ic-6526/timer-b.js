@@ -27,7 +27,7 @@ import {
 import Pin from 'components/pin'
 import { bitSet, bitClear, range } from 'utils'
 
-const OUTPUT = Pin.OUTPUT
+const { OUTPUT } = Pin
 
 export function tbDefault({ readRegister }) {
   assert(readRegister(TBHI) === 0xff)
@@ -80,7 +80,7 @@ export function tbCntUnderDec({ tr, writeRegister, readRegister }) {
 
   tr.CNT.level = 0
   for (const _ of range(5)) {
-    for (const _ of range(2)) {
+    for (const __ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
     }
@@ -181,7 +181,7 @@ export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
   assert(tr.PB7.low)
 
   for (const _ of range(3)) {
-    for (const _ of range(4)) {
+    for (const __ of range(4)) {
       tr.φ2.set()
       assert(tr.PB7.low)
       tr.φ2.clear()

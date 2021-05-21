@@ -7,12 +7,13 @@ import { writeFile } from 'fs'
 
 import { resolve } from 'path'
 
-import { WaveformGenerator } from 'chips/ic-6581/waveform'
+import WaveformGenerator from 'chips/ic-6581/waveform'
 import { Ic6581 } from 'chips/index'
 import { deviceTraces } from 'test/helper'
 import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from 'chips/ic-6581/constants'
 import { range } from 'utils'
 
+/* eslint-disable no-console */
 function write(path, name, value) {
   const text = `const ${name} = [${value.join(',')}]`
   writeFile(resolve(__dirname, path), text, err => {
@@ -23,10 +24,16 @@ function write(path, name, value) {
     console.log(`Wrote ${path}`)
   })
 }
+/* eslint-enable no-console */
 
 describe('6581 SID', () => {
   describe('waveform generator', () => {
-    let chip, tr, registers, gen1, gen2, gen3
+    let chip
+    let tr
+    let registers
+    let gen1
+    let gen2
+    let gen3
 
     function readRegister(index) {
       return registers[index]
@@ -40,7 +47,7 @@ describe('6581 SID', () => {
         values.push(gen1.value)
         tr.φ2.clear()
 
-        for (const _ of range(20)) {
+        for (const __ of range(20)) {
           tr.φ2.set().clear()
         }
       }
@@ -159,7 +166,8 @@ describe('6581 SID', () => {
         write(path, 'noisehigh', values)
       })
 
-      for (const pw of range(1000, 3001, 1000)) {
+      const widths = [...range(1000, 3001, 1000)]
+      widths.forEach(pw => {
         it(`produces a pulse with width ${pw}`, () => {
           registers[0] = 0xd6
           registers[1] = 0x1c
@@ -172,7 +180,7 @@ describe('6581 SID', () => {
           const path = `../../../docs/waveforms/pulse${pw}.js`
           write(path, `pulse${pw}`, values)
         })
-      }
+      })
 
       it('produces sawtooth + triangle', () => {
         registers[0] = 0xd6

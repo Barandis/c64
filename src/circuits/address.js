@@ -251,6 +251,6 @@ function MuxBus({ U2, U9, U10, U11, U12, U13, U14, U17, U19, U21, U22, U23, U24,
   }
 }
 
-export function AddressCircuit(chips, ports) {
+export default function AddressCircuit(chips, ports) {
   return { ...FullBus(chips, ports), ...MuxBus(chips, ports) }
 }

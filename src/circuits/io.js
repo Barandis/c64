@@ -5,7 +5,10 @@
 
 import Trace from 'components/trace'
 
-export function IoCircuit({ U1, U2, U7, U8, U18, U19, U28 }, { CN1, CN2, CN3, CN4, CN8, CN9 }) {
+export default function IoCircuit(
+  { U1, U2, U7, U8, U18, U19, U28 },
+  { CN1, CN2, CN3, CN4, CN8, CN9 },
+) {
   // Keyboard/control ports
 
   // U1: 6526 CIA (connects to keyboard matrix)

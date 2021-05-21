@@ -7,8 +7,7 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import { assert } from 'test/helper'
 
-const INPUT = Pin.INPUT
-const OUTPUT = Pin.OUTPUT
+const { INPUT, OUTPUT } = Pin
 
 describe('Chip', () => {
   const pins = {

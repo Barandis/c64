@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import Pin from 'components/pin'
+import { assert } from 'test/helper'
 import {
   modeInitial,
   modeChange,
@@ -53,9 +55,6 @@ import {
   listenerNonexistent,
   listenerDouble,
 } from './pin/listener'
-
-import Pin from 'components/pin'
-import { assert } from 'test/helper'
 
 describe('Pin', () => {
   const test = fn => () => fn()
