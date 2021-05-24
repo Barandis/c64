@@ -14,7 +14,7 @@ describe('Keyboard port', () => {
   let c
 
   beforeEach(() => {
-    port = KeyboardPort()
+    port = new KeyboardPort()
     cable = portCable(port)
 
     p = deviceTraces(port)

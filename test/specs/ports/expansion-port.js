@@ -14,7 +14,7 @@ describe('Expansion port', () => {
   let c
 
   beforeEach(() => {
-    port = ExpansionPort()
+    port = new ExpansionPort()
     cable = portCable(port)
 
     p = deviceTraces(port)

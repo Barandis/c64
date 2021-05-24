@@ -21,7 +21,7 @@ describe('Serial port', () => {
   let c
 
   beforeEach(() => {
-    port = SerialPort()
+    port = new SerialPort()
     cable = portCable(port)
 
     p = deviceTraces(port)

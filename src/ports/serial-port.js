@@ -8,14 +8,16 @@ import Port from 'components/port'
 
 const { INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
-export default function SerialPort() {
-  return new Port(
-    new Pin(5, 'DATA', BIDIRECTIONAL),
-    new Pin(4, 'CLK', BIDIRECTIONAL),
-    new Pin(3, 'ATN', INPUT),
-    new Pin(1, '_SRQ', OUTPUT),
-    new Pin(6, '_RESET', BIDIRECTIONAL),
+export default class SerialPort extends Port {
+  constructor() {
+    super(
+      new Pin(5, 'DATA', BIDIRECTIONAL),
+      new Pin(4, 'CLK', BIDIRECTIONAL),
+      new Pin(3, 'ATN', INPUT),
+      new Pin(1, '_SRQ', OUTPUT),
+      new Pin(6, '_RESET', BIDIRECTIONAL),
 
-    new Pin(2, 'GND'),
-  )
+      new Pin(2, 'GND'),
+    )
+  }
 }

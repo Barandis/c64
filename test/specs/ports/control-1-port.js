@@ -14,7 +14,7 @@ describe('Control port 1', () => {
   let c
 
   beforeEach(() => {
-    port = Control1Port()
+    port = new Control1Port()
     cable = portCable(port)
 
     p = deviceTraces(port)

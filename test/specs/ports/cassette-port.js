@@ -14,7 +14,7 @@ describe('Cassette port', () => {
   let c
 
   beforeEach(() => {
-    port = CassettePort()
+    port = new CassettePort()
     cable = portCable(port)
 
     p = deviceTraces(port)
