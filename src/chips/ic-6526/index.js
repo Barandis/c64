@@ -477,110 +477,206 @@ const { INPUT, OUTPUT } = Pin
  * @returns {Ic6526} A new 6526 Complex Interface Adapter.
  * @memberof module:chips
  */
-export default function Ic6526() {
-  const chip = new Chip(
-    // Register address pins. The 6526 has 16 addressable 8-bit registers, which requires
-    // four pins.
-    new Pin(38, 'A0', INPUT),
-    new Pin(37, 'A1', INPUT),
-    new Pin(36, 'A2', INPUT),
-    new Pin(35, 'A3', INPUT),
-
-    // Data bus pins. These are input OR output pins, not both at the same time.
-    new Pin(33, 'D0', OUTPUT),
-    new Pin(32, 'D1', OUTPUT),
-    new Pin(31, 'D2', OUTPUT),
-    new Pin(30, 'D3', OUTPUT),
-    new Pin(29, 'D4', OUTPUT),
-    new Pin(28, 'D5', OUTPUT),
-    new Pin(27, 'D6', OUTPUT),
-    new Pin(26, 'D7', OUTPUT),
-
-    // Parallel Port A pins. These are bidirectional but the direction is switchable via
-    // register.
-    new Pin(2, 'PA0', INPUT).pullUp(),
-    new Pin(3, 'PA1', INPUT).pullUp(),
-    new Pin(4, 'PA2', INPUT).pullUp(),
-    new Pin(5, 'PA3', INPUT).pullUp(),
-    new Pin(6, 'PA4', INPUT).pullUp(),
-    new Pin(7, 'PA5', INPUT).pullUp(),
-    new Pin(8, 'PA6', INPUT).pullUp(),
-    new Pin(9, 'PA7', INPUT).pullUp(),
-
-    // Parallel Port B pins. These are bidirectional but the direction is switchable via
-    // register.
-    new Pin(10, 'PB0', INPUT).pullUp(),
-    new Pin(11, 'PB1', INPUT).pullUp(),
-    new Pin(12, 'PB2', INPUT).pullUp(),
-    new Pin(13, 'PB3', INPUT).pullUp(),
-    new Pin(14, 'PB4', INPUT).pullUp(),
-    new Pin(15, 'PB5', INPUT).pullUp(),
-    new Pin(16, 'PB6', INPUT).pullUp(),
-    new Pin(17, 'PB7', INPUT).pullUp(),
-
-    // Port control pin. Pulses low after a read or write on port B, can be used for
-    // handshaking.
-    new Pin(18, '_PC', OUTPUT).set(),
-
-    // IRQ input, maskable to fire hardware interrupt. Often used for handshaking.
-    new Pin(24, '_FLAG', INPUT),
-
-    // Determines whether data is being read from (1) or written to (0) the chip
-    new Pin(22, 'R__W', INPUT),
-
-    // Interrupt request output. When low, this signals an interrupt to the CPU. There can
-    // be several sources of interrupts connected to the same CPU, so this pin will be set
-    // to `null` if there is no interrupt and `0` if there is. Setting the trace that
-    // connects these interrupts to PULL_UP will cause the trace to be high unless one or
-    // more IRQ pins lower it.
-    new Pin(21, '_IRQ', OUTPUT),
-
-    // Serial port. This is bidirectional but the direction is chosen by a control bit.
-    new Pin(39, 'SP', INPUT),
-
-    // Count pin. This is used for a couple of different purposes. As an input (its default
-    // state), it can provide pulses for the interval timers to count, or it can be used to
-    // signal that a new bit is available to receive on the serial port. It can serve as an
-    // output as well; in that case the 6526 uses it to signal to the outside that an
-    // outgoing bit is ready on the serial port pin.
-    new Pin(40, 'CNT', INPUT),
-
-    // System clock input. In the 6526 this is expected to be a 1 MHz clock.
-    new Pin(25, 'φ2', INPUT),
-
-    // TOD clock input. This can be either 50Hz or 60Hz, selectable from a control register.
-    new Pin(19, 'TOD', INPUT),
-
-    // Chip select pin. When this is low, the chip responds to R/W and register select
-    // signals. When it's high, the data pins go high impedance.
-    new Pin(23, '_CS', INPUT),
-
-    // Resets the chip on a low signal.
-    new Pin(34, '_RES', INPUT),
-
-    // Power supply and ground pins. These are not emulated.
-    new Pin(20, 'VCC'),
-    new Pin(1, 'VSS'),
-  )
-
-  const addrPins = [...range(4)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
-
+export default class Ic6526 extends Chip {
   // The 16 readable registers on the 6526.
-  const registers = new Uint8Array(16)
+  #registers = new Uint8Array(16)
 
   // Some registers have read-only and write-only portions. For those registers, these are
   // the write-only portions.
-  const latches = new Uint8Array(16)
+  #latches = new Uint8Array(16)
 
-  const { readPrb, writePra, writePrb, writeDdra, writeDdrb } = ports(chip, registers)
-  const { readTenths, readHours, writeTenths, writeSeconds, writeMinutes, writeHours } = tod(
-    chip,
-    registers,
-    latches,
-  )
-  const { writeSdr } = timers(chip, registers, latches)
-  const { readIcr, writeIcr, writeCra, writeCrb } = control(chip, registers, latches)
+  #readPrb
+
+  #writePra
+
+  #writePrb
+
+  #writeDdra
+
+  #writeDdrb
+
+  #readTenths
+
+  #readHours
+
+  #writeTenths
+
+  #writeSeconds
+
+  #writeMinutes
+
+  #writeHours
+
+  #writeSdr
+
+  #readIcr
+
+  #writeIcr
+
+  #writeCra
+
+  #writeCrb
+
+  constructor() {
+    super(
+      // Register address pins. The 6526 has 16 addressable 8-bit registers, which requires
+      // four pins.
+      new Pin(38, 'A0', INPUT),
+      new Pin(37, 'A1', INPUT),
+      new Pin(36, 'A2', INPUT),
+      new Pin(35, 'A3', INPUT),
+
+      // Data bus pins. These are input OR output pins, not both at the same time.
+      new Pin(33, 'D0', OUTPUT),
+      new Pin(32, 'D1', OUTPUT),
+      new Pin(31, 'D2', OUTPUT),
+      new Pin(30, 'D3', OUTPUT),
+      new Pin(29, 'D4', OUTPUT),
+      new Pin(28, 'D5', OUTPUT),
+      new Pin(27, 'D6', OUTPUT),
+      new Pin(26, 'D7', OUTPUT),
+
+      // Parallel Port A pins. These are bidirectional but the direction is switchable via
+      // register.
+      new Pin(2, 'PA0', INPUT).pullUp(),
+      new Pin(3, 'PA1', INPUT).pullUp(),
+      new Pin(4, 'PA2', INPUT).pullUp(),
+      new Pin(5, 'PA3', INPUT).pullUp(),
+      new Pin(6, 'PA4', INPUT).pullUp(),
+      new Pin(7, 'PA5', INPUT).pullUp(),
+      new Pin(8, 'PA6', INPUT).pullUp(),
+      new Pin(9, 'PA7', INPUT).pullUp(),
+
+      // Parallel Port B pins. These are bidirectional but the direction is switchable via
+      // register.
+      new Pin(10, 'PB0', INPUT).pullUp(),
+      new Pin(11, 'PB1', INPUT).pullUp(),
+      new Pin(12, 'PB2', INPUT).pullUp(),
+      new Pin(13, 'PB3', INPUT).pullUp(),
+      new Pin(14, 'PB4', INPUT).pullUp(),
+      new Pin(15, 'PB5', INPUT).pullUp(),
+      new Pin(16, 'PB6', INPUT).pullUp(),
+      new Pin(17, 'PB7', INPUT).pullUp(),
+
+      // Port control pin. Pulses low after a read or write on port B, can be used for
+      // handshaking.
+      new Pin(18, '_PC', OUTPUT).set(),
+
+      // IRQ input, maskable to fire hardware interrupt. Often used for handshaking.
+      new Pin(24, '_FLAG', INPUT),
+
+      // Determines whether data is being read from (1) or written to (0) the chip
+      new Pin(22, 'R__W', INPUT),
+
+      // Interrupt request output. When low, this signals an interrupt to the CPU. There can
+      // be several sources of interrupts connected to the same CPU, so this pin will be set
+      // to `null` if there is no interrupt and `0` if there is. Setting the trace that
+      // connects these interrupts to PULL_UP will cause the trace to be high unless one or
+      // more IRQ pins lower it.
+      new Pin(21, '_IRQ', OUTPUT),
+
+      // Serial port. This is bidirectional but the direction is chosen by a control bit.
+      new Pin(39, 'SP', INPUT),
+
+      // Count pin. This is used for a couple of different purposes. As an input (its
+      // default state), it can provide pulses for the interval timers to count, or it can
+      // be used to signal that a new bit is available to receive on the serial port. It can
+      // serve as an output as well; in that case the 6526 uses it to signal to the outside
+      // that an outgoing bit is ready on the serial port pin.
+      new Pin(40, 'CNT', INPUT),
+
+      // System clock input. In the 6526 this is expected to be a 1 MHz clock.
+      new Pin(25, 'φ2', INPUT),
+
+      // TOD clock input. This can be either 50Hz or 60Hz, selectable from a control
+      // register.
+      new Pin(19, 'TOD', INPUT),
+
+      // Chip select pin. When this is low, the chip responds to R/W and register select
+      // signals. When it's high, the data pins go high impedance.
+      new Pin(23, '_CS', INPUT),
+
+      // Resets the chip on a low signal.
+      new Pin(34, '_RES', INPUT),
+
+      // Power supply and ground pins. These are not emulated.
+      new Pin(20, 'VCC'),
+      new Pin(1, 'VSS'),
+    )
+
+    const addrPins = [...range(4)].map(pin => this[`A${pin}`])
+    const dataPins = [...range(8)].map(pin => this[`D${pin}`])
+
+    const { readPrb, writePra, writePrb, writeDdra, writeDdrb } = ports(this, this.#registers)
+    const { readTenths, readHours, writeTenths, writeSeconds, writeMinutes, writeHours } = tod(
+      this,
+      this.#registers,
+      this.#latches,
+    )
+    const { writeSdr } = timers(this, this.#registers, this.#latches)
+    const { readIcr, writeIcr, writeCra, writeCrb } = control(this, this.#registers, this.#latches)
+
+    this.#readPrb = readPrb
+    this.#writePra = writePra
+    this.#writePrb = writePrb
+    this.#writeDdra = writeDdra
+    this.#writeDdrb = writeDdrb
+
+    this.#readTenths = readTenths
+    this.#readHours = readHours
+    this.#writeTenths = writeTenths
+    this.#writeSeconds = writeSeconds
+    this.#writeMinutes = writeMinutes
+    this.#writeHours = writeHours
+
+    this.#writeSdr = writeSdr
+
+    this.#readIcr = readIcr
+    this.#writeIcr = writeIcr
+    this.#writeCra = writeCra
+    this.#writeCrb = writeCrb
+
+    // _FLAG handling. Lowering this pin sets the appropriate bit in the ICR and fires an
+    // interrupt if that bit is enabled by the ICR mask. This is potentially useful for
+    // handshaking with another 6526 by receiving its _PC output on this pin.
+    this._FLAG.addListener(pin => {
+      if (pin.low) {
+        this.#registers[ICR] = setBit(this.#registers[ICR], FLG)
+        if (bitSet(this.#latches[ICR], FLG)) {
+          this.#registers[ICR] = setBit(this.#registers[ICR], IR)
+          this._IRQ.clear()
+        }
+      }
+    })
+
+    this._RES.addListener(pin => {
+      if (pin.low) {
+        this.#reset()
+      }
+    })
+
+    // -------------------------------------------------------------------
+    // Register reading and writing
+
+    // Reads and writes between the data bus and the registers only happens on translation of
+    // _CS from high to low.
+    this._CS.addListener(pin => {
+      if (pin.high) {
+        setMode(OUTPUT, ...dataPins)
+        valueToPins(null, ...dataPins)
+      } else {
+        const index = pinsToValue(...addrPins)
+        if (this.R__W.high) {
+          valueToPins(this.#readRegister(index), ...dataPins)
+        } else {
+          setMode(INPUT, ...dataPins)
+          this.#writeRegister(index, pinsToValue(...dataPins))
+        }
+      }
+    })
+
+    this.#reset()
+  }
 
   // -------------------------------------------------------------------
   // Reset
@@ -602,141 +698,98 @@ export default function Ic6526() {
   //
   // * Note that pins PA0...PA7 and PB0...PB7 are pulled up by internal resistors, which is
   //   emulated, so the PCR registers will read all 1's for unconnected lines on reset.
-  function reset() {
+  #reset() {
     // Backwards order to hit control registers first, so we know we're setting the TOD
     // clock later and not the TOD alarm, and also to ensure hours gets hit before tenths so
     // we know the clock hasn't halted
-    for (const i of range(registers.length - 1, 0, true)) {
+    for (const i of range(this.#registers.length - 1, 0, true)) {
       // Timer latches get all 1's; ICR mask gets all flags reset; all others get all 0's
       const value = i >= TALO && i <= TBHI ? 0xff : i === ICR ? 0x7f : 0x00
-      writeRegister(i, value)
+      this.#writeRegister(i, value)
     }
     // Force latched timer values into timer registers
-    writeRegister(CRA, 1 << LOAD)
-    writeRegister(CRB, 1 << LOAD)
+    this.#writeRegister(CRA, 1 << LOAD)
+    this.#writeRegister(CRB, 1 << LOAD)
     // Read ICR to clear all IRQ flags and release IRQ line
-    readRegister(ICR)
+    this.#readRegister(ICR)
     // Write zeroes to the TOD alarm
-    writeRegister(CRB, 1 << ALARM)
-    writeRegister(TODHR, 0)
-    writeRegister(TODMIN, 0)
-    writeRegister(TODSEC, 0)
-    writeRegister(TOD10TH, 0)
-    writeRegister(CRB, 0)
+    this.#writeRegister(CRB, 1 << ALARM)
+    this.#writeRegister(TODHR, 0)
+    this.#writeRegister(TODMIN, 0)
+    this.#writeRegister(TODSEC, 0)
+    this.#writeRegister(TOD10TH, 0)
+    this.#writeRegister(CRB, 0)
 
-    chip._PC.set()
+    this._PC.set()
 
     for (const i of range(8)) {
       const name = `D${i}`
-      chip[name].mode = OUTPUT
-      chip[name].level = null
+      this[name].mode = OUTPUT
+      this[name].level = null
     }
   }
 
-  chip._RES.addListener(_res => {
-    if (_res.low) {
-      reset()
-    }
-  })
-
-  // -------------------------------------------------------------------
-  // Register reading and writing
-
-  // Reads and writes between the data bus and the registers only happens on translation of
-  // _CS from high to low.
-  chip._CS.addListener(pin => {
-    if (pin.high) {
-      setMode(OUTPUT, ...dataPins)
-      valueToPins(null, ...dataPins)
-    } else {
-      const index = pinsToValue(...addrPins)
-      if (chip.R__W.high) {
-        valueToPins(readRegister(index), ...dataPins)
-      } else {
-        setMode(INPUT, ...dataPins)
-        writeRegister(index, pinsToValue(...dataPins))
-      }
-    }
-  })
-
-  function readRegister(index) {
+  #readRegister(index) {
     switch (index) {
       case PRB:
-        return readPrb()
+        return this.#readPrb()
       case TOD10TH:
-        return readTenths()
+        return this.#readTenths()
       case TODHR:
-        return readHours()
+        return this.#readHours()
       case ICR:
-        return readIcr()
+        return this.#readIcr()
       default:
-        return registers[index]
+        return this.#registers[index]
     }
   }
 
-  function writeRegister(index, value) {
+  #writeRegister(index, value) {
     switch (index) {
       case PRA:
-        writePra(value)
+        this.#writePra(value)
         break
       case PRB:
-        writePrb(value)
+        this.#writePrb(value)
         break
       case DDRA:
-        writeDdra(value)
+        this.#writeDdra(value)
         break
       case DDRB:
-        writeDdrb(value)
+        this.#writeDdrb(value)
         break
       case TALO:
       case TAHI:
       case TBLO:
       case TBHI:
-        latches[index] = value
+        this.#latches[index] = value
         break
       case TOD10TH:
-        writeTenths(value)
+        this.#writeTenths(value)
         break
       case TODSEC:
-        writeSeconds(value)
+        this.#writeSeconds(value)
         break
       case TODMIN:
-        writeMinutes(value)
+        this.#writeMinutes(value)
         break
       case TODHR:
-        writeHours(value)
+        this.#writeHours(value)
         break
       case SDR:
-        writeSdr(value)
+        this.#writeSdr(value)
         break
       case ICR:
-        writeIcr(value)
+        this.#writeIcr(value)
         break
       case CRA:
-        writeCra(value)
+        this.#writeCra(value)
         break
       case CRB:
-        writeCrb(value)
+        this.#writeCrb(value)
         break
       default:
         break
     }
   }
-
-  // _FLAG handling. Lowering this pin sets the appropriate bit in the ICR and fires an
-  // interrupt if that bit is enabled by the ICR mask. This is potentially useful for
-  // handshaking with another 6526 by receiving its _PC output on this pin.
-  chip._FLAG.addListener(pin => {
-    if (pin.low) {
-      registers[ICR] = setBit(registers[ICR], FLG)
-      if (bitSet(latches[ICR], FLG)) {
-        registers[ICR] = setBit(registers[ICR], IR)
-        chip._IRQ.clear()
-      }
-    }
-  })
-
-  reset()
-
-  return chip
 }

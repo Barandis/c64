@@ -39,8 +39,8 @@ import IoCircuit from './io'
 
 export default function Board() {
   const chips = {
-    U1: Ic6526(),
-    U2: Ic6526(),
+    U1: new Ic6526(),
+    U2: new Ic6526(),
     U3: new Ic2364(basic),
     U4: new Ic2364(kernal),
     U5: new Ic2332(character),

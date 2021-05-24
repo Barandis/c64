@@ -84,7 +84,7 @@ describe('6526 CIA', () => {
   let pbTraces
 
   beforeEach(() => {
-    chip = Ic6526()
+    chip = new Ic6526()
     tr = deviceTraces(chip)
 
     addrTraces = [...range(4)].map(i => tr[`A${i}`])
