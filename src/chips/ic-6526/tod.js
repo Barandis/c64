@@ -19,33 +19,66 @@ import {
   PM,
 } from './constants'
 
-export default function tod(chip, registers, latches) {
-  // -------------------------------------------------------------------
-  // Time-of-day clock
-  //
-  // This is a more human-usable clock than the microsecond timers. It stores parts of the
-  // current time in four registers, corresponding to hours, minutes, seconds, and tenths of
-  // seconds. It runs off 60Hz (default, can be set to 50Hz) pulses at the chip's TOD pin.
-  //
-  // If the hour is read, then the registers do not update further until the tenths of
-  // seconds are read (this keeps the time from advancing during the four reads, possibly
-  // creating reads that can be up to an hour off). The clock does continue running in this
-  // case, just in the background. If the hour is *written*, then the clock stops running
-  // entirely until the tenths of seconds are written.
-  //
-  // There is an alarm available, and it can be set by writing to the same TOD registers
-  // with the Alarm bit in Control Register B set. In this implementation the alarm is being
-  // kept in the latches.
+/** @typedef {import('./index').default} Ic6526 */
+
+// -------------------------------------------------------------------
+// Time-of-day clock
+//
+// This is a more human-usable clock than the microsecond timers. It stores parts of the
+// current time in four registers, corresponding to hours, minutes, seconds, and tenths of
+// seconds. It runs off 60Hz (default, can be set to 50Hz) pulses at the chip's TOD pin.
+//
+// If the hour is read, then the registers do not update further until the tenths of
+// seconds are read (this keeps the time from advancing during the four reads, possibly
+// creating reads that can be up to an hour off). The clock does continue running in this
+// case, just in the background. If the hour is *written*, then the clock stops running
+// entirely until the tenths of seconds are written.
+//
+// There is an alarm available, and it can be set by writing to the same TOD registers
+// with the Alarm bit in Control Register B set. In this implementation the alarm is being
+// kept in the latches.
+
+// Adds 1 to a BCD number, accounting for carry. Rolling over the tens digit isn't
+// implemented because we never have a number over 59 anyway.
+function bcdIncrement(value) {
+  let digit0 = (value & 0x0f) + 1
+  let digit1 = (value & 0xf0) >> 4
+
+  if (digit0 === 0x0a) {
+    digit0 = 0
+    digit1 += 1
+  }
+
+  return (digit1 << 4) | digit0
+}
+
+// Tests a BCD number to see if it's greater than or equal to a decimal number.
+function bcdGte(bcd, decimal) {
+  return decimal <= (bcd & 0x0f) + 10 * ((bcd & 0xf0) >> 4)
+}
+export default class TodClock {
+  /** @type {Ic6526} */
+  #pins
+
+  /** @type {Uint8Array} */
+  #registers
+
+  /** @type {Uint8Array} */
+  #latches
 
   // Whether or not the TOD clock is running or updating its registers. Both of these
   // `false` is normal operation; `todLatched` being `true` means that the clock continues
   // to run even though it is not updating its registers as it does so, and `todHalted`
   // being true means the clock is not running at all.
-  let todLatched = false
-  let todHalted = false
+  /** @type {boolean} */
+  #latched = false
+
+  /** @type {boolean} */
+  #halted = false
 
   // Internal count of the number of TOD pulses since the last tenth-of-seconds update.
-  let pulseCount = 0
+  /** @type {number} */
+  #pulseCount = 0
 
   // Values of the actual running clock. These are necessary because the clock does not
   // always update its registers, so the values need to be kept somewhere. For convenience,
@@ -53,161 +86,163 @@ export default function tod(chip, registers, latches) {
   // format used in the registers.
   //
   // Also just as with the registers, bit 7 of `hours` is the AM (0)/PM (1) flag.
-  let tenths = 0
-  let seconds = 0
-  let minutes = 0
-  let hours = 0
+  /** @type {number} */
+  #tenths = 0
 
-  chip.TOD.addListener(pin => {
-    if (pin.high && !todHalted) {
-      pulseCount += 1
-      // runs if 1/10 second has elapsed, counting pulses for that time at either 50Hz or
-      // 60Hz
-      if (pulseCount === (bitSet(registers[CRA], TODIN) ? 5 : 6)) {
-        pulseCount = 0
-        incrementTenths()
-        if (!todLatched) {
-          // Update registers with the new time
-          registers[TOD10TH] = tenths
-          registers[TODSEC] = seconds
-          registers[TODMIN] = minutes
-          registers[TODHR] = hours
-        }
-        // If time === alarm, fire an interrupt if it's enabled in the ICR
-        if (
-          tenths === latches[TOD10TH] &&
-          seconds === latches[TODSEC] &&
-          minutes === latches[TODMIN] &&
-          hours === latches[TODHR]
-        ) {
-          registers[ICR] = setBit(registers[ICR], ALRM)
-          if (bitSet(latches[ICR], ALRM)) {
-            registers[ICR] = setBit(registers[ICR], IR)
-            chip._IRQ.clear()
+  /** @type {number} */
+  #seconds = 0
+
+  /** @type {number} */
+  #minutes = 0
+
+  /** @type {number} */
+  #hours = 0
+
+  /**
+   * @param {Ic6526} pins
+   * @param {Uint8Array} registers
+   * @param {Uint8Array} latches
+   */
+  constructor(pins, registers, latches) {
+    this.#pins = pins
+    this.#registers = registers
+    this.#latches = latches
+
+    pins.TOD.addListener(pin => {
+      if (pin.high && !this.#halted) {
+        this.#pulseCount += 1
+        // runs if 1/10 second has elapsed, counting pulses for that time at either 50Hz or
+        // 60Hz
+        if (this.#pulseCount === (bitSet(registers[CRA], TODIN) ? 5 : 6)) {
+          this.#pulseCount = 0
+          this.#incrementTenths()
+          if (!this.#latched) {
+            // Update registers with the new time
+            registers[TOD10TH] = this.#tenths
+            registers[TODSEC] = this.#seconds
+            registers[TODMIN] = this.#minutes
+            registers[TODHR] = this.#hours
+          }
+          // If time === alarm, fire an interrupt if it's enabled in the ICR
+          if (
+            this.#tenths === latches[TOD10TH] &&
+            this.#seconds === latches[TODSEC] &&
+            this.#minutes === latches[TODMIN] &&
+            this.#hours === latches[TODHR]
+          ) {
+            registers[ICR] = setBit(registers[ICR], ALRM)
+            if (bitSet(latches[ICR], ALRM)) {
+              registers[ICR] = setBit(registers[ICR], IR)
+              pins._IRQ.clear()
+            }
           }
         }
       }
-    }
-  })
+    })
+  }
 
-  function incrementTenths() {
-    tenths = bcdIncrement(tenths)
-    if (bcdGte(tenths, 10)) {
-      tenths = 0
-      incrementSeconds()
+  #incrementTenths() {
+    this.#tenths = bcdIncrement(this.#tenths)
+    if (bcdGte(this.#tenths, 10)) {
+      this.#tenths = 0
+      this.#incrementSeconds()
     }
   }
 
-  function incrementSeconds() {
-    seconds = bcdIncrement(seconds)
-    if (bcdGte(seconds, 60)) {
-      seconds = 0
-      incrementMinutes()
+  #incrementSeconds() {
+    this.#seconds = bcdIncrement(this.#seconds)
+    if (bcdGte(this.#seconds, 60)) {
+      this.#seconds = 0
+      this.#incrementMinutes()
     }
   }
 
-  function incrementMinutes() {
-    minutes = bcdIncrement(minutes)
-    if (bcdGte(minutes, 60)) {
-      minutes = 0
-      incrementHours()
+  #incrementMinutes() {
+    this.#minutes = bcdIncrement(this.#minutes)
+    if (bcdGte(this.#minutes, 60)) {
+      this.#minutes = 0
+      this.#incrementHours()
     }
   }
 
-  function incrementHours() {
+  #incrementHours() {
     const pmMask = 1 << PM
 
-    hours = bcdIncrement(hours)
-    if ((hours & ~pmMask) === 0x12) {
-      hours = toggleBit(hours, PM)
-    } else if (bcdGte(hours & ~pmMask, 13)) {
-      hours = (hours & pmMask) | 1
+    this.#hours = bcdIncrement(this.#hours)
+    if ((this.#hours & ~pmMask) === 0x12) {
+      this.#hours = toggleBit(this.#hours, PM)
+    } else if (bcdGte(this.#hours & ~pmMask, 13)) {
+      this.#hours = (this.#hours & pmMask) | 1
     }
   }
 
-  // Adds 1 to a BCD number, accounting for carry. Rolling over the tens digit isn't
-  // implemented because we never have a number over 59 anyway.
-  function bcdIncrement(value) {
-    let digit0 = (value & 0x0f) + 1
-    let digit1 = (value & 0xf0) >> 4
+  reset() {
+    this.#latched = false
+    this.#halted = false
 
-    if (digit0 === 0x0a) {
-      digit0 = 0
-      digit1 += 1
-    }
+    this.#pulseCount = 0
 
-    return (digit1 << 4) | digit0
+    this.#tenths = 0
+    this.#seconds = 0
+    this.#minutes = 0
+    this.#hours = 0
   }
 
-  // Tests a BCD number to see if it's greater than or equal to a decimal number.
-  function bcdGte(bcd, decimal) {
-    return decimal <= (bcd & 0x0f) + 10 * ((bcd & 0xf0) >> 4)
-  }
-
-  function writeTenths(value) {
+  writeTenths(value) {
     const masked = value & 0x0f
-    if (bitSet(registers[CRB], ALARM)) {
-      latches[TOD10TH] = masked
+    if (bitSet(this.#registers[CRB], ALARM)) {
+      this.#latches[TOD10TH] = masked
     } else {
-      registers[TOD10TH] = masked
-      tenths = masked
-      todHalted = false
+      this.#registers[TOD10TH] = masked
+      this.#tenths = masked
+      this.#halted = false
     }
   }
 
-  function readTenths() {
-    if (todLatched) {
-      todLatched = false
-      registers[TOD10TH] = tenths
-      registers[TODSEC] = seconds
-      registers[TODMIN] = minutes
-      registers[TODHR] = hours
+  readTenths() {
+    if (this.#latched) {
+      this.#latched = false
+      this.#registers[TOD10TH] = this.#tenths
+      this.#registers[TODSEC] = this.#seconds
+      this.#registers[TODMIN] = this.#minutes
+      this.#registers[TODHR] = this.#hours
     }
-    return registers[TOD10TH]
+    return this.#registers[TOD10TH]
   }
 
-  function writeSeconds(value) {
+  writeSeconds(value) {
     const masked = value & 0x7f
-    if (bitSet(registers[CRB], ALARM)) {
-      latches[TODSEC] = masked
+    if (bitSet(this.#registers[CRB], ALARM)) {
+      this.#latches[TODSEC] = masked
     } else {
-      registers[TODSEC] = masked
-      seconds = masked
+      this.#registers[TODSEC] = masked
+      this.#seconds = masked
     }
   }
 
-  function writeMinutes(value) {
+  writeMinutes(value) {
     const masked = value & 0x7f
-    if (bitSet(registers[CRB], ALARM)) {
-      latches[TODMIN] = masked
+    if (bitSet(this.#registers[CRB], ALARM)) {
+      this.#latches[TODMIN] = masked
     } else {
-      registers[TODMIN] = masked
-      minutes = masked
+      this.#registers[TODMIN] = masked
+      this.#minutes = masked
     }
   }
 
-  function writeHours(value) {
+  writeHours(value) {
     const masked = value & 0x9f
-    if (bitSet(registers[CRB], ALARM)) {
-      latches[TODHR] = masked
+    if (bitSet(this.#registers[CRB], ALARM)) {
+      this.#latches[TODHR] = masked
     } else {
-      registers[TODHR] = masked
-      hours = masked
-      todHalted = true
+      this.#registers[TODHR] = masked
+      this.#hours = masked
+      this.#halted = true
     }
   }
 
-  function readHours() {
-    todLatched = true
-    return registers[TODHR]
-  }
-
-  return {
-    readTenths,
-    readHours,
-    writeTenths,
-    writeSeconds,
-    writeMinutes,
-    writeHours,
+  readHours() {
+    this.#latched = true
+    return this.#registers[TODHR]
   }
 }

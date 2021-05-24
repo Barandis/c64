@@ -466,7 +466,7 @@ import {
 } from './constants'
 import ports from './ports'
 import timers from './timers'
-import tod from './tod'
+import TodClock from './tod'
 import control from './control'
 
 const { INPUT, OUTPUT } = Pin
@@ -485,6 +485,9 @@ export default class Ic6526 extends Chip {
   // the write-only portions.
   #latches = new Uint8Array(16)
 
+  /** @type {TodClock} */
+  #tod
+
   #readPrb
 
   #writePra
@@ -494,18 +497,6 @@ export default class Ic6526 extends Chip {
   #writeDdra
 
   #writeDdrb
-
-  #readTenths
-
-  #readHours
-
-  #writeTenths
-
-  #writeSeconds
-
-  #writeMinutes
-
-  #writeHours
 
   #writeSdr
 
@@ -608,11 +599,6 @@ export default class Ic6526 extends Chip {
     const dataPins = [...range(8)].map(pin => this[`D${pin}`])
 
     const { readPrb, writePra, writePrb, writeDdra, writeDdrb } = ports(this, this.#registers)
-    const { readTenths, readHours, writeTenths, writeSeconds, writeMinutes, writeHours } = tod(
-      this,
-      this.#registers,
-      this.#latches,
-    )
     const { writeSdr } = timers(this, this.#registers, this.#latches)
     const { readIcr, writeIcr, writeCra, writeCrb } = control(this, this.#registers, this.#latches)
 
@@ -622,19 +608,14 @@ export default class Ic6526 extends Chip {
     this.#writeDdra = writeDdra
     this.#writeDdrb = writeDdrb
 
-    this.#readTenths = readTenths
-    this.#readHours = readHours
-    this.#writeTenths = writeTenths
-    this.#writeSeconds = writeSeconds
-    this.#writeMinutes = writeMinutes
-    this.#writeHours = writeHours
-
     this.#writeSdr = writeSdr
 
     this.#readIcr = readIcr
     this.#writeIcr = writeIcr
     this.#writeCra = writeCra
     this.#writeCrb = writeCrb
+
+    this.#tod = new TodClock(this, this.#registers, this.#latches)
 
     // _FLAG handling. Lowering this pin sets the appropriate bit in the ICR and fires an
     // interrupt if that bit is enabled by the ICR mask. This is potentially useful for
@@ -727,6 +708,8 @@ export default class Ic6526 extends Chip {
       this[name].mode = OUTPUT
       this[name].level = null
     }
+
+    this.#tod.reset()
   }
 
   #readRegister(index) {
@@ -734,9 +717,9 @@ export default class Ic6526 extends Chip {
       case PRB:
         return this.#readPrb()
       case TOD10TH:
-        return this.#readTenths()
+        return this.#tod.readTenths()
       case TODHR:
-        return this.#readHours()
+        return this.#tod.readHours()
       case ICR:
         return this.#readIcr()
       default:
@@ -765,16 +748,16 @@ export default class Ic6526 extends Chip {
         this.#latches[index] = value
         break
       case TOD10TH:
-        this.#writeTenths(value)
+        this.#tod.writeTenths(value)
         break
       case TODSEC:
-        this.#writeSeconds(value)
+        this.#tod.writeSeconds(value)
         break
       case TODMIN:
-        this.#writeMinutes(value)
+        this.#tod.writeMinutes(value)
         break
       case TODHR:
-        this.#writeHours(value)
+        this.#tod.writeHours(value)
         break
       case SDR:
         this.#writeSdr(value)
