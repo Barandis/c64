@@ -16,7 +16,8 @@ export function spInput({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert.equal(readRegister(SDR), 0x2f)
+  const value = readRegister(SDR)
+  assert.equal(value, 0x2f)
 }
 
 export function spInputWrite({ tr, writeRegister, readRegister }) {

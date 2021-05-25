@@ -17,13 +17,17 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   tr._RES.clear()
   tr._RES.set()
   for (const i of range(16)) {
-    assert(readRegister(i) === (i <= PRB || (i >= TALO && i <= TBHI) ? 255 : 0))
+    assert.equal(
+      readRegister(i),
+      i <= PRB || (i >= TALO && i <= TBHI) ? 255 : 0,
+      `register ${i} has incorrect value`,
+    )
   }
-  assert(chip.CNT.mode === INPUT)
+  assert.equal(chip.CNT.mode, INPUT)
   assert(tr._IRQ.floating)
   for (const i of range(8)) {
     const name = `D${i}`
-    assert(chip[name].mode === OUTPUT)
+    assert.equal(chip[name].mode, OUTPUT)
     assert(tr[name].floating)
   }
 }

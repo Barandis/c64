@@ -91,6 +91,13 @@ export function toggleBit(value, bit) {
   return value ^ (1 << bit)
 }
 
+export function bin(value, digits = 8) {
+  if (value === null) {
+    return 'null'
+  }
+  return `0000000000000000${value.toString(2)}`.substr(-digits)
+}
+
 export function word(lobyte, hibyte) {
   return lobyte + 256 * hibyte
 }

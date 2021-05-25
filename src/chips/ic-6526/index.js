@@ -208,7 +208,7 @@
  * The `SC` bit indicates whether the write is setting bits (1) or clearing them (0).
  * Therefore, somewhat unintuitively, sending a 0 for a bit does not clear that bit; it
  * leaves it unaffected. To set bits, one writes a value that has a 1 in the `SC` bit; i.e.,
- * writing 0x85 (10000101 )will set the `ALRM` and `TA` bits and leave the other bits
+ * writing 0x85 (10000101) will set the `ALRM` and `TA` bits and leave the other bits
  * unaffected.
  *
  * The same works for clearing bits, except that the `SC` bit is 0 in that case. Similarly,
@@ -442,7 +442,7 @@
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Registers from 'components/registers'
-import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
+import { valueToPins, pinsToValue, setMode, setBit, bitSet, range, bin } from 'utils'
 import {
   PRA,
   PRB,
@@ -772,5 +772,23 @@ export default class Ic6526 extends Chip {
       default:
         break
     }
+  }
+
+  dump() {
+    const status = ['Registers:']
+    for (const [index, register] of this.#registers.entries()) {
+      const prefix = `  ${index} (${this.#registers.names[index]}): `
+      status.push(`${prefix}${' '.repeat(16 - prefix.length)}${bin(register)}`)
+    }
+
+    status.push('Latches:')
+    for (const [index, latch] of this.#latches.entries()) {
+      if ((index >= 0x04 && index <= 0x0b) || index === 0x0d) {
+        const prefix = `  ${index} (${this.#latches.names[index]}): `
+        status.push(`${prefix}${' '.repeat(16 - prefix.length)}${bin(latch)}`)
+      }
+    }
+
+    return `${super.dump()}\n${status.join('\n')}`
   }
 }
