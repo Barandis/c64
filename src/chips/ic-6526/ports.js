@@ -5,11 +5,46 @@
 
 import Pin from 'components/pin'
 import { setBit, clearBit, bitSet, range } from 'utils'
-import { PRA, PRB, DDRA, CRA, PBON, DDRB, CRB } from './constants'
+import { PRA, PRB, PBON } from './constants'
+
+/** @typedef {import('./index').default} Ic6526 */
+/** @typedef {import('components/registers').default} Registers */
 
 const { INPUT, OUTPUT } = Pin
 
-export default function ports(chip, registers) {
+function setPortPins(value, mask, pins) {
+  for (const bit of range(8)) {
+    if (bitSet(mask, bit)) {
+      pins[bit].level = bitSet(value, bit)
+    }
+  }
+}
+
+export default class Ports {
+  /** @type {Ic6526} */
+  #pins
+
+  /** @type {Registers} */
+  #registers
+
+  constructor(pins, registers) {
+    this.#pins = pins
+    this.#registers = registers
+
+    for (const i of range(8)) {
+      pins[`PA${i}`].addListener(this.#portListener(PRA, i))
+      pins[`PB${i}`].addListener(this.#portListener(PRB, i))
+    }
+
+    // Raises the _PC pin every cycle, as reading or writing the PB register sets that pin
+    // low for one cycle
+    pins.φ2.addListener(pin => {
+      if (pin.high) {
+        pins._PC.set()
+      }
+    })
+  }
+
   // -------------------------------------------------------------------
   // Data ports
   //
@@ -52,30 +87,15 @@ export default function ports(chip, registers) {
   // to provide memory bank switching (effectively, address lines 14 and 15) for the VIC,
   // which can on its own only access 16k of memory (PA0...PA1).
 
-  const paPins = [chip.PA0, chip.PA1, chip.PA2, chip.PA3, chip.PA4, chip.PA5, chip.PA6, chip.PA7]
-  const pbPins = [chip.PB0, chip.PB1, chip.PB2, chip.PB3, chip.PB4, chip.PB5, chip.PB6, chip.PB7]
-
   // Returns a closure that can be used as a listener. That closure sets a particular bit in
   // the the given register if the listened-to pin is high and clears that same bit if the
   // pin is low.
-  function portListener(index, bit) {
+  #portListener(index, bit) {
     return pin => {
       if (pin.high) {
-        registers[index] = setBit(registers[index], bit)
+        this.#registers[index] = setBit(this.#registers[index], bit)
       } else {
-        registers[index] = clearBit(registers[index], bit)
-      }
-    }
-  }
-  for (const i of range(8)) {
-    chip[`PA${i}`].addListener(portListener(PRA, i))
-    chip[`PB${i}`].addListener(portListener(PRB, i))
-  }
-
-  function setPortPins(value, mask, pins) {
-    for (const bit of range(8)) {
-      if (bitSet(mask, bit)) {
-        pins[bit].level = bitSet(value, bit)
+        this.#registers[index] = clearBit(this.#registers[index], bit)
       }
     }
   }
@@ -84,36 +104,36 @@ export default function ports(chip, registers) {
   // values to the associated pins. The masking ensures that pins that should not be
   // writable - meaning pins designated as input by the DDR or pins designated as timer
   // output pins by the control registers - are not modified one way or the other.
-  function writePra(value) {
-    const mask = registers[DDRA]
-    registers[PRA] = (registers[PRA] & ~mask) | (value & mask)
-    setPortPins(value, mask, paPins)
+  writePra(value) {
+    const mask = this.#registers.DDRA
+    this.#registers.PRA = (this.#registers.PRA & ~mask) | (value & mask)
+    setPortPins(
+      value,
+      mask,
+      [...range(8)].map(index => this.#pins[`PA${index}`]),
+    )
   }
 
-  function writePrb(value) {
+  writePrb(value) {
     const mask =
-      registers[DDRB] &
-      (bitSet(registers[CRB], PBON) ? 0x7f : 0xff) &
-      (bitSet(registers[CRA], PBON) ? 0xbf : 0xff)
-    registers[PRB] = (registers[PRB] & ~mask) | (value & mask)
-    setPortPins(value, mask, pbPins)
-    chip._PC.clear()
+      this.#registers.DDRB &
+      (bitSet(this.#registers.CRB, PBON) ? 0x7f : 0xff) &
+      (bitSet(this.#registers.CRA, PBON) ? 0xbf : 0xff)
+    this.#registers.PRB = (this.#registers.PRB & ~mask) | (value & mask)
+    setPortPins(
+      value,
+      mask,
+      [...range(8)].map(index => this.#pins[`PB${index}`]),
+    )
+    this.#pins._PC.clear()
   }
 
   // A read function is only necessary for port B, and only because reading the register
   // lowers the _PC pin for a cycle.
-  function readPrb() {
-    chip._PC.clear()
-    return registers[PRB]
+  readPrb() {
+    this.#pins._PC.clear()
+    return this.#registers.PRB
   }
-
-  // Raises the _PC pin every cycle, as reading or writing the PB register sets that pin low
-  // for one cycle
-  chip.φ2.addListener(pin => {
-    if (pin.high) {
-      chip._PC.set()
-    }
-  })
 
   // -------------------------------------------------------------------
   // Data direction registers
@@ -126,32 +146,27 @@ export default function ports(chip, registers) {
   // flags are set, one or both of these may override the setting of DDRB to instead be an
   // output for one of the timers.
 
-  function writeDdra(value) {
-    registers[DDRA] = value
+  writeDdra(value) {
+    this.#registers.DDRA = value
     for (const bit of range(8)) {
-      chip[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
+      this.#pins[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
     }
   }
 
-  function writeDdrb(value) {
-    registers[DDRB] = value
+  writeDdrb(value) {
+    this.#registers.DDRB = value
     for (const bit of range(8)) {
       if (
         !(
-          (bit === 6 && bitSet(registers[CRA], PBON)) ||
-          (bit === 7 && bitSet(registers[CRB], PBON))
+          (bit === 6 && bitSet(this.#registers.CRA, PBON)) ||
+          (bit === 7 && bitSet(this.#registers.CRB, PBON))
         )
       ) {
-        chip[`PB${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
+        this.#pins[`PB${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
       }
     }
   }
 
-  return {
-    readPrb,
-    writePra,
-    writePrb,
-    writeDdra,
-    writeDdrb,
-  }
+  // The ports don't keep any internal state of their own, so there's no need for a reset
+  // method.
 }

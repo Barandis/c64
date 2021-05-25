@@ -4,22 +4,10 @@
 // https://opensource.org/licenses/MIT
 
 import { bitSet, toggleBit, setBit } from 'utils'
-import {
-  CRB,
-  ALARM,
-  TOD10TH,
-  CRA,
-  TODIN,
-  TODMIN,
-  TODSEC,
-  TODHR,
-  ICR,
-  ALRM,
-  IR,
-  PM,
-} from './constants'
+import { ALARM, TODIN, ALRM, IR, PM } from './constants'
 
 /** @typedef {import('./index').default} Ic6526 */
+/** @typedef {import('components/registers').default} Registers */
 
 // -------------------------------------------------------------------
 // Time-of-day clock
@@ -60,10 +48,10 @@ export default class TodClock {
   /** @type {Ic6526} */
   #pins
 
-  /** @type {Uint8Array} */
+  /** @type {Registers} */
   #registers
 
-  /** @type {Uint8Array} */
+  /** @type {Registers} */
   #latches
 
   // Whether or not the TOD clock is running or updating its registers. Both of these
@@ -100,8 +88,8 @@ export default class TodClock {
 
   /**
    * @param {Ic6526} pins
-   * @param {Uint8Array} registers
-   * @param {Uint8Array} latches
+   * @param {Registers} registers
+   * @param {Registers} latches
    */
   constructor(pins, registers, latches) {
     this.#pins = pins
@@ -113,26 +101,26 @@ export default class TodClock {
         this.#pulseCount += 1
         // runs if 1/10 second has elapsed, counting pulses for that time at either 50Hz or
         // 60Hz
-        if (this.#pulseCount === (bitSet(registers[CRA], TODIN) ? 5 : 6)) {
+        if (this.#pulseCount === (bitSet(registers.CRA, TODIN) ? 5 : 6)) {
           this.#pulseCount = 0
           this.#incrementTenths()
           if (!this.#latched) {
             // Update registers with the new time
-            registers[TOD10TH] = this.#tenths
-            registers[TODSEC] = this.#seconds
-            registers[TODMIN] = this.#minutes
-            registers[TODHR] = this.#hours
+            registers.TOD10TH = this.#tenths
+            registers.TODSEC = this.#seconds
+            registers.TODMIN = this.#minutes
+            registers.TODHR = this.#hours
           }
           // If time === alarm, fire an interrupt if it's enabled in the ICR
           if (
-            this.#tenths === latches[TOD10TH] &&
-            this.#seconds === latches[TODSEC] &&
-            this.#minutes === latches[TODMIN] &&
-            this.#hours === latches[TODHR]
+            this.#tenths === latches.TOD10TH &&
+            this.#seconds === latches.TODSEC &&
+            this.#minutes === latches.TODMIN &&
+            this.#hours === latches.TODHR
           ) {
-            registers[ICR] = setBit(registers[ICR], ALRM)
-            if (bitSet(latches[ICR], ALRM)) {
-              registers[ICR] = setBit(registers[ICR], IR)
+            registers.ICR = setBit(registers.ICR, ALRM)
+            if (bitSet(latches.ICR, ALRM)) {
+              registers.ICR = setBit(registers.ICR, IR)
               pins._IRQ.clear()
             }
           }
@@ -190,10 +178,10 @@ export default class TodClock {
 
   writeTenths(value) {
     const masked = value & 0x0f
-    if (bitSet(this.#registers[CRB], ALARM)) {
-      this.#latches[TOD10TH] = masked
+    if (bitSet(this.#registers.CRB, ALARM)) {
+      this.#latches.TOD10TH = masked
     } else {
-      this.#registers[TOD10TH] = masked
+      this.#registers.TOD10TH = masked
       this.#tenths = masked
       this.#halted = false
     }
@@ -202,40 +190,40 @@ export default class TodClock {
   readTenths() {
     if (this.#latched) {
       this.#latched = false
-      this.#registers[TOD10TH] = this.#tenths
-      this.#registers[TODSEC] = this.#seconds
-      this.#registers[TODMIN] = this.#minutes
-      this.#registers[TODHR] = this.#hours
+      this.#registers.TOD10TH = this.#tenths
+      this.#registers.TODSEC = this.#seconds
+      this.#registers.TODMIN = this.#minutes
+      this.#registers.TODHR = this.#hours
     }
-    return this.#registers[TOD10TH]
+    return this.#registers.TOD10TH
   }
 
   writeSeconds(value) {
     const masked = value & 0x7f
-    if (bitSet(this.#registers[CRB], ALARM)) {
-      this.#latches[TODSEC] = masked
+    if (bitSet(this.#registers.CRB, ALARM)) {
+      this.#latches.TODSEC = masked
     } else {
-      this.#registers[TODSEC] = masked
+      this.#registers.TODSEC = masked
       this.#seconds = masked
     }
   }
 
   writeMinutes(value) {
     const masked = value & 0x7f
-    if (bitSet(this.#registers[CRB], ALARM)) {
-      this.#latches[TODMIN] = masked
+    if (bitSet(this.#registers.CRB, ALARM)) {
+      this.#latches.TODMIN = masked
     } else {
-      this.#registers[TODMIN] = masked
+      this.#registers.TODMIN = masked
       this.#minutes = masked
     }
   }
 
   writeHours(value) {
     const masked = value & 0x9f
-    if (bitSet(this.#registers[CRB], ALARM)) {
-      this.#latches[TODHR] = masked
+    if (bitSet(this.#registers.CRB, ALARM)) {
+      this.#latches.TODHR = masked
     } else {
-      this.#registers[TODHR] = masked
+      this.#registers.TODHR = masked
       this.#hours = masked
       this.#halted = true
     }
@@ -243,6 +231,6 @@ export default class TodClock {
 
   readHours() {
     this.#latched = true
-    return this.#registers[TODHR]
+    return this.#registers.TODHR
   }
 }

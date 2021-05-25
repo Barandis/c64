@@ -441,6 +441,7 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Registers from 'components/registers'
 import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
 import {
   PRA,
@@ -464,12 +465,31 @@ import {
   LOAD,
   ALARM,
 } from './constants'
-import ports from './ports'
-import timers from './timers'
+import Ports from './ports'
+import Timers from './timers'
 import TodClock from './tod'
-import control from './control'
+import Control from './control'
 
 const { INPUT, OUTPUT } = Pin
+
+const REGISTERS = [
+  'PRA',
+  'PRB',
+  'DDRA',
+  'DDRB',
+  'TALO',
+  'TAHI',
+  'TBLO',
+  'TBHI',
+  'TOD10TH',
+  'TODSEC',
+  'TODMIN',
+  'TODHR',
+  'SDR',
+  'ICR',
+  'CRA',
+  'CRB',
+]
 
 /**
  * Creates an emulation of the 6526 Complex Interface Adapter.
@@ -479,34 +499,23 @@ const { INPUT, OUTPUT } = Pin
  */
 export default class Ic6526 extends Chip {
   // The 16 readable registers on the 6526.
-  #registers = new Uint8Array(16)
+  #registers = new Registers(...REGISTERS)
 
   // Some registers have read-only and write-only portions. For those registers, these are
   // the write-only portions.
-  #latches = new Uint8Array(16)
+  #latches = new Registers(...REGISTERS)
+
+  /** @type {Ports} */
+  #ports
+
+  /** @type {Timers} */
+  #timers
 
   /** @type {TodClock} */
   #tod
 
-  #readPrb
-
-  #writePra
-
-  #writePrb
-
-  #writeDdra
-
-  #writeDdrb
-
-  #writeSdr
-
-  #readIcr
-
-  #writeIcr
-
-  #writeCra
-
-  #writeCrb
+  /** @type {Control} */
+  #control
 
   constructor() {
     super(
@@ -598,33 +607,19 @@ export default class Ic6526 extends Chip {
     const addrPins = [...range(4)].map(pin => this[`A${pin}`])
     const dataPins = [...range(8)].map(pin => this[`D${pin}`])
 
-    const { readPrb, writePra, writePrb, writeDdra, writeDdrb } = ports(this, this.#registers)
-    const { writeSdr } = timers(this, this.#registers, this.#latches)
-    const { readIcr, writeIcr, writeCra, writeCrb } = control(this, this.#registers, this.#latches)
-
-    this.#readPrb = readPrb
-    this.#writePra = writePra
-    this.#writePrb = writePrb
-    this.#writeDdra = writeDdra
-    this.#writeDdrb = writeDdrb
-
-    this.#writeSdr = writeSdr
-
-    this.#readIcr = readIcr
-    this.#writeIcr = writeIcr
-    this.#writeCra = writeCra
-    this.#writeCrb = writeCrb
-
+    this.#ports = new Ports(this, this.#registers)
+    this.#timers = new Timers(this, this.#registers, this.#latches)
     this.#tod = new TodClock(this, this.#registers, this.#latches)
+    this.#control = new Control(this, this.#registers, this.#latches)
 
     // _FLAG handling. Lowering this pin sets the appropriate bit in the ICR and fires an
     // interrupt if that bit is enabled by the ICR mask. This is potentially useful for
     // handshaking with another 6526 by receiving its _PC output on this pin.
     this._FLAG.addListener(pin => {
       if (pin.low) {
-        this.#registers[ICR] = setBit(this.#registers[ICR], FLG)
+        this.#registers.ICR = setBit(this.#registers.ICR, FLG)
         if (bitSet(this.#latches[ICR], FLG)) {
-          this.#registers[ICR] = setBit(this.#registers[ICR], IR)
+          this.#registers.ICR = setBit(this.#registers.ICR, IR)
           this._IRQ.clear()
         }
       }
@@ -699,6 +694,8 @@ export default class Ic6526 extends Chip {
     this.#writeRegister(TODMIN, 0)
     this.#writeRegister(TODSEC, 0)
     this.#writeRegister(TOD10TH, 0)
+
+    this.#writeRegister(CRA, 0)
     this.#writeRegister(CRB, 0)
 
     this._PC.set()
@@ -709,19 +706,20 @@ export default class Ic6526 extends Chip {
       this[name].level = null
     }
 
+    this.#timers.reset()
     this.#tod.reset()
   }
 
   #readRegister(index) {
     switch (index) {
       case PRB:
-        return this.#readPrb()
+        return this.#ports.readPrb()
       case TOD10TH:
         return this.#tod.readTenths()
       case TODHR:
         return this.#tod.readHours()
       case ICR:
-        return this.#readIcr()
+        return this.#control.readIcr()
       default:
         return this.#registers[index]
     }
@@ -730,16 +728,16 @@ export default class Ic6526 extends Chip {
   #writeRegister(index, value) {
     switch (index) {
       case PRA:
-        this.#writePra(value)
+        this.#ports.writePra(value)
         break
       case PRB:
-        this.#writePrb(value)
+        this.#ports.writePrb(value)
         break
       case DDRA:
-        this.#writeDdra(value)
+        this.#ports.writeDdra(value)
         break
       case DDRB:
-        this.#writeDdrb(value)
+        this.#ports.writeDdrb(value)
         break
       case TALO:
       case TAHI:
@@ -760,16 +758,16 @@ export default class Ic6526 extends Chip {
         this.#tod.writeHours(value)
         break
       case SDR:
-        this.#writeSdr(value)
+        this.#timers.writeSdr(value)
         break
       case ICR:
-        this.#writeIcr(value)
+        this.#control.writeIcr(value)
         break
       case CRA:
-        this.#writeCra(value)
+        this.#control.writeCra(value)
         break
       case CRB:
-        this.#writeCrb(value)
+        this.#control.writeCrb(value)
         break
       default:
         break

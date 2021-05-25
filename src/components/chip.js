@@ -35,4 +35,15 @@ export default class Chip extends Array {
 
     Object.freeze(this)
   }
+
+  dump() {
+    const status = ['Pins:']
+    this.forEach(pin => {
+      const prefix = `  ${pin.number} (${pin.name}): `
+      status.push(
+        `${prefix}${' '.repeat(16 - prefix.length)}${pin.high ? '1' : pin.low ? '0' : 'x'}`,
+      )
+    })
+    return status.join('\n')
+  }
 }

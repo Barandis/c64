@@ -16,7 +16,7 @@ export function spInput({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(readRegister(SDR) === 0x2f)
+  assert.equal(readRegister(SDR), 0x2f)
 }
 
 export function spInputWrite({ tr, writeRegister, readRegister }) {
@@ -29,7 +29,7 @@ export function spInputWrite({ tr, writeRegister, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(readRegister(SDR) === 0x2f)
+  assert.equal(readRegister(SDR), 0x2f)
 }
 
 export function spOutput({ tr, writeRegister }) {
@@ -54,7 +54,7 @@ export function spOutput({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
-      assert(tr.SP.level === ((data >> bit) & 1))
+      assert.equal(tr.SP.level, (data >> bit) & 1)
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -62,8 +62,8 @@ export function spOutput({ tr, writeRegister }) {
     for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
-      assert(tr.CNT.level === (bit === 0 ? 1 : 0))
-      assert(tr.SP.level === ((data >> bit) & 1))
+      assert.equal(tr.CNT.level, bit === 0 ? 1 : 0)
+      assert.equal(tr.SP.level, (data >> bit) & 1)
     }
   }
 }
@@ -101,7 +101,7 @@ export function spReady({ tr, writeRegister }) {
       tr.φ2.set()
       tr.φ2.clear()
       assert(tr.CNT.high)
-      assert(tr.SP.level === ((data >> bit) & 1))
+      assert.equal(tr.SP.level, (data >> bit) & 1)
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
@@ -109,8 +109,8 @@ export function spReady({ tr, writeRegister }) {
     for (const _ of range(2)) {
       tr.φ2.set()
       tr.φ2.clear()
-      assert(tr.CNT.level === (bit === 0 ? 1 : 0))
-      assert(tr.SP.level === ((data >> bit) & 1))
+      assert.equal(tr.CNT.level, bit === 0 ? 1 : 0)
+      assert.equal(tr.SP.level, (data >> bit) & 1)
     }
   }
 }

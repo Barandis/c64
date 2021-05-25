@@ -5,25 +5,29 @@
 
 import Pin from 'components/pin'
 import { bitSet } from 'utils'
-import {
-  ICR,
-  SC,
-  CRA,
-  LOAD,
-  PBON,
-  DDRA,
-  TALO,
-  TAHI,
-  SPMODE,
-  CRB,
-  DDRB,
-  TBLO,
-  TBHI,
-} from './constants'
+import { SC, LOAD, PBON, SPMODE } from './constants'
+
+/** @typedef {import('./index').default} Ic6526 */
+/** @typedef {import('components/registers').default} Registers */
 
 const { INPUT, OUTPUT } = Pin
 
-export default function control(chip, registers, latches) {
+export default class Control {
+  /** @type {Ic6526} */
+  #pins
+
+  /** @type {Registers} */
+  #registers
+
+  /** @type {Registers} */
+  #latches
+
+  constructor(pins, registers, latches) {
+    this.#pins = pins
+    this.#registers = registers
+    this.#latches = latches
+  }
+
   // -------------------------------------------------------------------
   // Interrupt Control Register
   //
@@ -44,19 +48,19 @@ export default function control(chip, registers, latches) {
   // store this information elsewhere if it needs it. Reading the register also resets the
   // _IRQ pin.
 
-  function readIcr() {
-    const result = registers[ICR]
-    registers[ICR] = 0
-    chip._IRQ.float()
+  readIcr() {
+    const result = this.#registers.ICR
+    this.#registers.ICR = 0
+    this.#pins._IRQ.float()
     return result
   }
 
-  function writeIcr(value) {
+  writeIcr(value) {
     const mask = value & 0x1f
     if (bitSet(value, SC)) {
-      latches[ICR] |= mask
+      this.#latches.ICR |= mask
     } else {
-      latches[ICR] &= ~mask
+      this.#latches.ICR &= ~mask
     }
   }
 
@@ -66,59 +70,57 @@ export default function control(chip, registers, latches) {
   // These two registers are primarily for controlling the two timers, though they also help
   // control the serial port and the TOD alarm.
 
-  function writeCra(value) {
+  writeCra(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CRA] = value & ~(1 << LOAD)
+    this.#registers.CRA = value & ~(1 << LOAD)
 
     // If bit 1 is set, PB6 becomes an output for Timer A, otherwise bit 6 of the DDR
     // controls it
     if (bitSet(value, PBON)) {
-      chip.PB6.mode = OUTPUT
-      chip.PB6.level = 0
+      this.#pins.PB6.mode = OUTPUT
+      this.#pins.PB6.level = 0
     } else {
-      chip.PB6.mode = bitSet(registers[DDRA], 6) ? OUTPUT : INPUT
+      this.#pins.PB6.mode = bitSet(this.#registers.DDRA, 6) ? OUTPUT : INPUT
     }
 
     // If bit 4 is set, the contents of the timer latch are forced into the timer register
     // immediately (normally the latches are loaded into the register on underflow)
     if (bitSet(value, LOAD)) {
-      registers[TALO] = latches[TALO]
-      registers[TAHI] = latches[TAHI]
+      this.#registers.TALO = this.#latches.TALO
+      this.#registers.TAHI = this.#latches.TAHI
     }
 
     // If bit 6 is set, SP is set to output. Since CNT is then used to signal new data, it
     // must also be set to output.
     if (bitSet(value, SPMODE)) {
-      chip.SP.mode = OUTPUT
-      chip.CNT.mode = OUTPUT
-      chip.SP.level = 0
-      chip.CNT.level = 0
+      this.#pins.SP.mode = OUTPUT
+      this.#pins.CNT.mode = OUTPUT
+      this.#pins.SP.level = 0
+      this.#pins.CNT.level = 0
     } else {
-      chip.SP.mode = INPUT
-      chip.CNT.mode = INPUT
+      this.#pins.SP.mode = INPUT
+      this.#pins.CNT.mode = INPUT
     }
   }
 
-  function writeCrb(value) {
+  writeCrb(value) {
     // The LOAD bit (bit 4) is a strobe and does not get recorded
-    registers[CRB] = value & ~(1 << LOAD)
+    this.#registers.CRB = value & ~(1 << LOAD)
 
     // If bit 1 is set, PB7 becomes an output for Timer B, otherwise bit 6 of the DDR
     // controls it
     if (bitSet(value, PBON)) {
-      chip.PB7.mode = OUTPUT
-      chip.PB7.level = 0
+      this.#pins.PB7.mode = OUTPUT
+      this.#pins.PB7.level = 0
     } else {
-      chip.PB7.mode = bitSet(registers[DDRB], 7) ? OUTPUT : INPUT
+      this.#pins.PB7.mode = bitSet(this.#registers.DDRB, 7) ? OUTPUT : INPUT
     }
 
     // If bit 4 is set, the contents of the timer latch are forced into the timer register
     // immediately (normally the latches are loaded into the register on underflow)
     if (bitSet(value, LOAD)) {
-      registers[TBLO] = latches[TBLO]
-      registers[TBHI] = latches[TBHI]
+      this.#registers.TBLO = this.#latches.TBLO
+      this.#registers.TBHI = this.#latches.TBHI
     }
   }
-
-  return { readIcr, writeIcr, writeCra, writeCrb }
 }
