@@ -56,7 +56,7 @@ export default function Board() {
     U15: new Ic74139(),
     U16: new Ic4066(),
     U17: new Ic82S100(),
-    U18: Ic6581(),
+    U18: new Ic6581(),
     U19: new Ic6567(),
     U21: new Ic4164(),
     U22: new Ic4164(),

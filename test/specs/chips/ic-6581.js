@@ -7,7 +7,7 @@ import { writeFile } from 'fs'
 
 import { resolve } from 'path'
 
-import WaveformGenerator from 'chips/ic-6581/waveform'
+import Oscillator from 'chips/ic-6581/oscillator'
 import { Ic6581 } from 'chips/index'
 import { deviceTraces } from 'test/helper'
 import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from 'chips/ic-6581/constants'
@@ -27,13 +27,13 @@ function write(path, name, value) {
 /* eslint-enable no-console */
 
 describe('6581 SID', () => {
-  describe('waveform generator', () => {
+  describe('oscillator', () => {
     let chip
     let tr
     let registers
-    let gen1
-    let gen2
-    let gen3
+    let osc1
+    let osc2
+    let osc3
 
     function readRegister(index) {
       return registers[index]
@@ -44,7 +44,7 @@ describe('6581 SID', () => {
 
       for (const _ of range(500)) {
         tr.φ2.set()
-        values.push(gen1.value)
+        values.push(osc1.read())
         tr.φ2.clear()
 
         for (const __ of range(20)) {
@@ -56,24 +56,24 @@ describe('6581 SID', () => {
     }
 
     beforeEach(() => {
-      chip = Ic6581()
+      chip = new Ic6581()
       tr = deviceTraces(chip)
       registers = new Uint8Array(15)
 
-      gen1 = WaveformGenerator(chip, 0, readRegister)
-      gen2 = WaveformGenerator(chip, 5, readRegister)
-      gen3 = WaveformGenerator(chip, 10, readRegister)
+      osc1 = new Oscillator(chip, 0, readRegister)
+      osc2 = new Oscillator(chip, 5, readRegister)
+      osc3 = new Oscillator(chip, 10, readRegister)
 
-      gen1.sync(gen3)
-      gen2.sync(gen1)
-      gen3.sync(gen2)
+      osc1.sync(osc3)
+      osc2.sync(osc1)
+      osc3.sync(osc2)
 
       tr._RES.set()
       tr._CS.set()
       tr.R__W.set()
     })
 
-    describe.skip('graph production', () => {
+    describe('graph production', () => {
       it('produces a sawtooth waveform', () => {
         registers[0] = 0xd6
         registers[1] = 0x1c
