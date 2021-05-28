@@ -11,7 +11,18 @@ import Oscillator from 'chips/ic-6581/oscillator'
 import { Ic6581 } from 'chips/index'
 import { deviceTraces } from 'test/helper'
 import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from 'chips/ic-6581/constants'
-import { range } from 'utils'
+import { range, setBit } from 'utils'
+import {
+  pulseA4,
+  pulseA7,
+  sawtoothA4,
+  sawtoothA7,
+  triangleA4,
+  triangleA7,
+} from './ic-6581/oscillator'
+
+const A4 = [0x1c, 0xd6]
+const A7 = [0xe6, 0xb0]
 
 /* eslint-disable no-console */
 function write(path, name, value) {
@@ -35,14 +46,30 @@ describe('6581 SID', () => {
     let osc2
     let osc3
 
+    function setPitch([hi, lo]) {
+      registers[0] = lo
+      registers[1] = hi
+    }
+
+    function setWaveform(...waveforms) {
+      let value = 0
+      waveforms.forEach(bit => (value = setBit(value, bit)))
+      registers[4] = value
+    }
+
+    function setPulseWidth(pw) {
+      registers[2] = pw & 0xff
+      registers[3] = (pw >> 8) & 0x0f
+    }
+
     function readRegister(index) {
       return registers[index]
     }
 
-    function produceValues() {
+    function produceValues(iterations = 500) {
       const values = []
 
-      for (const _ of range(500)) {
+      for (const _ of range(iterations)) {
         tr.φ2.set()
         values.push(osc1.read())
         tr.φ2.clear()
@@ -73,11 +100,38 @@ describe('6581 SID', () => {
       tr.R__W.set()
     })
 
-    describe('graph production', () => {
+    const test = fn => () =>
+      fn({
+        chip,
+        tr,
+        readRegister,
+        setPitch,
+        setWaveform,
+        setPulseWidth,
+        osc1,
+        osc2,
+        osc3,
+      })
+
+    describe('oscillator and waveform generator', () => {
+      describe('sawtooth generator', () => {
+        it('produces a 440Hz A', test(sawtoothA4))
+        it('produces a 3520Hz A', test(sawtoothA7))
+      })
+      describe('triangle generator', () => {
+        it('produces a 440Hz A', test(triangleA4))
+        it('produces a 3520Hz A', test(triangleA7))
+      })
+      describe('pulse generator', () => {
+        it('produces a 440Hz A', test(pulseA4))
+        it('produces a 3520Hz A', test(pulseA7))
+      })
+    })
+
+    describe.only('graph production', () => {
       it('produces a sawtooth waveform', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = 1 << SAWTOOTH
+        setPitch(A4)
+        setWaveform(SAWTOOTH)
 
         const values = produceValues()
 
@@ -86,9 +140,8 @@ describe('6581 SID', () => {
       })
 
       it('produces a high-frequency sawtooth waveform', () => {
-        registers[0] = 0xb0
-        registers[1] = 0xe6
-        registers[4] = 1 << SAWTOOTH
+        setPitch(A7)
+        setWaveform(SAWTOOTH)
 
         const values = produceValues()
 
@@ -97,9 +150,8 @@ describe('6581 SID', () => {
       })
 
       it('produces a triangle waveform', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = 1 << TRIANGLE
+        setPitch(A4)
+        setWaveform(TRIANGLE)
 
         const values = produceValues()
 
@@ -108,9 +160,8 @@ describe('6581 SID', () => {
       })
 
       it('produces a high-frequency triangle waveform', () => {
-        registers[0] = 0xb0
-        registers[1] = 0xe6
-        registers[4] = 1 << TRIANGLE
+        setPitch(A7)
+        setWaveform(TRIANGLE)
 
         const values = produceValues()
 
@@ -119,11 +170,9 @@ describe('6581 SID', () => {
       })
 
       it('produces a pulse waveform', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[2] = 0x00
-        registers[3] = 0x08
-        registers[4] = 1 << PULSE
+        setPitch(A4)
+        setWaveform(PULSE)
+        setPulseWidth(0x800)
 
         const values = produceValues()
 
@@ -132,11 +181,9 @@ describe('6581 SID', () => {
       })
 
       it('produces a pulse waveform', () => {
-        registers[0] = 0xb0
-        registers[1] = 0xe6
-        registers[2] = 0x00
-        registers[3] = 0x08
-        registers[4] = 1 << PULSE
+        setPitch(A7)
+        setWaveform(PULSE)
+        setPulseWidth(0x800)
 
         const values = produceValues()
 
@@ -145,9 +192,8 @@ describe('6581 SID', () => {
       })
 
       it('produces a noise waveform', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = 1 << NOISE
+        setPitch(A4)
+        setWaveform(NOISE)
 
         const values = produceValues()
 
@@ -156,9 +202,8 @@ describe('6581 SID', () => {
       })
 
       it('produces a higher-frequency noise waveform', () => {
-        registers[0] = 0xb0
-        registers[1] = 0xe6
-        registers[4] = 1 << NOISE
+        setPitch(A7)
+        setWaveform(NOISE)
 
         const values = produceValues()
 
@@ -169,11 +214,9 @@ describe('6581 SID', () => {
       const widths = [...range(1000, 3001, 1000)]
       widths.forEach(pw => {
         it(`produces a pulse with width ${pw}`, () => {
-          registers[0] = 0xd6
-          registers[1] = 0x1c
-          registers[2] = pw & 0xff
-          registers[3] = (pw & 0xff00) >> 8
-          registers[4] = 1 << PULSE
+          setPitch(A4)
+          setWaveform(PULSE)
+          setPulseWidth(pw)
 
           const values = produceValues()
 
@@ -183,9 +226,8 @@ describe('6581 SID', () => {
       })
 
       it('produces sawtooth + triangle', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = (1 << SAWTOOTH) | (1 << TRIANGLE)
+        setPitch(A4)
+        setWaveform(SAWTOOTH, TRIANGLE)
 
         const values = produceValues()
 
@@ -194,11 +236,9 @@ describe('6581 SID', () => {
       })
 
       it('produces sawtooth + pulse', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[2] = 0x00
-        registers[3] = 0x08
-        registers[4] = (1 << SAWTOOTH) | (1 << PULSE)
+        setPitch(A4)
+        setWaveform(SAWTOOTH, PULSE)
+        setPulseWidth(0x800)
 
         const values = produceValues()
 
@@ -207,11 +247,9 @@ describe('6581 SID', () => {
       })
 
       it('produces triangle + pulse', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[2] = 0x00
-        registers[3] = 0x08
-        registers[4] = (1 << TRIANGLE) | (1 << PULSE)
+        setPitch(A4)
+        setWaveform(TRIANGLE, PULSE)
+        setPulseWidth(0x800)
 
         const values = produceValues()
 
@@ -219,10 +257,20 @@ describe('6581 SID', () => {
         write(path, 'tripul', values)
       })
 
+      it('produces triangle + pulse + sawtooth', () => {
+        setPitch(A4)
+        setWaveform(TRIANGLE, PULSE, SAWTOOTH)
+        setPulseWidth(0x800)
+
+        const values = produceValues()
+
+        const path = '../../../docs/waveforms/tripulsaw.js'
+        write(path, 'tripulsaw', values)
+      })
+
       it('produces a hard sync with osc 3', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = (1 << SAWTOOTH) | (1 << SYNC)
+        setPitch(A4)
+        setWaveform(SAWTOOTH, SYNC)
         registers[10] = 0x25
         registers[11] = 0x11
 
@@ -233,9 +281,8 @@ describe('6581 SID', () => {
       })
 
       it('produces ring modulation with osc 3', () => {
-        registers[0] = 0xd6
-        registers[1] = 0x1c
-        registers[4] = (1 << TRIANGLE) | (1 << RING)
+        setPitch(A4)
+        setWaveform(TRIANGLE, RING)
         registers[10] = 0x25
         registers[11] = 0x11
 

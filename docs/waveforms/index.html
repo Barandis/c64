@@ -28,6 +28,7 @@
   <div id="sawtri"></div>
   <div id="sawpul"></div>
   <div id="tripul"></div>
+  <div id="tripulsaw"></div>
   <div id="sync"></div>
   <div id="ring"></div>
 
@@ -46,6 +47,7 @@
   <script src="./sawtri.js"></script>
   <script src="./sawpul.js"></script>
   <script src="./tripul.js"></script>
+  <script src="./tripulsaw.js"></script>
   <script src="./sync.js"></script>
   <script src="./ring.js"></script>
   <script>
@@ -148,6 +150,11 @@
       y: tripul,
       mode: "lines",
     }
+    const tps = {
+      x: [...range(500)],
+      y: tripulsaw,
+      mode: "lines",
+    }
     const syn = {
       x: [...range(500)],
       y: sync,
@@ -173,6 +180,7 @@
     Plotly.newPlot("sawtri", [spt], { title: "Sawtooth + Triangle" })
     Plotly.newPlot("sawpul", [spp], { title: "Sawtooth + Pulse", yaxis: { autorange: false, range: [0, 4095] } })
     Plotly.newPlot("tripul", [tpp], { title: "Triangle + Pulse" })
+    Plotly.newPlot("tripulsaw", [tps], { title: "Triangle + Pulse + Sawtooth" })
     Plotly.newPlot("sync", [syn], { title: "Sawtooth synched with C4" })
     Plotly.newPlot("ring", [rin], { title: "Triangle ring modulated with C4" })
   </script>
