@@ -1,0 +1,140 @@
+<!--
+ Copyright (c) 2020 Thomas J. Otterson
+ 
+ This software is released under the MIT License.
+ https://opensource.org/licenses/MIT
+-->
+
+<html lang="en">
+
+<head>
+  <title>Test chip</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div id="wave1"></div>
+  <div id="wave2"></div>
+  <div id="wave3"></div>
+  <div id="env1"></div>
+  <div id="env2"></div>
+  <div id="env3"></div>
+  <div id="amp1"></div>
+  <div id="amp2"></div>
+  <div id="amp3"></div>
+  <div id="filt"></div>
+  <div id="out"></div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="./wave1.js"></script>
+  <script src="./wave2.js"></script>
+  <script src="./wave3.js"></script>
+  <script src="./env1.js"></script>
+  <script src="./env2.js"></script>
+  <script src="./env3.js"></script>
+  <script src="./amp1.js"></script>
+  <script src="./amp2.js"></script>
+  <script src="./amp3.js"></script>
+  <script src="./filt.js"></script>
+  <script src="./out.js"></script>
+  <script>
+    function* range(start, end, step, inclusive) {
+      const s = typeof end === "number" ? start : 0
+      const e = typeof end === "number" ? end : start
+      const p = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
+      const i = typeof step === "number"
+        ? !!inclusive : typeof end === "number"
+          ? !!step : !!end
+
+      const forward = s < e
+      let current = s
+
+      const finished = () => {
+        if (forward) {
+          return i ? current > e : current >= e
+        }
+        return i ? current < e : current <= e
+      }
+
+      // `current` is a local variable not readable from outside this
+      // function, so there's no need to worry about it being updated
+      // during the yield
+      /* eslint-disable require-atomic-updates */
+      while (!finished()) {
+        yield current
+        current = forward ? current + p : current - p
+      }
+      /* eslint-enable require-atomic-updates */
+    }
+
+    const wv1 = {
+      x: [...range(500)],
+      y: wave1,
+      mode: "lines",
+    }
+    const wv2 = {
+      x: [...range(500)],
+      y: wave2,
+      mode: "lines",
+    }
+    const wv3 = {
+      x: [...range(500)],
+      y: wave3,
+      mode: "lines",
+    }
+    const en1 = {
+      x: [...range(500)],
+      y: env1,
+      mode: "lines",
+    }
+    const en2 = {
+      x: [...range(500)],
+      y: env2,
+      mode: "lines",
+    }
+    const en3 = {
+      x: [...range(500)],
+      y: env3,
+      mode: "lines",
+    }
+    const am1 = {
+      x: [...range(500)],
+      y: amp1,
+      mode: "lines",
+    }
+    const am2 = {
+      x: [...range(500)],
+      y: amp2,
+      mode: "lines",
+    }
+    const am3 = {
+      x: [...range(500)],
+      y: amp3,
+      mode: "lines",
+    }
+    const fil = {
+      x: [...range(500)],
+      y: filt,
+      mode: "lines",
+    }
+    const aud = {
+      x: [...range(500)],
+      y: out,
+      mode: "lines",
+    }
+
+    Plotly.newPlot("wave1", [wv1], { title: "Waveform generator 1 (triangle, D7) output" })
+    Plotly.newPlot("wave2", [wv2], { title: "Waveform generator 2 (sawtooth, F#7) output" })
+    Plotly.newPlot("wave3", [wv3], { title: "Waveform generator 3 (pulse, A7) output" })
+    Plotly.newPlot("env1", [en1], { title: "Envelope generator 1 (A: 2ms, D: 6ms, S: 75%, R: 6ms) output" })
+    Plotly.newPlot("env2", [en2], { title: "Envelope generator 2 (A: 2ms, D: 6ms, S: 63%, R: 6ms) output" })
+    Plotly.newPlot("env3", [en3], { title: "Envelope generator 3 (A: 2ms, D: 6ms, S: 50%, R: 6ms) output" })
+    Plotly.newPlot("amp1", [am1], { title: "Amplitude modulator 1 output" })
+    Plotly.newPlot("amp2", [am2], { title: "Amplitude modulator 2 output" })
+    Plotly.newPlot("amp3", [am3], { title: "Amplitude modulator 3 output" })
+    Plotly.newPlot("filt", [fil], { title: "Filter (low pass on D7 only) / mixer output" })
+    Plotly.newPlot("out", [aud], { title: "Audio output" })
+  </script>
+</body>
+
+</html>

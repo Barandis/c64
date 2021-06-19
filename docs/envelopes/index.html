@@ -1,0 +1,76 @@
+<!--
+ Copyright (c) 2020 Thomas J. Otterson
+ 
+ This software is released under the MIT License.
+ https://opensource.org/licenses/MIT
+-->
+
+<html lang="en">
+
+<head>
+  <title>Test envelopes</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div id="minimum"></div>
+  <div id="zerosus"></div>
+  <div id="fullsus"></div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="./minimum.js"></script>
+  <script src="./zerosus.js"></script>
+  <script src="./fullsus.js"></script>
+  <script>
+    function* range(start, end, step, inclusive) {
+      const s = typeof end === "number" ? start : 0
+      const e = typeof end === "number" ? end : start
+      const p = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
+      const i = typeof step === "number"
+        ? !!inclusive : typeof end === "number"
+          ? !!step : !!end
+
+      const forward = s < e
+      let current = s
+
+      const finished = () => {
+        if (forward) {
+          return i ? current > e : current >= e
+        }
+        return i ? current < e : current <= e
+      }
+
+      // `current` is a local variable not readable from outside this
+      // function, so there's no need to worry about it being updated
+      // during the yield
+      /* eslint-disable require-atomic-updates */
+      while (!finished()) {
+        yield current
+        current = forward ? current + p : current - p
+      }
+      /* eslint-enable require-atomic-updates */
+    }
+
+    const min = {
+      x: [...range(500)],
+      y: minimum,
+      mode: "lines",
+    }
+    const zer = {
+      x: [...range(500)],
+      y: zerosus,
+      mode: "lines",
+    }
+    const ful = {
+      x: [...range(500)],
+      y: fullsus,
+      mode: "lines",
+    }
+
+    Plotly.newPlot("minimum", [min], { title: "Minimum parameter values" })
+    Plotly.newPlot("zerosus", [zer], { title: "Zero sustain" })
+    Plotly.newPlot("fullsus", [ful], { title: "Full sustain" })
+  </script>
+</body>
+
+</html>

@@ -102,6 +102,14 @@ export function word(lobyte, hibyte) {
   return lobyte + 256 * hibyte
 }
 
+export function hi4(byte) {
+  return (byte & 0xf0) >> 4
+}
+
+export function lo4(byte) {
+  return byte & 0x0f
+}
+
 export function* range(start, end, step, inclusive) {
   const s = typeof end === 'number' ? start : 0
   const e = typeof end === 'number' ? end : start

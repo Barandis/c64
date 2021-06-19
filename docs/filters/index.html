@@ -1,0 +1,116 @@
+<!--
+ Copyright (c) 2020 Thomas J. Otterson
+ 
+ This software is released under the MIT License.
+ https://opensource.org/licenses/MIT
+-->
+
+<html lang="en">
+
+<head>
+  <title>Test filters</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div id="nofilter"></div>
+  <div id="lowpass"></div>
+  <div id="bandpass"></div>
+  <div id="highpass"></div>
+  <div id="nofilter3"></div>
+  <div id="lowpass3"></div>
+  <div id="bandpass3"></div>
+  <div id="highpass3"></div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="./nofilter.js"></script>
+  <script src="./lowpass.js"></script>
+  <script src="./bandpass.js"></script>
+  <script src="./highpass.js"></script>
+  <script src="./nofilter3.js"></script>
+  <script src="./lowpass3.js"></script>
+  <script src="./bandpass3.js"></script>
+  <script src="./highpass3.js"></script>
+  <script>
+    function* range(start, end, step, inclusive) {
+      const s = typeof end === "number" ? start : 0
+      const e = typeof end === "number" ? end : start
+      const p = typeof step === "number" ? step === 0 ? 1 : Math.abs(step) : 1
+      const i = typeof step === "number"
+        ? !!inclusive : typeof end === "number"
+          ? !!step : !!end
+
+      const forward = s < e
+      let current = s
+
+      const finished = () => {
+        if (forward) {
+          return i ? current > e : current >= e
+        }
+        return i ? current < e : current <= e
+      }
+
+      // `current` is a local variable not readable from outside this
+      // function, so there's no need to worry about it being updated
+      // during the yield
+      /* eslint-disable require-atomic-updates */
+      while (!finished()) {
+        yield current
+        current = forward ? current + p : current - p
+      }
+      /* eslint-enable require-atomic-updates */
+    }
+
+    const nof = {
+      x: [...range(500)],
+      y: nofilter,
+      mode: "lines",
+    }
+    const low = {
+      x: [...range(500)],
+      y: lowpass,
+      mode: "lines",
+    }
+    const ban = {
+      x: [...range(500)],
+      y: bandpass,
+      mode: "lines",
+    }
+    const hig = {
+      x: [...range(500)],
+      y: highpass,
+      mode: "lines",
+    }
+    const no3 = {
+      x: [...range(500)],
+      y: nofilter3,
+      mode: "lines",
+    }
+    const lo3 = {
+      x: [...range(500)],
+      y: lowpass3,
+      mode: "lines",
+    }
+    const ba3 = {
+      x: [...range(500)],
+      y: bandpass3,
+      mode: "lines",
+    }
+    const hi3 = {
+      x: [...range(500)],
+      y: highpass3,
+      mode: "lines",
+    }
+
+    Plotly.newPlot("nofilter", [nof], { title: "D7 with no filter" })
+    Plotly.newPlot("lowpass", [low], { title: "D7 with low-pass filter" })
+    Plotly.newPlot("bandpass", [ban], { title: "D7 with band-pass filter" })
+    Plotly.newPlot("highpass", [hig], { title: "D7 with high-pass filter" })
+    Plotly.newPlot("nofilter3", [no3], { title: "D major chord with no filter" })
+    Plotly.newPlot("lowpass3", [lo3], { title: "D major chord with low-pass filter" })
+    Plotly.newPlot("bandpass3", [ba3], { title: "D major chord with band-pass filter" })
+    Plotly.newPlot("highpass3", [hi3], { title: "D major chord with high-pass filter" })
+  </script>
+</body>
+
+</html>

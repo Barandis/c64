@@ -3,293 +3,305 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { writeFile } from 'fs'
-
-import { resolve } from 'path'
-
-import Oscillator from 'chips/ic-6581/oscillator'
-import { Ic6581 } from 'chips/index'
-import { deviceTraces } from 'test/helper'
-import { SAWTOOTH, TRIANGLE, PULSE, NOISE, SYNC, RING } from 'chips/ic-6581/constants'
+import EnvelopeGenerator from 'chips/ic-6581/envelope'
+import ExternalFilter from 'chips/ic-6581/external'
+import Filter from 'chips/ic-6581/filter'
+import Voice from 'chips/ic-6581/voice'
+import WaveformGenerator from 'chips/ic-6581/waveform'
 import { range, setBit } from 'utils'
+import { graphFullSustain, graphMinimum, graphZeroSustain } from './ic-6581/envelope'
+import graphChord from './ic-6581/external'
 import {
+  graphSingleBandPass,
+  graphSingleHighPass,
+  graphSingleLowPass,
+  graphSingleNoFilter,
+  graphTripleBandPass,
+  graphTripleHighPass,
+  graphTripleLowPass,
+  graphTripleNoFilter,
+} from './ic-6581/filter'
+import { graphVoice } from './ic-6581/voice'
+import {
+  graphNoise,
+  graphNoiseHigh,
+  graphPulse,
+  graphPulseHigh,
+  graphPulseVary,
+  graphRing,
+  graphSawPul,
+  graphSawtooth,
+  graphSawtoothHigh,
+  graphSawTri,
+  graphSync,
+  graphTriangle,
+  graphTriangleHigh,
+  graphTriPul,
+  graphTriPulSaw,
   pulseA4,
   pulseA7,
   sawtoothA4,
   sawtoothA7,
   triangleA4,
   triangleA7,
-} from './ic-6581/oscillator'
+} from './ic-6581/waveform'
 
-const A4 = [0x1c, 0xd6]
-const A7 = [0xe6, 0xb0]
+describe.only('6581 SID', () => {
+  describe('waveform generator', () => {
+    let wave1
+    let wave2
+    let wave3
 
-/* eslint-disable no-console */
-function write(path, name, value) {
-  const text = `const ${name} = [${value.join(',')}]`
-  writeFile(resolve(__dirname, path), text, err => {
-    if (err) {
-      console.log(err)
-      return
-    }
-    console.log(`Wrote ${path}`)
-  })
-}
-/* eslint-enable no-console */
-
-describe('6581 SID', () => {
-  describe('oscillator', () => {
-    let chip
-    let tr
-    let registers
-    let osc1
-    let osc2
-    let osc3
-
-    function setPitch([hi, lo]) {
-      registers[0] = lo
-      registers[1] = hi
+    function setPitch(wave, [hi, lo]) {
+      wave.frelo = lo
+      wave.frehi = hi
     }
 
-    function setWaveform(...waveforms) {
+    function setControl(wave, ...ctrl) {
       let value = 0
-      waveforms.forEach(bit => (value = setBit(value, bit)))
-      registers[4] = value
+      ctrl.forEach(bit => (value = setBit(value, bit)))
+      wave.vcreg = value
     }
 
-    function setPulseWidth(pw) {
-      registers[2] = pw & 0xff
-      registers[3] = (pw >> 8) & 0x0f
+    function setPulseWidth(wave, pw) {
+      wave.pwlo = pw & 0xff
+      wave.pwhi = (pw >> 8) & 0x0f
     }
 
-    function readRegister(index) {
-      return registers[index]
-    }
-
-    function produceValues(iterations = 500) {
-      const values = []
-
-      for (const _ of range(iterations)) {
-        tr.φ2.set()
-        values.push(osc1.read())
-        tr.φ2.clear()
-
-        for (const __ of range(20)) {
-          tr.φ2.set().clear()
-        }
-      }
-
-      return values
+    function clock() {
+      wave1.clock()
+      wave2.clock()
+      wave3.clock()
     }
 
     beforeEach(() => {
-      chip = new Ic6581()
-      tr = deviceTraces(chip)
-      registers = new Uint8Array(15)
+      wave1 = new WaveformGenerator()
+      wave2 = new WaveformGenerator()
+      wave3 = new WaveformGenerator()
 
-      osc1 = new Oscillator(chip, 0, readRegister)
-      osc2 = new Oscillator(chip, 5, readRegister)
-      osc3 = new Oscillator(chip, 10, readRegister)
-
-      osc1.sync(osc3)
-      osc2.sync(osc1)
-      osc3.sync(osc2)
-
-      tr._RES.set()
-      tr._CS.set()
-      tr.R__W.set()
+      wave1.sync = wave3
+      wave2.sync = wave1
+      wave3.sync = wave2
     })
 
-    const test = fn => () =>
-      fn({
-        chip,
-        tr,
-        readRegister,
-        setPitch,
-        setWaveform,
-        setPulseWidth,
-        osc1,
-        osc2,
-        osc3,
-      })
+    const test =
+      (fn, ...args) =>
+      () =>
+        fn(
+          {
+            setPitch,
+            setControl,
+            setPulseWidth,
+            clock,
+            wave1,
+            wave2,
+            wave3,
+          },
+          ...args,
+        )
 
-    describe('oscillator and waveform generator', () => {
-      describe('sawtooth generator', () => {
-        it('produces a 440Hz A', test(sawtoothA4))
-        it('produces a 3520Hz A', test(sawtoothA7))
-      })
-      describe('triangle generator', () => {
-        it('produces a 440Hz A', test(triangleA4))
-        it('produces a 3520Hz A', test(triangleA7))
-      })
-      describe('pulse generator', () => {
-        it('produces a 440Hz A', test(pulseA4))
-        it('produces a 3520Hz A', test(pulseA7))
-      })
+    describe('sawtooth generator', () => {
+      it('produces a 440Hz A', test(sawtoothA4))
+      it('produces a 3520Hz A', test(sawtoothA7))
+    })
+    describe('triangle generator', () => {
+      it('produces a 440Hz A', test(triangleA4))
+      it('produces a 3520Hz A', test(triangleA7))
+    })
+    describe('pulse generator', () => {
+      it('produces a 440Hz A', test(pulseA4))
+      it('produces a 3520Hz A', test(pulseA7))
     })
 
-    describe.only('graph production', () => {
-      it('produces a sawtooth waveform', () => {
-        setPitch(A4)
-        setWaveform(SAWTOOTH)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/sawtooth.js'
-        write(path, 'sawtooth', values)
-      })
-
-      it('produces a high-frequency sawtooth waveform', () => {
-        setPitch(A7)
-        setWaveform(SAWTOOTH)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/sawtoothhigh.js'
-        write(path, 'sawtoothhigh', values)
-      })
-
-      it('produces a triangle waveform', () => {
-        setPitch(A4)
-        setWaveform(TRIANGLE)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/triangle.js'
-        write(path, 'triangle', values)
-      })
-
-      it('produces a high-frequency triangle waveform', () => {
-        setPitch(A7)
-        setWaveform(TRIANGLE)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/trianglehigh.js'
-        write(path, 'trianglehigh', values)
-      })
-
-      it('produces a pulse waveform', () => {
-        setPitch(A4)
-        setWaveform(PULSE)
-        setPulseWidth(0x800)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/pulse.js'
-        write(path, 'pulse', values)
-      })
-
-      it('produces a pulse waveform', () => {
-        setPitch(A7)
-        setWaveform(PULSE)
-        setPulseWidth(0x800)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/pulsehigh.js'
-        write(path, 'pulsehigh', values)
-      })
-
-      it('produces a noise waveform', () => {
-        setPitch(A4)
-        setWaveform(NOISE)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/noise.js'
-        write(path, 'noise', values)
-      })
-
-      it('produces a higher-frequency noise waveform', () => {
-        setPitch(A7)
-        setWaveform(NOISE)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/noisehigh.js'
-        write(path, 'noisehigh', values)
-      })
+    describe('graph production', () => {
+      it('graphs a sawtooth waveform', test(graphSawtooth))
+      it('graphs a high-frequency sawtooth waveform', test(graphSawtoothHigh))
+      it('graphs a triangle waveform', test(graphTriangle))
+      it('graphs a high-frequency triangle waveform', test(graphTriangleHigh))
+      it('graphs a pulse waveform', test(graphPulse))
+      it('graphs a high-frequency pulse waveform', test(graphPulseHigh))
+      it('graphs a noise waveform', test(graphNoise))
+      it('graphs a higher-frequency noise waveform', test(graphNoiseHigh))
 
       const widths = [...range(1000, 3001, 1000)]
       widths.forEach(pw => {
-        it(`produces a pulse with width ${pw}`, () => {
-          setPitch(A4)
-          setWaveform(PULSE)
-          setPulseWidth(pw)
-
-          const values = produceValues()
-
-          const path = `../../../docs/waveforms/pulse${pw}.js`
-          write(path, `pulse${pw}`, values)
-        })
+        it(`graphs a pulse with width ${pw}`, test(graphPulseVary, pw))
       })
+      it('graphs sawtooth + triangle', test(graphSawTri))
+      it('graphs sawtooth + pulse', test(graphSawPul))
+      it('graphs triangle + pulse', test(graphTriPul))
+      it('graphs triangle + pulse + sawtooth', test(graphTriPulSaw))
+      it('graphs a hard sync with wave 3', test(graphSync))
+      it('graphs ring modulation with wave 3', test(graphRing))
+    })
+  })
 
-      it('produces sawtooth + triangle', () => {
-        setPitch(A4)
-        setWaveform(SAWTOOTH, TRIANGLE)
+  describe('envelope generator', () => {
+    let env1
+    let env2
+    let env3
 
-        const values = produceValues()
+    function clock() {
+      env1.clock()
+      env2.clock()
+      env3.clock()
+    }
 
-        const path = '../../../docs/waveforms/sawtri.js'
-        write(path, 'sawtri', values)
+    beforeEach(() => {
+      env1 = new EnvelopeGenerator()
+      env2 = new EnvelopeGenerator()
+      env3 = new EnvelopeGenerator()
+    })
+
+    const test =
+      (fn, ...args) =>
+      () =>
+        fn(
+          {
+            clock,
+            env1,
+            env2,
+            env3,
+          },
+          ...args,
+        )
+
+    describe('graph production', () => {
+      it('graphs a minimum-parameter envelope', test(graphMinimum))
+      it('graphs a zero-sustain envelope', test(graphZeroSustain))
+      it('graphs a full-sustain envelope', test(graphFullSustain))
+    })
+  })
+
+  describe('voice', () => {
+    let voice1
+    let voice2
+    let voice3
+
+    function clock() {
+      voice1.clock()
+      voice2.clock()
+      voice3.clock()
+    }
+
+    beforeEach(() => {
+      voice1 = new Voice()
+      voice2 = new Voice()
+      voice3 = new Voice()
+
+      voice1.sync = voice3
+      voice2.sync = voice1
+      voice3.sync = voice2
+    })
+
+    const test =
+      (fn, ...args) =>
+      () =>
+        fn(
+          {
+            clock,
+            voice1,
+            voice2,
+            voice3,
+          },
+          ...args,
+        )
+
+    describe('graph production', () => {
+      it('graphs waveform, envelope, and voice', test(graphVoice))
+    })
+  })
+
+  describe('filter', () => {
+    let voice1
+    let voice2
+    let voice3
+    let filter
+
+    function clock() {
+      voice1.clock()
+      voice2.clock()
+      voice3.clock()
+      filter.clock(voice1.output, voice2.output, voice3.output, 0)
+    }
+
+    beforeEach(() => {
+      voice1 = new Voice()
+      voice2 = new Voice()
+      voice3 = new Voice()
+
+      voice1.sync = voice3
+      voice2.sync = voice1
+      voice3.sync = voice2
+
+      filter = new Filter()
+    })
+
+    const test =
+      (fn, ...args) =>
+      () =>
+        fn(
+          {
+            clock,
+            voice1,
+            voice2,
+            voice3,
+            filter,
+          },
+          ...args,
+        )
+
+    describe('graph production', () => {
+      describe('filter a single note', () => {
+        it('graphs a no-filter tone', test(graphSingleNoFilter))
+        it('graphs a low-pass tone', test(graphSingleLowPass))
+        it('graphs a band-pass tone', test(graphSingleBandPass))
+        it('graphs a high-pass tone', test(graphSingleHighPass))
+        it('graphs a no-filter chord', test(graphTripleNoFilter))
+        it('graphs a low-pass chord', test(graphTripleLowPass))
+        it('graphs a band-pass chord', test(graphTripleBandPass))
+        it('graphs a high-pass chord', test(graphTripleHighPass))
       })
+    })
+  })
 
-      it('produces sawtooth + pulse', () => {
-        setPitch(A4)
-        setWaveform(SAWTOOTH, PULSE)
-        setPulseWidth(0x800)
+  describe('full chip', () => {
+    let voice1
+    let voice2
+    let voice3
+    let filter
+    let ext
 
-        const values = produceValues()
+    beforeEach(() => {
+      voice1 = new Voice()
+      voice2 = new Voice()
+      voice3 = new Voice()
 
-        const path = '../../../docs/waveforms/sawpul.js'
-        write(path, 'sawpul', values)
-      })
+      voice1.sync = voice3
+      voice2.sync = voice1
+      voice3.sync = voice2
 
-      it('produces triangle + pulse', () => {
-        setPitch(A4)
-        setWaveform(TRIANGLE, PULSE)
-        setPulseWidth(0x800)
+      filter = new Filter()
+      ext = new ExternalFilter()
+    })
 
-        const values = produceValues()
+    const test =
+      (fn, ...args) =>
+      () =>
+        fn(
+          {
+            voice1,
+            voice2,
+            voice3,
+            filter,
+            ext,
+          },
+          ...args,
+        )
 
-        const path = '../../../docs/waveforms/tripul.js'
-        write(path, 'tripul', values)
-      })
-
-      it('produces triangle + pulse + sawtooth', () => {
-        setPitch(A4)
-        setWaveform(TRIANGLE, PULSE, SAWTOOTH)
-        setPulseWidth(0x800)
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/tripulsaw.js'
-        write(path, 'tripulsaw', values)
-      })
-
-      it('produces a hard sync with osc 3', () => {
-        setPitch(A4)
-        setWaveform(SAWTOOTH, SYNC)
-        registers[10] = 0x25
-        registers[11] = 0x11
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/sync.js'
-        write(path, 'sync', values)
-      })
-
-      it('produces ring modulation with osc 3', () => {
-        setPitch(A4)
-        setWaveform(TRIANGLE, RING)
-        registers[10] = 0x25
-        registers[11] = 0x11
-
-        const values = produceValues()
-
-        const path = '../../../docs/waveforms/ring.js'
-        write(path, 'ring', values)
+    describe.only('graph production', () => {
+      describe('produce a chord', () => {
+        it('graphs a D major chord', test(graphChord))
       })
     })
   })
