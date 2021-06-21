@@ -9,6 +9,7 @@ import Filter from 'chips/ic-6581/filter'
 import Voice from 'chips/ic-6581/voice'
 import WaveformGenerator from 'chips/ic-6581/waveform'
 import { range, setBit } from 'utils'
+import graphFull from './ic-6581/chip'
 import { graphFullSustain, graphMinimum, graphZeroSustain } from './ic-6581/envelope'
 import graphChord from './ic-6581/external'
 import {
@@ -299,10 +300,16 @@ describe.only('6581 SID', () => {
           ...args,
         )
 
-    describe.only('graph production', () => {
+    describe('graph production', () => {
       describe('produce a chord', () => {
         it('graphs a D major chord', test(graphChord))
       })
+    })
+  })
+
+  describe.only('packaged 6581', () => {
+    describe('graph production', () => {
+      it('graphs registers and output for a D major chord', graphFull)
     })
   })
 })
