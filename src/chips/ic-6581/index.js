@@ -15,7 +15,7 @@
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Registers from 'components/registers'
-import { setMode, valueToPins, pinsToValue, range, dumpPins, dumpRegisters } from 'utils'
+import { setMode, valueToPins, pinsToValue, range } from 'utils'
 import {
   ATDCY1,
   ATDCY2,
@@ -401,8 +401,8 @@ export default function Ic6581() {
   voice3.sync(voice2)
 
   return Object.assign(chip, {
-    dump() {
-      return `${dumpPins(chip)}\n${dumpRegisters(registers)}`
+    get registers() {
+      return registers
     },
   })
 }

@@ -81,7 +81,7 @@ export default function Trace(...pins) {
       for (const p of pins) {
         if (!p.connected) {
           pns.push(p)
-          p.trace = this
+          p.trace = trace
         }
       }
       return trace

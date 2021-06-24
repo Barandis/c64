@@ -172,10 +172,10 @@ export default function ControlCircuit(
   // software will provide those clock signals. (In fact, since we're also not emulating VIC
   // output RF signals, there's no *purpose* for OCOLOR and the only purpose for ODOT is
   // providing it to the expansion port.)
-  const PHICOLOR = new Trace(U19.PHICOLOR)
-  const PHIDOT = new Trace(U19.PHIIN, CN6.PHIDOT)
-  const PHI0 = new Trace(U19.PHI0, U7.PHI0)
-  const PHI2 = new Trace(U7.PHI2, U1.PHI2, U2.PHI2, U18.PHI2, CN6.PHI2)
+  const PHICOLOR = Trace(U19.PHICOLOR)
+  const PHIDOT = Trace(U19.PHIIN, CN6.PHIDOT)
+  const PHI0 = Trace(U19.PHI0, U7.PHI0)
+  const PHI2 = Trace(U7.PHI2, U1.PHI2, U2.PHI2, U18.PHI2, CN6.PHI2)
 
   return {
     CCAS,

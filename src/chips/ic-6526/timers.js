@@ -181,6 +181,9 @@ export default function TimerModule(pins, registers, latches) {
   // depending on register settings (e.g., manipulates the PB6 output, fires an interrupt,
   // or resets the start bit if the timer is in one-shot mode).
   //
+  // Timer A can also be set to decrement timer B when the former reaches 0, letting the
+  // timers be chained together. This happens in this function as well.
+  //
   // Notably, if the serial port is in output mode and timer A is in continuous mode, it is
   // used as the baud rate generator for the serial port. In that case, underflow will call
   // handleSpOut, which will send a bit out the serial port (and set the CNT pin high) every

@@ -97,9 +97,9 @@ export default function IoCircuit(
   // CN3: Cassette port
 
   SSRQ.addPins(CN3.READ)
-  const WRITE = new Trace(U7.P3, CN3.WRITE)
-  const SENSE = new Trace(U7.P4, CN3.SENSE).pullUp()
-  const MOTOR = new Trace(U7.P5, CN3.MOTOR)
+  const WRITE = Trace(U7.P3, CN3.WRITE)
+  const SENSE = Trace(U7.P4, CN3.SENSE).pullUp()
+  const MOTOR = Trace(U7.P5, CN3.MOTOR)
 
   return {
     COL0,

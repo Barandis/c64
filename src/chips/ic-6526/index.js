@@ -385,16 +385,7 @@
 import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Registers from 'components/registers'
-import {
-  valueToPins,
-  pinsToValue,
-  setMode,
-  setBit,
-  bitSet,
-  range,
-  dumpPins,
-  dumpRegisters,
-} from 'utils'
+import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
 import {
   PRA,
   PRB,
@@ -706,8 +697,12 @@ export default function Ic6526() {
   reset()
 
   return Object.assign(chip, {
-    dump() {
-      return `${dumpPins(chip)}\n${dumpRegisters(registers)}\n${dumpRegisters(latches, 'Latches')}`
+    get registers() {
+      return registers
+    },
+
+    get latches() {
+      return latches
     },
   })
 }
