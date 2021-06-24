@@ -10,7 +10,89 @@ import Port from 'components/port'
 import Trace from 'components/trace'
 import { range } from 'utils'
 
-const { INPUT, OUTPUT } = Pin
+const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
+
+function modeName(mode) {
+  switch (mode) {
+    case UNCONNECTED:
+      return 'UNCONNECTED'
+    case INPUT:
+      return 'INPUT'
+    case OUTPUT:
+      return 'OUTPUT'
+    case BIDIRECTIONAL:
+      return 'BIDIRECTIONAL'
+    default:
+      return 'Huh?'
+  }
+}
+
+chai.assert.isHigh = function isHigh(tested, message) {
+  const name = tested.name ? `pin '${tested.name}'` : 'trace'
+  const test = new chai.Assertion(tested.high, message, chai.assert, true)
+  test.assert(
+    chai.util.flag(test, 'object'),
+    `expected ${name} to be high`,
+    `expected ${name} not to be high`,
+    true,
+    tested.high,
+    false,
+  )
+}
+
+chai.assert.isLow = function isLow(tested, message) {
+  const name = tested.name ? `pin '${tested.name}'` : 'trace'
+  const test = new chai.Assertion(tested.low, message, chai.assert, true)
+  test.assert(
+    chai.util.flag(test, 'object'),
+    `expected ${name} to be low`,
+    `expected ${name} not to be low`,
+    true,
+    tested.low,
+    false,
+  )
+}
+
+chai.assert.isFloating = function isFloating(tested, message) {
+  const name = tested.name ? `pin '${tested.name}'` : 'trace'
+  const test = new chai.Assertion(tested.floating, message, chai.assert, true)
+  test.assert(
+    chai.util.flag(test, 'object'),
+    `expected ${name} to be floating`,
+    `expected ${name} not to be floating`,
+    true,
+    tested.floating,
+    false,
+  )
+}
+
+chai.assert.level = function level(tested, expected, message) {
+  const name = tested.name ? `pin '${tested.name}'` : 'trace'
+  const test = new chai.Assertion(tested.level, message, chai.assert.equal, true)
+  test.assert(
+    expected === chai.util.flag(test, 'object'),
+    `expected level of ${name} to be ${expected}, found ${chai.util.flag(test, 'object')}`,
+    `expected level of ${name} not to be ${expected}`,
+    expected,
+    tested.level,
+    true,
+  )
+}
+
+chai.assert.mode = function mode(tested, expected, message) {
+  const name = tested.name ? `pin '${tested.name}'` : 'trace'
+  const test = new chai.Assertion(tested.mode, message, chai.assert.equal, true)
+  test.assert(
+    expected === chai.util.flag(test, 'object'),
+    `expected level of ${name} to be ${modeName(expected)}, found ${modeName(
+      chai.util.flag(test, 'object'),
+    )}`,
+    `expected level of ${name} not to be ${modeName(expected)}`,
+    expected,
+    tested.level,
+    true,
+  )
+}
 
 export const { assert } = chai
 
@@ -75,7 +157,7 @@ export function deviceTraces(device) {
 
   for (const pin of device) {
     if (pin) {
-      const trace = new Trace(pin)
+      const trace = Trace(pin)
       traces[pin.number] = trace
       traces[pin.name] = trace
     }
@@ -90,11 +172,11 @@ export function portCable(port) {
   for (const pin of port) {
     if (pin) {
       const mode = pin.mode === INPUT ? OUTPUT : pin.mode === OUTPUT ? INPUT : pin.mode
-      pins[pin.number] = new Pin(pin.number, pin.name, mode)
+      pins[pin.number] = Pin(pin.number, pin.name, mode)
     }
   }
 
-  return new Port(...pins)
+  return Port(...pins)
 }
 
 export function portMessage(name) {

@@ -21,7 +21,7 @@ describe('Serial port', () => {
   let c
 
   beforeEach(() => {
-    port = new SerialPort()
+    port = SerialPort()
     cable = portCable(port)
 
     p = deviceTraces(port)
@@ -37,44 +37,44 @@ describe('Serial port', () => {
     cable.connect(port)
 
     p.GND.level = 1
-    assert(c.GND.level === 0, 'Cable GND should not change when port one does')
+    assert.level(c.GND, 0, 'Cable GND should not change when port one does')
 
     p.GND.level = 0
     c.GND.level = 1
-    assert(p.GND.level === 0, 'Port GND should not change when cable one does')
+    assert.level(p.GND, 0, 'Port GND should not change when cable one does')
   })
 
   it('allows data to pass through ports in the correct direction', () => {
     cable.connect(port)
 
-    c._SRQ.level = 1
-    assert(p._SRQ.level === 1, portMessage('_SRQ'))
-    p._SRQ.level = 0
-    assert(c._SRQ.level === 1, 'Cable _SRQ should not change when port _SRQ does')
+    c.SRQ.level = 1
+    assert.level(p.SRQ, 1, portMessage('_SRQ'))
+    p.SRQ.level = 0
+    assert.level(c.SRQ, 1, 'Cable SRQ should not change when port SRQ does')
 
     p.ATN.level = 1
-    assert(c.ATN.level === 1, cableMessage('ATN'))
+    assert.level(c.ATN, 1, cableMessage('ATN'))
     c.ATN.level = 0
-    assert(p.ATN.level === 1, 'Port ATN should not change when port ATN does')
+    assert.level(p.ATN, 1, 'Port ATN should not change when port ATN does')
   })
 
   it('allows data to pass both ways through a bidirectional port', () => {
     cable.connect(port)
 
     c.CLK.level = 1
-    assert(p.CLK.level === 1, portMessage('CLK'))
+    assert.level(p.CLK, 1, portMessage('CLK'))
     p.CLK.level = 0
-    assert(c.CLK.level === 0, cableMessage('CLK'))
+    assert.level(c.CLK, 0, cableMessage('CLK'))
 
     c.DATA.level = 1
-    assert(p.DATA.level === 1, portMessage('DATA'))
+    assert.level(p.DATA, 1, portMessage('DATA'))
     p.DATA.level = 0
-    assert(c.DATA.level === 0, cableMessage('DATA'))
+    assert.level(c.DATA, 0, cableMessage('DATA'))
 
-    c._RESET.level = 1
-    assert(p._RESET.level === 1, portMessage('_RESET'))
-    p._RESET.level = 0
-    assert(c._RESET.level === 0, cableMessage('_RESET'))
+    c.RESET.level = 1
+    assert.level(p.RESET, 1, portMessage('RESET'))
+    p.RESET.level = 0
+    assert.level(c.RESET, 0, cableMessage('RESET'))
   })
 
   it('stops passing data when the port is disconnected', () => {
@@ -82,21 +82,21 @@ describe('Serial port', () => {
     cable.disconnect()
 
     p.GND.level = 1
-    assert(c.GND.low, disconnectMessage('GND'))
+    assert.isLow(c.GND, disconnectMessage('GND'))
 
-    c._SRQ.level = 1
-    assert(p._SRQ.floating, disconnectMessage('_SRQ'))
+    c.SRQ.level = 1
+    assert.isFloating(p.SRQ, disconnectMessage('SRQ'))
 
     p.ATN.level = 1
-    assert(c.ATN.floating, disconnectMessage('ATN'))
+    assert.isFloating(c.ATN, disconnectMessage('ATN'))
 
     c.CLK.level = 1
-    assert(p.CLK.floating, disconnectMessage('CLK'))
+    assert.isFloating(p.CLK, disconnectMessage('CLK'))
 
     c.DATA.level = 1
-    assert(p.DATA.floating, disconnectMessage('DATA'))
+    assert.isFloating(p.DATA, disconnectMessage('DATA'))
 
-    c._RESET.level = 1
-    assert(p._RESET.floating, disconnectMessage('_RESET'))
+    c.RESET.level = 1
+    assert.isFloating(p.RESET, disconnectMessage('RESET'))
   })
 })

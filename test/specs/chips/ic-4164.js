@@ -13,54 +13,54 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
   let addrTraces
 
   beforeEach(() => {
-    chip = new Ic4164()
+    chip = Ic4164()
     traces = deviceTraces(chip)
-    traces._WE.set()
-    traces._RAS.set()
-    traces._CAS.set()
+    traces.WE.set()
+    traces.RAS.set()
+    traces.CAS.set()
 
     addrTraces = [...range(8)].map(pin => traces[`A${pin}`])
   })
 
   describe('read mode', () => {
     it('enables Q', () => {
-      traces._RAS.clear()
-      traces._CAS.clear()
+      traces.RAS.clear()
+      traces.CAS.clear()
       // data at 0x0000
-      assert(traces.Q.low, 'Q should have data during read')
+      assert.isLow(traces.Q, 'Q should have data during read')
 
-      traces._RAS.set()
-      traces._CAS.set()
-      assert(traces.Q.floating, 'Q should be disabled after read')
+      traces.RAS.set()
+      traces.CAS.set()
+      assert.isFloating(traces.Q, 'Q should be disabled after read')
     })
   })
 
   describe('write mode', () => {
     it('disables Q', () => {
-      traces._RAS.clear()
-      traces._WE.clear()
-      traces._CAS.clear()
-      assert(traces.Q.floating, 'Q should be disabled during write')
+      traces.RAS.clear()
+      traces.WE.clear()
+      traces.CAS.clear()
+      assert.isFloating(traces.Q, 'Q should be disabled during write')
 
-      traces._RAS.set()
-      traces._WE.set()
-      traces._CAS.set()
-      assert(traces.Q.floating, 'Q should be disabled after write')
+      traces.RAS.set()
+      traces.WE.set()
+      traces.CAS.set()
+      assert.isFloating(traces.Q, 'Q should be disabled after write')
     })
   })
 
   describe('read-modify-write mode', () => {
     it('enables Q', () => {
       traces.D.clear()
-      traces._RAS.clear()
-      traces._CAS.clear()
-      traces._WE.clear()
-      assert(traces.Q.low, 'Q should be enabled during RMW')
+      traces.RAS.clear()
+      traces.CAS.clear()
+      traces.WE.clear()
+      assert.isLow(traces.Q, 'Q should be enabled during RMW')
 
-      traces._RAS.set()
-      traces._CAS.set()
-      traces._WE.set()
-      assert(traces.Q.floating, 'Q should be disabled after RMW')
+      traces.RAS.set()
+      traces.CAS.set()
+      traces.WE.set()
+      assert.isFloating(traces.Q, 'Q should be disabled after RMW')
     })
   })
 
@@ -77,17 +77,17 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
           const col = addr & 0x00ff
 
           valueToPins(row, ...addrTraces)
-          traces._RAS.clear()
+          traces.RAS.clear()
 
           valueToPins(col, ...addrTraces)
-          traces._CAS.clear()
+          traces.CAS.clear()
 
           traces.D.level = bitValue(row, col)
-          traces._WE.clear()
+          traces.WE.clear()
 
-          traces._RAS.set()
-          traces._CAS.set()
-          traces._WE.set()
+          traces.RAS.set()
+          traces.CAS.set()
+          traces.WE.set()
         }
 
         for (const addr of range(base, base + 0x1000)) {
@@ -95,18 +95,19 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
           const col = addr & 0x00ff
 
           valueToPins(row, ...addrTraces)
-          traces._RAS.clear()
+          traces.RAS.clear()
 
           valueToPins(col, ...addrTraces)
-          traces._CAS.clear()
+          traces.CAS.clear()
 
-          assert(
-            traces.Q.level === bitValue(row, col),
+          assert.level(
+            traces.Q,
+            bitValue(row, col),
             `Incorrect bit value at address 0x${hex(addr, 4)}`,
           )
 
-          traces._RAS.set()
-          traces._CAS.set()
+          traces.RAS.set()
+          traces.CAS.set()
         }
       })
     })
@@ -114,65 +115,65 @@ describe('4164 64k x 1 bit dynamic RAM', () => {
     it('reads and writes within the same page without resetting row addresses', () => {
       const row = 0x2f // arbitrary
       valueToPins(row, ...addrTraces)
-      traces._RAS.clear()
+      traces.RAS.clear()
 
       for (const col of range(256)) {
         valueToPins(col, ...addrTraces)
-        traces._CAS.clear()
+        traces.CAS.clear()
 
         traces.D.level = bitValue(row, col)
-        traces._WE.clear()
+        traces.WE.clear()
 
-        traces._CAS.set()
-        traces._WE.set()
+        traces.CAS.set()
+        traces.WE.set()
       }
 
       for (const col of range(256)) {
         valueToPins(col, ...addrTraces)
-        traces._CAS.clear()
+        traces.CAS.clear()
 
-        assert(traces.Q.level === bitValue(row, col), `Incorrect bit value at column 0x${hex(col)}`)
+        assert.level(traces.Q, bitValue(row, col), `Incorrect bit value at column 0x${hex(col)}`)
 
-        traces._CAS.set()
+        traces.CAS.set()
       }
 
-      traces._RAS.set()
+      traces.RAS.set()
     })
 
     it('updates the output pin on write in RMW mode', () => {
       const row = 0x2f
       valueToPins(row, ...addrTraces)
-      traces._RAS.clear()
+      traces.RAS.clear()
 
       for (const col of range(256)) {
         traces.D.clear()
         valueToPins(col, ...addrTraces)
-        traces._CAS.clear()
-        assert(traces.Q.low, 'Q should reflect the low on D')
+        traces.CAS.clear()
+        assert.isLow(traces.Q, 'Q should reflect the low on D')
         traces.D.set()
-        traces._WE.clear()
-        assert(traces.Q.high, 'Q should reflect the high on D')
-        traces._WE.set()
-        traces._CAS.set()
+        traces.WE.clear()
+        assert.isHigh(traces.Q, 'Q should reflect the high on D')
+        traces.WE.set()
+        traces.CAS.set()
       }
-      traces._RAS.set()
+      traces.RAS.set()
     })
 
     it('does not update the output pin on write in write mode', () => {
       const row = 0x2f
       valueToPins(row, ...addrTraces)
-      traces._RAS.clear()
+      traces.RAS.clear()
 
       for (const col of range(256)) {
         valueToPins(col, ...addrTraces)
         traces.D.set()
-        traces._WE.clear()
-        traces._CAS.clear()
-        assert(traces.Q.floating, 'Q should not reflect D in write mode')
-        traces._WE.set()
-        traces._CAS.set()
+        traces.WE.clear()
+        traces.CAS.clear()
+        assert.isFloating(traces.Q, 'Q should not reflect D in write mode')
+        traces.WE.set()
+        traces.CAS.set()
       }
-      traces._RAS.set()
+      traces.RAS.set()
     })
   })
 })

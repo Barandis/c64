@@ -21,37 +21,35 @@ export const L = 22
 export const M = 23
 export const N = 24
 
-export default class UserPort extends Port {
-  constructor() {
-    super(
-      new Pin(M, 'PA2', BIDIRECTIONAL),
+export default function UserPort() {
+  return Port(
+    Pin(M, 'PA2', BIDIRECTIONAL),
 
-      new Pin(C, 'PB0', BIDIRECTIONAL),
-      new Pin(D, 'PB1', BIDIRECTIONAL),
-      new Pin(E, 'PB2', BIDIRECTIONAL),
-      new Pin(F, 'PB3', BIDIRECTIONAL),
-      new Pin(H, 'PB4', BIDIRECTIONAL),
-      new Pin(J, 'PB5', BIDIRECTIONAL),
-      new Pin(K, 'PB6', BIDIRECTIONAL),
-      new Pin(L, 'PB7', BIDIRECTIONAL),
+    Pin(C, 'PB0', BIDIRECTIONAL),
+    Pin(D, 'PB1', BIDIRECTIONAL),
+    Pin(E, 'PB2', BIDIRECTIONAL),
+    Pin(F, 'PB3', BIDIRECTIONAL),
+    Pin(H, 'PB4', BIDIRECTIONAL),
+    Pin(J, 'PB5', BIDIRECTIONAL),
+    Pin(K, 'PB6', BIDIRECTIONAL),
+    Pin(L, 'PB7', BIDIRECTIONAL),
 
-      new Pin(5, 'SP1', BIDIRECTIONAL),
-      new Pin(7, 'SP2', BIDIRECTIONAL),
+    Pin(5, 'SP1', BIDIRECTIONAL),
+    Pin(7, 'SP2', BIDIRECTIONAL),
 
-      new Pin(4, 'CNT1', BIDIRECTIONAL),
-      new Pin(6, 'CNT2', BIDIRECTIONAL),
-      new Pin(9, 'ATN', OUTPUT),
-      new Pin(8, '_PC2', INPUT),
-      new Pin(B, '_FLAG2', OUTPUT),
-      new Pin(3, '_RESET', BIDIRECTIONAL),
+    Pin(4, 'CNT1', BIDIRECTIONAL),
+    Pin(6, 'CNT2', BIDIRECTIONAL),
+    Pin(9, 'ATN', OUTPUT),
+    Pin(8, 'PC2', INPUT),
+    Pin(B, 'FLAG2', OUTPUT),
+    Pin(3, 'RESET', BIDIRECTIONAL),
 
-      new Pin(2, 'VCC'),
-      new Pin(10, 'VAC1'),
-      new Pin(11, 'VAC2'),
-      new Pin(1, 'GND1'),
-      new Pin(12, 'GND2'),
-      new Pin(A, 'GND3'),
-      new Pin(N, 'GND4'),
-    )
-  }
+    Pin(2, 'VCC'),
+    Pin(10, 'VAC1'),
+    Pin(11, 'VAC2'),
+    Pin(1, 'GND1'),
+    Pin(12, 'GND2'),
+    Pin(A, 'GND3'),
+    Pin(N, 'GND4'),
+  )
 }

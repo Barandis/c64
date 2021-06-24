@@ -47,26 +47,26 @@ import {
   triangleA7,
 } from './ic-6581/waveform'
 
-describe.only('6581 SID', () => {
+describe('6581 SID', () => {
   describe('waveform generator', () => {
     let wave1
     let wave2
     let wave3
 
     function setPitch(wave, [hi, lo]) {
-      wave.frelo = lo
-      wave.frehi = hi
+      wave.frelo(lo)
+      wave.frehi(hi)
     }
 
     function setControl(wave, ...ctrl) {
       let value = 0
       ctrl.forEach(bit => (value = setBit(value, bit)))
-      wave.vcreg = value
+      wave.vcreg(value)
     }
 
     function setPulseWidth(wave, pw) {
-      wave.pwlo = pw & 0xff
-      wave.pwhi = (pw >> 8) & 0x0f
+      wave.pwlo(pw & 0xff)
+      wave.pwhi((pw >> 8) & 0x0f)
     }
 
     function clock() {
@@ -76,13 +76,13 @@ describe.only('6581 SID', () => {
     }
 
     beforeEach(() => {
-      wave1 = new WaveformGenerator()
-      wave2 = new WaveformGenerator()
-      wave3 = new WaveformGenerator()
+      wave1 = WaveformGenerator()
+      wave2 = WaveformGenerator()
+      wave3 = WaveformGenerator()
 
-      wave1.sync = wave3
-      wave2.sync = wave1
-      wave3.sync = wave2
+      wave1.sync(wave3)
+      wave2.sync(wave1)
+      wave3.sync(wave2)
     })
 
     const test =
@@ -114,7 +114,7 @@ describe.only('6581 SID', () => {
       it('produces a 3520Hz A', test(pulseA7))
     })
 
-    describe('graph production', () => {
+    describe.skip('graph production', () => {
       it('graphs a sawtooth waveform', test(graphSawtooth))
       it('graphs a high-frequency sawtooth waveform', test(graphSawtoothHigh))
       it('graphs a triangle waveform', test(graphTriangle))
@@ -149,9 +149,9 @@ describe.only('6581 SID', () => {
     }
 
     beforeEach(() => {
-      env1 = new EnvelopeGenerator()
-      env2 = new EnvelopeGenerator()
-      env3 = new EnvelopeGenerator()
+      env1 = EnvelopeGenerator()
+      env2 = EnvelopeGenerator()
+      env3 = EnvelopeGenerator()
     })
 
     const test =
@@ -167,7 +167,7 @@ describe.only('6581 SID', () => {
           ...args,
         )
 
-    describe('graph production', () => {
+    describe.skip('graph production', () => {
       it('graphs a minimum-parameter envelope', test(graphMinimum))
       it('graphs a zero-sustain envelope', test(graphZeroSustain))
       it('graphs a full-sustain envelope', test(graphFullSustain))
@@ -186,13 +186,13 @@ describe.only('6581 SID', () => {
     }
 
     beforeEach(() => {
-      voice1 = new Voice()
-      voice2 = new Voice()
-      voice3 = new Voice()
+      voice1 = Voice()
+      voice2 = Voice()
+      voice3 = Voice()
 
-      voice1.sync = voice3
-      voice2.sync = voice1
-      voice3.sync = voice2
+      voice1.sync(voice3)
+      voice2.sync(voice1)
+      voice3.sync(voice2)
     })
 
     const test =
@@ -208,7 +208,7 @@ describe.only('6581 SID', () => {
           ...args,
         )
 
-    describe('graph production', () => {
+    describe.skip('graph production', () => {
       it('graphs waveform, envelope, and voice', test(graphVoice))
     })
   })
@@ -227,15 +227,15 @@ describe.only('6581 SID', () => {
     }
 
     beforeEach(() => {
-      voice1 = new Voice()
-      voice2 = new Voice()
-      voice3 = new Voice()
+      voice1 = Voice()
+      voice2 = Voice()
+      voice3 = Voice()
 
-      voice1.sync = voice3
-      voice2.sync = voice1
-      voice3.sync = voice2
+      voice1.sync(voice3)
+      voice2.sync(voice1)
+      voice3.sync(voice2)
 
-      filter = new Filter()
+      filter = Filter()
     })
 
     const test =
@@ -252,7 +252,7 @@ describe.only('6581 SID', () => {
           ...args,
         )
 
-    describe('graph production', () => {
+    describe.skip('graph production', () => {
       describe('filter a single note', () => {
         it('graphs a no-filter tone', test(graphSingleNoFilter))
         it('graphs a low-pass tone', test(graphSingleLowPass))
@@ -274,16 +274,16 @@ describe.only('6581 SID', () => {
     let ext
 
     beforeEach(() => {
-      voice1 = new Voice()
-      voice2 = new Voice()
-      voice3 = new Voice()
+      voice1 = Voice()
+      voice2 = Voice()
+      voice3 = Voice()
 
-      voice1.sync = voice3
-      voice2.sync = voice1
-      voice3.sync = voice2
+      voice1.sync(voice3)
+      voice2.sync(voice1)
+      voice3.sync(voice2)
 
-      filter = new Filter()
-      ext = new ExternalFilter()
+      filter = Filter()
+      ext = ExternalFilter()
     })
 
     const test =
@@ -300,15 +300,15 @@ describe.only('6581 SID', () => {
           ...args,
         )
 
-    describe('graph production', () => {
+    describe.skip('graph production', () => {
       describe('produce a chord', () => {
         it('graphs a D major chord', test(graphChord))
       })
     })
   })
 
-  describe.only('packaged 6581', () => {
-    describe('graph production', () => {
+  describe('packaged 6581', () => {
+    describe.skip('graph production', () => {
       it('graphs registers and output for a D major chord', graphFull)
     })
   })

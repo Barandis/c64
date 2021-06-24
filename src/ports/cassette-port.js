@@ -8,16 +8,14 @@ import Port from 'components/port'
 
 const { INPUT, OUTPUT } = Pin
 
-export default class CassettePort extends Port {
-  constructor() {
-    super(
-      new Pin(4, 'READ', OUTPUT),
-      new Pin(5, 'WRITE', INPUT),
-      new Pin(6, 'SENSE', OUTPUT),
-      new Pin(3, 'MOTOR', INPUT),
+export default function CassettePort() {
+  return Port(
+    Pin(4, 'READ', OUTPUT),
+    Pin(5, 'WRITE', INPUT),
+    Pin(6, 'SENSE', OUTPUT),
+    Pin(3, 'MOTOR', INPUT),
 
-      new Pin(2, 'VCC'),
-      new Pin(1, 'GND'),
-    )
-  }
+    Pin(2, 'VCC'),
+    Pin(1, 'GND'),
+  )
 }

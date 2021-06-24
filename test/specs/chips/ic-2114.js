@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces, hex } from 'test/helper'
-import { Ic2114 } from 'chips/'
+import { Ic2114 } from 'chips'
 import { range, valueToPins, pinsToValue } from 'utils'
 
 const message = (addr, expected, actual) =>
@@ -20,11 +20,11 @@ describe('2114 1024 x 4-bit static RAM', () => {
   let dataTraces
 
   beforeEach(() => {
-    chip = new Ic2114()
+    chip = Ic2114()
     traces = deviceTraces(chip)
 
-    traces._CS.set()
-    traces._WE.set()
+    traces.CS.set()
+    traces.WE.set()
 
     addrTraces = [...range(10)].map(pin => traces[`A${pin}`])
     dataTraces = [...range(4)].map(pin => traces[`D${pin}`])
@@ -33,10 +33,10 @@ describe('2114 1024 x 4-bit static RAM', () => {
       const level = addr & 0xf
       valueToPins(addr, ...addrTraces)
       valueToPins(level, ...dataTraces)
-      traces._WE.clear()
-      traces._CS.clear()
-      traces._CS.set()
-      traces._WE.set()
+      traces.WE.clear()
+      traces.CS.clear()
+      traces.CS.set()
+      traces.WE.set()
     }
   })
 
@@ -44,11 +44,11 @@ describe('2114 1024 x 4-bit static RAM', () => {
     for (const addr of range(0x000, 0x400)) {
       const expected = addr & 0xf
       valueToPins(addr, ...addrTraces)
-      traces._CS.clear()
+      traces.CS.clear()
       const data = pinsToValue(...dataTraces)
 
-      assert(data === expected, message(addr, expected, data))
-      traces._CS.set()
+      assert.equal(data, expected, message(addr, expected, data))
+      traces.CS.set()
     }
   })
 
@@ -57,16 +57,16 @@ describe('2114 1024 x 4-bit static RAM', () => {
       const expected = ~addr & 0xf
       valueToPins(addr, ...addrTraces)
 
-      traces._CS.clear()
+      traces.CS.clear()
       const temp = pinsToValue(...dataTraces)
       valueToPins(~temp, ...dataTraces)
-      traces._WE.clear().set()
-      traces._CS.set()
+      traces.WE.clear().set()
+      traces.CS.set()
 
-      traces._CS.clear()
+      traces.CS.clear()
       const data = pinsToValue(...dataTraces)
-      assert(data === expected, message(addr, expected, data))
-      traces._CS.set()
+      assert.equal(data, expected, message(addr, expected, data))
+      traces.CS.set()
     }
   })
 
@@ -74,22 +74,22 @@ describe('2114 1024 x 4-bit static RAM', () => {
     valueToPins(0, ...dataTraces)
     valueToPins(0, ...addrTraces)
 
-    traces._WE.clear()
-    traces._CS.clear()
+    traces.WE.clear()
+    traces.CS.clear()
 
     for (const i of range(10)) {
       valueToPins(i, ...dataTraces)
       traces[`A${i}`].set()
     }
 
-    traces._WE.set()
+    traces.WE.set()
     valueToPins(0, ...addrTraces)
 
     for (const i of range(10)) {
       traces[`A${i}`].set()
       const data = pinsToValue(...dataTraces)
-      assert(data === i, message(2 ** (i + 1) - 1, i, data))
+      assert.equal(data, i, message(2 ** (i + 1) - 1, i, data))
     }
-    traces._CS.set()
+    traces.CS.set()
   })
 })

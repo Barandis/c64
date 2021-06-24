@@ -22,98 +22,98 @@ describe('4066 quad bilateral switch', () => {
   let traces
 
   beforeEach(() => {
-    chip = new Ic4066()
+    chip = Ic4066()
     traces = deviceTraces(chip)
   })
 
   it('passes signals from A to B', () => {
     traces.X1.clear()
     traces.A1.level = 0.5
-    assert(traces.B1.level === 0.5, passMessage('A1', 'B1'))
+    assert.level(traces.B1, 0.5, passMessage('A1', 'B1'))
 
     traces.X2.clear()
     traces.A2.level = 0.75
-    assert(traces.B2.level === 0.75, passMessage('A2', 'B2'))
+    assert.level(traces.B2, 0.75, passMessage('A2', 'B2'))
 
     traces.X3.clear()
     traces.A3.level = 0.25
-    assert(traces.B3.level === 0.25, passMessage('A3', 'B3'))
+    assert.level(traces.B3, 0.25, passMessage('A3', 'B3'))
 
     traces.X4.clear()
     traces.A4.level = 1
-    assert(traces.B4.level === 1, passMessage('A4', 'B4'))
+    assert.level(traces.B4, 1, passMessage('A4', 'B4'))
   })
 
   it('passes signals from B to A', () => {
     traces.X1.clear()
     traces.B1.level = 0.5
-    assert(traces.A1.level === 0.5, passMessage('B1', 'A1'))
+    assert.level(traces.A1, 0.5, passMessage('B1', 'A1'))
 
     traces.X2.clear()
     traces.B2.level = 0.75
-    assert(traces.A2.level === 0.75, passMessage('B2', 'A2'))
+    assert.level(traces.A2, 0.75, passMessage('B2', 'A2'))
 
     traces.X3.clear()
     traces.B3.level = 0.25
-    assert(traces.A3.level === 0.25, passMessage('B3', 'A3'))
+    assert.level(traces.A3, 0.25, passMessage('B3', 'A3'))
 
     traces.X4.clear()
     traces.B4.level = 1
-    assert(traces.A4.level === 1, passMessage('B4', 'A4'))
+    assert.level(traces.A4, 1, passMessage('B4', 'A4'))
   })
 
   it('disconnects A and B when X is high', () => {
     traces.X1.set()
-    assert(traces.A1.floating, discMessage('A1'))
-    assert(traces.B1.floating, discMessage('B1'))
+    assert.isFloating(traces.A1, discMessage('A1'))
+    assert.isFloating(traces.B1, discMessage('B1'))
 
     traces.X2.set()
-    assert(traces.A2.floating, discMessage('A2'))
-    assert(traces.B2.floating, discMessage('B2'))
+    assert.isFloating(traces.A2, discMessage('A2'))
+    assert.isFloating(traces.B2, discMessage('B2'))
 
     traces.X3.set()
-    assert(traces.A3.floating, discMessage('A3'))
-    assert(traces.B3.floating, discMessage('B3'))
+    assert.isFloating(traces.A3, discMessage('A3'))
+    assert.isFloating(traces.B3, discMessage('B3'))
 
     traces.X4.set()
-    assert(traces.A4.floating, discMessage('A4'))
-    assert(traces.B4.floating, discMessage('B4'))
+    assert.isFloating(traces.A4, discMessage('A4'))
+    assert.isFloating(traces.B4, discMessage('B4'))
   })
 
   it('does not pass signals from A to B when X is high', () => {
     traces.X1.set()
     traces.A1.level = 0.5
-    assert(traces.B1.floating, noPassMessage('A1', 'B1'))
+    assert.isFloating(traces.B1, noPassMessage('A1', 'B1'))
 
     traces.X2.set()
     traces.A2.level = 0.75
-    assert(traces.B2.floating, noPassMessage('A2', 'B2'))
+    assert.isFloating(traces.B2, noPassMessage('A2', 'B2'))
 
     traces.X3.set()
     traces.A3.level = 0.25
-    assert(traces.B3.floating, noPassMessage('A3', 'B3'))
+    assert.isFloating(traces.B3, noPassMessage('A3', 'B3'))
 
     traces.X4.set()
     traces.A4.level = 1
-    assert(traces.B4.floating, noPassMessage('A4', 'B4'))
+    assert.isFloating(traces.B4, noPassMessage('A4', 'B4'))
   })
 
   it('does not pass signals from B to A when X is high', () => {
     traces.X1.set()
     traces.B1.level = 0.5
-    assert(traces.A1.floating, noPassMessage('B1', 'A1'))
+    assert.isFloating(traces.A1, noPassMessage('B1', 'A1'))
 
     traces.X2.set()
     traces.B2.level = 0.75
-    assert(traces.A2.floating, noPassMessage('B2', 'A2'))
+    assert.isFloating(traces.A2, noPassMessage('B2', 'A2'))
 
     traces.X3.set()
     traces.B3.level = 0.25
-    assert(traces.A3.floating, noPassMessage('B3', 'A3'))
+    assert.isFloating(traces.A3, noPassMessage('B3', 'A3'))
 
     traces.X4.set()
     traces.B4.level = 1
-    assert(traces.A4.floating, noPassMessage('B4', 'A4'))
+    assert.isFloating(traces.A4, noPassMessage('B4', 'A4'))
   })
 
   it("sets B to A's level after X goes low if A was last set", () => {
@@ -121,25 +121,25 @@ describe('4066 quad bilateral switch', () => {
     traces.B1.level = 1.5
     traces.A1.level = 0.5
     traces.X1.clear()
-    assert(traces.B1.level === 0.5, lastSetMessage('B1', 'A1'))
+    assert.level(traces.B1, 0.5, lastSetMessage('B1', 'A1'))
 
     traces.X2.set()
     traces.B2.level = 1.5
     traces.A2.level = 0.75
     traces.X2.clear()
-    assert(traces.B2.level === 0.75, lastSetMessage('B2', 'A2'))
+    assert.level(traces.B2, 0.75, lastSetMessage('B2', 'A2'))
 
     traces.X3.set()
     traces.B3.level = 1.5
     traces.A3.level = 0.25
     traces.X3.clear()
-    assert(traces.B3.level === 0.25, lastSetMessage('B3', 'A3'))
+    assert.level(traces.B3, 0.25, lastSetMessage('B3', 'A3'))
 
     traces.X4.set()
     traces.B4.level = 1.5
     traces.A4.level = 1
     traces.X4.clear()
-    assert(traces.B4.level === 1, lastSetMessage('B4', 'A4'))
+    assert.level(traces.B4, 1, lastSetMessage('B4', 'A4'))
   })
 
   it("sets A to B's level after X goes low if B was last set", () => {
@@ -147,42 +147,42 @@ describe('4066 quad bilateral switch', () => {
     traces.A1.level = 1.5
     traces.B1.level = 0.5
     traces.X1.clear()
-    assert(traces.A1.level === 0.5, lastSetMessage('A1', 'B1'))
+    assert.level(traces.A1, 0.5, lastSetMessage('A1', 'B1'))
 
     traces.X2.set()
     traces.A2.level = 1.5
     traces.B2.level = 0.75
     traces.X2.clear()
-    assert(traces.A2.level === 0.75, lastSetMessage('A2', 'B2'))
+    assert.level(traces.A2, 0.75, lastSetMessage('A2', 'B2'))
 
     traces.X3.set()
     traces.A3.level = 1.5
     traces.B3.level = 0.25
     traces.X3.clear()
-    assert(traces.A3.level === 0.25, lastSetMessage('A3', 'B3'))
+    assert.level(traces.A3, 0.25, lastSetMessage('A3', 'B3'))
 
     traces.X4.set()
     traces.A4.level = 1.5
     traces.B4.level = 1
     traces.X4.clear()
-    assert(traces.A4.level === 1, lastSetMessage('A4', 'B4'))
+    assert.level(traces.A4, 1, lastSetMessage('A4', 'B4'))
   })
 
   it('sets both data pins to 0 if neither was set before X goes low', () => {
     traces.X1.set().clear()
-    assert(traces.A1.low, noSetMessage('A1'))
-    assert(traces.B1.low, noSetMessage('B1'))
+    assert.isLow(traces.A1, noSetMessage('A1'))
+    assert.isLow(traces.B1, noSetMessage('B1'))
 
     traces.X2.set().clear()
-    assert(traces.A2.low, noSetMessage('A2'))
-    assert(traces.B2.low, noSetMessage('B2'))
+    assert.isLow(traces.A2, noSetMessage('A2'))
+    assert.isLow(traces.B2, noSetMessage('B2'))
 
     traces.X3.set().clear()
-    assert(traces.A3.low, noSetMessage('A3'))
-    assert(traces.B3.low, noSetMessage('B3'))
+    assert.isLow(traces.A3, noSetMessage('A3'))
+    assert.isLow(traces.B3, noSetMessage('B3'))
 
     traces.X4.set().clear()
-    assert(traces.A4.low, noSetMessage('A4'))
-    assert(traces.B4.low, noSetMessage('B4'))
+    assert.isLow(traces.A4, noSetMessage('A4'))
+    assert.isLow(traces.B4, noSetMessage('B4'))
   })
 })

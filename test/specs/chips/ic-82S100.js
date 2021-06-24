@@ -7,9 +7,8 @@ import { assert, bin, deviceTraces, hex } from 'test/helper'
 import { Ic82S100 } from 'chips'
 import { range, valueToPins, pinsToValue } from 'utils'
 
-// This program was adapted from a C program that provides a 64k table
-// of outputs for PLA based on all of the possible inputs. The original
-// is located at
+// This program was adapted from a C program that provides a 64k table of outputs for PLA
+// based on all of the possible inputs. The original is located at
 // http://www.zimmers.net/anonftp/pub/cbm/firmware/computers/c64/pla.c.
 
 /* eslint-disable complexity, camelcase */
@@ -106,23 +105,23 @@ function getExpected(input) {
 /* eslint-enable complexity, camelcase */
 
 describe('82S100 Programmable Logic Array', () => {
-  const chip = new Ic82S100()
+  const chip = Ic82S100()
   const traces = deviceTraces(chip)
 
   const inTraces = [...range(0, 16)].map(pin => traces[`I${pin}`])
   const outTraces = [...range(0, 8)].map(pin => traces[`F${pin}`])
 
-  it('disables all outputs if _OE is set high', () => {
-    traces._OE.set()
-    assert(traces.F0.floating)
-    assert(traces.F1.floating)
-    assert(traces.F2.floating)
-    assert(traces.F3.floating)
-    assert(traces.F4.floating)
-    assert(traces.F5.floating)
-    assert(traces.F6.floating)
-    assert(traces.F7.floating)
-    traces._OE.clear()
+  it('disables all outputs if OE is set high', () => {
+    traces.OE.set()
+    assert.isFloating(traces.F0)
+    assert.isFloating(traces.F1)
+    assert.isFloating(traces.F2)
+    assert.isFloating(traces.F3)
+    assert.isFloating(traces.F4)
+    assert.isFloating(traces.F5)
+    assert.isFloating(traces.F6)
+    assert.isFloating(traces.F7)
+    traces.OE.clear()
   })
 
   describe('logic combinations', () => {
@@ -133,8 +132,9 @@ describe('82S100 Programmable Logic Array', () => {
 
           valueToPins(addr, ...inTraces)
           const actual = pinsToValue(...outTraces)
-          assert(
-            actual === expected,
+          assert.equal(
+            actual,
+            expected,
             `Incorrect output for input ${bin(addr, 16)}: expected: ${bin(
               expected,
               8,

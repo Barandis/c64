@@ -10,118 +10,118 @@ import Trace from 'components/trace'
 const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function puInitial() {
-  const p = new Pin(1, 'A', OUTPUT).pullUp()
-  assert(p.high)
+  const p = Pin(1, 'A', OUTPUT).pullUp()
+  assert.isHigh(p)
 }
 
 export function puUnconnected() {
-  const p = new Pin(1, 'A', UNCONNECTED).pullUp()
+  const p = Pin(1, 'A', UNCONNECTED).pullUp()
   p.level = 0
-  assert(p.low)
+  assert.isLow(p)
   p.level = null
-  assert(p.high)
+  assert.isHigh(p)
 }
 
 export function puInput() {
-  const p = new Pin(1, 'A', INPUT).pullUp()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT).pullUp()
+  const t = Trace(p)
   t.level = 0
-  assert(p.low)
+  assert.isLow(p)
   t.level = null
-  assert(p.high)
+  assert.isHigh(p)
 }
 
 export function puOutput() {
-  const p = new Pin(1, 'A', OUTPUT).pullUp()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', OUTPUT).pullUp()
+  const t = Trace(p)
   p.level = 0
-  assert(t.low)
+  assert.isLow(t)
   p.level = null
-  assert(t.high)
+  assert.isHigh(t)
 }
 
 export function puBidirectional() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL).pullUp()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL).pullUp()
+  const t = Trace(p)
   p.level = 0
-  assert(t.low)
+  assert.isLow(t)
   p.level = null
-  assert(t.high)
+  assert.isHigh(t)
 }
 
 export function puAfter() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  assert(p.floating)
+  const p = Pin(1, 'A', UNCONNECTED)
+  assert.isFloating(p)
   p.pullUp()
-  assert(p.high)
+  assert.isHigh(p)
 }
 
 export function pdInitial() {
-  const p = new Pin(1, 'A', OUTPUT).pullDown()
-  assert(p.low)
+  const p = Pin(1, 'A', OUTPUT).pullDown()
+  assert.isLow(p)
 }
 
 export function pdUnconnected() {
-  const p = new Pin(1, 'A', UNCONNECTED).pullDown()
+  const p = Pin(1, 'A', UNCONNECTED).pullDown()
   p.level = 1
-  assert(p.high)
+  assert.isHigh(p)
   p.level = null
-  assert(p.low)
+  assert.isLow(p)
 }
 
 export function pdInput() {
-  const p = new Pin(1, 'A', INPUT).pullDown()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT).pullDown()
+  const t = Trace(p)
   t.level = 1
-  assert(p.high)
+  assert.isHigh(p)
   t.level = null
-  assert(p.low)
+  assert.isLow(p)
 }
 
 export function pdOutput() {
-  const p = new Pin(1, 'A', OUTPUT).pullDown()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', OUTPUT).pullDown()
+  const t = Trace(p)
   p.level = 1
-  assert(t.high)
+  assert.isHigh(t)
   p.level = null
-  assert(t.low)
+  assert.isLow(t)
 }
 
 export function pdBidirectional() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL).pullDown()
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL).pullDown()
+  const t = Trace(p)
   p.level = 1
-  assert(t.high)
+  assert.isHigh(t)
   p.level = null
-  assert(t.low)
+  assert.isLow(t)
 }
 
 export function pdAfter() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  assert(p.floating)
+  const p = Pin(1, 'A', UNCONNECTED)
+  assert.isFloating(p)
   p.pullDown()
-  assert(p.low)
+  assert.isLow(p)
 }
 
 export function pnInitial() {
-  const p = new Pin(1, 'A', OUTPUT).noPull()
-  assert(p.floating)
+  const p = Pin(1, 'A', OUTPUT).noPull()
+  assert.isFloating(p)
 }
 
 export function pnPullUp() {
-  const p = new Pin(1, 'A', OUTPUT).pullUp()
+  const p = Pin(1, 'A', OUTPUT).pullUp()
   p.level = null
-  assert(p.high)
+  assert.isHigh(p)
   p.noPull()
   p.level = null
-  assert(p.floating)
+  assert.isFloating(p)
 }
 
 export function pnPullDown() {
-  const p = new Pin(1, 'A', OUTPUT).pullDown()
+  const p = Pin(1, 'A', OUTPUT).pullDown()
   p.level = null
-  assert(p.low)
+  assert.isLow(p)
   p.noPull()
   p.level = null
-  assert(p.floating)
+  assert.isFloating(p)
 }

@@ -10,160 +10,160 @@ import Trace from 'components/trace'
 const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function levelDirectUnconnected() {
-  const t = new Trace()
+  const t = Trace()
   t.set()
-  assert(t.high)
-  assert(!t.low)
-  assert(!t.floating)
+  assert.isTrue(t.high)
+  assert.isFalse(t.low)
+  assert.isFalse(t.floating)
 
   t.clear()
-  assert(!t.high)
-  assert(t.low)
-  assert(!t.floating)
+  assert.isFalse(t.high)
+  assert.isTrue(t.low)
+  assert.isFalse(t.floating)
 
   t.float()
-  assert(!t.high)
-  assert(!t.low)
-  assert(t.floating)
+  assert.isFalse(t.high)
+  assert.isFalse(t.low)
+  assert.isTrue(t.floating)
 
   t.level = -0.35
-  assert(t.level === -0.35)
+  assert.equal(t.level, -0.35)
 }
 
 export function levelDirectInput() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   t.level = 1
-  assert(t.level === 1)
+  assert.level(t, 1)
   t.level = 0
-  assert(t.level === 0)
+  assert.level(t, 0)
   t.level = null
-  assert(t.level === null)
+  assert.level(t, null)
   t.level = -0.35
-  assert(t.level === -0.35)
+  assert.level(t, -0.35)
 }
 
 export function levelDirectHiOutput() {
-  const p1 = new Pin(1, 'HI', OUTPUT)
-  const p2 = new Pin(2, 'LO', OUTPUT)
-  const t = new Trace(p1, p2)
+  const p1 = Pin(1, 'HI', OUTPUT)
+  const p2 = Pin(2, 'LO', OUTPUT)
+  const t = Trace(p1, p2)
 
   p1.level = 1
   p2.level = 0
 
   t.level = 1
-  assert(t.level === 1)
+  assert.level(t, 1)
   t.level = 0
-  assert(t.level === 1)
+  assert.level(t, 1)
   t.level = null
-  assert(t.level === 1)
+  assert.level(t, 1)
   t.level = -0.35
-  assert(t.level === 1)
+  assert.level(t, 1)
 }
 
 export function levelDirectLoOutput() {
-  const p1 = new Pin(1, 'HI', OUTPUT)
-  const p2 = new Pin(2, 'LO', OUTPUT)
-  const t = new Trace(p1, p2)
+  const p1 = Pin(1, 'HI', OUTPUT)
+  const p2 = Pin(2, 'LO', OUTPUT)
+  const t = Trace(p1, p2)
 
   p1.level = 0
   p2.level = 0
 
   t.level = 1
-  assert(t.level === 0)
+  assert.level(t, 0)
   t.level = 0
-  assert(t.level === 0)
+  assert.level(t, 0)
   t.level = null
-  assert(t.level === 0)
+  assert.level(t, 0)
   t.level = -0.35
-  assert(t.level === 0)
+  assert.level(t, 0)
 }
 
 export function levelDirectNullOutput() {
-  const p1 = new Pin(1, 'HI', OUTPUT)
-  const p2 = new Pin(2, 'LO', OUTPUT)
-  const t = new Trace(p1, p2)
+  const p1 = Pin(1, 'HI', OUTPUT)
+  const p2 = Pin(2, 'LO', OUTPUT)
+  const t = Trace(p1, p2)
 
   p1.level = null
   p2.level = null
 
   t.level = 1
-  assert(t.level === 1)
+  assert.level(t, 1)
   t.level = 0
-  assert(t.level === 0)
+  assert.level(t, 0)
   t.level = null
-  assert(t.level === null)
+  assert.level(t, null)
   t.level = -0.35
-  assert(t.level === -0.35)
+  assert.level(t, -0.35)
 }
 
 export function levelPinUnconnected() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', UNCONNECTED)
+  const t = Trace(p)
   t.level = 0
 
   p.level = 1
-  assert(t.level === 0)
-  assert(p.level === 1)
+  assert.level(t, 0)
+  assert.level(p, 1)
 }
 
 export function levelPinInput() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
   t.level = 0
 
   p.level = 1
-  assert(t.level === 0)
-  assert(p.level === 0)
+  assert.level(t, 0)
+  assert.level(p, 0)
 }
 
 export function levelPinOutput() {
-  const p = new Pin(1, 'A', OUTPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', OUTPUT)
+  const t = Trace(p)
   t.level = 0
 
   p.level = 1
-  assert(t.level === 1)
-  assert(p.level === 1)
+  assert.level(t, 1)
+  assert.level(p, 1)
 }
 
 export function levelPinBidirectional() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p)
   t.level = 0
 
   p.level = 1
-  assert(t.level === 1)
-  assert(p.level === 1)
+  assert.level(t, 1)
+  assert.level(p, 1)
 
   t.level = null
-  assert(t.level === null)
-  assert(p.level === null)
+  assert.level(t, null)
+  assert.level(p, null)
 }
 
 export function levelPinHiOutputs() {
-  const p1 = new Pin(1, 'A', OUTPUT)
-  const p2 = new Pin(2, 'B', OUTPUT)
-  const p3 = new Pin(3, 'C', OUTPUT)
-  const t = new Trace(p1, p2, p3)
+  const p1 = Pin(1, 'A', OUTPUT)
+  const p2 = Pin(2, 'B', OUTPUT)
+  const p3 = Pin(3, 'C', OUTPUT)
+  const t = Trace(p1, p2, p3)
 
   p2.level = 1
   p3.level = 1
 
   p1.level = 0
-  assert(t.level === 0)
+  assert.level(t, 0)
 }
 
 export function levelPinLoOutputs() {
-  const p1 = new Pin(1, 'A', OUTPUT)
-  const p2 = new Pin(2, 'B', OUTPUT)
-  const p3 = new Pin(3, 'C', OUTPUT)
-  const t = new Trace(p1, p2, p3)
+  const p1 = Pin(1, 'A', OUTPUT)
+  const p2 = Pin(2, 'B', OUTPUT)
+  const p3 = Pin(3, 'C', OUTPUT)
+  const t = Trace(p1, p2, p3)
 
   p2.level = 0
   p3.level = 0
 
   p1.level = 1
-  assert(t.level === 1)
+  assert.level(t, 1)
 }

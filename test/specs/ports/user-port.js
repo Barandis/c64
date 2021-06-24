@@ -14,103 +14,101 @@ describe('User port', () => {
   let c
 
   beforeEach(() => {
-    port = new UserPort()
+    port = UserPort()
     cable = portCable(port)
 
     p = deviceTraces(port)
     c = deviceTraces(cable)
 
     for (const i of range(1, 24, true)) {
-      if (i !== 2) {
-        p[i].clear()
-        c[i].clear()
-      }
+      p[i].clear()
+      c[i].clear()
     }
 
     cable.connect(port)
   })
 
   it('writes to 1 pin', () => {
-    p._PC2.level = 1
-    assert(c._PC2.level === 1, cableMessage('_PC2'))
+    p.PC2.level = 1
+    assert.level(c.PC2, 1, cableMessage('PC2'))
   })
 
   it('reads from 2 pins', () => {
     c.ATN.level = 1
-    c._FLAG2.level = 2
-    assert(p.ATN.level === 1, portMessage('ATN'))
-    assert(p._FLAG2.level === 2, portMessage('_FLAG2'))
+    c.FLAG2.level = 2
+    assert.level(p.ATN, 1, portMessage('ATN'))
+    assert.level(p.FLAG2, 2, portMessage('FLAG2'))
   })
 
   it('both reads and writes to 14 pins', () => {
-    p._RESET.level = 1
-    assert(c._RESET.level === 1, cableMessage('_RESET'))
-    c._RESET.level = 0
-    assert(p._RESET.level === 0, portMessage('_RESET'))
+    p.RESET.level = 1
+    assert.level(c.RESET, 1, cableMessage('RESET'))
+    c.RESET.level = 0
+    assert.level(p.RESET, 0, portMessage('RESET'))
 
     p.CNT1.level = 1
-    assert(c.CNT1.level === 1, cableMessage('CNT1'))
+    assert.level(c.CNT1, 1, cableMessage('CNT1'))
     c.CNT1.level = 0
-    assert(p.CNT1.level === 0, portMessage('CNT1'))
+    assert.level(p.CNT1, 0, portMessage('CNT1'))
 
     p.SP1.level = 1
-    assert(c.SP1.level === 1, cableMessage('SP1'))
+    assert.level(c.SP1, 1, cableMessage('SP1'))
     c.SP1.level = 0
-    assert(p.SP1.level === 0, portMessage('SP1'))
+    assert.level(p.SP1, 0, portMessage('SP1'))
 
     p.CNT2.level = 1
-    assert(c.CNT2.level === 1, cableMessage('CNT2'))
+    assert.level(c.CNT2, 1, cableMessage('CNT2'))
     c.CNT2.level = 0
-    assert(p.CNT2.level === 0, portMessage('CNT2'))
+    assert.level(p.CNT2, 0, portMessage('CNT2'))
 
     p.SP2.level = 1
-    assert(c.SP2.level === 1, cableMessage('SP2'))
+    assert.level(c.SP2, 1, cableMessage('SP2'))
     c.SP2.level = 0
-    assert(p.SP2.level === 0, portMessage('SP2'))
+    assert.level(p.SP2, 0, portMessage('SP2'))
 
     p.PB0.level = 1
-    assert(c.PB0.level === 1, cableMessage('PB0'))
+    assert.level(c.PB0, 1, cableMessage('PB0'))
     c.PB0.level = 0
-    assert(p.PB0.level === 0, portMessage('PB0'))
+    assert.level(p.PB0, 0, portMessage('PB0'))
 
     p.PB1.level = 1
-    assert(c.PB1.level === 1, cableMessage('PB1'))
+    assert.level(c.PB1, 1, cableMessage('PB1'))
     c.PB1.level = 0
-    assert(p.PB1.level === 0, portMessage('PB1'))
+    assert.level(p.PB1, 0, portMessage('PB1'))
 
     p.PB2.level = 1
-    assert(c.PB2.level === 1, cableMessage('PB2'))
+    assert.level(c.PB2, 1, cableMessage('PB2'))
     c.PB2.level = 0
-    assert(p.PB2.level === 0, portMessage('PB2'))
+    assert.level(p.PB2, 0, portMessage('PB2'))
 
     p.PB3.level = 1
-    assert(c.PB3.level === 1, cableMessage('PB3'))
+    assert.level(c.PB3, 1, cableMessage('PB3'))
     c.PB3.level = 0
-    assert(p.PB3.level === 0, portMessage('PB3'))
+    assert.level(p.PB3, 0, portMessage('PB3'))
 
     p.PB4.level = 1
-    assert(c.PB4.level === 1, cableMessage('PB4'))
+    assert.level(c.PB4, 1, cableMessage('PB4'))
     c.PB4.level = 0
-    assert(p.PB4.level === 0, portMessage('PB4'))
+    assert.level(p.PB4, 0, portMessage('PB4'))
 
     p.PB5.level = 1
-    assert(c.PB5.level === 1, cableMessage('PB5'))
+    assert.level(c.PB5, 1, cableMessage('PB5'))
     c.PB5.level = 0
-    assert(p.PB5.level === 0, portMessage('PB5'))
+    assert.level(p.PB5, 0, portMessage('PB5'))
 
     p.PB6.level = 1
-    assert(c.PB6.level === 1, cableMessage('PB6'))
+    assert.level(c.PB6, 1, cableMessage('PB6'))
     c.PB6.level = 0
-    assert(p.PB6.level === 0, portMessage('PB6'))
+    assert.level(p.PB6, 0, portMessage('PB6'))
 
     p.PB7.level = 1
-    assert(c.PB7.level === 1, cableMessage('PB7'))
+    assert.level(c.PB7, 1, cableMessage('PB7'))
     c.PB7.level = 0
-    assert(p.PB7.level === 0, portMessage('PB7'))
+    assert.level(p.PB7, 0, portMessage('PB7'))
 
     p.PA2.level = 1
-    assert(c.PA2.level === 1, cableMessage('PA2'))
+    assert.level(c.PA2, 1, cableMessage('PA2'))
     c.PA2.level = 0
-    assert(p.PA2.level === 0, portMessage('PA2'))
+    assert.level(p.PA2, 0, portMessage('PA2'))
   })
 })

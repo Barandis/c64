@@ -10,176 +10,176 @@ import Trace from 'components/trace'
 const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function levelNoTrace() {
-  const p = new Pin(1, 'A', INPUT)
-  assert(p.level === null)
-  assert(!p.high)
-  assert(!p.low)
-  assert(p.floating)
+  const p = Pin(1, 'A', INPUT)
+  assert.equal(p.level, null)
+  assert.isFalse(p.high)
+  assert.isFalse(p.low)
+  assert.isTrue(p.floating)
 
   p.level = 1
-  assert(p.level === 1)
-  assert(p.high)
-  assert(!p.low)
-  assert(!p.floating)
+  assert.equal(p.level, 1)
+  assert.isTrue(p.high)
+  assert.isFalse(p.low)
+  assert.isFalse(p.floating)
 
   p.level = 0
-  assert(p.level === 0)
-  assert(!p.high)
-  assert(p.low)
-  assert(!p.floating)
+  assert.equal(p.level, 0)
+  assert.isFalse(p.high)
+  assert.isTrue(p.low)
+  assert.isFalse(p.floating)
 
   p.level = -0.35
-  assert(p.level === -0.35)
-  assert(!p.high)
-  assert(p.low)
-  assert(!p.floating)
+  assert.equal(p.level, -0.35)
+  assert.isFalse(p.high)
+  assert.isTrue(p.low)
+  assert.isFalse(p.floating)
 }
 
 export function levelUpdateNoTrace() {
-  const p = new Pin(1, 'A', INPUT)
+  const p = Pin(1, 'A', INPUT)
   p.level = 1
   p.updateLevel()
-  assert(p.level === 1)
+  assert.level(p, 1)
 }
 
 export function levelUnconnected() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', UNCONNECTED)
+  const t = Trace(p)
 
   t.level = 1
-  assert(p.level === null)
-  assert(t.level === 1)
+  assert.level(p, null)
+  assert.level(t, 1)
 
   p.level = 1
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = 0
-  assert(p.level === 0)
-  assert(t.level === 1)
+  assert.level(p, 0)
+  assert.level(t, 1)
 
   p.level = -0.35
-  assert(p.level === -0.35)
-  assert(t.level === 1)
+  assert.level(p, -0.35)
+  assert.level(t, 1)
 
   p.level = null
-  assert(p.level === null)
-  assert(t.level === 1)
+  assert.level(p, null)
+  assert.level(t, 1)
 }
 
 export function levelInput() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   t.level = 1
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = 1
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = 0
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = -0.35
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = null
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 }
 
 export function levelOutput() {
-  const p = new Pin(1, 'A', OUTPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', OUTPUT)
+  const t = Trace(p)
 
   t.level = 1
-  assert(p.level === null)
-  assert(t.level === 1)
+  assert.level(p, null)
+  assert.level(t, 1)
 
   p.level = 1
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = 0
-  assert(p.level === 0)
-  assert(t.level === 0)
+  assert.level(p, 0)
+  assert.level(t, 0)
 
   p.level = -0.35
-  assert(p.level === -0.35)
-  assert(t.level === -0.35)
+  assert.level(p, -0.35)
+  assert.level(t, -0.35)
 
   p.level = null
-  assert(p.level === null)
-  assert(t.level === null)
+  assert.level(p, null)
+  assert.level(t, null)
 }
 
 export function levelBidirectional() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p)
 
   t.level = 1
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.level = 0
-  assert(p.level === 0)
-  assert(t.level === 0)
+  assert.level(p, 0)
+  assert.level(t, 0)
 
   t.level = -0.35
-  assert(p.level === -0.35)
-  assert(t.level === -0.35)
+  assert.level(p, -0.35)
+  assert.level(t, -0.35)
 
   p.level = null
-  assert(p.level === null)
-  assert(t.level === null)
+  assert.level(p, null)
+  assert.level(t, null)
 }
 
 export function levelOptions() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p)
 
   t.set()
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.clear()
-  assert(p.level === 0)
-  assert(t.level === 0)
+  assert.level(p, 0)
+  assert.level(t, 0)
 
   t.level = -0.35
-  assert(p.level === -0.35)
-  assert(t.level === -0.35)
+  assert.level(p, -0.35)
+  assert.level(t, -0.35)
 
   p.set()
-  assert(p.level === 1)
-  assert(t.level === 1)
+  assert.level(p, 1)
+  assert.level(t, 1)
 
   p.float()
-  assert(p.level === null)
-  assert(t.level === null)
+  assert.level(p, null)
+  assert.level(t, null)
 }
 
 export function levelToggleHigh() {
-  const p = new Pin(1, 'A')
+  const p = Pin(1, 'A')
   p.level = 0
   p.toggle()
-  assert(p.level === 1)
+  assert.level(p, 1)
 }
 
 export function levelToggleLow() {
-  const p = new Pin(1, 'A')
+  const p = Pin(1, 'A')
   p.level = 1
   p.toggle()
-  assert(p.level === 0)
+  assert.level(p, 0)
 }
 
 export function levelToggleNone() {
-  const p = new Pin(1, 'A')
+  const p = Pin(1, 'A')
   p.level = null
   p.toggle()
-  assert(p.level === null)
+  assert.level(p, null)
 }

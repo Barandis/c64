@@ -3,25 +3,23 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-export default class Registers extends Uint8Array {
-  #names
+// A convenience object to attach names to the elements of an 8-bit typed array (all
+// registers in the C64 are 8 bits).
+export default function Registers(...names) {
+  const regs = new Uint8Array(names.length)
 
-  constructor(...names) {
-    super(names.length)
-    this.#names = names
-
-    for (const [index, name] of names.entries()) {
-      if (name) {
-        Object.defineProperty(this, name, {
-          get: () => this[index],
-          set: value => (this[index] = value),
-          enumerable: true,
-        })
-      }
+  for (const [index, name] of names.entries()) {
+    if (name) {
+      Object.defineProperty(regs, name, {
+        get: () => regs[index],
+        set: value => (regs[index] = value),
+      })
     }
   }
 
-  get names() {
-    return Object.freeze(this.#names)
-  }
+  return Object.assign(regs, {
+    get names() {
+      return names
+    },
+  })
 }

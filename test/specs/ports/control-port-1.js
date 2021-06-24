@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { assert, deviceTraces, portCable, portMessage } from 'test/helper'
-import { Control1Port } from 'ports'
+import { ControlPort1 } from 'ports'
 import { range } from 'utils'
 
 describe('Control port 1', () => {
@@ -14,7 +14,7 @@ describe('Control port 1', () => {
   let c
 
   beforeEach(() => {
-    port = new Control1Port()
+    port = ControlPort1()
     cable = portCable(port)
 
     p = deviceTraces(port)
@@ -37,12 +37,12 @@ describe('Control port 1', () => {
     c.BTNA_LP.level = 1
     c.POTAX.level = 0.4
 
-    assert(p.JOYA0.level === 0.9, portMessage('JOYA0'))
-    assert(p.JOYA1.level === 0.8, portMessage('JOYA1'))
-    assert(p.JOYA2.level === 0.7, portMessage('JOYA2'))
-    assert(p.JOYA3.level === 0.6, portMessage('JOYA3'))
-    assert(p.POTAY.level === 0.5, portMessage('POTAY'))
-    assert(p.BTNA_LP.level === 1, portMessage('BTNA_LP'))
-    assert(p.POTAX.level === 0.4, portMessage('POTAX'))
+    assert.level(p.JOYA0, 0.9, portMessage('JOYA0'))
+    assert.level(p.JOYA1, 0.8, portMessage('JOYA1'))
+    assert.level(p.JOYA2, 0.7, portMessage('JOYA2'))
+    assert.level(p.JOYA3, 0.6, portMessage('JOYA3'))
+    assert.level(p.POTAY, 0.5, portMessage('POTAY'))
+    assert.level(p.BTNA_LP, 1, portMessage('BTNA_LP'))
+    assert.level(p.POTAX, 0.4, portMessage('POTAX'))
   })
 })

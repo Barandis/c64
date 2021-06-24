@@ -5,56 +5,47 @@
 
 import Connector from 'components/connector'
 
-/** @typedef {import('./pin').default} Pin */
-
 // Represents an external port on a computer, consisting of a number of pins to connect to
 // the electronics behind it and a matching number of connectors to allow connection to
 // external devices.
 
-export default class Port extends Array {
-  /** @type {Connector[]} */
-  #connectors = []
+export default function Port(...pins) {
+  const connectors = []
+  const array = []
 
-  /**
-   * @param {...Pin} pins
-   */
-  constructor(...pins) {
-    super()
-
-    for (const pin of pins) {
-      if (pin) {
-        this.#connectors[pin.number] = new Connector(pin)
-        this[pin.number] = pin
-        Object.defineProperty(this, pin.name, {
-          get: () => pin,
-          enumerable: true,
-        })
-      }
-    }
-
-    Object.freeze(this.#connectors)
-    Object.freeze(this)
-  }
-
-  get connectors() {
-    return this.#connectors
-  }
-
-  /**
-   * @param {Port} port
-   */
-  connect(port) {
-    for (const [i, connector] of this.#connectors.entries()) {
-      const other = port.connectors[i]
-      if (connector && other) {
-        connector.connect(other)
-      }
+  for (const pin of pins) {
+    if (pin) {
+      connectors[pin.number] = new Connector(pin)
+      array[pin.number] = pin
+      Object.defineProperty(array, pin.name, {
+        value: pin,
+        writable: false,
+      })
     }
   }
 
-  disconnect() {
-    for (const connector of this.#connectors) {
-      if (connector) connector.disconnect()
-    }
-  }
+  return Object.freeze(
+    Object.assign(array, {
+      // Object.assign takes the getter away and replaces it with a value, but that's fine
+      // because the value never changes anyway
+      get connectors() {
+        return Object.freeze(connectors)
+      },
+
+      connect(port) {
+        for (const [i, connector] of connectors.entries()) {
+          const other = port.connectors[i]
+          if (connector && other) {
+            connector.connect(other)
+          }
+        }
+      },
+
+      disconnect() {
+        for (const connector of connectors) {
+          if (connector) connector.disconnect()
+        }
+      },
+    }),
+  )
 }

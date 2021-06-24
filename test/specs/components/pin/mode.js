@@ -10,96 +10,96 @@ import Trace from 'components/trace'
 const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function modeInitial() {
-  const p1 = new Pin(1, 'A', UNCONNECTED)
-  const p2 = new Pin(2, 'B', INPUT)
-  const p3 = new Pin(3, 'C', OUTPUT)
-  const p4 = new Pin(4, 'D', BIDIRECTIONAL)
+  const p1 = Pin(1, 'A', UNCONNECTED)
+  const p2 = Pin(2, 'B', INPUT)
+  const p3 = Pin(3, 'C', OUTPUT)
+  const p4 = Pin(4, 'D', BIDIRECTIONAL)
 
-  assert(p1.mode === Pin.UNCONNECTED)
-  assert(!p1.input)
-  assert(!p1.output)
+  assert.equal(p1.mode, Pin.UNCONNECTED)
+  assert.isTrue(!p1.input)
+  assert.isTrue(!p1.output)
 
-  assert(p2.mode === Pin.INPUT)
-  assert(p2.input)
-  assert(!p2.output)
+  assert.equal(p2.mode, Pin.INPUT)
+  assert.isTrue(p2.input)
+  assert.isTrue(!p2.output)
 
-  assert(p3.mode === Pin.OUTPUT)
-  assert(!p3.input)
-  assert(p3.output)
+  assert.equal(p3.mode, Pin.OUTPUT)
+  assert.isTrue(!p3.input)
+  assert.isTrue(p3.output)
 
-  assert(p4.mode === Pin.BIDIRECTIONAL)
-  assert(p4.input)
-  assert(p4.output)
+  assert.equal(p4.mode, Pin.BIDIRECTIONAL)
+  assert.isTrue(p4.input)
+  assert.isTrue(p4.output)
 }
 
 export function modeChange() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  assert(p.mode === UNCONNECTED)
+  const p = Pin(1, 'A', UNCONNECTED)
+  assert.mode(p, UNCONNECTED)
   p.mode = INPUT
-  assert(p.mode === INPUT)
+  assert.mode(p, INPUT)
   p.mode = OUTPUT
-  assert(p.mode === OUTPUT)
+  assert.mode(p, OUTPUT)
   p.mode = BIDIRECTIONAL
-  assert(p.mode === BIDIRECTIONAL)
+  assert.mode(p, BIDIRECTIONAL)
 }
 
 export function modeOutToIn() {
-  const p = new Pin(1, 'A', OUTPUT)
-  const t = new Trace(p, new Pin(2, 'B', INPUT))
+  const p = Pin(1, 'A', OUTPUT)
+  const t = Trace(p, Pin(2, 'B', INPUT))
   p.level = 1
-  assert(t.high)
+  assert.isHigh(t)
   p.mode = INPUT
-  assert(t.floating)
+  assert.isFloating(t)
 }
 
 export function modeBidiToIn() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p, new Pin(2, 'B', INPUT))
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p, Pin(2, 'B', INPUT))
   p.level = 1
-  assert(t.high)
+  assert.isHigh(t)
   p.mode = INPUT
-  assert(t.floating)
+  assert.isFloating(t)
 }
 
 export function modeUncToIn() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  const t = new Trace(p, new Pin(2, 'B', INPUT))
+  const p = Pin(1, 'A', UNCONNECTED)
+  const t = Trace(p, Pin(2, 'B', INPUT))
   p.level = 1
-  assert(t.floating)
+  assert.isFloating(t)
   p.mode = INPUT
-  assert(t.floating)
+  assert.isFloating(t)
 }
 
 export function modeBidiToOut() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p)
   p.level = 1
-  assert(t.high)
+  assert.isHigh(t)
   p.mode = OUTPUT
-  assert(t.high)
+  assert.isHigh(t)
 }
 
 export function modeUncToOut() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', UNCONNECTED)
+  const t = Trace(p)
   p.level = 1
-  assert(t.floating)
+  assert.isFloating(t)
   p.mode = OUTPUT
-  assert(t.high)
+  assert.isHigh(t)
 }
 
 export function modeInToUnc() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
   t.level = 1
-  assert(p.high)
+  assert.isHigh(p)
   p.mode = UNCONNECTED
-  assert(t.high)
-  assert(p.high)
+  assert.isHigh(t)
+  assert.isHigh(p)
 }
 
 export function incorrectMode() {
-  const p = new Pin(1, 'A', INPUT)
+  const p = Pin(1, 'A', INPUT)
   p.mode = 1729
-  assert(p.mode === INPUT)
+  assert.mode(p, INPUT)
 }

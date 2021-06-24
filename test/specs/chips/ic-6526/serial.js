@@ -43,28 +43,27 @@ export function spOutput({ tr, writeRegister }) {
   writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
-  tr.φ2.set()
-  tr.φ2.clear()
-  assert(tr.SP.low)
-  assert(tr.CNT.low)
+  tr.PHI2.set()
+  tr.PHI2.clear()
+  assert.isLow(tr.SP)
+  assert.isLow(tr.CNT)
 
   // 8 loops for 8 bits, MSB first
   for (const bit of range(7, 0, true)) {
     // First underflow, CNT is high and SP is the bit value
     for (const _ of range(2)) {
-      tr.φ2.set()
-      tr.φ2.clear()
-      assert(tr.CNT.high)
-      assert.equal(tr.SP.level, (data >> bit) & 1)
+      tr.PHI2.set()
+      tr.PHI2.clear()
+      assert.isHigh(tr.CNT)
+      assert.level(tr.SP, (data >> bit) & 1)
     }
-    // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
-    // stays high after a value is done being sent) but SP retains its
-    // value
+    // Second underflow, CNT drops (EXCEPT on the last pass, as CNT stays high after a value
+    // is done being sent) but SP retains its value
     for (const _ of range(2)) {
-      tr.φ2.set()
-      tr.φ2.clear()
-      assert.equal(tr.CNT.level, bit === 0 ? 1 : 0)
-      assert.equal(tr.SP.level, (data >> bit) & 1)
+      tr.PHI2.set()
+      tr.PHI2.clear()
+      assert.level(tr.CNT, bit === 0 ? 1 : 0)
+      assert.level(tr.SP, (data >> bit) & 1)
     }
   }
 }
@@ -79,39 +78,38 @@ export function spReady({ tr, writeRegister }) {
   writeRegister(SDR, 0x00)
 
   // Initial clock, before first timer underflow
-  tr.φ2.set()
-  tr.φ2.clear()
-  assert(tr.SP.low)
-  assert(tr.CNT.low)
+  tr.PHI2.set()
+  tr.PHI2.clear()
+  assert.isLow(tr.SP)
+  assert.isLow(tr.CNT)
 
-  // Dropping a new value into the SDR as the old one is being
-  // transmitted; this one will automatically begin when the first one
-  // finishes
+  // Dropping a new value into the SDR as the old one is being transmitted; this one will
+  // automatically begin when the first one finishes
   writeRegister(SDR, data)
 
   // pulse clock 32 times to shift out 8 bits from first value
   for (const _ of range(32)) {
-    tr.φ2.set()
-    tr.φ2.clear()
+    tr.PHI2.set()
+    tr.PHI2.clear()
   }
 
   // 8 loops for 8 bits, MSB first
   for (const bit of range(7, 0, true)) {
     // First underflow, CNT is high and SP is the bit value
     for (const _ of range(2)) {
-      tr.φ2.set()
-      tr.φ2.clear()
-      assert(tr.CNT.high)
-      assert.equal(tr.SP.level, (data >> bit) & 1)
+      tr.PHI2.set()
+      tr.PHI2.clear()
+      assert.isHigh(tr.CNT)
+      assert.level(tr.SP, (data >> bit) & 1)
     }
     // Second underflow, CNT drops (EXCEPT on the last pass, as CNT
     // stays high after a value is done being sent) but SP retains its
     // value
     for (const _ of range(2)) {
-      tr.φ2.set()
-      tr.φ2.clear()
-      assert.equal(tr.CNT.level, bit === 0 ? 1 : 0)
-      assert.equal(tr.SP.level, (data >> bit) & 1)
+      tr.PHI2.set()
+      tr.PHI2.clear()
+      assert.level(tr.CNT, bit === 0 ? 1 : 0)
+      assert.level(tr.SP, (data >> bit) & 1)
     }
   }
 }
@@ -125,10 +123,10 @@ export function spIrqRxDefault({ tr, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(!tr._IRQ.low)
+  assert.isFalse(tr.IRQ.low)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, SP))
-  assert(bitClear(icr, IR))
+  assert.isTrue(bitSet(icr, SP))
+  assert.isTrue(bitClear(icr, IR))
 }
 
 export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
@@ -141,20 +139,20 @@ export function spIrqTxDefault({ tr, writeRegister, readRegister }) {
   writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
-  tr.φ2.set()
-  tr.φ2.clear()
-  assert(tr.SP.low)
-  assert(tr.CNT.low)
+  tr.PHI2.set()
+  tr.PHI2.clear()
+  assert.isLow(tr.SP)
+  assert.isLow(tr.CNT)
 
   for (const _ of range(32)) {
-    tr.φ2.set()
-    tr.φ2.clear()
+    tr.PHI2.set()
+    tr.PHI2.clear()
   }
 
-  assert(!tr._IRQ.low)
+  assert.isFalse(tr.IRQ.low)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, SP))
-  assert(bitClear(icr, IR))
+  assert.isTrue(bitSet(icr, SP))
+  assert.isTrue(bitClear(icr, IR))
 }
 
 export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
@@ -167,10 +165,10 @@ export function spIrqRxFlagSet({ tr, writeRegister, readRegister }) {
     tr.CNT.clear()
   }
 
-  assert(tr._IRQ.low)
+  assert.isLow(tr.IRQ)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, SP))
-  assert(bitSet(icr, IR))
+  assert.isTrue(bitSet(icr, SP))
+  assert.isTrue(bitSet(icr, IR))
 }
 
 export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
@@ -184,18 +182,18 @@ export function spIrqTxFlagSet({ tr, writeRegister, readRegister }) {
   writeRegister(SDR, data)
 
   // Initial clock, before first timer underflow
-  tr.φ2.set()
-  tr.φ2.clear()
-  assert(tr.SP.low)
-  assert(tr.CNT.low)
+  tr.PHI2.set()
+  tr.PHI2.clear()
+  assert.isLow(tr.SP)
+  assert.isLow(tr.CNT)
 
   for (const _ of range(32)) {
-    tr.φ2.set()
-    tr.φ2.clear()
+    tr.PHI2.set()
+    tr.PHI2.clear()
   }
 
-  assert(tr._IRQ.low)
+  assert.isLow(tr.IRQ)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, SP))
-  assert(bitSet(icr, IR))
+  assert.isTrue(bitSet(icr, SP))
+  assert.isTrue(bitSet(icr, IR))
 }

@@ -45,22 +45,22 @@ function write(path, name, value) {
 function writeRegister(tr, index, value) {
   valueToPins(index, tr.A0, tr.A1, tr.A2, tr.A3, tr.A4)
   valueToPins(value, tr.D0, tr.D1, tr.D2, tr.D3, tr.D4, tr.D5, tr.D6, tr.D7)
-  tr.R__W.clear()
-  tr._CS.clear()
-  tr._CS.set()
-  tr.R__W.set()
+  tr.R_W.clear()
+  tr.CS.clear()
+  tr.CS.set()
+  tr.R_W.set()
 }
 
 function readRegister(tr, index) {
   valueToPins(index, tr.A0, tr.A1, tr.A2, tr.A3, tr.A4)
-  tr._CS.clear()
+  tr.CS.clear()
   const result = pinsToValue(tr.D0, tr.D1, tr.D2, tr.D3, tr.D4, tr.D5, tr.D6, tr.D7)
-  tr._CS.set()
+  tr.CS.set()
   return result
 }
 
 export default function graphFull() {
-  const chip = new Ic6581()
+  const chip = Ic6581()
   const tr = deviceTraces(chip)
 
   // Set voice 1 pitch to D7 (0x99f7)
@@ -103,13 +103,13 @@ export default function graphFull() {
 
   // Graph valuus for attack, decay, and sustain phases
   for (const _ of range(300)) {
-    tr.φ2.set().clear()
+    tr.PHI2.set().clear()
     osc3.push(readRegister(tr, RANDOM))
     env3.push(readRegister(tr, ENV3))
     audio.push(tr.AUDIO.level)
 
     for (const __ of range(50)) {
-      tr.φ2.set().clear()
+      tr.PHI2.set().clear()
     }
   }
 
@@ -120,13 +120,13 @@ export default function graphFull() {
 
   // Graph values for release phase
   for (const _ of range(200)) {
-    tr.φ2.set().clear()
+    tr.PHI2.set().clear()
     osc3.push(readRegister(tr, RANDOM))
     env3.push(readRegister(tr, ENV3))
     audio.push(tr.AUDIO.level)
 
     for (const __ of range(50)) {
-      tr.φ2.set().clear()
+      tr.PHI2.set().clear()
     }
   }
 

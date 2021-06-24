@@ -5,10 +5,7 @@
 
 import Pin from 'components/pin'
 import { setBit, clearBit, bitSet, range } from 'utils'
-import { PRA, PRB, PBON } from './constants'
-
-/** @typedef {import('./index').default} Ic6526 */
-/** @typedef {import('components/registers').default} Registers */
+import { PBON, PRA, PRB } from './constants'
 
 const { INPUT, OUTPUT } = Pin
 
@@ -20,31 +17,7 @@ function setPortPins(value, mask, pins) {
   }
 }
 
-export default class Ports {
-  /** @type {Ic6526} */
-  #pins
-
-  /** @type {Registers} */
-  #registers
-
-  constructor(pins, registers) {
-    this.#pins = pins
-    this.#registers = registers
-
-    for (const i of range(8)) {
-      pins[`PA${i}`].addListener(this.#portListener(PRA, i))
-      pins[`PB${i}`].addListener(this.#portListener(PRB, i))
-    }
-
-    // Raises the _PC pin every cycle, as reading or writing the PB register sets that pin
-    // low for one cycle
-    pins.φ2.addListener(pin => {
-      if (pin.high) {
-        pins._PC.set()
-      }
-    })
-  }
-
+export default function PortModule(pins, registers) {
   // -------------------------------------------------------------------
   // Data ports
   //
@@ -90,83 +63,95 @@ export default class Ports {
   // Returns a closure that can be used as a listener. That closure sets a particular bit in
   // the the given register if the listened-to pin is high and clears that same bit if the
   // pin is low.
-  #portListener(index, bit) {
-    return pin => {
-      if (pin.high) {
-        this.#registers[index] = setBit(this.#registers[index], bit)
-      } else {
-        this.#registers[index] = clearBit(this.#registers[index], bit)
+  const portListener = (index, bit) => pin => {
+    if (pin.high) {
+      registers[index] = setBit(registers[index], bit)
+    } else {
+      registers[index] = clearBit(registers[index], bit)
+    }
+  }
+
+  // Raises the PC pin every cycle, as reading or writing the PB register sets that pin
+  // low for one cycle
+  const clockListener = () => pin => {
+    if (pin.high) pins.PC.set()
+  }
+
+  for (const i of range(8)) {
+    pins[`PA${i}`].addListener(portListener(PRA, i))
+    pins[`PB${i}`].addListener(portListener(PRB, i))
+  }
+  pins.PHI2.addListener(clockListener())
+
+  return {
+    // The write functions have to set the values in the registers but then also set the same
+    // values to the associated pins. The masking ensures that pins that should not be
+    // writable - meaning pins designated as input by the DDR or pins designated as timer
+    // output pins by the control registers - are not modified one way or the other.
+    writePra(value) {
+      const mask = registers.DDRA
+      registers.PRA = (registers.PRA & ~mask) | (value & mask)
+      setPortPins(
+        value,
+        mask,
+        [...range(8)].map(index => pins[`PA${index}`]),
+      )
+    },
+
+    writePrb(value) {
+      const mask =
+        registers.DDRB &
+        (bitSet(registers.CRB, PBON) ? 0x7f : 0xff) &
+        (bitSet(registers.CRA, PBON) ? 0xbf : 0xff)
+      registers.PRB = (registers.PRB & ~mask) | (value & mask)
+      setPortPins(
+        value,
+        mask,
+        [...range(8)].map(index => pins[`PB${index}`]),
+      )
+      pins.PC.clear()
+    },
+
+    // A read function is only necessary for port B, and only because reading the register
+    // lowers the PC pin for a cycle.
+    readPrb() {
+      pins.PC.clear()
+      return registers.PRB
+    },
+
+    // -------------------------------------------------------------------
+    // Data direction registers
+    //
+    // Reading from one of these simply returned its contents, so no special functions are
+    // needed. Writing changes the contents of the register normally, but it also sets the
+    // direction on the pins for the appropriate port. This is reasonably straightforward;
+    // setting a bit means the corresponding pin is an output, and clearing a bit means it is
+    // an input. The only exception is for bits 6 and 7 of port B; if the appropriate control
+    // flags are set, one or both of these may override the setting of DDRB to instead be an
+    // output for one of the timers.
+
+    writeDdra(value) {
+      registers.DDRA = value
+      for (const bit of range(8)) {
+        pins[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
       }
-    }
-  }
+    },
 
-  // The write functions have to set the values in the registers but then also set the same
-  // values to the associated pins. The masking ensures that pins that should not be
-  // writable - meaning pins designated as input by the DDR or pins designated as timer
-  // output pins by the control registers - are not modified one way or the other.
-  writePra(value) {
-    const mask = this.#registers.DDRA
-    this.#registers.PRA = (this.#registers.PRA & ~mask) | (value & mask)
-    setPortPins(
-      value,
-      mask,
-      [...range(8)].map(index => this.#pins[`PA${index}`]),
-    )
-  }
-
-  writePrb(value) {
-    const mask =
-      this.#registers.DDRB &
-      (bitSet(this.#registers.CRB, PBON) ? 0x7f : 0xff) &
-      (bitSet(this.#registers.CRA, PBON) ? 0xbf : 0xff)
-    this.#registers.PRB = (this.#registers.PRB & ~mask) | (value & mask)
-    setPortPins(
-      value,
-      mask,
-      [...range(8)].map(index => this.#pins[`PB${index}`]),
-    )
-    this.#pins._PC.clear()
-  }
-
-  // A read function is only necessary for port B, and only because reading the register
-  // lowers the _PC pin for a cycle.
-  readPrb() {
-    this.#pins._PC.clear()
-    return this.#registers.PRB
-  }
-
-  // -------------------------------------------------------------------
-  // Data direction registers
-  //
-  // Reading from one of these simply returned its contents, so no special functions are
-  // needed. Writing changes the contents of the register normally, but it also sets the
-  // direction on the pins for the appropriate port. This is reasonably straightforward;
-  // setting a bit means the corresponding pin is an output, and clearing a bit means it is
-  // an input. The only exception is for bits 6 and 7 of port B; if the appropriate control
-  // flags are set, one or both of these may override the setting of DDRB to instead be an
-  // output for one of the timers.
-
-  writeDdra(value) {
-    this.#registers.DDRA = value
-    for (const bit of range(8)) {
-      this.#pins[`PA${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
-    }
-  }
-
-  writeDdrb(value) {
-    this.#registers.DDRB = value
-    for (const bit of range(8)) {
-      if (
-        !(
-          (bit === 6 && bitSet(this.#registers.CRA, PBON)) ||
-          (bit === 7 && bitSet(this.#registers.CRB, PBON))
-        )
-      ) {
-        this.#pins[`PB${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
+    writeDdrb(value) {
+      registers.DDRB = value
+      for (const bit of range(8)) {
+        if (
+          !(
+            (bit === 6 && bitSet(registers.CRA, PBON)) ||
+            (bit === 7 && bitSet(registers.CRB, PBON))
+          )
+        ) {
+          pins[`PB${bit}`].mode = bitSet(value, bit) ? OUTPUT : INPUT
+        }
       }
-    }
-  }
+    },
 
-  // The ports don't keep any internal state of their own, so there's no need for a reset
-  // method.
+    // The ports don't keep any internal state of their own, so there's no need for a reset
+    // method.
+  }
 }

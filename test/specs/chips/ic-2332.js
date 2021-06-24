@@ -17,10 +17,10 @@ describe('2332 4k x 8-bit ROM', () => {
     let dataTraces
 
     before(() => {
-      chip = new Ic2332(character)
+      chip = Ic2332(character)
       traces = deviceTraces(chip)
-      traces._CS2.clear()
-      traces._CS1.set()
+      traces.CS2.clear()
+      traces.CS1.set()
 
       addrTraces = [...range(12)].map(pin => traces[`A${pin}`])
       dataTraces = [...range(8)].map(pin => traces[`D${pin}`])
@@ -29,7 +29,7 @@ describe('2332 4k x 8-bit ROM', () => {
     it('reads correctly from 0x0000 to 0x0fff', () => {
       for (const addr of range(0x1000)) {
         valueToPins(addr, ...addrTraces)
-        traces._CS1.clear()
+        traces.CS1.clear()
         const data = pinsToValue(...dataTraces)
 
         if (DEBUG) {
@@ -42,14 +42,15 @@ describe('2332 4k x 8-bit ROM', () => {
           )
         }
 
-        assert(
-          data === expected[addr],
+        assert.equal(
+          data,
+          expected[addr],
           `Incorrect value at address 0x${hex(addr, 3)}: expected: 0x${hex(
             expected[addr],
             2,
           )}, actual 0x${hex(data, 2)}`,
         )
-        traces._CS1.set()
+        traces.CS1.set()
       }
     })
   })

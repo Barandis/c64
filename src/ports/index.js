@@ -4,8 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import CassettePort from './cassette-port'
-import Control1Port from './control-1-port'
-import Control2Port from './control-2-port'
+import ControlPort1 from './control-port-1'
+import ControlPort2 from './control-port-2'
 import ExpansionPort from './expansion-port'
 import KeyboardPort from './keyboard-port'
 import SerialPort from './serial-port'
@@ -13,8 +13,8 @@ import UserPort from './user-port'
 
 export {
   CassettePort,
-  Control1Port,
-  Control2Port,
+  ControlPort1,
+  ControlPort2,
   ExpansionPort,
   KeyboardPort,
   SerialPort,

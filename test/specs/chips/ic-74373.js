@@ -10,16 +10,16 @@ import { range } from 'utils'
 const highLeMessage = (latch, state) =>
   `Q${latch} should be ${state} when LE is high and D${latch} is ${state}`
 const lowLeMessage = (latch, state) => `Q${latch} should remain ${state} when LE is low`
-const oeMessage = latch => `Q${latch} should float when _OE is high`
+const oeMessage = latch => `Q${latch} should float when OE is high`
 
 describe('74373 Octal tri-state transparent latch', () => {
   let chip
   let traces
 
   beforeEach(() => {
-    chip = new Ic74373()
+    chip = Ic74373()
     traces = deviceTraces(chip)
-    traces._OE.clear()
+    traces.OE.clear()
   })
 
   it('allows data to pass through when LE is high', () => {
@@ -27,12 +27,12 @@ describe('74373 Octal tri-state transparent latch', () => {
 
     for (const i of range(8)) {
       traces[`D${i}`].set()
-      assert(traces[`Q${i}`].high, highLeMessage(i, 'high'))
+      assert.isHigh(traces[`Q${i}`], highLeMessage(i, 'high'))
     }
 
     for (const i of range(8)) {
       traces[`D${i}`].clear()
-      assert(traces[`Q${i}`].low, highLeMessage(i, 'low'))
+      assert.isLow(traces[`Q${i}`], highLeMessage(i, 'low'))
     }
   })
 
@@ -49,12 +49,12 @@ describe('74373 Octal tri-state transparent latch', () => {
     for (const i of range(8)) {
       // Odd outputs remain low even when inputs are all set high
       traces[`D${i}`].set()
-      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
+      assert.level(traces[`Q${i}`], (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
     for (const i of range(8)) {
       // Even outputs remain high even when inputs are all set low
       traces[`D${i}`].clear()
-      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
+      assert.level(traces[`Q${i}`], (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
   })
 
@@ -70,55 +70,55 @@ describe('74373 Octal tri-state transparent latch', () => {
     for (const i of range(8)) {
       // All inputs set high here
       traces[`D${i}`].set()
-      assert(traces[`Q${i}`].level === (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
+      assert.level(traces[`Q${i}`], (i + 1) % 2, lowLeMessage(i, i % 2 === 0 ? 'high' : 'low'))
     }
 
     traces.LE.set()
 
     // Outputs now match inputs, which are still all high
     for (const i of range(8)) {
-      assert(traces[`Q${i}`].high, highLeMessage(i, 'high'))
+      assert.isHigh(traces[`Q${i}`], highLeMessage(i, 'high'))
     }
   })
 
-  it('sets all outputs to floating when _OE is high', () => {
+  it('sets all outputs to floating when OE is high', () => {
     traces.LE.set()
 
     for (const i of range(8)) {
       traces[`D${i}`].set()
     }
 
-    traces._OE.set()
+    traces.OE.set()
 
     for (const i of range(8)) {
-      assert(traces[`Q${i}`].floating, oeMessage(i))
+      assert.isFloating(traces[`Q${i}`], oeMessage(i))
     }
 
-    traces._OE.clear()
+    traces.OE.clear()
 
     for (const i of range(8)) {
-      assert(traces[`Q${i}`].high, highLeMessage(i, 'high'))
+      assert.isHigh(traces[`Q${i}`], highLeMessage(i, 'high'))
     }
   })
 
-  it('remembers levels latched when _OE is high', () => {
+  it('remembers levels latched when OE is high', () => {
     traces.LE.set()
 
     for (const i of range(8)) {
       traces[`D${i}`].set()
     }
 
-    traces._OE.set()
+    traces.OE.set()
 
     for (const i of range(0, 8, 2)) {
       traces[`D${i}`].clear()
     }
     traces.LE.clear()
 
-    traces._OE.clear()
+    traces.OE.clear()
 
     for (const i of range(8)) {
-      assert(traces[`Q${i}`].level === i % 2, lowLeMessage(i, i % 2 === 0 ? 'low' : 'high'))
+      assert.level(traces[`Q${i}`], i % 2, lowLeMessage(i, i % 2 === 0 ? 'low' : 'high'))
     }
   })
 })

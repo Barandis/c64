@@ -14,7 +14,7 @@ describe('Cassette port', () => {
   let c
 
   beforeEach(() => {
-    port = new CassettePort()
+    port = CassettePort()
     cable = portCable(port)
 
     p = deviceTraces(port)
@@ -30,17 +30,17 @@ describe('Cassette port', () => {
 
   it('writes data to MOTOR and WRITE', () => {
     p.MOTOR.set()
-    assert(c.MOTOR.high, cableMessage('MOTOR'))
+    assert.isHigh(c.MOTOR, cableMessage('MOTOR'))
 
     p.WRITE.set()
-    assert(c.WRITE.high, cableMessage('WRITE'))
+    assert.isHigh(c.WRITE, cableMessage('WRITE'))
   })
 
   it('reads data from READ and SENSE', () => {
     c.READ.set()
-    assert(p.READ.high, portMessage('READ'))
+    assert.isHigh(p.READ, portMessage('READ'))
 
     c.SENSE.set()
-    assert(p.SENSE.high, portMessage('SENSE'))
+    assert.isHigh(p.SENSE, portMessage('SENSE'))
   })
 })

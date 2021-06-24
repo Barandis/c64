@@ -78,261 +78,249 @@ const SUSTAIN_LEVELS = [
 // implement a shift register for oscillator noise production, the shift registers here
 // require neither tapping nor feedback, so they are much more simply implemented as a
 // counter and a set of tables to provide targets.
-export default class EnvelopeGenerator {
-  // Tracks the phase of the envelope generator. This is either ATTACK, DECAY_SUSTAIN, or
-  // RELEASE.
-  /** @type {number} */
-  #phase
+export default function EnvelopeGenerator() {
+  // The envelope counter. The purpose of the envelope generator is to calculate this
+  // number, which is then readable via the `output` method.
+  let envelope = 0
 
   // The 4-bit attack value. Each value corresponds to an attack of a certain length, which
   // is given in the `RATE_TARGETS` array above.
-  /** @type {number} */
-  #attack
+  let attack = 0
 
   // The 4-bit decay value. Each value corresponds to a decay of a certain length, assuming
   // a sustain level of 0x00 (the decay will be cut short if a higher sustain level is
   // reached first). This is given in the `RATE_TARGETS` table, except that exponentiation
   // causes the true decay value to be three times that listed.
-  /** @type {number} */
-  #decay
+  let decay = 0
 
   // The 4-bit sustain value. This value represents the volume at which decay will cease and
   // the note will be held until the GATE bit clears and release begins.
-  /** @type {number} */
-  #sustain
+  let sustain = 0
 
   // The 4-bit release value. Each value corresponds to a release of a certain length,
   // assuming a sustain level of 0xff (the release will be shorter with any lower sustain
   // level).T his is given in the `RATE_TARGETS` table, except that exponentiation causes
   // the true release value to be three times that listed.
-  /** @type {number} */
-  #release
+  let release = 0
 
   // The value of the GATE bit of this envelope generator's VCREG register. When this
   // changes from `false` to `true`, a new attack begins; when it changes from `true` to
   // `false`, release begins.
-  /** @type {boolean} */
-  #gate
+  let gate = false
 
   // The internal counter that determines when the envelope counter changes. Each time this
   // value reaches its target, the envelope counter is increased (on attach) or decreased by
   // 1.
-  /** @type {number} */
-  #rateCounter
-
-  // The target value for the rate counter to reach before the envelope counter can be
-  // incremented. This will always be one of the values in the `RATE_TARGETS` table above.
-  /** @type {number} */
-  #rateTarget
+  let rateCounter = 0
 
   // A separate counter that can cause the envelope counter to take multiple rate counter
   // periods before it decrements (between 1 period and 30). This is used to gradually slow
   // the decay/release into a simulated exponential curve.
-  /** @type {number} */
-  #falloffCounter
+  let falloffCounter = 0
+
+  // The target value for the rate counter to reach before the envelope counter can be
+  // incremented. This will always be one of the values in the `RATE_TARGETS` table above.
+  let rateTarget = RATE_TARGETS[0]
 
   // The number of rate counter periods that must elapse before the envelope counter
   // decrements. This is increased from 1 to 2, 4, 8, 16, and finally 30 at certain envelope
   // counter values.
-  /** @type {number} */
-  #falloffTarget
+  let falloffTarget = 1
 
-  // The envelope counter. The purpose of the envelope generator is to calculate this
-  // number, which is then readable via the `output` method.
-  /** @type {number} */
-  #envelope
+  // Tracks the phase of the envelope generator. This is either ATTACK, DECAY_SUSTAIN, or
+  // RELEASE.
+  let phase = RELEASE
 
   // Determines whether the envelope counter is capable of changing any further. Once the
   // counter reaches 0, it cannot move until the next attack. This is used to skip logic
-  // that wouldn't run anyway becuase the envelope counter value is 0.
-  /** @type {boolean} */
-  #zeroFreeze
+  // that wouldn't run anyway becuase the envelope counter value is 0 and to implement the
+  // "bug" that causes the envelope counter to wrap to 0xff when setting GATE high and then
+  // immediately setting it low.
+  let zeroFreeze = true
 
-  constructor() {
-    this.reset()
-  }
+  return {
+    // Processes changes to the appropriate VCREG register. The envelope generator is only
+    // concerned with the GATE bit of this register; when it is set, the
+    // attack/decay/sustain sequence begins, and when it is cleared, the release begins.
+    vcreg(value) {
+      const nextGate = bitSet(value, GATE)
 
-  // Processes changes to the appropriate VCREG register. The envelope generator is only
-  // concerned with the GATE bit of this register; when it is set, the attack/decay/sustain
-  // sequence begins, and when it is cleared, the release begins.
-  set vcreg(value) {
-    const nextGate = bitSet(value, GATE)
+      if (!gate && nextGate) {
+        // If the GATE bit has just been set, then start the attack. Starting the attack
+        // automatically unfreezes the zero falloff counter.
+        phase = ATTACK
+        rateTarget = RATE_TARGETS[attack]
+        zeroFreeze = false
+      } else if (gate && !nextGate) {
+        // If the GATE bit has just been cleared, then start the release.
+        phase = RELEASE
+        rateTarget = RATE_TARGETS[release]
+      }
 
-    if (!this.#gate && nextGate) {
-      // If the GATE bit has just been set, then start the attack. Starting the attack
-      // automatically unfreezes the zero falloff counter.
-      this.#phase = ATTACK
-      this.#rateTarget = RATE_TARGETS[this.#attack]
-      this.#zeroFreeze = false
-    } else if (this.#gate && !nextGate) {
-      // If the GATE bit has just been cleared, then start the release.
-      this.#phase = RELEASE
-      this.#rateTarget = RATE_TARGETS[this.#release]
-    }
+      gate = nextGate
+    },
 
-    this.#gate = nextGate
-  }
+    // Processes changes to the appropriate ATDCY register. This sets 4-bit values for
+    // attack and decay. If the voice is currently in the phase corresponding to an
+    // attack/decay value that has changed, a new rate target will be chosen. This can cause
+    // the ADSR delay bug detailed in the `clock` method below.
+    atdcy(value) {
+      attack = hi4(value)
+      decay = lo4(value)
+      if (phase === ATTACK) {
+        rateTarget = RATE_TARGETS[attack]
+      } else if (phase === DECAY_SUSTAIN) {
+        rateTarget = RATE_TARGETS[decay]
+      }
+    },
 
-  // Processes changes to the appropriate ATDCY register. This sets 4-bit values for attack
-  // and decay. If the voice is currently in the phase corresponding to an attack/decay
-  // value that has changed, a new rate target will be chosen. This can cause the ADSR delay
-  // bug detailed in the `clock` method below.
-  set atdcy(value) {
-    this.#attack = hi4(value)
-    this.#decay = lo4(value)
-    if (this.#phase === ATTACK) {
-      this.#rateTarget = RATE_TARGETS[this.#attack]
-    } else if (this.#phase === DECAY_SUSTAIN) {
-      this.#rateTarget = RATE_TARGETS[this.#decay]
-    }
-  }
+    // Processes changes to the appropriate SUREL register. This sets 4-bit values for
+    // sustain and release. If the sustain changes to a higher value during sustain itself,
+    // then the envelope counter will simply start decrementing again as though back in
+    // decay. If the release changes to a value that the rate counter has already passed,
+    // then the ADSR delay bug will manifest and the next attack may be delayed.
+    surel(value) {
+      sustain = hi4(value)
+      release = lo4(value)
+      if (phase === RELEASE) {
+        rateTarget = RATE_TARGETS[release]
+      }
+    },
 
-  // Processes changes to the appropriate SUREL register. This sets 4-bit values for sustain
-  // and release. If the sustain changes to a higher value during sustain itself, then the
-  // envelope counter will simply start decrementing again as though back in decay. If the
-  // release changes to a value that the rate counter has already passed, then the ADSR
-  // delay bug will manifest and the next attack may be delayed.
-  set surel(value) {
-    this.#sustain = hi4(value)
-    this.#release = lo4(value)
-    if (this.#phase === RELEASE) {
-      this.#rateTarget = RATE_TARGETS[this.#release]
-    }
-  }
+    reset(value = true) {
+      if (value) {
+        envelope = 0
 
-  reset(value = true) {
-    if (value) {
-      this.#envelope = 0
+        attack = 0
+        decay = 0
+        sustain = 0
+        release = 0
 
-      this.#attack = 0
-      this.#decay = 0
-      this.#sustain = 0
-      this.#release = 0
+        gate = false
 
-      this.#gate = false
+        rateCounter = 0
+        falloffCounter = 0
+        // eslint-disable-next-line prefer-destructuring
+        rateTarget = RATE_TARGETS[0]
+        falloffTarget = 1
 
-      this.#rateCounter = 0
-      this.#falloffCounter = 0
-      // eslint-disable-next-line prefer-destructuring
-      this.#rateTarget = RATE_TARGETS[0]
-      this.#falloffTarget = 1
+        phase = RELEASE
+        zeroFreeze = true
+      }
+    },
 
-      this.#phase = RELEASE
-      this.#zeroFreeze = true
-    }
-  }
+    // Called when the SID's clock pin goes high. This manipulates three separate counters
+    // that control the envelope generator output.
+    //
+    // 1. The rate counter increments by 1 with every clock. If it has not reached its target
+    //    (which is determined by the settings in the attack, decay, and release registers),
+    //    then this method does nothing until called again on the next clock.
+    // 2. Once the rate counter reaches its target, the envelope counter is either incremented
+    //    (on attack) or decremented (on decay or release). The envelope counter changes
+    //    counting directions after reaching 0xff on attack (it changes to decay/sustain phase
+    //    at that point) and stops descending when it reaches the sustain level and, after the
+    //    release phase is entered, at 0x00.
+    // 3. The falloff counter changes at certain breakpoints of the envelope counter as it
+    //    descends. This counter acts in much the same way as the rate counter; the envelope
+    //    counter doesn't change until the falloff counter reaches its target. The breakpoints
+    //    and targets are chosen to make a smooth exponential decay/release curve, which
+    //    sounds more natural.
+    //
+    //    This exponential curve also happens to take three times longer to complete than a
+    //    linear curve; hence all of the SID documentation giving values for decay/release as
+    //    three times the length of attack.
+    clock() {
+      // If we reach 0x8000 on the rate counter, we wrap it back around to 0 and keep going.
+      // This is the implementation of the ADSR delay bug...if a parameter is changed so that
+      // the rate target changes, and the rate counter has not yet reached the original
+      // target, and the new target is *lower* than the current value of the rate counter,
+      // then the rate counter will have to count to 0x8000, wrap around to 0, and then count
+      // up to the new target. This will likely cause a delay in the next phase starting.
+      rateCounter = (rateCounter + 1) & 0x7fff
 
-  // Called when the SID's clock pin goes high. This manipulates three separate counters
-  // that control the envelope generator output.
-  //
-  // 1. The rate counter increments by 1 with every clock. If it has not reached its target
-  //    (which is determined by the settings in the attack, decay, and release registers),
-  //    then this method does nothing until called again on the next clock.
-  // 2. Once the rate counter reaches its target, the envelope counter is either incremented
-  //    (on attack) or decremented (on decay or release). The envelope counter changes
-  //    counting directions after reaching 0xff on attack (it changes to decay/sustain phase
-  //    at that point) and stops descending when it reaches the sustain level and, after the
-  //    release phase is entered, at 0x00.
-  // 3. The falloff counter changes at certain breakpoints of the envelope counter as it
-  //    descends. This counter acts in much the same way as the rate counter; the envelope
-  //    counter doesn't change until the falloff counter reaches its target. The breakpoints
-  //    and targets are chosen to make a smooth exponential decay/release curve, which
-  //    sounds more natural.
-  //
-  //    This exponential curve also happens to take three times longer to complete than a
-  //    linear curve; hence all of the SID documentation giving values for decay/release as
-  //    three times the length of attack.
-  clock() {
-    // If we reach 0x8000 on the rate counter, we wrap it back around to 0 and keep going.
-    // This is the implementation of the ADSR delay bug...if a parameter is changed so that
-    // the rate target changes, and the rate counter has not yet reached the original
-    // target, and the new target is *lower* than the current value of the rate counter,
-    // then the rate counter will have to count to 0x8000, wrap around to 0, and then count
-    // up to the new target. This will likely cause a delay in the next phase starting.
-    this.#rateCounter = (this.#rateCounter + 1) & 0x7fff
+      // If the incremented rate counter hasn't reached its target, do nothing. Check again on
+      // the next clock cycle.
+      if (rateCounter === rateTarget) {
+        rateCounter = 0
+        falloffCounter += 1
 
-    // If the incremented rate counter hasn't reached its target, do nothing. Check again on
-    // the next clock cycle.
-    if (this.#rateCounter === this.#rateTarget) {
-      this.#rateCounter = 0
-      this.#falloffCounter += 1
+        if (phase === ATTACK || falloffCounter === falloffTarget) {
+          // The falloff counter resets on attack or when it reaches its target value.
+          falloffCounter = 0
 
-      if (this.#phase === ATTACK || this.#falloffCounter === this.#falloffTarget) {
-        // The falloff counter resets on attack or when it reaches its target value.
-        this.#falloffCounter = 0
+          // If the envelope counter is frozen at zero, it is just that...it no longer changes
+          // (until the next attack), so we return skip everything else and just return.
+          if (!zeroFreeze) {
+            switch (phase) {
+              case ATTACK:
+                // Increment the envelope counter by one until it reaches 0xff, at which time
+                // the phase changes to the decay/sustain phase.
+                envelope = (envelope + 1) & 0xff
+                if (envelope === 0xff) {
+                  phase = DECAY_SUSTAIN
+                  rateTarget = RATE_TARGETS[decay]
+                }
+                break
 
-        // If the envelope counter is frozen at zero, it is just that...it no longer changes
-        // (until the next attack), so we return skip everything else and just return.
-        if (!this.#zeroFreeze) {
-          switch (this.#phase) {
-            case ATTACK:
-              // Increment the envelope counter by one until it reaches 0xff, at which time
-              // the phase changes to the decay/sustain phase.
-              this.#envelope = (this.#envelope + 1) & 0xff
-              if (this.#envelope === 0xff) {
-                this.#phase = DECAY_SUSTAIN
-                this.#rateTarget = RATE_TARGETS[this.#decay]
-              }
-              break
+              case DECAY_SUSTAIN:
+                // Decrement the envelope counter by one unless it's already reached the
+                // sustain level.
+                if (envelope !== SUSTAIN_LEVELS[sustain]) {
+                  envelope -= 1
+                }
+                break
 
-            case DECAY_SUSTAIN:
-              // Decrement the envelope counter by one unless it's already reached the
-              // sustain level.
-              if (this.#envelope !== SUSTAIN_LEVELS[this.#sustain]) {
-                this.#envelope -= 1
-              }
-              break
+              case RELEASE:
+                // Decrement the envelope counter until it reaches zero (the stop at zero is
+                // enforced by the next switch block). The bitwise AND is here because if the
+                // phase is shifted to ATTACK and then immediately to RELEASE, the envelope
+                // counter will set to 0xff and begin counting from there.
+                envelope = (envelope - 1) & 0xff
+                break
 
-            case RELEASE:
-              // Decrement the envelope counter until it reaches zero (the stop at zero is
-              // enforced by the next switch block). The bitwise AND is here because if the
-              // phase is shifted to ATTACK and then immediately to RELEASE, the envelope
-              // counter will set to 0xff and begin counting from there.
-              this.#envelope = (this.#envelope - 1) & 0xff
-              break
+              default:
+                break
+            }
 
-            default:
-              break
-          }
-
-          // Change the value of the exponential target each time the envelope counter
-          // reaches a certain breakpoint. There is not a separate curve for decay and
-          // release; they both share the same set of breakpoints. This breakpoint/target
-          // combination is engineered to simulate a smooth exponential curve.
-          switch (this.#envelope) {
-            case 0xff:
-              this.#falloffTarget = 1
-              break
-            case 0x5d:
-              this.#falloffTarget = 2
-              break
-            case 0x36:
-              this.#falloffTarget = 4
-              break
-            case 0x1a:
-              this.#falloffTarget = 8
-              break
-            case 0x0e:
-              this.#falloffTarget = 16
-              break
-            case 0x06:
-              this.#falloffTarget = 30
-              break
-            case 0x00:
-              this.#falloffTarget = 1
-              // Lock the envelope counter at zero. This zero freeze is removed the next
-              // time an attack phase is started.
-              this.#zeroFreeze = true
-              break
-            default:
-              break
+            // Change the value of the exponential target each time the envelope counter
+            // reaches a certain breakpoint. There is not a separate curve for decay and
+            // release; they both share the same set of breakpoints. This breakpoint/target
+            // combination is engineered to simulate a smooth exponential curve.
+            switch (envelope) {
+              case 0xff:
+                falloffTarget = 1
+                break
+              case 0x5d:
+                falloffTarget = 2
+                break
+              case 0x36:
+                falloffTarget = 4
+                break
+              case 0x1a:
+                falloffTarget = 8
+                break
+              case 0x0e:
+                falloffTarget = 16
+                break
+              case 0x06:
+                falloffTarget = 30
+                break
+              case 0x00:
+                falloffTarget = 1
+                // Lock the envelope counter at zero. This zero freeze is removed the next
+                // time an attack phase is started.
+                zeroFreeze = true
+                break
+              default:
+                break
+            }
           }
         }
       }
-    }
-  }
+    },
 
-  get output() {
-    return this.#envelope
+    get output() {
+      return envelope
+    },
   }
 }

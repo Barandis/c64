@@ -184,202 +184,188 @@ function interpolate() {
 
 const CUTOFF_FREQS = interpolate()
 
-export default class Filter {
+export default function Filter() {
   // The value of the frequency cutoff registers, an 11-bit number.
-  /** @type {number} */
-  #cut
+  let cut = 0
 
   // The filter resonance from the register, a 4-bit number.
-  /** @type {number} */
-  #res
+  let res = 0
 
   // The master volume from the register, a 4-bit number.
-  /** @type {number} */
-  #volume
-
-  // The filter cutoff frequency, in hertz. This is capped at 16000.
-  /** @type {number} */
-  #fc
-
-  // The resonance. This is actually stored as 1024 / Q, since that's what's used in the
-  // resonance calculation.
-  /** @type {number} */
-  #q
+  let volume = 0
 
   // Whether or not the low-pass filter is engaged.
-  /** @type {boolean} */
-  #filtlp
+  let filtlp = false
 
   // Whether or not the band-pass filter is engaged.
-  /** @type {boolean} */
-  #filtbp
+  let filtbp = false
 
   // Whether or not the high-pass filter is engaged.
-  /** @type {boolean} */
-  #filthp
+  let filthp = false
 
   // Whether or not voice 1 is being filtered.
-  /** @type {boolean} */
-  #filtv1
+  let filtv1 = false
 
   // Whether or not voice 2 is being filtered.
-  /** @type {boolean} */
-  #filtv2
+  let filtv2 = false
 
   // Whether or not voice 3 is being filtered.
-  /** @type {boolean} */
-  #filtv3
+  let filtv3 = false
 
   // Whether or not the external input is being filtered.
-  /** @type {boolean} */
-  #filtext
+  let filtext = false
 
-  // Set to `true` if voice 3 is producing no output. This will only happen if #filtv3 is
+  // Set to `true` if voice 3 is producing no output. This will only happen if filtv3 is
   // `false`. It allows voice 3 to be used purely for sync/modulation without adding
   // anything to the output.
-  /** @type {boolean} */
-  #dscnv3
+  let dscnv3 = false
 
   // The value on this clock cycle of the low-pass component of the filter.
-  /** @type {number} */
-  #lp
+  let lp = 0
 
   // The value on this clock cycle of the band-pass component of the filter.
-  /** @type {number} */
-  #bp
+  let bp = 0
 
   // The value on this clock cycle of the high-pass component of the filter.
-  /** @type {number} */
-  #hp
+  let hp = 0
 
   // The value on this clock cycle of the unfiltered output.
-  /** @type {number} */
-  #nf
+  let nf = 0
 
-  constructor() {
-    this.reset()
-  }
+  // The filter cutoff frequency, in hertz. This is capped at 16000 and is calculated at
+  // creation time, so this 0 value is only a placeholder.
+  let fc = 0
 
-  // Resets the filter to its starting state. This is 0 in the cutoff and resonance
-  // registers, no filters enabled, no voices being filtered, and zero volume.
-  reset(value = true) {
-    if (value) {
-      this.#cut = 0
-      this.#res = 0
-      this.#volume = 0
-
-      this.#filtlp = false
-      this.#filtbp = false
-      this.#filthp = false
-
-      this.#filtv1 = false
-      this.#filtv2 = false
-      this.#filtv3 = false
-      this.#filtext = false
-
-      this.#dscnv3 = false
-
-      this.#lp = 0
-      this.#bp = 0
-      this.#hp = 0
-      this.#nf = 0
-
-      this.#calcFc()
-      this.#calcQ()
-    }
-  }
-
-  // Runs on each clock cycle. Unlike most clock methods, this takes the current values for
-  // each of the voices and for the external input. It then calculates the output values for
-  // each of the filter channels and for the non-filtered output.
-  clock(voice1, voice2, voice3, external) {
-    const v1 = voice1 >> 7
-    const v2 = voice2 >> 7
-    const v3 = this.#dscnv3 && !this.#filtv3 ? 0 : voice3 >> 7
-    const ext = external >> 7
-
-    let level = 0
-    this.#nf = 0
-
-    if (this.#filtv1) level += v1
-    else this.#nf += v1
-
-    if (this.#filtv2) level += v2
-    else this.#nf += v2
-
-    if (this.#filtv3) level += v3
-    else this.#nf += v3
-
-    if (this.#filtext) level += ext
-    else this.#nf += ext
-
-    // This is the actual calculation of the filter outputs.
-    const dbp = (this.#fc * this.#hp) >> 20
-    const dlp = (this.#fc * this.#bp) >> 20
-    this.#bp -= dbp
-    this.#lp -= dlp
-    this.#hp = ((this.#bp * this.#q) >> 10) - this.#lp - level
-  }
-
-  // Processes changes to the CUTLO register by setting the low 3 bits of #cut.
-  set cutlo(value) {
-    this.#cut = (this.#cut & 0x7f8) | (value & 0x007)
-    this.#calcFc()
-  }
-
-  // Processes changes to the CUTHI register by setting the high 8 bits of #cut.
-  set cuthi(value) {
-    this.#cut = ((value << 3) & 0x7f8) | (this.#cut & 0x007)
-    this.#calcFc()
-  }
-
-  // Processes changes to the RESON register by setting the value of #res and setting
-  // filter flags for each of the voices.
-  set reson(value) {
-    this.#res = hi4(value)
-    this.#calcQ()
-
-    this.#filtv1 = bitSet(value, FILTV1)
-    this.#filtv2 = bitSet(value, FILTV2)
-    this.#filtv3 = bitSet(value, FILTV3)
-    this.#filtext = bitSet(value, FILTEXT)
-  }
-
-  // Processes changes to the SIGVOL register by setting the value of #volume and setting
-  // flags to indicate which type of filter is engaged.
-  set sigvol(value) {
-    this.#volume = lo4(value)
-
-    this.#filtlp = bitSet(value, FILTLP)
-    this.#filtbp = bitSet(value, FILTBP)
-    this.#filthp = bitSet(value, FILTHP)
-    this.#dscnv3 = bitSet(value, DSCNV3)
-  }
-
-  // Returns the current output value of the filter mixer. This simply adds each filter
-  // channel together along with the DC offset, then multiplies that by the volume.
-  get output() {
-    let level = this.#nf
-
-    if (this.#filtlp) level += this.#lp
-    if (this.#filtbp) level += this.#bp
-    if (this.#filthp) level += this.#hp
-
-    return (level + OFFSET) * this.#volume
-  }
+  // The resonance. This is actually stored as 1024 / Q, since that's what's used in the
+  // resonance calculation. This is calculated at creation time, so this 0 value is only a
+  // placeholder.
+  let q = 0
 
   // Calculates the cutoff frequency based on the value of the #cut field. This number
   // allows for a max frequency of 16kHz and also multiples the value by a constant that
   // will allow division by 1,000,000 (which happens in filter calculations) to instead just
   // be a right shift of 20 bits.
-  #calcFc() {
-    this.#fc = Math.round(2 * Math.PI * Math.min(CUTOFF_FREQS[this.#cut], 16000) * 1.048576)
+  const calcFc = () => {
+    fc = Math.round(2 * Math.PI * Math.min(CUTOFF_FREQS[cut], 16000) * 1.048576)
   }
 
   // Calculates 1000 / Q, the resonance value. This value is multiplied by a constant which
   // turns division by 1000 (which happens in filter calculations) to be done by right
   // shifting 10 bits.
-  #calcQ() {
-    this.#q = Math.round(1024 / (0.707 + this.#res / 15))
+  const calcQ = () => {
+    q = Math.round(1024 / (0.707 + res / 15))
+  }
+
+  calcFc()
+  calcQ()
+
+  return {
+    // Processes changes to the CUTLO register by setting the low 3 bits of #cut.
+    cutlo(value) {
+      cut = (cut & 0x7f8) | (value & 0x007)
+      calcFc()
+    },
+
+    // Processes changes to the CUTHI register by setting the high 8 bits of #cut.
+    cuthi(value) {
+      cut = ((value << 3) & 0x7f8) | (cut & 0x007)
+      calcFc()
+    },
+
+    // Processes changes to the RESON register by setting the value of #res and setting
+    // filter flags for each of the voices.
+    reson(value) {
+      res = hi4(value)
+      calcQ()
+
+      filtv1 = bitSet(value, FILTV1)
+      filtv2 = bitSet(value, FILTV2)
+      filtv3 = bitSet(value, FILTV3)
+      filtext = bitSet(value, FILTEXT)
+    },
+
+    // Processes changes to the SIGVOL register by setting the value of #volume and setting
+    // flags to indicate which type of filter is engaged.
+    sigvol(value) {
+      volume = lo4(value)
+
+      filtlp = bitSet(value, FILTLP)
+      filtbp = bitSet(value, FILTBP)
+      filthp = bitSet(value, FILTHP)
+      dscnv3 = bitSet(value, DSCNV3)
+    },
+
+    // Resets the filter to its starting state. This is 0 in the cutoff and resonance
+    // registers, no filters enabled, no voices being filtered, and zero volume.
+    reset(value = true) {
+      if (value) {
+        cut = 0
+        res = 0
+        volume = 0
+
+        filtlp = false
+        filtbp = false
+        filthp = false
+
+        filtv1 = false
+        filtv2 = false
+        filtv3 = false
+        filtext = false
+
+        dscnv3 = false
+
+        lp = 0
+        bp = 0
+        hp = 0
+        nf = 0
+
+        calcFc()
+        calcQ()
+      }
+    },
+
+    // Runs on each clock cycle. Unlike most clock methods, this takes the current values
+    // for each of the voices and for the external input. It then calculates the output
+    // values for each of the filter channels and for the non-filtered output.
+    clock(voice1, voice2, voice3, external) {
+      const v1 = voice1 >> 7
+      const v2 = voice2 >> 7
+      const v3 = dscnv3 && !filtv3 ? 0 : voice3 >> 7
+      const ext = external >> 7
+
+      let level = 0
+      nf = 0
+
+      if (filtv1) level += v1
+      else nf += v1
+
+      if (filtv2) level += v2
+      else nf += v2
+
+      if (filtv3) level += v3
+      else nf += v3
+
+      if (filtext) level += ext
+      else nf += ext
+
+      // This is the actual calculation of the filter outputs.
+      const dbp = (fc * hp) >> 20
+      const dlp = (fc * bp) >> 20
+      bp -= dbp
+      lp -= dlp
+      hp = ((bp * q) >> 10) - lp - level
+    },
+
+    // Returns the current output value of the filter mixer. This simply adds each filter
+    // channel together along with the DC offset, then multiplies that by the volume.
+    get output() {
+      let level = nf
+
+      if (filtlp) level += lp
+      if (filtbp) level += bp
+      if (filthp) level += hp
+
+      return (level + OFFSET) * volume
+    },
   }
 }

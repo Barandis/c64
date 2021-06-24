@@ -84,7 +84,7 @@ describe('6526 CIA', () => {
   let pbTraces
 
   beforeEach(() => {
-    chip = new Ic6526()
+    chip = Ic6526()
     tr = deviceTraces(chip)
 
     addrTraces = [...range(4)].map(i => tr[`A${i}`])
@@ -92,26 +92,26 @@ describe('6526 CIA', () => {
     paTraces = [...range(8)].map(i => tr[`PA${i}`])
     pbTraces = [...range(8)].map(i => tr[`PB${i}`])
 
-    tr.R__W.set()
-    tr._CS.set()
-    tr._RES.set()
-    tr._FLAG.set()
+    tr.R_W.set()
+    tr.CS.set()
+    tr.RES.set()
+    tr.FLAG.set()
   })
 
   function writeRegister(register, value) {
     valueToPins(value, ...dataTraces)
     valueToPins(register, ...addrTraces)
-    tr.R__W.clear()
-    tr._CS.clear()
-    tr._CS.set()
-    tr.R__W.set()
+    tr.R_W.clear()
+    tr.CS.clear()
+    tr.CS.set()
+    tr.R_W.set()
   }
 
   function readRegister(register) {
     valueToPins(register, ...addrTraces)
-    tr._CS.clear()
+    tr.CS.clear()
     const value = pinsToValue(...dataTraces)
-    tr._CS.set()
+    tr.CS.set()
     return value
   }
 
@@ -137,7 +137,7 @@ describe('6526 CIA', () => {
     it('can send data on all 8 pins', test(pdrSend))
     it('can send and receive on different pins', test(pdrCombo))
     it('cannot affect pins being used as timer outputs', test(pdrTimerOut))
-    it('triggers _PC on port B register reads and writes', test(pdrTriggerPc))
+    it('triggers PC on port B register reads and writes', test(pdrTriggerPc))
   })
 
   describe('interval timers', () => {
@@ -216,7 +216,7 @@ describe('6526 CIA', () => {
 
   describe('miscellaneous pin functions', () => {
     describe('reset', () => {
-      it('resets all registers, data pins, CNT and _IRQ', test(reset))
+      it('resets all registers, data pins, CNT and IRQ', test(reset))
     })
 
     describe('flag', () => {

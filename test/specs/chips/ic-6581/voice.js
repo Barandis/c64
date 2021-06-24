@@ -26,7 +26,7 @@ function produceValues(voice, clock, iterations = 500, gap = 50) {
   const envs = []
   const voices = []
 
-  voice.vcreg = setBit(setBit(0, PULSE), GATE)
+  voice.vcreg(setBit(setBit(0, PULSE), GATE))
 
   for (const _ of range(iterations - 200)) {
     clock()
@@ -39,7 +39,7 @@ function produceValues(voice, clock, iterations = 500, gap = 50) {
     }
   }
 
-  voice.vcreg = setBit(0, PULSE)
+  voice.vcreg(setBit(0, PULSE))
 
   for (const _ of range(200)) {
     clock()
@@ -56,12 +56,12 @@ function produceValues(voice, clock, iterations = 500, gap = 50) {
 }
 
 export function graphVoice({ voice1, clock }) {
-  voice1.frelo = 0xb0
-  voice1.frehi = 0xe6
-  voice1.pwlo = 0x00
-  voice1.pwhi = 0x08
-  voice1.atdcy = 0x00
-  voice1.surel = 0x80
+  voice1.frelo(0xb0)
+  voice1.frehi(0xe6)
+  voice1.pwlo(0x00)
+  voice1.pwhi(0x08)
+  voice1.atdcy(0x00)
+  voice1.surel(0x80)
 
   const { waves, envs, voices } = produceValues(voice1, clock)
 

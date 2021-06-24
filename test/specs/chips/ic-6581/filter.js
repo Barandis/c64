@@ -27,9 +27,9 @@ function write(path, name, value) {
 function produceOneVoice(voice1, filter, clock, iterations = 500, gap = 50) {
   const values = []
 
-  voice1.surel = 0x80
+  voice1.surel(0x80)
 
-  voice1.vcreg = 0x11
+  voice1.vcreg(0x11)
 
   for (const _ of range(iterations - 200)) {
     clock()
@@ -40,7 +40,7 @@ function produceOneVoice(voice1, filter, clock, iterations = 500, gap = 50) {
     }
   }
 
-  voice1.vcreg = 0x10
+  voice1.vcreg(0x10)
 
   for (const _ of range(200)) {
     clock()
@@ -57,13 +57,13 @@ function produceOneVoice(voice1, filter, clock, iterations = 500, gap = 50) {
 function produceThreeVoices(voice1, voice2, voice3, filter, clock, iterations = 500, gap = 50) {
   const values = []
 
-  voice1.surel = 0x80
-  voice2.surel = 0x80
-  voice3.surel = 0x80
+  voice1.surel(0x80)
+  voice2.surel(0x80)
+  voice3.surel(0x80)
 
-  voice1.vcreg = 0x11
-  voice2.vcreg = 0x11
-  voice3.vcreg = 0x11
+  voice1.vcreg(0x11)
+  voice2.vcreg(0x11)
+  voice3.vcreg(0x11)
 
   for (const _ of range(iterations - 200)) {
     clock()
@@ -74,9 +74,9 @@ function produceThreeVoices(voice1, voice2, voice3, filter, clock, iterations = 
     }
   }
 
-  voice1.vcreg = 0x10
-  voice2.vcreg = 0x10
-  voice3.vcreg = 0x10
+  voice1.vcreg(0x10)
+  voice2.vcreg(0x10)
+  voice3.vcreg(0x10)
 
   for (const _ of range(200)) {
     clock()
@@ -91,8 +91,9 @@ function produceThreeVoices(voice1, voice2, voice3, filter, clock, iterations = 
 }
 
 export function graphSingleNoFilter({ voice1, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  filter.sigvol = 0x0f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  filter.sigvol(0x0f)
 
   const values = produceOneVoice(voice1, filter, clock)
 
@@ -101,10 +102,11 @@ export function graphSingleNoFilter({ voice1, filter, clock }) {
 }
 
 export function graphSingleLowPass({ voice1, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x1f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x1f)
 
   const values = produceOneVoice(voice1, filter, clock)
 
@@ -113,10 +115,11 @@ export function graphSingleLowPass({ voice1, filter, clock }) {
 }
 
 export function graphSingleBandPass({ voice1, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x2f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x2f)
 
   const values = produceOneVoice(voice1, filter, clock)
 
@@ -125,10 +128,11 @@ export function graphSingleBandPass({ voice1, filter, clock }) {
 }
 
 export function graphSingleHighPass({ voice1, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x4f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x4f)
 
   const values = produceOneVoice(voice1, filter, clock)
 
@@ -137,10 +141,13 @@ export function graphSingleHighPass({ voice1, filter, clock }) {
 }
 
 export function graphTripleNoFilter({ voice1, voice2, voice3, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  ;[voice2.frehi, voice2.frelo] = FG7
-  ;[voice3.frehi, voice3.frelo] = A7
-  filter.sigvol = 0x0f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  voice2.frelo(FG7[1])
+  voice2.frehi(FG7[0])
+  voice3.frelo(A7[1])
+  voice3.frehi(A7[0])
+  filter.sigvol(0x0f)
 
   const values = produceThreeVoices(voice1, voice2, voice3, filter, clock)
 
@@ -149,12 +156,15 @@ export function graphTripleNoFilter({ voice1, voice2, voice3, filter, clock }) {
 }
 
 export function graphTripleLowPass({ voice1, voice2, voice3, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  ;[voice2.frehi, voice2.frelo] = FG7
-  ;[voice3.frehi, voice3.frelo] = A7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x1f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  voice2.frelo(FG7[1])
+  voice2.frehi(FG7[0])
+  voice3.frelo(A7[1])
+  voice3.frehi(A7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x1f)
 
   const values = produceThreeVoices(voice1, voice2, voice3, filter, clock)
 
@@ -163,12 +173,15 @@ export function graphTripleLowPass({ voice1, voice2, voice3, filter, clock }) {
 }
 
 export function graphTripleBandPass({ voice1, voice2, voice3, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  ;[voice2.frehi, voice2.frelo] = FG7
-  ;[voice3.frehi, voice3.frelo] = A7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x2f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  voice2.frelo(FG7[1])
+  voice2.frehi(FG7[0])
+  voice3.frelo(A7[1])
+  voice3.frehi(A7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x2f)
 
   const values = produceThreeVoices(voice1, voice2, voice3, filter, clock)
 
@@ -177,12 +190,15 @@ export function graphTripleBandPass({ voice1, voice2, voice3, filter, clock }) {
 }
 
 export function graphTripleHighPass({ voice1, voice2, voice3, filter, clock }) {
-  ;[voice1.frehi, voice1.frelo] = D7
-  ;[voice2.frehi, voice2.frelo] = FG7
-  ;[voice3.frehi, voice3.frelo] = A7
-  filter.cuthi = 0x70
-  filter.reson = 0x01
-  filter.sigvol = 0x4f
+  voice1.frelo(D7[1])
+  voice1.frehi(D7[0])
+  voice2.frelo(FG7[1])
+  voice2.frehi(FG7[0])
+  voice3.frelo(A7[1])
+  voice3.frehi(A7[0])
+  filter.cuthi(0x70)
+  filter.reson(0x01)
+  filter.sigvol(0x4f)
 
   const values = produceThreeVoices(voice1, voice2, voice3, filter, clock)
 

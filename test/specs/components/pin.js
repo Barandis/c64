@@ -60,13 +60,13 @@ describe('Pin', () => {
   const test = fn => () => fn()
 
   it('has a number', () => {
-    const p = new Pin(1, 'A')
-    assert(p.number === 1)
+    const p = Pin(1, 'A')
+    assert.equal(p.number, 1)
   })
 
   it('has a name', () => {
-    const p = new Pin(1, 'A')
-    assert(p.name === 'A')
+    const p = Pin(1, 'A')
+    assert.equal(p.name, 'A')
   })
 
   describe('mode', () => {

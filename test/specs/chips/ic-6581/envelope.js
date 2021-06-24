@@ -22,7 +22,7 @@ function write(path, name, value) {
 
 function produceEnvelope(env, clock, iterations = 500, gap = 100) {
   const values = []
-  env.vcreg = 1
+  env.vcreg(1)
 
   for (const _ of range(iterations - 200)) {
     clock()
@@ -33,7 +33,7 @@ function produceEnvelope(env, clock, iterations = 500, gap = 100) {
     }
   }
 
-  env.vcreg = 0
+  env.vcreg(0)
 
   for (const _ of range(200)) {
     clock()
@@ -48,8 +48,8 @@ function produceEnvelope(env, clock, iterations = 500, gap = 100) {
 }
 
 export function graphMinimum({ env1, clock }) {
-  env1.atdcy = 0x00
-  env1.surel = 0x80
+  env1.atdcy(0x00)
+  env1.surel(0x80)
 
   const values = produceEnvelope(env1, clock)
 
@@ -58,8 +58,8 @@ export function graphMinimum({ env1, clock }) {
 }
 
 export function graphZeroSustain({ env1, clock }) {
-  env1.atdcy = 0x00
-  env1.surel = 0x00
+  env1.atdcy(0x00)
+  env1.surel(0x00)
 
   const values = produceEnvelope(env1, clock)
 
@@ -68,8 +68,8 @@ export function graphZeroSustain({ env1, clock }) {
 }
 
 export function graphFullSustain({ env1, clock }) {
-  env1.atdcy = 0x00
-  env1.surel = 0xf0
+  env1.atdcy(0x00)
+  env1.surel(0xf0)
 
   const values = produceEnvelope(env1, clock)
 

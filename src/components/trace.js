@@ -26,108 +26,103 @@ const { OUTPUT } = Pin
 function normalize(level) {
   return level === null ? null : Number(level)
 }
-export default class Trace {
-  /** @type {Pin[]} */
-  #pins = []
 
-  /** @type {null|0|1} */
-  #float = null
+export default function Trace(...pins) {
+  const pns = []
 
-  /** @type {number|null} */
-  #level = null
+  let float = null
+  let level = null
 
-  /** @param {number|null} level */
-  #calculate(level) {
-    const hi = this.#pins.find(p => p.mode === OUTPUT && p.high)
+  function calculate(lvl) {
+    const hi = pns.find(p => p.mode === OUTPUT && p.high)
     if (hi) return hi.level
 
-    const lo = this.#pins.find(p => p.mode === OUTPUT && p.low)
+    const lo = pns.find(p => p.mode === OUTPUT && p.low)
     if (lo) return lo.level
 
-    if (level === null) return this.#float
+    if (lvl === null) return float
 
-    return level
+    return lvl
   }
 
-  /**
-   * @param {...Pin} pins
-   */
-  constructor(...pins) {
-    this.addPins(...pins)
-    this.updateLevel(null)
+  function setLevel(value) {
+    level = calculate(normalize(value))
+    pns.forEach(p => p.updateLevel())
   }
 
-  get level() {
-    return this.#level
-  }
+  const trace = {
+    get level() {
+      return level
+    },
 
-  set level(value) {
-    this.#level = this.#calculate(normalize(value))
-    this.#pins.forEach(p => p.updateLevel())
-  }
+    set level(value) {
+      setLevel(value)
+    },
 
-  get high() {
-    return this.#level >= 0.5
-  }
+    get high() {
+      return level >= 0.5
+    },
 
-  get low() {
-    return this.#level < 0.5 && this.level !== null
-  }
+    get low() {
+      return level < 0.5 && level !== null
+    },
 
-  get floating() {
-    return this.#level === null
-  }
+    get floating() {
+      return level === null
+    },
 
-  /**
-   * @param {...Pin} pins
-   */
-  addPins(...pins) {
-    for (const p of pins) {
-      if (!p.connected) {
-        this.#pins.push(p)
-        p.trace = this
+    updateLevel(lvl) {
+      level = normalize(lvl) ?? calculate(null)
+      pns.forEach(p => p.updateLevel())
+    },
+
+    // eslint-disable-next-line no-shadow
+    addPins(...pins) {
+      for (const p of pins) {
+        if (!p.connected) {
+          pns.push(p)
+          p.trace = this
+        }
       }
-    }
-    return this
+      return trace
+    },
+
+    set() {
+      setLevel(1)
+      return trace
+    },
+
+    clear() {
+      setLevel(0)
+      return trace
+    },
+
+    float() {
+      setLevel(null)
+      return trace
+    },
+
+    pullUp() {
+      float = 1
+      setLevel(level)
+      return trace
+    },
+
+    pullDown() {
+      float = 0
+      setLevel(level)
+      return trace
+    },
+
+    noPull() {
+      float = null
+      setLevel(level)
+      return trace
+    },
   }
 
-  /** @param {number} level */
-  updateLevel(level) {
-    const normalized = normalize(level)
-    this.#level = normalized === null ? this.#calculate(null) : normalized
-    this.#pins.forEach(p => p.updateLevel())
-  }
+  trace.addPins(...pins)
+  trace.updateLevel(null)
 
-  set() {
-    this.level = 1
-    return this
-  }
-
-  clear() {
-    this.level = 0
-    return this
-  }
-
-  float() {
-    this.level = null
-    return this
-  }
-
-  pullUp() {
-    this.#float = 1
-    this.level = this.#level
-    return this
-  }
-
-  pullDown() {
-    this.#float = 0
-    this.level = this.#level
-    return this
-  }
-
-  noPull() {
-    this.#float = null
-    this.level = this.#level
-    return this
-  }
+  return trace
 }

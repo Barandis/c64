@@ -13,24 +13,24 @@ const { INPUT, OUTPUT } = Pin
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(DDRA, 0)
   for (const i of range(8)) {
-    assert(chip[`PA${i}`].mode === INPUT)
+    assert.mode(chip[`PA${i}`], INPUT)
   }
 
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert(chip[`PB${i}`].mode === INPUT)
+    assert.mode(chip[`PB${i}`], INPUT)
   }
 }
 
 export function ddrOutput({ chip, writeRegister }) {
   writeRegister(DDRA, 0xff)
   for (const i of range(8)) {
-    assert(chip[`PA${i}`].mode === OUTPUT)
+    assert.mode(chip[`PA${i}`], OUTPUT)
   }
 
   writeRegister(DDRB, 0xff)
   for (const i of range(8)) {
-    assert(chip[`PB${i}`].mode === OUTPUT)
+    assert.mode(chip[`PB${i}`], OUTPUT)
   }
 }
 
@@ -39,12 +39,12 @@ export function ddrCombo({ chip, writeRegister }) {
 
   writeRegister(DDRA, value)
   for (const i of range(8)) {
-    assert(chip[`PA${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
+    assert.equal(chip[`PA${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
   }
 
   writeRegister(DDRB, value)
   for (const i of range(8)) {
-    assert(chip[`PB${i}`].mode === (bitSet(value, i) ? OUTPUT : INPUT))
+    assert.equal(chip[`PB${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
   }
 }
 
@@ -55,7 +55,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // Set DDR for port B to all inputs, bit 6 and should remain output
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert(chip[`PB${i}`].mode === (i === 6 ? OUTPUT : INPUT))
+    assert.mode(chip[`PB${i}`], i === 6 ? OUTPUT : INPUT)
   }
 
   // turn on PBON for timer B
@@ -65,7 +65,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // outputs
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert(chip[`PB${i}`].mode === (i === 6 || i === 7 ? OUTPUT : INPUT))
+    assert.mode(chip[`PB${i}`], i === 6 || i === 7 ? OUTPUT : INPUT)
   }
 }
 
@@ -74,13 +74,13 @@ export function pdrReceive({ writeRegister, readRegister, paTraces, pbTraces }) 
 
   writeRegister(DDRA, 0)
   valueToPins(paValue, ...paTraces)
-  assert(readRegister(PRA) === paValue)
+  assert.equal(readRegister(PRA), paValue)
 
   const pbValue = rand(256)
 
   writeRegister(DDRB, 0)
   valueToPins(pbValue, ...pbTraces)
-  assert(readRegister(PRB) === pbValue)
+  assert.equal(readRegister(PRB), pbValue)
 }
 
 export function pdrSend({ writeRegister, paTraces, pbTraces }) {
@@ -88,13 +88,13 @@ export function pdrSend({ writeRegister, paTraces, pbTraces }) {
 
   writeRegister(DDRA, 0xff)
   writeRegister(PRA, paValue)
-  assert(pinsToValue(...paTraces) === paValue)
+  assert.equal(pinsToValue(...paTraces), paValue)
 
   const pbValue = rand(256)
 
   writeRegister(DDRB, 0xff)
   writeRegister(PRB, pbValue)
-  assert(pinsToValue(...pbTraces) === pbValue)
+  assert.equal(pinsToValue(...pbTraces), pbValue)
 }
 
 export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
@@ -109,8 +109,8 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const paReg = readRegister(PRA)
   const paPins = pinsToValue(...paTraces)
 
-  assert(paReg === paExp)
-  assert(paPins === paExp)
+  assert.equal(paReg, paExp)
+  assert.equal(paPins, paExp)
 
   const pbMask = rand(256)
   const pbIn = rand(256)
@@ -123,8 +123,8 @@ export function pdrCombo({ writeRegister, readRegister, paTraces, pbTraces }) {
   const pbReg = readRegister(PRB)
   const pbPins = pinsToValue(...pbTraces)
 
-  assert(pbReg === pbExp)
-  assert(pbPins === pbExp)
+  assert.equal(pbReg, pbExp)
+  assert.equal(pbPins, pbExp)
 }
 
 export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
@@ -138,43 +138,43 @@ export function pdrTimerOut({ writeRegister, readRegister, pbTraces }) {
 
   // Write all 1's; PB6 and PB7 shouldn't respond
   writeRegister(PRB, 0b11111111)
-  assert(readRegister(PRB) === 0b00111111)
-  assert(pinsToValue(...pbTraces) === 0b00111111)
+  assert.equal(readRegister(PRB), 0b00111111)
+  assert.equal(pinsToValue(...pbTraces), 0b00111111)
 }
 
 export function pdrTriggerPc({ tr, readRegister, writeRegister, paTraces, pbTraces }) {
-  // Reading port A does not trigger _PC
+  // Reading port A does not trigger PC
   writeRegister(DDRA, 0x00)
   valueToPins(0xff, ...paTraces)
-  assert(readRegister(PRA) === 0xff)
-  assert(tr._PC.high)
+  assert.equal(readRegister(PRA), 0xff)
+  assert.isHigh(tr.PC)
 
-  // Writing port A does not trigger _PC
+  // Writing port A does not trigger PC
   writeRegister(DDRA, 0xff)
   writeRegister(PRA, 0x2f)
-  assert(pinsToValue(...paTraces) === 0x2f)
-  assert(tr._PC.high)
+  assert.equal(pinsToValue(...paTraces), 0x2f)
+  assert.isHigh(tr.PC)
 
-  // Reading port B does trigger _PC
+  // Reading port B does trigger PC
   writeRegister(DDRB, 0x00)
   valueToPins(0xff, ...pbTraces)
-  assert(tr._PC.high)
-  assert(readRegister(PRB) === 0xff)
-  assert(tr._PC.low)
+  assert.isHigh(tr.PC)
+  assert.equal(readRegister(PRB), 0xff)
+  assert.isLow(tr.PC)
 
-  // _PC resets on the next clock high
-  tr.φ2.set()
-  assert(tr._PC.high)
-  tr.φ2.clear()
+  // PC resets on the next clock high
+  tr.PHI2.set()
+  assert.isHigh(tr.PC)
+  tr.PHI2.clear()
 
-  // Writing port B does trigger _PC
+  // Writing port B does trigger PC
   writeRegister(DDRB, 0xff)
-  assert(tr._PC.high)
+  assert.isHigh(tr.PC)
   writeRegister(PRB, 0x2f)
-  assert(pinsToValue(...pbTraces) === 0x2f)
-  assert(tr._PC.low)
+  assert.equal(pinsToValue(...pbTraces), 0x2f)
+  assert.isLow(tr.PC)
 
-  tr.φ2.set()
-  assert(tr._PC.high)
-  tr.φ2.clear()
+  tr.PHI2.set()
+  assert.isHigh(tr.PC)
+  tr.PHI2.clear()
 }

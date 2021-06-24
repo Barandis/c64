@@ -14,8 +14,8 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
   for (const i of range(16)) {
     writeRegister(i, rand(256))
   }
-  tr._RES.clear()
-  tr._RES.set()
+  tr.RES.clear()
+  tr.RES.set()
   for (const i of range(16)) {
     assert.equal(
       readRegister(i),
@@ -23,40 +23,40 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
       `register ${i} has incorrect value`,
     )
   }
-  assert.equal(chip.CNT.mode, INPUT)
-  assert(tr._IRQ.floating)
+  assert.mode(chip.CNT, INPUT)
+  assert(tr.IRQ.floating)
   for (const i of range(8)) {
     const name = `D${i}`
-    assert.equal(chip[name].mode, OUTPUT)
+    assert.mode(chip[name], OUTPUT)
     assert(tr[name].floating)
   }
 }
 
 export function flagDefault({ tr, readRegister }) {
-  tr._FLAG.clear()
-  assert(!tr._IRQ.low)
+  tr.FLAG.clear()
+  assert.isFalse(tr.IRQ.low)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, FLG))
-  assert(bitClear(icr, IR))
+  assert.isTrue(bitSet(icr, FLG))
+  assert.isTrue(bitClear(icr, IR))
 }
 
 export function flagFlagSet({ tr, readRegister, writeRegister }) {
   writeRegister(ICR, (1 << SC) | (1 << FLG))
 
-  tr._FLAG.clear()
-  assert(tr._IRQ.low)
+  tr.FLAG.clear()
+  assert.isLow(tr.IRQ)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, FLG))
-  assert(bitSet(icr, IR))
+  assert.isTrue(bitSet(icr, FLG))
+  assert.isTrue(bitSet(icr, IR))
 }
 
 export function flagFlagReset({ tr, readRegister, writeRegister }) {
   writeRegister(ICR, (1 << SC) | (1 << FLG))
   writeRegister(ICR, 1 << FLG)
 
-  tr._FLAG.clear()
-  assert(!tr._IRQ.low)
+  tr.FLAG.clear()
+  assert.isFalse(tr.IRQ.low)
   const icr = readRegister(ICR)
-  assert(bitSet(icr, FLG))
-  assert(bitClear(icr, IR))
+  assert.isTrue(bitSet(icr, FLG))
+  assert.isTrue(bitClear(icr, IR))
 }

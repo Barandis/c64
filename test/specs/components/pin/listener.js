@@ -12,8 +12,8 @@ import Trace from 'components/trace'
 const { UNCONNECTED, INPUT, OUTPUT, BIDIRECTIONAL } = Pin
 
 export function listenerUnconnected() {
-  const p = new Pin(1, 'A', UNCONNECTED)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', UNCONNECTED)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -23,8 +23,8 @@ export function listenerUnconnected() {
 }
 
 export function listenerInput() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -34,8 +34,8 @@ export function listenerInput() {
 }
 
 export function listenerOutput() {
-  const p = new Pin(1, 'A', OUTPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', OUTPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -45,8 +45,8 @@ export function listenerOutput() {
 }
 
 export function listenerBidirectional() {
-  const p = new Pin(1, 'A', BIDIRECTIONAL)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', BIDIRECTIONAL)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -56,7 +56,7 @@ export function listenerBidirectional() {
 }
 
 export function listenerDirect() {
-  const p = new Pin(1, 'A', INPUT)
+  const p = Pin(1, 'A', INPUT)
 
   const spy = Sinon.spy()
   p.addListener(spy)
@@ -65,8 +65,8 @@ export function listenerDirect() {
 }
 
 export function listenerRemove() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -86,8 +86,8 @@ export function listenerRemove() {
 }
 
 export function listenerNonexistent() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   const spy1 = Sinon.spy()
   const spy2 = Sinon.spy()
@@ -106,8 +106,8 @@ export function listenerNonexistent() {
 }
 
 export function listenerDouble() {
-  const p = new Pin(1, 'A', INPUT)
-  const t = new Trace(p)
+  const p = Pin(1, 'A', INPUT)
+  const t = Trace(p)
 
   const spy = Sinon.spy()
   p.addListener(spy)

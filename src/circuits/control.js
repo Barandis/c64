@@ -66,35 +66,44 @@ export default function ControlCircuit(
   // addressable chips/expansion port pins should be enabled. A8...A11 are connected to U15
   // and A12...A15, VA12...VA13, and _VA14 are already connected U17 in the address bus
   // definitions.
-  const _CAS = new Trace(U19._CAS, U17.I0)
-  const _LORAM = new Trace(U7.P0, U17.I1).pullUp()
-  const _HIRAM = new Trace(U7.P1, U17.I2).pullUp()
-  const _CHAREN = new Trace(U7.P2, U17.I3).pullUp()
-  const BA = new Trace(U19.BA, U17.I9)
-  const _AEC = new Trace(U8.Y5, U17.I10)
-  const R__W = new Trace(U7.R__W, U17.I11).pullUp()
-  const _EXROM = new Trace(CN6._EXROM, U17.I12).pullUp()
-  const _GAME = new Trace(CN6._GAME, U17.I13).pullUp()
-  const _CASRAM = new Trace(U17.F0, U9._CAS, U10._CAS, U11._CAS, U12._CAS)
-  _CASRAM.addPins(U21._CAS, U22._CAS, U23._CAS, U24._CAS)
-  const _BASIC = new Trace(U17.F1, U3._CS)
-  const _KERNAL = new Trace(U17.F2, U4._CS)
-  const _CHAROM = new Trace(U17.F3, U5._CS1)
-  const _CHAROM2 = new Trace(U5._CS2).pullUp() // _CS2 always high
-  const GR__W = new Trace(U17.F4, U6._WE)
-  const _IO = new Trace(U17.F5, U15._G1)
-  const _ROML = new Trace(U17.F6, CN6._ROML)
-  const _ROMH = new Trace(U17.F7, CN6._ROMH)
-  const _VIC = new Trace(U15._Y10, U19._CS)
-  const _SID = new Trace(U15._Y11, U18._CS)
-  const _COLOR = new Trace(U15._Y12, U27.A3)
-  const _SRAM = new Trace(U27.Y3, U6._CS)
-  const _CIAS = new Trace(U15._Y13, U15._G2)
-  const _CIA1 = new Trace(U15._Y20, U1._CS)
-  const _CIA2 = new Trace(U15._Y21, U2._CS)
-  const _IO1 = new Trace(U15._Y22, CN6._IO1)
-  const _IO2 = new Trace(U15._Y23, CN6._IO2)
-  const _PLA = new Trace(U17._OE).pullDown() // PLA out always enabled
+  const CCAS = Trace(U19.CAS, U17.I0)
+  const LLORAM = Trace(U7.P0, U17.I1).pullUp()
+  const HHIRAM = Trace(U7.P1, U17.I2).pullUp()
+  const CCHAREN = Trace(U7.P2, U17.I3).pullUp()
+  const BA = Trace(U19.BA, U17.I9)
+  const AAEC = Trace(U8.Y5, U17.I10)
+  const R_W = Trace(U7.R_W, U17.I11).pullUp()
+  const EXROM = Trace(CN6.EXROM, U17.I12).pullUp()
+  const GAME = Trace(CN6.GAME, U17.I13).pullUp()
+  const CASRAM = Trace(
+    U17.F0,
+    U9.CAS,
+    U10.CAS,
+    U11.CAS,
+    U12.CAS,
+    U21.CAS,
+    U22.CAS,
+    U23.CAS,
+    U24.CAS,
+  )
+  const BBASIC = Trace(U17.F1, U3.CS)
+  const KKERNAL = Trace(U17.F2, U4.CS)
+  const CCHAROM = Trace(U17.F3, U5.CS1)
+  const CCHAROM2 = Trace(U5.CS2).pullUp() // _CS2 always high
+  const GR_W = Trace(U17.F4, U6.WE)
+  const IIO = Trace(U17.F5, U15.G1)
+  const RROML = Trace(U17.F6, CN6.ROML)
+  const RROMH = Trace(U17.F7, CN6.ROMH)
+  const VVIC = Trace(U15.Y10, U19.CS)
+  const SSID = Trace(U15.Y11, U18.CS)
+  const CCOLOR = Trace(U15.Y12, U27.A3)
+  const SSRAM = Trace(U27.Y3, U6.CS)
+  const CCIAS = Trace(U15.Y13, U15.G2)
+  const CCIA1 = Trace(U15.Y20, U1.CS)
+  const CCIA2 = Trace(U15.Y21, U2.CS)
+  const IIO1 = Trace(U15.Y22, CN6.IO1)
+  const IIO2 = Trace(U15.Y23, CN6.IO2)
+  const PPLA = Trace(U17.OE).pullDown() // PLA out always enabled
 
   // Non-PLA-based chip control
 
@@ -122,19 +131,17 @@ export default function ControlCircuit(
 
   // Non-PLA signals are done here just in the interest of complexity. The only difference
   // in criteria for this section is that the PLA is not involved in any of these signals.
-  _CAS.addPins(U14.SEL, U13.SEL, U25.SEL)
+  CCAS.addPins(U14.SEL, U13.SEL, U25.SEL)
   BA.addPins(U27.A1, CN6.BA)
-  _AEC.addPins(U13._OE, U25._OE)
-  R__W.addPins(U1.R__W, U2.R__W, U18.R__W, U19.R__W, CN6.R__W)
-  R__W.addPins(U9._WE, U10._WE, U11._WE, U12._WE)
-  R__W.addPins(U21._WE, U22._WE, U23._WE, U24._WE)
-  const _RAS = new Trace(U19._RAS, U26.LE, U9._RAS, U10._RAS, U11._RAS, U12._RAS)
-  _RAS.addPins(U21._RAS, U22._RAS, U23._RAS)
-  const AEC = new Trace(U19.AEC, U16.X1, U16.X2, U16.X3, U16.X4)
-  AEC.addPins(U27.B3, U26._OE, U14._OE, U8.A5, U27.A2)
-  const _DMA = new Trace(CN6._DMA, U27.B1, U27.B2).pullUp()
-  const RDY = new Trace(U27.Y1, U7.RDY)
-  const CAEC = new Trace(U27.Y2, U7.AEC)
+  AAEC.addPins(U13.OE, U25.OE)
+  R_W.addPins(U1.R_W, U2.R_W, U18.R_W, U19.R_W, CN6.R_W)
+  R_W.addPins(U9.WE, U10.WE, U11.WE, U12.WE)
+  R_W.addPins(U21.WE, U22.WE, U23.WE, U24.WE)
+  const RRAS = Trace(U19.RAS, U26.LE, U9.RAS, U10.RAS, U11.RAS, U12.RAS, U21.RAS, U22.RAS, U23.RAS)
+  const AEC = Trace(U19.AEC, U16.X1, U16.X2, U16.X3, U16.X4, U27.B3, U26.OE, U14.OE, U8.A5, U27.A2)
+  const DDMA = Trace(CN6.DMA, U27.B1, U27.B2).pullUp()
+  const RDY = Trace(U27.Y1, U7.RDY)
+  const CAEC = Trace(U27.Y2, U7.AEC)
 
   // Reset, IRQ, and NMI
 
@@ -147,10 +154,9 @@ export default function ControlCircuit(
   // CN2: User port (provides _RES)
   // CN4: Serial port (provides _RES)
   // CN6: Expansion port (receives _RES, provides _NMI, _IRQ)
-  const _RES = new Trace(CN2._RESET, CN4._RESET).pullUp()
-  _RES.addPins(U7._RES, U1._RES, U2._RES, U18._RES, CN6._RESET)
-  const _NMI = new Trace(U2._IRQ, CN1._RESTORE, CN6._NMI, U7._NMI).pullUp()
-  const _IRQ = new Trace(U1._IRQ, U19._IRQ, CN6._IRQ, U7._IRQ).pullUp()
+  const RRES = Trace(CN2.RESET, CN4.RESET, U7.RES, U1.RES, U2.RES, U18.RES, CN6.RESET).pullUp()
+  const NNMI = Trace(U2.IRQ, CN1.RESTORE, CN6.NMI, U7.NMI).pullUp()
+  const IIRQ = Trace(U1.IRQ, U19.IRQ, CN6.IRQ, U7.IRQ).pullUp()
 
   // Clocks
 
@@ -166,51 +172,51 @@ export default function ControlCircuit(
   // software will provide those clock signals. (In fact, since we're also not emulating VIC
   // output RF signals, there's no *purpose* for OCOLOR and the only purpose for ODOT is
   // providing it to the expansion port.)
-  const φCOLOR = new Trace(U19.φCOLOR)
-  const φDOT = new Trace(U19.φIN, CN6.φDOT)
-  const φ0 = new Trace(U19.φ0, U7.φ0)
-  const φ2 = new Trace(U7.φ2, U1.φ2, U2.φ2, U18.φ2, CN6.φ2)
+  const PHICOLOR = new Trace(U19.PHICOLOR)
+  const PHIDOT = new Trace(U19.PHIIN, CN6.PHIDOT)
+  const PHI0 = new Trace(U19.PHI0, U7.PHI0)
+  const PHI2 = new Trace(U7.PHI2, U1.PHI2, U2.PHI2, U18.PHI2, CN6.PHI2)
 
   return {
-    _CAS,
-    _LORAM,
-    _HIRAM,
-    _CHAREN,
+    CCAS,
+    LLORAM,
+    HHIRAM,
+    CCHAREN,
     BA,
-    _AEC,
-    R__W,
-    _EXROM,
-    _GAME,
-    _CASRAM,
-    _BASIC,
-    _KERNAL,
-    _CHAROM,
-    _CHAROM2,
-    GR__W,
-    _IO,
-    _ROML,
-    _ROMH,
-    _VIC,
-    _SID,
-    _COLOR,
-    _SRAM,
-    _CIAS,
-    _CIA1,
-    _CIA2,
-    _IO1,
-    _IO2,
-    _PLA,
-    _RAS,
+    AAEC,
+    R_W,
+    EXROM,
+    GAME,
+    CASRAM,
+    BBASIC,
+    KKERNAL,
+    CCHAROM,
+    CCHAROM2,
+    GR_W,
+    IIO,
+    RROML,
+    RROMH,
+    VVIC,
+    SSID,
+    CCOLOR,
+    SSRAM,
+    CCIAS,
+    CCIA1,
+    CCIA2,
+    IIO1,
+    IIO2,
+    PPLA,
+    RRAS,
     AEC,
-    _DMA,
+    DDMA,
     RDY,
     CAEC,
-    _RES,
-    _NMI,
-    _IRQ,
-    φCOLOR,
-    φDOT,
-    φ0,
-    φ2,
+    RRES,
+    NNMI,
+    IIRQ,
+    PHICOLOR,
+    PHIDOT,
+    PHI0,
+    PHI2,
   }
 }

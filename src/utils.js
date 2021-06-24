@@ -98,6 +98,13 @@ export function bin(value, digits = 8) {
   return `0000000000000000${value.toString(2)}`.substr(-digits)
 }
 
+export function hex(value, digits = 2) {
+  if (value === null) {
+    return 'null'
+  }
+  return `0000000000000000${value.toString(16).toLowerCase()}`.substr(-digits)
+}
+
 export function word(lobyte, hibyte) {
   return lobyte + 256 * hibyte
 }
@@ -108,6 +115,29 @@ export function hi4(byte) {
 
 export function lo4(byte) {
   return byte & 0x0f
+}
+
+export function dumpPins(chip, title = 'Pins') {
+  let output = `${title}:`
+  for (const pin of chip) {
+    if (pin) {
+      const mode = ['U', 'I', 'O', 'B'][pin.mode]
+      output += `\n  ${`${pin.name} (${mode}) ${'.'.repeat(12)}`.substring(0, 12)} ${pin.level}`
+    }
+  }
+  output += '\n'
+  return output
+}
+
+export function dumpRegisters(registers, title = 'Registers') {
+  let output = `${title}:`
+  for (const [index, name] of registers.names.entries()) {
+    if (name) {
+      output += `\n  ${`${name} ${'.'.repeat(12)}`.substring(0, 12)} ${hex(registers[index])}`
+    }
+  }
+  output += '\n'
+  return output
 }
 
 export function* range(start, end, step, inclusive) {

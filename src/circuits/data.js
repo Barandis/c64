@@ -16,14 +16,14 @@ export default function DataCircuit(
   // U7: 6510 CPU
   // U18: 6581 SID
   // U19: 6567 VIC
-  const D0 = new Trace(U7.D0, U1.D0, U2.D0, U18.D0, U19.D0)
-  const D1 = new Trace(U7.D1, U1.D1, U2.D1, U18.D1, U19.D1)
-  const D2 = new Trace(U7.D2, U1.D2, U2.D2, U18.D2, U19.D2)
-  const D3 = new Trace(U7.D3, U1.D3, U2.D3, U18.D3, U19.D3)
-  const D4 = new Trace(U7.D4, U1.D4, U2.D4, U18.D4, U19.D4)
-  const D5 = new Trace(U7.D5, U1.D5, U2.D5, U18.D5, U19.D5)
-  const D6 = new Trace(U7.D6, U1.D6, U2.D6, U18.D6, U19.D6)
-  const D7 = new Trace(U7.D7, U1.D7, U2.D7, U18.D7, U19.D7)
+  const D0 = Trace(U7.D0, U1.D0, U2.D0, U18.D0, U19.D0)
+  const D1 = Trace(U7.D1, U1.D1, U2.D1, U18.D1, U19.D1)
+  const D2 = Trace(U7.D2, U1.D2, U2.D2, U18.D2, U19.D2)
+  const D3 = Trace(U7.D3, U1.D3, U2.D3, U18.D3, U19.D3)
+  const D4 = Trace(U7.D4, U1.D4, U2.D4, U18.D4, U19.D4)
+  const D5 = Trace(U7.D5, U1.D5, U2.D5, U18.D5, U19.D5)
+  const D6 = Trace(U7.D6, U1.D6, U2.D6, U18.D6, U19.D6)
+  const D7 = Trace(U7.D7, U1.D7, U2.D7, U18.D7, U19.D7)
 
   // Data bus to memory
 
@@ -70,10 +70,10 @@ export default function DataCircuit(
   D1.addPins(U16.A3)
   D2.addPins(U16.A2)
   D3.addPins(U16.A1)
-  const D8 = new Trace(U19.D8, U6.D0, U16.B4)
-  const D9 = new Trace(U19.D9, U6.D1, U16.B3)
-  const D10 = new Trace(U19.D10, U6.D2, U16.B2)
-  const D11 = new Trace(U19.D11, U6.D3, U16.B1)
+  const D8 = Trace(U19.D8, U6.D0, U16.B4)
+  const D9 = Trace(U19.D9, U6.D1, U16.B3)
+  const D10 = Trace(U19.D10, U6.D2, U16.B2)
+  const D11 = Trace(U19.D11, U6.D3, U16.B1)
 
   // Data bus to expansion port
 

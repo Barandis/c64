@@ -56,28 +56,28 @@ function produceValues(voice1, voice2, voice3, filter, ext, iterations = 500, ga
     out.push(ext.output)
   }
 
-  voice1.frelo = 0xf7
-  voice1.frehi = 0x99
-  voice2.frelo = 0xfc
-  voice2.frehi = 0xc1
-  voice3.frelo = 0xb0
-  voice3.frehi = 0xe6
+  voice1.frelo(0xf7)
+  voice1.frehi(0x99)
+  voice2.frelo(0xfc)
+  voice2.frehi(0xc1)
+  voice3.frelo(0xb0)
+  voice3.frehi(0xe6)
 
-  voice3.pwlo = 0x00
-  voice3.pwhi = 0x08
+  voice3.pwlo(0x00)
+  voice3.pwhi(0x08)
 
-  voice1.surel = 0xc0
-  voice2.surel = 0xa0
-  voice3.surel = 0x80
+  voice1.surel(0xc0)
+  voice2.surel(0xa0)
+  voice3.surel(0x80)
 
-  filter.cutlo = 0x00
-  filter.cuthi = 0x80
-  filter.reson = 0x01
-  filter.sigvol = 0x1f
+  filter.cutlo(0x00)
+  filter.cuthi(0x80)
+  filter.reson(0x01)
+  filter.sigvol(0x1f)
 
-  voice1.vcreg = 0x11
-  voice2.vcreg = 0x21
-  voice3.vcreg = 0x41
+  voice1.vcreg(0x11)
+  voice2.vcreg(0x21)
+  voice3.vcreg(0x41)
 
   for (const _ of range(iterations - 200)) {
     clock()
@@ -88,9 +88,9 @@ function produceValues(voice1, voice2, voice3, filter, ext, iterations = 500, ga
     }
   }
 
-  voice1.vcreg = 0x10
-  voice2.vcreg = 0x20
-  voice3.vcreg = 0x40
+  voice1.vcreg(0x10)
+  voice2.vcreg(0x20)
+  voice3.vcreg(0x40)
 
   for (const _ of range(200)) {
     clock()
