@@ -58,18 +58,3 @@ export const FILTLP = 4
 export const FILTBP = 5
 export const FILTHP = 6
 export const DSCNV3 = 7
-
-// Miscellaneous constants not tied to registers or bits within them
-
-// This is the maximum number of cycles for which a write-only register, when read, will
-// return a value of whatever was last written to *any* register. After that number of
-// cycles since the last write, any read from a write-only register will result in zero.
-// This is a simplification of the actual write-only read model, which fades the value more
-// gradually to zero.
-export const MAX_LAST_WRITE_TIME = 2000
-
-// The minimum value that can be placed on one of the analog input pins (POTX, POTY).
-export const MIN_ANALOG_VALUE = 0
-
-// The maximum value that can be placed on one of the analog input pins (POTX, POTY).
-export const MAX_ANALOG_VALUE = 1

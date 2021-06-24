@@ -416,22 +416,22 @@ import ControlModule from './control'
 const { INPUT, OUTPUT } = Pin
 
 const REGISTER_NAMES = [
-  'PRA',
-  'PRB',
-  'DDRA',
-  'DDRB',
-  'TALO',
-  'TAHI',
-  'TBLO',
-  'TBHI',
-  'TOD10TH',
-  'TODSEC',
-  'TODMIN',
-  'TODHR',
-  'SDR',
-  'ICR',
-  'CRA',
-  'CRB',
+  'PRA', //     Parallel data register A
+  'PRB', //     Parallel data register B
+  'DDRA', //    Data direction register A
+  'DDRB', //    Data direction register B
+  'TALO', //    Timer A low word
+  'TAHI', //    Timer A high word
+  'TBLO', //    Timer B low word
+  'TBHI', //    Timer B high word
+  'TOD10TH', // Time-of-day tenths of seconds
+  'TODSEC', //  Time-of-day seconds
+  'TODMIN', //  Time-of-day minutes
+  'TODHR', //   Time-of-day hours
+  'SDR', //     Serial data register
+  'ICR', //     Interrupt control register
+  'CRA', //     Control register A
+  'CRB', //     Control register B
 ]
 
 export default function Ic6526() {

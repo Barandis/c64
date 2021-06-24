@@ -28,7 +28,6 @@ import {
   FRELO1,
   FRELO2,
   FRELO3,
-  MAX_LAST_WRITE_TIME,
   POTX,
   PWHI1,
   PWHI2,
@@ -51,6 +50,13 @@ import Filter from './filter'
 import Voice from './voice'
 
 const { INPUT, OUTPUT } = Pin
+
+// This is the maximum number of cycles for which a write-only register, when read, will
+// return a value of whatever was last written to *any* register. After that number of
+// cycles since the last write, any read from a write-only register will result in zero.
+// This is a simplification of the actual write-only read model, which fades the value more
+// gradually to zero.
+const MAX_LAST_WRITE_TIME = 2000
 
 export default function Ic6581() {
   const chip = Chip(
@@ -244,6 +250,7 @@ export default function Ic6581() {
     } else if (index < POTX) {
       registers[index] = value
     }
+    lastWriteValue = value
     lastWriteTime = 0
 
     switch (index) {
@@ -351,7 +358,7 @@ export default function Ic6581() {
 
       // Check to see if last written value has bled off internal data bus yet
       lastWriteTime += 1
-      if (lastWriteTime > MAX_LAST_WRITE_TIME) {
+      if (lastWriteTime >= MAX_LAST_WRITE_TIME) {
         lastWriteValue = 0
       }
 

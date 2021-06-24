@@ -5,7 +5,10 @@
 
 import { writeFile } from 'fs'
 import { resolve } from 'path'
+import { assert } from 'test/helper'
 import { range } from 'utils'
+
+const FALLOFF_BREAKPOINTS = [0x5d, 0x36, 0x1a, 0x0e, 0x06]
 
 /* eslint-disable no-console */
 function write(path, name, value) {
@@ -45,6 +48,149 @@ function produceEnvelope(env, clock, iterations = 500, gap = 100) {
   }
 
   return values
+}
+
+export function envMinimum({ env1, clock }) {
+  env1.atdcy(0x00) // Minimum attack/decay
+  env1.surel(0x80) // 0x88 sustain level, minimum release
+
+  env1.vcreg(1)
+
+  let envelope = 0
+  // attack phase; increasing until 255
+  while (envelope < 255) {
+    // Minimum attack goes 9 cycles between increases in envelope value
+    for (const _ of range(9)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope += 1
+  }
+
+  // decay phase, descending until sustain level (0x88)
+  while (envelope > 0x88) {
+    // Minimum decay goes 9 cycles between decreases in envelope value
+    for (const _ of range(9)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope -= 1
+  }
+
+  // sustain phase, stays at sustain level
+  // 261 is a multiple of the rate target (9), so it'll make release testing easier by
+  // keeping envelope changes on the right cycle
+  for (const _ of range(261)) {
+    assert.equal(env1.output, envelope)
+    clock()
+  }
+
+  // release phase, descends until 0
+  let falloff = 1
+  env1.vcreg(0)
+
+  while (envelope > 0) {
+    for (const _ of range(9 * falloff)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope -= 1
+    if (FALLOFF_BREAKPOINTS.includes(envelope)) {
+      falloff = Math.min(falloff * 2, 30)
+    }
+  }
+
+  // release phase, stays at 0
+  for (const _ of range(256)) {
+    assert.equal(env1.output, envelope)
+    clock()
+  }
+}
+
+export function envNoSustain({ env1, clock }) {
+  env1.atdcy(0x00) // Minimum attack/decay
+  env1.surel(0x00) // Zero sustain level, minimum release
+
+  env1.vcreg(1)
+
+  let envelope = 0
+  // attack phase; increasing until 255
+  while (envelope < 255) {
+    // Minimum attack goes 9 cycles between increases in envelope value
+    for (const _ of range(9)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope += 1
+  }
+
+  // decay phase, descends until sustain level (0)
+  let falloff = 1
+
+  while (envelope > 0) {
+    for (const _ of range(9 * falloff)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope -= 1
+    if (FALLOFF_BREAKPOINTS.includes(envelope)) {
+      falloff = Math.min(falloff * 2, 30)
+    }
+  }
+
+  // decay phase, stays at 0
+  for (const _ of range(256)) {
+    assert.equal(env1.output, envelope)
+    clock()
+  }
+}
+
+export function envMaxSustain({ env1, clock }) {
+  env1.atdcy(0x00) // Minimum attack/decay
+  env1.surel(0xf0) // Max sustain level, minimum release
+
+  env1.vcreg(1)
+
+  let envelope = 0
+  // attack phase; increasing until 255
+  while (envelope < 255) {
+    // Minimum attack goes 9 cycles between increases in envelope value
+    for (const _ of range(9)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope += 1
+  }
+
+  // decay phase gets skipped since envelope is already at sustain level
+  // sustain phase, stays at sustain level
+  // 261 is a multiple of the rate target (9), so it'll make release testing easier by
+  // keeping envelope changes on the right cycle
+  for (const _ of range(261)) {
+    assert.equal(env1.output, envelope)
+    clock()
+  }
+
+  // release phase, descends until 0
+  let falloff = 1
+  env1.vcreg(0)
+
+  while (envelope > 0) {
+    for (const _ of range(9 * falloff)) {
+      assert.equal(env1.output, envelope)
+      clock()
+    }
+    envelope -= 1
+    if (FALLOFF_BREAKPOINTS.includes(envelope)) {
+      falloff = Math.min(falloff * 2, 30)
+    }
+  }
+
+  // release phase, stays at 0
+  for (const _ of range(256)) {
+    assert.equal(env1.output, envelope)
+    clock()
+  }
 }
 
 export function graphMinimum({ env1, clock }) {

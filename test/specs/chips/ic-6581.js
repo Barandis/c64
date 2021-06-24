@@ -6,11 +6,20 @@
 import EnvelopeGenerator from 'chips/ic-6581/envelope'
 import ExternalFilter from 'chips/ic-6581/external'
 import Filter from 'chips/ic-6581/filter'
+import Ic6581 from 'chips/ic-6581/index'
 import Voice from 'chips/ic-6581/voice'
 import WaveformGenerator from 'chips/ic-6581/waveform'
-import { range, setBit } from 'utils'
+import { deviceTraces } from 'test/helper'
+import { pinsToValue, range, setBit, valueToPins } from 'utils'
 import graphFull from './ic-6581/chip'
-import { graphFullSustain, graphMinimum, graphZeroSustain } from './ic-6581/envelope'
+import {
+  envMaxSustain,
+  envMinimum,
+  envNoSustain,
+  graphFullSustain,
+  graphMinimum,
+  graphZeroSustain,
+} from './ic-6581/envelope'
 import graphChord from './ic-6581/external'
 import {
   graphSingleBandPass,
@@ -22,6 +31,16 @@ import {
   graphTripleLowPass,
   graphTripleNoFilter,
 } from './ic-6581/filter'
+import {
+  readEnvRegister,
+  readOscRegister,
+  readPotRegisters,
+  readWriteOnly,
+  writeFcRegisters,
+  writeOtherRegisters,
+  writePwRegisters,
+  writeReadOnly,
+} from './ic-6581/registers'
 import { graphVoice } from './ic-6581/voice'
 import {
   graphNoise,
@@ -47,11 +66,80 @@ import {
   triangleA7,
 } from './ic-6581/waveform'
 
+const RUN_GRAPHS = false
+
 describe('6581 SID', () => {
+  let chip
+  let tr
+  let addrTraces
+  let dataTraces
+
+  beforeEach(() => {
+    chip = Ic6581()
+    tr = deviceTraces(chip)
+
+    addrTraces = [...range(5)].map(i => tr[`A${i}`])
+    dataTraces = [...range(8)].map(i => tr[`D${i}`])
+
+    tr.R_W.set()
+    tr.RES.set()
+    tr.CS.set()
+  })
+
+  function writeRegister(register, value) {
+    valueToPins(value, ...dataTraces)
+    valueToPins(register, ...addrTraces)
+    tr.R_W.clear()
+    tr.CS.clear()
+    tr.CS.set()
+    tr.R_W.set()
+  }
+
+  function readRegister(register) {
+    valueToPins(register, ...addrTraces)
+    tr.CS.clear()
+    const value = pinsToValue(...dataTraces)
+    tr.CS.set()
+    return value
+  }
+
+  const test = fn => () =>
+    fn({
+      chip,
+      tr,
+      writeRegister,
+      readRegister,
+    })
+
+  describe('external interface', () => {
+    describe('writing registers', () => {
+      it('removes the top 4 bits from PWHI registers', test(writePwRegisters))
+      it('removes the top 5 bits from the CUTLO register', test(writeFcRegisters))
+      it('writes other registers without changes', test(writeOtherRegisters))
+      it('does not write to read-only registers', test(writeReadOnly))
+    })
+    describe('reading registers', () => {
+      it('reads changes to POTX and POTY', test(readPotRegisters))
+      it('reads voice 3 envelope from ENV3', test(readEnvRegister))
+      it('reads voice 3 waveform from RANDOM', test(readOscRegister))
+      it('reads last written value from write-only registers', test(readWriteOnly))
+    })
+  })
+
   describe('waveform generator', () => {
     let wave1
     let wave2
     let wave3
+
+    beforeEach(() => {
+      wave1 = WaveformGenerator()
+      wave2 = WaveformGenerator()
+      wave3 = WaveformGenerator()
+
+      wave1.sync(wave3)
+      wave2.sync(wave1)
+      wave3.sync(wave2)
+    })
 
     function setPitch(wave, [hi, lo]) {
       wave.frelo(lo)
@@ -75,17 +163,7 @@ describe('6581 SID', () => {
       wave3.clock()
     }
 
-    beforeEach(() => {
-      wave1 = WaveformGenerator()
-      wave2 = WaveformGenerator()
-      wave3 = WaveformGenerator()
-
-      wave1.sync(wave3)
-      wave2.sync(wave1)
-      wave3.sync(wave2)
-    })
-
-    const test =
+    const testWave =
       (fn, ...args) =>
       () =>
         fn(
@@ -102,39 +180,41 @@ describe('6581 SID', () => {
         )
 
     describe('sawtooth generator', () => {
-      it('produces a 440Hz A', test(sawtoothA4))
-      it('produces a 3520Hz A', test(sawtoothA7))
+      it('produces a 440Hz A', testWave(sawtoothA4))
+      it('produces a 3520Hz A', testWave(sawtoothA7))
     })
     describe('triangle generator', () => {
-      it('produces a 440Hz A', test(triangleA4))
-      it('produces a 3520Hz A', test(triangleA7))
+      it('produces a 440Hz A', testWave(triangleA4))
+      it('produces a 3520Hz A', testWave(triangleA7))
     })
     describe('pulse generator', () => {
-      it('produces a 440Hz A', test(pulseA4))
-      it('produces a 3520Hz A', test(pulseA7))
+      it('produces a 440Hz A', testWave(pulseA4))
+      it('produces a 3520Hz A', testWave(pulseA7))
     })
 
-    describe.skip('graph production', () => {
-      it('graphs a sawtooth waveform', test(graphSawtooth))
-      it('graphs a high-frequency sawtooth waveform', test(graphSawtoothHigh))
-      it('graphs a triangle waveform', test(graphTriangle))
-      it('graphs a high-frequency triangle waveform', test(graphTriangleHigh))
-      it('graphs a pulse waveform', test(graphPulse))
-      it('graphs a high-frequency pulse waveform', test(graphPulseHigh))
-      it('graphs a noise waveform', test(graphNoise))
-      it('graphs a higher-frequency noise waveform', test(graphNoiseHigh))
+    if (RUN_GRAPHS) {
+      describe('graph production', () => {
+        it('graphs a sawtooth waveform', testWave(graphSawtooth))
+        it('graphs a high-frequency sawtooth waveform', testWave(graphSawtoothHigh))
+        it('graphs a triangle waveform', testWave(graphTriangle))
+        it('graphs a high-frequency triangle waveform', testWave(graphTriangleHigh))
+        it('graphs a pulse waveform', testWave(graphPulse))
+        it('graphs a high-frequency pulse waveform', testWave(graphPulseHigh))
+        it('graphs a noise waveform', testWave(graphNoise))
+        it('graphs a higher-frequency noise waveform', testWave(graphNoiseHigh))
 
-      const widths = [...range(1000, 3001, 1000)]
-      widths.forEach(pw => {
-        it(`graphs a pulse with width ${pw}`, test(graphPulseVary, pw))
+        const widths = [...range(1000, 3001, 1000)]
+        widths.forEach(pw => {
+          it(`graphs a pulse with width ${pw}`, testWave(graphPulseVary, pw))
+        })
+        it('graphs sawtooth + triangle', testWave(graphSawTri))
+        it('graphs sawtooth + pulse', testWave(graphSawPul))
+        it('graphs triangle + pulse', testWave(graphTriPul))
+        it('graphs triangle + pulse + sawtooth', testWave(graphTriPulSaw))
+        it('graphs a hard sync with wave 3', testWave(graphSync))
+        it('graphs ring modulation with wave 3', testWave(graphRing))
       })
-      it('graphs sawtooth + triangle', test(graphSawTri))
-      it('graphs sawtooth + pulse', test(graphSawPul))
-      it('graphs triangle + pulse', test(graphTriPul))
-      it('graphs triangle + pulse + sawtooth', test(graphTriPulSaw))
-      it('graphs a hard sync with wave 3', test(graphSync))
-      it('graphs ring modulation with wave 3', test(graphRing))
-    })
+    }
   })
 
   describe('envelope generator', () => {
@@ -154,7 +234,7 @@ describe('6581 SID', () => {
       env3 = EnvelopeGenerator()
     })
 
-    const test =
+    const testEnv =
       (fn, ...args) =>
       () =>
         fn(
@@ -167,23 +247,25 @@ describe('6581 SID', () => {
           ...args,
         )
 
-    describe.skip('graph production', () => {
-      it('graphs a minimum-parameter envelope', test(graphMinimum))
-      it('graphs a zero-sustain envelope', test(graphZeroSustain))
-      it('graphs a full-sustain envelope', test(graphFullSustain))
+    describe('envelope values', () => {
+      it('generates an envelope with minmum ADR values', testEnv(envMinimum))
+      it('generates an envelope with no sustain', testEnv(envNoSustain))
+      it('generates an envelope with max sustain', testEnv(envMaxSustain))
     })
+
+    if (RUN_GRAPHS) {
+      describe('graph production', () => {
+        it('graphs a minimum-parameter envelope', testEnv(graphMinimum))
+        it('graphs a zero-sustain envelope', testEnv(graphZeroSustain))
+        it('graphs a full-sustain envelope', testEnv(graphFullSustain))
+      })
+    }
   })
 
   describe('voice', () => {
     let voice1
     let voice2
     let voice3
-
-    function clock() {
-      voice1.clock()
-      voice2.clock()
-      voice3.clock()
-    }
 
     beforeEach(() => {
       voice1 = Voice()
@@ -195,7 +277,13 @@ describe('6581 SID', () => {
       voice3.sync(voice2)
     })
 
-    const test =
+    function clock() {
+      voice1.clock()
+      voice2.clock()
+      voice3.clock()
+    }
+
+    const testVoice =
       (fn, ...args) =>
       () =>
         fn(
@@ -208,9 +296,11 @@ describe('6581 SID', () => {
           ...args,
         )
 
-    describe.skip('graph production', () => {
-      it('graphs waveform, envelope, and voice', test(graphVoice))
-    })
+    if (RUN_GRAPHS) {
+      describe('graph production', () => {
+        it('graphs waveform, envelope, and voice', testVoice(graphVoice))
+      })
+    }
   })
 
   describe('filter', () => {
@@ -218,13 +308,6 @@ describe('6581 SID', () => {
     let voice2
     let voice3
     let filter
-
-    function clock() {
-      voice1.clock()
-      voice2.clock()
-      voice3.clock()
-      filter.clock(voice1.output, voice2.output, voice3.output, 0)
-    }
 
     beforeEach(() => {
       voice1 = Voice()
@@ -238,7 +321,14 @@ describe('6581 SID', () => {
       filter = Filter()
     })
 
-    const test =
+    function clock() {
+      voice1.clock()
+      voice2.clock()
+      voice3.clock()
+      filter.clock(voice1.output, voice2.output, voice3.output, 0)
+    }
+
+    const testFilter =
       (fn, ...args) =>
       () =>
         fn(
@@ -252,18 +342,20 @@ describe('6581 SID', () => {
           ...args,
         )
 
-    describe.skip('graph production', () => {
-      describe('filter a single note', () => {
-        it('graphs a no-filter tone', test(graphSingleNoFilter))
-        it('graphs a low-pass tone', test(graphSingleLowPass))
-        it('graphs a band-pass tone', test(graphSingleBandPass))
-        it('graphs a high-pass tone', test(graphSingleHighPass))
-        it('graphs a no-filter chord', test(graphTripleNoFilter))
-        it('graphs a low-pass chord', test(graphTripleLowPass))
-        it('graphs a band-pass chord', test(graphTripleBandPass))
-        it('graphs a high-pass chord', test(graphTripleHighPass))
+    if (RUN_GRAPHS) {
+      describe('graph production', () => {
+        describe('filter a single note', () => {
+          it('graphs a no-filter tone', testFilter(graphSingleNoFilter))
+          it('graphs a low-pass tone', testFilter(graphSingleLowPass))
+          it('graphs a band-pass tone', testFilter(graphSingleBandPass))
+          it('graphs a high-pass tone', testFilter(graphSingleHighPass))
+          it('graphs a no-filter chord', testFilter(graphTripleNoFilter))
+          it('graphs a low-pass chord', testFilter(graphTripleLowPass))
+          it('graphs a band-pass chord', testFilter(graphTripleBandPass))
+          it('graphs a high-pass chord', testFilter(graphTripleHighPass))
+        })
       })
-    })
+    }
   })
 
   describe('full chip', () => {
@@ -286,7 +378,7 @@ describe('6581 SID', () => {
       ext = ExternalFilter()
     })
 
-    const test =
+    const testExt =
       (fn, ...args) =>
       () =>
         fn(
@@ -300,16 +392,20 @@ describe('6581 SID', () => {
           ...args,
         )
 
-    describe.skip('graph production', () => {
-      describe('produce a chord', () => {
-        it('graphs a D major chord', test(graphChord))
+    if (RUN_GRAPHS) {
+      describe('graph production', () => {
+        describe('produce a chord', () => {
+          it('graphs a D major chord', testExt(graphChord))
+        })
       })
-    })
+    }
   })
 
   describe('packaged 6581', () => {
-    describe.skip('graph production', () => {
-      it('graphs registers and output for a D major chord', graphFull)
-    })
+    if (RUN_GRAPHS) {
+      describe.skip('graph production', () => {
+        it('graphs registers and output for a D major chord', graphFull)
+      })
+    }
   })
 })
