@@ -19,33 +19,33 @@
 // Since the chip has only 8 address pins, an address has to be split into two parts,
 // representing a row and a column (presenting the memory array as a physical 256-bit x
 // 256-bit array). These row and column addresses are provided to the chip sequentially; the
-// row address is put onto the address pins and  the active-low row address strobe pin `RAS`
+// row address is put onto the address pins and  the active-low row address strobe pin RAS
 // is set low, then the column address is put onto the address pins and the active-low
-// column address strobe pin `CAS` is set low.
+// column address strobe pin CAS is set low.
 //
 // The chip has three basic modes of operation, controlled by the active-low write-enable
-// (`WE`) pin with some help from `CAS`. If `WE` is high, then the chip is in read mode
-// after the address is set. If `WE` is low, the mode depends on whether `WE` went low
-// before the address was set by putting `CAS` low; if `CAS` went low first, (meaning the
-// chip was initially in read mode), setting `WE` low will start read-modify-write mode,
-// where the value at that address is still available on the data-out pin (`Q`) even as the
-// new value is set from the data-in pin (`D`). If `WE` goes low before `CAS`, then read
-// mode is never entered and write mode is enabled instead. The value of `D` is still
-// written to memory, but `Q` is disconnected and no data is available there.
+// (WE) pin with some help from CAS. If WE is high, then the chip is in read mode after the
+// address is set. If WE is low, the mode depends on whether WE went low before the address
+// was set by putting CAS low; if CAS went low first, (meaning the chip was initially in
+// read mode), setting WE low will start read-modify-write mode, where the value at that
+// address is still available on the data-out pin (Q) even as the new value is set from the
+// data-in pin (D). If WE goes low before CAS, then read mode is never entered and write
+// mode is enabled instead. The value of D is still written to memory, but Q is disconnected
+// and no data is available there.
 //
-// The Commodore 64 does not use read-modify-write mode. The `WE` pin is always set to its
-// proper level before the `CAS` pin goes low.
+// The Commodore 64 does not use read-modify-write mode. The WE pin is always set to its
+// proper level before the CAS pin goes low.
 //
-// While `WE` and `CAS` control what is read from and/or written to the chip's memory, `RAS`
-// is not needed for anything other than setting the row address. Hence `RAS` can remain low
+// While WE and CAS control what is read from and/or written to the chip's memory, RAS is
+// not needed for anything other than setting the row address. Hence RAS can remain low
 // through multiple memory accesses, as long as its address is valid for all of them,
 // allowing reads and writes to happen within a single 256-address page of memory without
-// incurring the cost of resetting the row address. This doesn't happen in the C64; the
-// 6567 VIC cycles the RAS line once every clock cycle.
+// incurring the cost of resetting the row address. This doesn't happen in the C64; the 6567
+// VIC cycles the RAS line once every clock cycle.
 //
 // Unlike most other non-logic chips in the system, there is no dedicated chip-select pin.
-// The combination of `RAS` and `CAS` can be regarded as such a pin, and it is used that way
-// in the Commodore 64.
+// The combination of RAS and CAS can be regarded as such a pin, and it is used that way in
+// the Commodore 64.
 //
 // The chip comes in a 16-pin dual in-line package with the following pin assignments.
 //
@@ -60,8 +60,42 @@
 //     Vcc |8        9| A7
 //         +----------+
 //
-// *(`Vss` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated. `NC` stands for "no contact" and is not connected to anything internally.)*
+// These pin assignments are explained below.
+//
+// | Pin | Name  | Description                                                             |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 1   | NC    | No connection. Not emulated.                                            |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 2   | D     | Data input. This pin's value is written to memory when write mode is    |
+// |     |       | entered.                                                                |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 3   | WE    | Active-low write enable. If this is low, memory is being written to. If |
+// |     |       | it is high, memory is being read.                                       |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 4   | RAS   | Active-low row address strobe. When this goes low, the value of the     |
+// |     |       | address pins is stored as the row address for the internal 256x256      |
+// |     |       | memory array.                                                           |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 5   | A0    | Address pins. These 8 pins in conjunction with RAS and CAS allow the    |
+// | 6   | A2    | the addressing of 65,536 memory locations.                              |
+// | 7   | A1    |                                                                         |
+// | 9   | A7    |                                                                         |
+// | 10  | A5    |                                                                         |
+// | 11  | A4    |                                                                         |
+// | 12  | A3    |                                                                         |
+// | 13  | A6    |                                                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 8   | Vcc   | +5V power supply. Not emulated.                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 14  | Q     | Data output. The value of the memory at the latched location appears on |
+// |     |       | this pin when the CAS pin goes low in read mode.                        |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 15  | CAS   | Active-low column address strobe. When this goes low, the value of the  |
+// |     |       | address pins is stored as the column address for the internal 256x256   |
+// |     |       | memory array, and the location is either read from or written to,       |
+// |     |       | depending on the value of WE.                                           |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 16  | Vss   | 0V power supply (ground). Not emulated.                                 |
 //
 // In the Commodore 64, U9, U10, U11, U12, U21, U22, U23, and U24 are 4164's, one for each
 // of the 8 bits on the data bus.
@@ -103,7 +137,7 @@ export default function Ic4164() {
     Pin(2, 'D', INPUT),
 
     // The data output pin. This is active in read and read-modify-write mode, set to the
-    // value of the bit at the address latched by _RAS and _CAS. In write mode, it is
+    // value of the bit at the address latched by RAS and CAS. In write mode, it is
     // hi-z.
     Pin(14, 'Q', OUTPUT),
 

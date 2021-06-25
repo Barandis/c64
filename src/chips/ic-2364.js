@@ -30,8 +30,39 @@
 //     GND |12          13| D3
 //         +--------------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// These pin assignments are explained below.
+//
+// | Pin | Name  | Description                                                             |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 1   | A7    | Address pins. These 13 pins can address 8192 memory locations.          |
+// | 2   | A6    |                                                                         |
+// | 3   | A5    |                                                                         |
+// | 4   | A4    |                                                                         |
+// | 5   | A3    |                                                                         |
+// | 6   | A2    |                                                                         |
+// | 7   | A1    |                                                                         |
+// | 8   | A0    |                                                                         |
+// | 18  | A11   |                                                                         |
+// | 19  | A10   |                                                                         |
+// | 21  | A12   |                                                                         |
+// | 22  | A9    |                                                                         |
+// | 23  | A8    |                                                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 9   | D0    | Data pins. Data being read from memory will appear on these pins.       |
+// | 10  | D1    |                                                                         |
+// | 11  | D2    |                                                                         |
+// | 13  | D3    |                                                                         |
+// | 14  | D4    |                                                                         |
+// | 15  | D5    |                                                                         |
+// | 16  | D6    |                                                                         |
+// | 17  | D7    |                                                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 12  | GND   | Electrical ground. Not emulated.                                        |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 20  | CS    | Active-low chip select pin. Reading memory can only be done while this  |
+// |     |       | pin is low.                                                             |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 24  | Vcc   | +5V power supply. Not emulated.                                         |
 //
 // In the Commodore 64, U3 and U4 are both 2364A's (a variant with slightly faster data
 // access). U3 stores the BASIC interpreter and U4 stores the kernal.
@@ -48,7 +79,7 @@ const { INPUT, OUTPUT } = Pin
 // change.
 export default function Ic2364(buffer) {
   const chip = Chip(
-    // Address pins A0...A12
+    // Address pins A0-A12
     Pin(8, 'A0', INPUT),
     Pin(7, 'A1', INPUT),
     Pin(6, 'A2', INPUT),
@@ -63,7 +94,7 @@ export default function Ic2364(buffer) {
     Pin(19, 'A11', INPUT),
     Pin(21, 'A12', INPUT),
 
-    // Data pins D0...D7
+    // Data pins D0-D7
     Pin(9, 'D0', OUTPUT),
     Pin(10, 'D1', OUTPUT),
     Pin(11, 'D2', OUTPUT),
@@ -74,7 +105,7 @@ export default function Ic2364(buffer) {
     Pin(17, 'D7', OUTPUT),
 
     // Chip select pin. When this goes low, a read cycle is executed based on the address
-    // on pins A0...A12. When it's high, the data pins are put into hi-Z.
+    // on pins A0-A12. When it's high, the data pins are put into hi-Z.
     Pin(20, 'CS', INPUT),
 
     // Power supply and ground pins. These are not emulated.

@@ -9,14 +9,14 @@
 // gates. An AND gate's output is high as long as all of its outputs are high; otherwise the
 // output is low.
 //
-// The `A` and `B` pins are inputs while the `Y` pins are the outputs.
+// The A and B pins are inputs while the Y pins are the outputs.
 //
-// | An     | Bn     | Yn     |
-// | :----: | :----: | :----: |
-// | L      | L      | **L**  |
-// | L      | H      | **L**  |
-// | H      | L      | **L**  |
-// | H      | H      | **H**  |
+// | An  | Bn  || Yn  |
+// | --- | --- || --- |
+// | L   | L   || L   |
+// | L   | H   || L   |
+// | H   | L   || L   |
+// | H   | H   || H   |
 //
 // The chip comes in a 14-pin dual in-line package with the following pin assignments.
 //
@@ -30,13 +30,12 @@
 //     GND |7        8| Y3
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, U27 is a 74LS08 (a lower-power, faster variant whose emulation is
-// the same). It's used for combining control signals from various sources, such as the `BA`
-// signal from the {@link Ic6567|6567} VIC and the `_DMA` signal from the expansion port
-// combining into the `RDY` signal for the 6510 CPU.
+// the same). It's used for combining control signals from various sources, such as the BA
+// signal from the 6567 VIC and the DMA signal from the expansion port combining into the
+// `RDY` signal for the 6510 CPU.
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'

@@ -13,19 +13,19 @@
 // This chip is exactly the same as the 74257 except that the this one has inverted outputs
 // and the other doesn't.
 //
-// The inputs to each multiplexer are the `A` and `B` pins, and the `Y` pins are their
-// inverted outputs. The `SEL` pin selects between the `A` inputs (when `SEL` is low) and
-// the `B` inputs (when `SEL` is high). This single pin selects the outputs for all four
-// multiplexers simultaneously. The active low output-enable pin, `OE`, tri-states all four
-// outputs when it's set high.
+// The inputs to each multiplexer are the A and B pins, and the Y pins are their inverted
+// outputs. The SEL pin selects between the A inputs (when SEL is low) and the B inputs
+// (when SEL is high). This single pin selects the outputs for all four multiplexers
+// simultaneously. The active low output-enable pin, OE, tri-states all four outputs when
+// it's set high.
 //
-// | OE     | SEL    | An     | Bn     | Yn     |
-// | :----: | :----: | :----: | :----: | :----: |
-// | H      | X      | X      | X      | **Z**  |
-// | L      | L      | L      | X      | **H**  |
-// | L      | L      | H      | X      | **L**  |
-// | L      | H      | X      | L      | **H**  |
-// | L      | H      | X      | H      | **L**  |
+// | OE  | SEL | An  | Bn  || Yn  |
+// | --- | --- | --- | --- || --- |
+// | H   | X   | X   | X   || Z   |
+// | L   | L   | L   | X   || H   |
+// | L   | L   | H   | X   || L   |
+// | L   | H   | X   | L   || H   |
+// | L   | H   | X   | H   || L   |
 //
 // The chip comes in a 16-pin dual in-line package with the following pin assignments.
 //
@@ -40,13 +40,12 @@
 //     GND |8        9| Y3
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, U14 is a 74LS258 (a lower-power, faster variant whose emulation is
 // the same). It's used to multiplex the upper two lines of the multiplexed address bus from
-// the `A6` and `A7` lines from the 6567 VIC and the `VA14` and `VA15` lines from one of the
-// 6526 CIAs.
+// the A6 and A7 lines from the 6567 VIC and the VA14 and VA15 lines from one of the 6526
+// CIAs.
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'

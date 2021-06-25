@@ -13,19 +13,18 @@
 // This chip is exactly the same as the 74258 except that the latter has inverted outputs
 // and this one doesn't.
 //
-// The inputs to each multiplexer are the `A` and `B` pins, and the `Y` pins are their
-// outputs. The `SEL` pin selects between the `A` inputs (when `SEL` is low) and the `B`
-// inputs (when `SEL` is high). This single pin selects the outputs for all four
-// multiplexers simultaneously. The active low output-enable pin, `OE`, tri-states all four
-// outputs when it's set high.
+// The inputs to each multiplexer are the A and B pins, and the Y pins are their outputs.
+// The SEL pin selects between the A inputs (when SEL is low) and the B inputs (when SEL is
+// high). This single pin selects the outputs for all four multiplexers simultaneously. The
+// active low output-enable pin, OE, tri-states all four outputs when it's set high.
 //
-// | OE     | SEL    | An     | Bn     | Yn     |
-// | :----: | :----: | :----: | :----: | :----: |
-// | H      | X      | X      | X      | **Z**  |
-// | L      | L      | L      | X      | **L**  |
-// | L      | L      | H      | X      | **H**  |
-// | L      | H      | X      | L      | **L**  |
-// | L      | H      | X      | H      | **H**  |
+// | OE  | SEL | An  | Bn  || Yn  |
+// | --- | --- | --- | --- || --- |
+// | H   | X   | X   | X   || Z   |
+// | L   | L   | L   | X   || L   |
+// | L   | L   | H   | X   || H   |
+// | L   | H   | X   | L   || L   |
+// | L   | H   | X   | H   || H   |
 //
 // The chip comes in a 16-pin dual in-line package with the following pin assignments.
 //
@@ -40,8 +39,7 @@
 //     GND |8        9| Y3
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, both U13 and U25 are 74LS257 chips (a lower-power, faster variant
 // whose emulation is the same). They are used together to multiplex the CPU's 16 address

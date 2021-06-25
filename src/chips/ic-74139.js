@@ -14,34 +14,34 @@
 // really two numbers that go into the output's name (the demultiplexer number and the
 // output number) and having a letter separate them is quite readable. But since each of
 // these pin names becomes a property on the chip, that scheme cannot be used here.
-// Therefore each demultiplexer has two inputs starting with `A` and `B`, an active-low
-// enable pin starting with `G`, and four inverted outputs whose names start with `Y`.
+// Therefore each demultiplexer has two inputs starting with A and B, an active-low enable
+// pin starting with G, and four inverted outputs whose names start with Y.
 //
-// | Gn     | An     | Bn     | Yn0    | Yn1    | Yn2    | Yn3    |
-// | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
-// | H      | X      | X      | **H**  | **H**  | **H**  | **H**  |
-// | L      | L      | L      | **L**  | **H**  | **H**  | **H**  |
-// | L      | H      | L      | **H**  | **L**  | **H**  | **H**  |
-// | L      | L      | H      | **H**  | **H**  | **L**  | **H**  |
-// | L      | H      | H      | **H**  | **H**  | **H**  | **L**  |
+// | Gn  | An  | Bn  || Yn0 | Yn1 | Yn2 | Yn3 |
+// | --- | --- | --- || --- | --- | --- | --- |
+// | H   | X   | X   || H   | H   | H   | H   |
+// | L   | L   | L   || L   | H   | H   | H   |
+// | L   | H   | L   || H   | L   | H   | H   |
+// | L   | L   | H   || H   | H   | L   | H   |
+// | L   | H   | H   || H   | H   | H   | L   |
 //
 // In the Commodore 64, the two demultiplexers are chained together by connecting one of the
 // outputs from demux 1 to the enable pin of demux 2. The inputs are the address lines
-// `A8`-`A11`, and the enable pin of demux 1 comes directly from the PLA's `IO` output. Thus
-// the demultiplexers only do work when `IO` is selected, which requires that the address be
-// from 0xD000 - 0xDFFF, among other things. A more specific table for this setup can thus
-// be created.
+// A8-A11, and the enable pin of demux 1 comes directly from the PLA's IO output. Thus the
+// demultiplexers only do work when IO is selected, which requires that the address be from
+// 0xd000 - 0xdfff, among other things. A more specific table for this setup can thus be
+// created.
 //
-// | IO    | A8    | A9    | A10   | A11   | Address         | Active Output |
-// | :---: | :---: | :---: | :---: | :---: | :-------------- | :------------ |
-// | H     | X     | X     | X     | X     | N/A             | None          |
-// | L     | X     | X     | L     | L     | 0xD000 - 0xD3FF | VIC           |
-// | L     | X     | X     | H     | L     | 0xD400 - 0xD7FF | SID           |
-// | L     | X     | X     | L     | H     | 0xD800 - 0xDBFF | Color RAM     |
-// | L     | L     | L     | H     | H     | 0xDC00 - 0xDCFF | CIA 1         |
-// | L     | H     | L     | H     | H     | 0xDD00 - 0xDDFF | CIA 2         |
-// | L     | L     | H     | H     | H     | 0xDE00 - 0xDEFF | I/O 1         |
-// | L     | H     | H     | H     | H     | 0xDF00 - 0xDFFF | I/O 2         |
+// | IO  | A8  | A9  | A10 | A11 | Address         || Active Output |
+// | --- | --- | --- | --- | --- | --------------- || ------------- |
+// | H   | X   | X   | X   | X   | N/A             || None          |
+// | L   | X   | X   | L   | L   | 0xd000 - 0xd3ff || VIC           |
+// | L   | X   | X   | H   | L   | 0xd400 - 0xd7ff || SID           |
+// | L   | X   | X   | L   | H   | 0xd800 - 0xdBff || Color RAM     |
+// | L   | L   | L   | H   | H   | 0xdc00 - 0xdcff || CIA 1         |
+// | L   | H   | L   | H   | H   | 0xdd00 - 0xddff || CIA 2         |
+// | L   | L   | H   | H   | H   | 0xde00 - 0xdeff || I/O 1         |
+// | L   | H   | H   | H   | H   | 0xdf00 - 0xdfff || I/O 2         |
 //
 // The decoding resolution is only 2 hexadecimal digits for the VIC, SID, and color RAM and
 // 3 hexadecimal digits for the CIAs and I/Os. This means that there will be memory
@@ -57,23 +57,22 @@
 //
 // The chip comes in a 16-pin dual in-line package with the following pin assignments.
 //
-//        +---+--+---+
-//     G1 |1  +--+ 16| Vcc
-//     A1 |2       15| G2
-//     B1 |3       14| A2
-//    Y10 |4       13| B2
-//    Y11 |5 74139 12| Y20
-//    Y12 |6       11| Y21
-//    Y13 |7       10| Y22
-//    GND |8        9| Y23
-//        +----------+
+//          +---+--+---+
+//       G1 |1  +--+ 16| Vcc
+//       A1 |2       15| G2
+//       B1 |3       14| A2
+//      Y10 |4       13| B2
+//      Y11 |5 74139 12| Y20
+//      Y12 |6       11| Y21
+//      Y13 |7       10| Y22
+//      GND |8        9| Y23
+//          +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, U15 is a 74LS139 (a lower-power, faster variant whose emulation is
 // the same). Its two demultiplexers are chained together to provide additional address
-// decoding when the PLA's `IO` output is selected.
+// decoding when the PLA's IO output is selected.
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'

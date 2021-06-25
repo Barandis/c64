@@ -526,7 +526,7 @@ export default function Ic6526() {
     Pin(26, 'D7', OUTPUT),
 
     // Parallel Port A pins. These are bidirectional but the direction is switchable via
-    // register.
+    // register. They're held high if unconnected through an internal pull-up resistor.
     Pin(2, 'PA0', INPUT).pullUp(),
     Pin(3, 'PA1', INPUT).pullUp(),
     Pin(4, 'PA2', INPUT).pullUp(),
@@ -537,7 +537,7 @@ export default function Ic6526() {
     Pin(9, 'PA7', INPUT).pullUp(),
 
     // Parallel Port B pins. These are bidirectional but the direction is switchable via
-    // register.
+    // register. They're held high if unconnected through an internal pull-up resistor.
     Pin(10, 'PB0', INPUT).pullUp(),
     Pin(11, 'PB1', INPUT).pullUp(),
     Pin(12, 'PB2', INPUT).pullUp(),

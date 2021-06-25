@@ -9,10 +9,10 @@
 // inverters. An inverter is the simplest of logic gates: if the input is low, the output is
 // high, and vice versa.
 //
-// | An     | Yn     |
-// | :----: | :----: |
-// | L      | **H**  |
-// | H      | **L**  |
+// | An  || Yn  |
+// | --- || --- |
+// | L   || H   |
+// | H   || L   |
 //
 // The chip comes in a 14-pin dual in-line package with the following pin assignments.
 //
@@ -26,12 +26,11 @@
 //     GND |7        8| Y4
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, U8 is a 7406. It's responsible for inverting logic signals that are
-// expected in the inverse they're given, such as the 6567's `AEC` signal being turned into
-// the inverse `AEC` signal for the 82S100.
+// expected in the inverse they're given, such as the 6567's AEC signal being turned into
+// the inverse AEC signal for the 82S100.
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'

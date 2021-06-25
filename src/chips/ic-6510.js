@@ -10,7 +10,7 @@ const { INPUT, OUTPUT } = Pin
 
 export default function Ic6510() {
   const chip = Chip(
-    // Address bus pins A0...A15.
+    // Address bus pins A0-A15.
     Pin(7, 'A0', OUTPUT),
     Pin(8, 'A1', OUTPUT),
     Pin(9, 'A2', OUTPUT),
@@ -28,8 +28,7 @@ export default function Ic6510() {
     Pin(22, 'A14', OUTPUT),
     Pin(23, 'A15', OUTPUT),
 
-    // Data bus pins D0...D7. These are bidirectional, the direction depending on the R_W
-    // pin.
+    // Data bus pins D0-D7. These are bidirectional, the direction depending on the R_W pin.
     Pin(37, 'D0', OUTPUT),
     Pin(36, 'D1', OUTPUT),
     Pin(35, 'D2', OUTPUT),
@@ -39,8 +38,8 @@ export default function Ic6510() {
     Pin(31, 'D6', OUTPUT),
     Pin(30, 'D7', OUTPUT),
 
-    // I/O Port pins P0...P5. These are bidrectional, the direction depending on the
-    // settings in the virtual registers in memory addresses 0x0000 and 0x0001.
+    // I/O Port pins P0-P5. These are bidrectional, the direction depending on the settings
+    // in the virtual registers in memory addresses 0x0000 and 0x0001.
     Pin(29, 'P0', OUTPUT),
     Pin(28, 'P1', OUTPUT),
     Pin(27, 'P2', OUTPUT),

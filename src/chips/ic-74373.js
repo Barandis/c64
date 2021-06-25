@@ -12,21 +12,21 @@
 // again, the outputs once more reflect their inputs.
 //
 // Since this chip is most often used in bus-type applications, the pins are named using
-// more of a bus-type convention. The inputs are `D` and the outputs are `Q`, and the
-// latches are numbered from 0 rather than from 1.
+// more of a bus-type convention. The inputs are D and the outputs are Q, and the latches
+// are numbered from 0 rather than from 1.
 //
-// The chip has an active-low output enable pin, `OE`. When this is high, all outputs are
-// set to a high impedance state.
+// The chip has an active-low output enable pin, OE. When this is high, all outputs are set
+// to a high impedance state.
 //
-// | OE     | LE     | Dn     | Qn     |
-// | :----: | :----: | :----: | :----: |
-// | H      | X      | X      | **Z**  |
-// | L      | H      | L      | **L**  |
-// | L      | H      | H      | **H**  |
-// | L      | L      | X      | **Q₀** |
+// | OE  | LE  | Dn  || Qn  |
+// | --- | --- | --- || --- |
+// | H   | X   | X   || Z   |
+// | L   | H   | L   || L   |
+// | L   | H   | H   || H   |
+// | L   | L   | X   || Q₀  |
 //
-// *(Q₀ means whatever level the pin was in the previous state. If the pin was high, then it
-// remains high. If it was low, it remains low.)*
+// Q₀ means whatever level the pin was in the previous state. If the pin was high, then it
+// remains high. If it was low, it remains low.
 //
 // The chip comes in a 20-pin dual in-line package with the following pin assignments.
 //
@@ -43,8 +43,7 @@
 //     GND |10      11| LE
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// GND and Vcc are ground and power supply pins respectively, and they are not emulated.
 //
 // In the Commodore 64, U26 is a 74LS373 (a lower-power, faster variant whose emulation is
 // the same). It's used to connect the multiplexed address bus to the lower 8 bits of the

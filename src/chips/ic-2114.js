@@ -21,21 +21,20 @@
 // 1k of colors and it isn't necessary to use it with a second 2114 to store full 8-bit
 // bytes.
 //
-// The timing of reads and writes is particularly simple. If the chip select pin `_CS` is
-// low, the 4 bits stored at the location given on its address pins is put onto the 4 data
-// pins. If the write enable pin `_WE` is also low, then the value on the 4 data pins is
-// stored at the location given on its address pins. The `_CS` pin can stay low for several
-// cycles of reads and writes; it does not require `CS` to return to high to start the next
-// cycle.
+// The timing of reads and writes is particularly simple. If the chip select pin CS is low,
+// the 4 bits stored at the location given on its address pins is put onto the 4 data pins.
+// If the write enable pin WE is also low, then the value on the 4 data pins is stored at
+// the location given on its address pins. The CS pin can stay low for several cycles of
+// reads and writes; it does not require CS to return to high to start the next cycle.
 //
 // The downside of this simple scheme is that care has to be taken to avoid unwanted writes.
-// Address changes should not take place while both `CS` and `WE` are low; since address
-// lines do not change simultaneously, changing addresses while both pins are low can and
-// will cause data to be written to multiple addresses, potentially overwriting legitimate
-// data. This is naturally emulated here for the same reason: the chip responds to address
-// line changes, and those changes do not happen simultaneously.
+// Address changes should not take place while both CS and WE are low; since address lines
+// do not change simultaneously, changing addresses while both pins are low can and will
+// cause data to be written to multiple addresses, potentially overwriting legitimate data.
+// This is naturally emulated here for the same reason: the chip responds to address line
+// changes, and those changes do not happen simultaneously.
 //
-// Aside from the active-low `CS` and `WE` pins, this simple memory device only has the
+// Aside from the active-low CS and WE pins, this simple memory device only has the
 // necessary address pins to address 1k of memory and the four necessary bidirectional data
 // pins. It's packages in an 18-pin dual-inline package with the following pin assignments.
 //
@@ -51,8 +50,35 @@
 //     GND |9       10| WE
 //         +----------+
 //
-// *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
-// emulated.)*
+// These pin assignments are explained below.
+//
+// | Pin | Name  | Description                                                             |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 1   | A6    | Address pins. These 10 pins can address 1024 memory locations.          |
+// | 2   | A5    |                                                                         |
+// | 3   | A4    |                                                                         |
+// | 4   | A3    |                                                                         |
+// | 5   | A0    |                                                                         |
+// | 6   | A1    |                                                                         |
+// | 7   | A2    |                                                                         |
+// | 15  | A9    |                                                                         |
+// | 16  | A8    |                                                                         |
+// | 17  | A7    |                                                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 8   | CS    | Active-low chip select pin. Reading and writing can only be done when   |
+// |     |       | this pin is low.                                                        |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 9   | GND   | Electrical ground. Not emulated.                                        |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 10  | WE    | Active-low write enable pin. This controls whether the chip is being    |
+// |     |       | read from (high) or written to (low).                                   |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 11  | D3    | Data pins. Data to be written to memory must be on these pins, and data |
+// | 12  | D2    | read from memory will appear on these pins.                             |
+// | 13  | D1    |                                                                         |
+// | 14  | D0    |                                                                         |
+// | --- | ----- | ----------------------------------------------------------------------- |
+// | 18  | Vcc   | +5V power supply. Not emulated.                                         |
 //
 // In the Commodore 64, U6 is a 2114. As explained above, it was used strictly as RAM for
 // storing graphics colors.

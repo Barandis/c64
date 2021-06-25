@@ -24,10 +24,10 @@
 // There is no consistency across datahsheets for naming the 4066's pins. Many sheets simply
 // have some data pins marked "IN/OUT" and others marked "OUT/IN", but those don't work well
 // as property names. For consistency with the rest of the logic chips in this module, the
-// data pins have been named `A` and `B`, while thie control pin is named `X`. The `A` and
-// `B` pins are completely interchangeable and do appear in different orders oon many
-// datasheets; this particular arrangement (if not the pin names) is taken from the
-// datasheet for the Texas Instruments CD4066B.
+// data pins have been named A and B, while thie control pin is named X. The A and B pins
+// are completely interchangeable and do appear in different orders oon many datasheets;
+// this particular arrangement (if not the pin names) is taken from the datasheet for the
+// Texas Instruments CD4066B.
 //
 // The chip comes in a 14-pin dual in-line package with the following pin assignments.
 //
@@ -41,7 +41,7 @@
 //     Vss |7        8| A3
 //         +----------+
 //
-// *(`Vdd` and `Vss` are power supply pins and are not emulated.)*
+// (Vdd and Vss are power supply pins and are not emulated.)
 //
 // This chip is unusual in that it's the only analog chip in the system as emulated (with
 // the exception of the filter portion of the 6581). Even so, it works fine for switching
