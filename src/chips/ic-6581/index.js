@@ -437,6 +437,16 @@
 // |     |       | additively mixing, and external filtering.                              |
 // | --- | ----- | ----------------------------------------------------------------------- |
 // | 28  | Vdd   | +12V power supply. Not emulated.                                        |
+//
+// In the Commodore 64, U18 is a 6581. It responds to addresses from 0xd400 to 0xd7ff. This
+// is many more addresses than are necessary to accomodate the 29 registers that are
+// actually present. These registers repeat every 32 (0x20) addresses through that space.
+// For example, writing 0xd400, 0xd420, 0xd440, etc. will all write to the FRELO1 register,
+// and reading 0xd419, 0xd439, 0xd459, etc. will all read from the POTX register. It's
+// recommended to ignore this "feature" and just read from/write to the lowest address
+// (0xd400 and 0xd419 in these examples).
+//
+// R7, R38, C13, C37, and Q8 make up the external filter.
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
