@@ -185,7 +185,7 @@
 //
 // | Bit        | 7   | 6   | 5   | 4   | 3   | 2   | 1   | 0   |
 // | ---------- | --- | --- | --- | --- | --- | --- | --- | --- |
-// |**Function**| SC  | x   | x   | FLG | SP  | ALRM| TB  | TA  |
+// | Function   | SC  | x   | x   | FLG | SP  | ALRM| TB  | TA  |
 //
 // Bits 0-4 are flags that represent the five sources of interrupts in the 6526:
 //
@@ -220,7 +220,7 @@
 //
 // | Bit        | 7   | 6   | 5   | 4   | 3   | 2   | 1   | 0   |
 // | ---------- | --- | --- | --- | --- | --- | --- | --- | --- |
-// |**Function**| IR  | 0   | 0   | FLG | SP  | ALRM| TB  | TA  |
+// | Function   | IR  | 0   | 0   | FLG | SP  | ALRM| TB  | TA  |
 //
 // Bits 0-4 are the same abbreviations as when writing the register. In reading, however,
 // they indicate that the event they're associated with *has actually happened* since the
@@ -260,7 +260,7 @@
 //
 // | Bit        | 7   | 6    | 5    | 4   | 3     | 2     | 1   | 0   |
 // | ---------- | --- | ---- | ---- | --- | ----- | ----- | --- | --- |
-// |**Function**|TODIN|SPMODE|INMODE| LOAD|RUNMODE|OUTMODE| PBON|START|
+// | Function   |TODIN|SPMODE|INMODE| LOAD|RUNMODE|OUTMODE| PBON|START|
 //
 // The `START` bit indicates whether Timer A is running. If it's at 0, setting it to 1 is
 // what starts the timer. If Timer Ais in one-shot mode (see `RUNMODE` below), then when it
@@ -304,7 +304,7 @@
 //
 // | Bit        | 7   | 6    | 5    | 4   | 3     | 2     | 1   | 0   |
 // | ---------- | --- | ---- | ---- | --- | ----- | ----- | --- | --- |
-// |**Function**|ALARM|INMODE|INMODE| LOAD|RUNMODE|OUTMODE| PBON|START|
+// | Function   |ALARM|INMODE|INMODE| LOAD|RUNMODE|OUTMODE| PBON|START|
 //
 // The lower 5 bits of this register are identical to the lower 5 bits of `CRA` except that
 // they affect Timer B instead of timer A, and that `PBON` sets the behavior of pin `PB7`

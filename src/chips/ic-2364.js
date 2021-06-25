@@ -14,7 +14,7 @@
 // address pins and makes the value at that location available on its data pins.
 //
 // The chip comes in a 24-pin dual in-line package with the following pin assignments.
-// ```txt
+//
 //         +-----+--+-----+
 //      A7 |1    +--+   24| Vcc
 //      A6 |2           23| A8
@@ -29,7 +29,7 @@
 //      D2 |11          14| D4
 //     GND |12          13| D3
 //         +--------------+
-// ```
+//
 // *(`GND` and `Vcc` are ground and power supply pins respectively, and they are not
 // emulated.)*
 //
