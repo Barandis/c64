@@ -14,18 +14,18 @@
 // are turned into properties on the chip itself, which has little chance of conflict since
 // a chip isn't meant to have any properties other than the pins themselves.
 
-export default function Chip(...pins) {
-  const array = []
+export default function Chip(pins, registers, latches) {
+  return {
+    get pins() {
+      return pins
+    },
 
-  for (const pin of pins) {
-    if (pin) {
-      array[pin.number] = pin
-      Object.defineProperty(array, pin.name, {
-        value: pin,
-        writable: false,
-      })
-    }
+    get registers() {
+      return registers
+    },
+
+    get latches() {
+      return latches
+    },
   }
-
-  return array
 }

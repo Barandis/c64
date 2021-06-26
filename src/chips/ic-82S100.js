@@ -191,14 +191,15 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 
 const { INPUT, OUTPUT } = Pin
 
 // These are alternate names for the input (I) and output (F) pins, matching purpose of each
 // pin in the Commodore 64. They can be used to access the same pins with a different naming
 // convention. For example, the I0 pin, which accepts the CAS signal from the VIC, can be
-// accessed regularly with `chip.I0` or `chip[9]`. With these constants, if so desired, it
-// can also be accessed as `chip[CAS]`.
+// accessed regularly with `chip.pins.I0` or `chip.pins[9]`. With these constants, if so
+// desired, it can also be accessed as `chip.pins[CAS]`.
 export const CAS = 'I0'
 export const LORAM = 'I1'
 export const HIRAM = 'I2'
@@ -225,7 +226,7 @@ export const ROML = 'F6'
 export const ROMH = 'F7'
 
 export default function Ic82S100() {
-  const chip = Chip(
+  const pins = Pins(
     // Input pins. In the 82S100, these were generically named I0 through I15, since each
     // pin could serve any function depending on the programming applies.
     Pin(9, 'I0', INPUT),
@@ -268,35 +269,35 @@ export default function Ic82S100() {
 
   // What else are you going to call an event listener that's 258 lines long?
   const oneListener = () => {
-    if (chip.OE.high) {
-      chip.F0.float()
-      chip.F1.float()
-      chip.F2.float()
-      chip.F3.float()
-      chip.F4.float()
-      chip.F5.float()
-      chip.F6.float()
-      chip.F7.float()
+    if (pins.OE.high) {
+      pins.F0.float()
+      pins.F1.float()
+      pins.F2.float()
+      pins.F3.float()
+      pins.F4.float()
+      pins.F5.float()
+      pins.F6.float()
+      pins.F7.float()
 
       return
     }
 
-    const i0 = chip.I0.high
-    const i1 = chip.I1.high
-    const i2 = chip.I2.high
-    const i3 = chip.I3.high
-    const i4 = chip.I4.high
-    const i5 = chip.I5.high
-    const i6 = chip.I6.high
-    const i7 = chip.I7.high
-    const i8 = chip.I8.high
-    const i9 = chip.I9.high
-    const i10 = chip.I10.high
-    const i11 = chip.I11.high
-    const i12 = chip.I12.high
-    const i13 = chip.I13.high
-    const i14 = chip.I14.high
-    const i15 = chip.I15.high
+    const i0 = pins.I0.high
+    const i1 = pins.I1.high
+    const i2 = pins.I2.high
+    const i3 = pins.I3.high
+    const i4 = pins.I4.high
+    const i5 = pins.I5.high
+    const i6 = pins.I6.high
+    const i7 = pins.I7.high
+    const i8 = pins.I8.high
+    const i9 = pins.I9.high
+    const i10 = pins.I10.high
+    const i11 = pins.I11.high
+    const i12 = pins.I12.high
+    const i13 = pins.I13.high
+    const i14 = pins.I14.high
+    const i15 = pins.I15.high
 
     // These are the product term equations programmed into the PLA for use in a C64. The
     // names for each signal reflect the names of the pins that those signals come from, and
@@ -517,33 +518,33 @@ export default function Ic82S100() {
     // inverted in the state assignment below.
     const s0 = s1 || s2 || s3 || s4 || s5 || s6 || p24 || p25 || p26 || p27 || p28 || p30
 
-    chip.F0.level = s0
-    chip.F1.level = !s1
-    chip.F2.level = !s2
-    chip.F3.level = !s3
-    chip.F4.level = !s7
-    chip.F5.level = !s4
-    chip.F6.level = !s5
-    chip.F7.level = !s6
+    pins.F0.level = s0
+    pins.F1.level = !s1
+    pins.F2.level = !s2
+    pins.F3.level = !s3
+    pins.F4.level = !s7
+    pins.F5.level = !s4
+    pins.F6.level = !s5
+    pins.F7.level = !s6
   }
 
-  chip.OE.addListener(oneListener)
-  chip.I0.addListener(oneListener)
-  chip.I1.addListener(oneListener)
-  chip.I2.addListener(oneListener)
-  chip.I3.addListener(oneListener)
-  chip.I4.addListener(oneListener)
-  chip.I5.addListener(oneListener)
-  chip.I6.addListener(oneListener)
-  chip.I7.addListener(oneListener)
-  chip.I8.addListener(oneListener)
-  chip.I9.addListener(oneListener)
-  chip.I10.addListener(oneListener)
-  chip.I11.addListener(oneListener)
-  chip.I12.addListener(oneListener)
-  chip.I13.addListener(oneListener)
-  chip.I14.addListener(oneListener)
-  chip.I15.addListener(oneListener)
+  pins.OE.addListener(oneListener)
+  pins.I0.addListener(oneListener)
+  pins.I1.addListener(oneListener)
+  pins.I2.addListener(oneListener)
+  pins.I3.addListener(oneListener)
+  pins.I4.addListener(oneListener)
+  pins.I5.addListener(oneListener)
+  pins.I6.addListener(oneListener)
+  pins.I7.addListener(oneListener)
+  pins.I8.addListener(oneListener)
+  pins.I9.addListener(oneListener)
+  pins.I10.addListener(oneListener)
+  pins.I11.addListener(oneListener)
+  pins.I12.addListener(oneListener)
+  pins.I13.addListener(oneListener)
+  pins.I14.addListener(oneListener)
+  pins.I15.addListener(oneListener)
 
-  return chip
+  return Chip(pins)
 }

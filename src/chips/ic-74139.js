@@ -76,12 +76,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic74139() {
-  const chip = Chip(
+  const pins = Pins(
     // Demultiplexer 1
     Pin(2, 'A1', INPUT),
     Pin(3, 'B1', INPUT),
@@ -106,13 +107,13 @@ export default function Ic74139() {
   )
 
   const dataListener = demux => {
-    const gpin = chip[`G${demux}`]
-    const apin = chip[`A${demux}`]
-    const bpin = chip[`B${demux}`]
-    const y0pin = chip[`Y${demux}0`]
-    const y1pin = chip[`Y${demux}1`]
-    const y2pin = chip[`Y${demux}2`]
-    const y3pin = chip[`Y${demux}3`]
+    const gpin = pins[`G${demux}`]
+    const apin = pins[`A${demux}`]
+    const bpin = pins[`B${demux}`]
+    const y0pin = pins[`Y${demux}0`]
+    const y1pin = pins[`Y${demux}1`]
+    const y2pin = pins[`Y${demux}2`]
+    const y3pin = pins[`Y${demux}3`]
 
     return () => {
       y0pin.level = 1 - (gpin.low && apin.low && bpin.low)
@@ -123,10 +124,10 @@ export default function Ic74139() {
   }
 
   for (const i of range(1, 2, true)) {
-    chip[`G${i}`].addListener(dataListener(i))
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
+    pins[`G${i}`].addListener(dataListener(i))
+    pins[`A${i}`].addListener(dataListener(i))
+    pins[`B${i}`].addListener(dataListener(i))
   }
 
-  return chip
+  return Chip(pins)
 }

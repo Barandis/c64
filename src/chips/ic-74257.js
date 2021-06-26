@@ -47,12 +47,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic74257() {
-  const chip = Chip(
+  const pins = Pins(
     // Select. When this is low, the Y output pins will take on the same value as their A
     // input pins. When this is high, the Y output pins will instead take on the value of
     // their B input pins.
@@ -88,14 +89,14 @@ export default function Ic74257() {
   )
 
   const dataListener = mux => {
-    const apin = chip[`A${mux}`]
-    const bpin = chip[`B${mux}`]
-    const ypin = chip[`Y${mux}`]
+    const apin = pins[`A${mux}`]
+    const bpin = pins[`B${mux}`]
+    const ypin = pins[`Y${mux}`]
 
     return () => {
-      if (chip.OE.high) {
+      if (pins.OE.high) {
         ypin.float()
-      } else if (chip.SEL.low) {
+      } else if (pins.SEL.low) {
         ypin.level = apin.level
       } else {
         ypin.level = bpin.level
@@ -108,12 +109,12 @@ export default function Ic74257() {
     return () => listeners.forEach(listener => listener())
   }
 
-  chip.SEL.addListener(controlListener())
-  chip.OE.addListener(controlListener())
+  pins.SEL.addListener(controlListener())
+  pins.OE.addListener(controlListener())
   for (const i of range(1, 4, true)) {
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
+    pins[`A${i}`].addListener(dataListener(i))
+    pins[`B${i}`].addListener(dataListener(i))
   }
 
-  return chip
+  return Chip(pins)
 }

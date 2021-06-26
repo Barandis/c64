@@ -23,11 +23,11 @@ export function reset({ chip, tr, writeRegister, readRegister }) {
       `register ${i} has incorrect value`,
     )
   }
-  assert.mode(chip.CNT, INPUT)
+  assert.mode(chip.pins.CNT, INPUT)
   assert(tr.IRQ.floating)
   for (const i of range(8)) {
     const name = `D${i}`
-    assert.mode(chip[name], OUTPUT)
+    assert.mode(chip.pins[name], OUTPUT)
     assert(tr[name].floating)
   }
 }

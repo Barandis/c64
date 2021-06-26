@@ -9,43 +9,37 @@ import Connector from 'components/connector'
 // the electronics behind it and a matching number of connectors to allow connection to
 // external devices.
 
-export default function Port(...pins) {
+export default function Port(pins) {
   const connectors = []
-  const array = []
 
   for (const pin of pins) {
     if (pin) {
       connectors[pin.number] = new Connector(pin)
-      array[pin.number] = pin
-      Object.defineProperty(array, pin.name, {
-        value: pin,
-        writable: false,
-      })
     }
   }
 
-  return Object.freeze(
-    Object.assign(array, {
-      // Object.assign takes the getter away and replaces it with a value, but that's fine
-      // because the value never changes anyway
-      get connectors() {
-        return Object.freeze(connectors)
-      },
+  return {
+    get pins() {
+      return pins
+    },
 
-      connect(port) {
-        for (const [i, connector] of connectors.entries()) {
-          const other = port.connectors[i]
-          if (connector && other) {
-            connector.connect(other)
-          }
-        }
-      },
+    get connectors() {
+      return Object.freeze(connectors)
+    },
 
-      disconnect() {
-        for (const connector of connectors) {
-          if (connector) connector.disconnect()
+    connect(port) {
+      for (const [i, connector] of connectors.entries()) {
+        const other = port.connectors[i]
+        if (connector && other) {
+          connector.connect(other)
         }
-      },
-    }),
-  )
+      }
+    },
+
+    disconnect() {
+      for (const connector of connectors) {
+        if (connector) connector.disconnect()
+      }
+    },
+  }
 }

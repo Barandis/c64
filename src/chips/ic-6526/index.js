@@ -456,6 +456,7 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import Registers from 'components/registers'
 import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
 import {
@@ -507,7 +508,7 @@ const REGISTER_NAMES = [
 ]
 
 export default function Ic6526() {
-  const chip = Chip(
+  const pins = Pins(
     // Register address pins. The 6526 has 16 addressable 8-bit registers, which requires
     // four pins.
     Pin(38, 'A0', INPUT),
@@ -596,13 +597,13 @@ export default function Ic6526() {
   const registers = Registers(...REGISTER_NAMES)
   const latches = Registers(...REGISTER_NAMES)
 
-  const addrPins = [...range(4)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+  const addrPins = [...range(4)].map(pin => pins[`A${pin}`])
+  const dataPins = [...range(8)].map(pin => pins[`D${pin}`])
 
-  const ports = PortModule(chip, registers)
-  const timers = TimerModule(chip, registers, latches)
-  const tod = TodModule(chip, registers, latches)
-  const control = ControlModule(chip, registers, latches)
+  const ports = PortModule(pins, registers)
+  const timers = TimerModule(pins, registers, latches)
+  const tod = TodModule(pins, registers, latches)
+  const control = ControlModule(pins, registers, latches)
 
   // Applies special reading functions to certain registers that need it. These are PRB,
   // TTOD10TH, TODHR, and ICR. Others simply return the value in the register.
@@ -713,12 +714,12 @@ export default function Ic6526() {
     writeRegister(CRA, 0)
     writeRegister(CRB, 0)
 
-    chip.PC.set()
+    pins.PC.set()
 
     for (const i of range(8)) {
       const name = `D${i}`
-      chip[name].mode = OUTPUT
-      chip[name].level = null
+      pins[name].mode = OUTPUT
+      pins[name].level = null
     }
 
     timers.reset()
@@ -733,7 +734,7 @@ export default function Ic6526() {
       registers.ICR = setBit(registers.ICR, FLG)
       if (bitSet(latches.ICR, FLG)) {
         registers.ICR = setBit(registers.ICR, IR)
-        chip.IRQ.clear()
+        pins.IRQ.clear()
       }
     }
   }
@@ -753,7 +754,7 @@ export default function Ic6526() {
       valueToPins(null, ...dataPins)
     } else {
       const index = pinsToValue(...addrPins)
-      if (chip.R_W.high) {
+      if (pins.R_W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {
         setMode(INPUT, ...dataPins)
@@ -762,19 +763,11 @@ export default function Ic6526() {
     }
   }
 
-  chip.FLAG.addListener(flagListener())
-  chip.RES.addListener(resetListener())
-  chip.CS.addListener(enableListener())
+  pins.FLAG.addListener(flagListener())
+  pins.RES.addListener(resetListener())
+  pins.CS.addListener(enableListener())
 
   reset()
 
-  return Object.assign(chip, {
-    get registers() {
-      return registers
-    },
-
-    get latches() {
-      return latches
-    },
-  })
+  return Chip(pins, registers, latches)
 }

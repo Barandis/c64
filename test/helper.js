@@ -6,6 +6,7 @@
 import chai from 'chai'
 
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import Port from 'components/port'
 import Trace from 'components/trace'
 import { range } from 'utils'
@@ -155,7 +156,7 @@ export function chipState(chip, name) {
 export function deviceTraces(device) {
   const traces = []
 
-  for (const pin of device) {
+  for (const pin of device.pins) {
     if (pin) {
       const trace = Trace(pin)
       traces[pin.number] = trace
@@ -169,14 +170,14 @@ export function deviceTraces(device) {
 export function portCable(port) {
   const pins = []
 
-  for (const pin of port) {
+  for (const pin of port.pins) {
     if (pin) {
       const mode = pin.mode === INPUT ? OUTPUT : pin.mode === OUTPUT ? INPUT : pin.mode
       pins[pin.number] = Pin(pin.number, pin.name, mode)
     }
   }
 
-  return Port(...pins)
+  return Port(Pins(...pins))
 }
 
 export function portMessage(name) {

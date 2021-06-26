@@ -5,11 +5,15 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
+import Registers from 'components/registers'
+import { pinsToValue, range, valueToPins } from 'utils'
+import { MOBDAT, MOBMOB, UNUSED1 } from './constants'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic6567() {
-  const chip = Chip(
+  const pins = Pins(
     // Address pins. The VIC can address 16k of memory, though the lower and upper 6 bits of
     // the address bus are multiplexed. There are duplicates here; A8, for example, is
     // multiplexed with A0 on pin 24, but it's also available on its own on pin 32.
@@ -101,5 +105,91 @@ export default function Ic6567() {
     Pin(20, 'GND'),
   )
 
-  return chip
+  const registers = Registers(
+    'MOB0X', //  Sprite 0 X coordinate
+    'MOB0Y', //  Sprite 0 Y coordinate
+    'MOB1X', //  Sprite 1 X coordinate
+    'MOB1Y', //  Sprite 1 Y coordinate
+    'MOB2X', //  Sprite 2 X coordinate
+    'MOB2Y', //  Sprite 2 Y coordinate
+    'MOB3X', //  Sprite 3 X coordinate
+    'MOB3Y', //  Sprite 3 Y coordinate
+    'MOB4X', //  Sprite 4 X coordinate
+    'MOB4Y', //  Sprite 4 Y coordinate
+    'MOB5X', //  Sprite 5 X coordinate
+    'MOB5Y', //  Sprite 5 Y coordinate
+    'MOB6X', //  Sprite 6 X coordinate
+    'MOB6Y', //  Sprite 6 Y coordinate
+    'MOB7X', //  Sprite 7 X coordinate
+    'MOB7Y', //  Sprite 7 Y coordinate
+    'MOBMSB', // Sprite X coordinate MSBs
+    'CTRL1', //  Control register 1
+    'RASTER', // Raster counter
+    'LPX', //    Light pen X coordinate
+    'LPY', //    Light pen Y coordinate
+    'MOBEN', //  Sprite enable
+    'CTRL2', //  Control register 2
+    'MOBYE', //  Sprite Y expansion
+    'MEMPTR', // Memory pointers
+    'IR', //     Interrupt register
+    'IE', //     Interrupt enable
+    'MOBDP', //  Sprite data priority
+    'MOBMC', //  Sprite multicolor
+    'MOBXE', //  Sprite X expansion
+    'MOBMOB', // Sprite-sprite collision
+    'MOBDAT', // Sprite-data collision
+    'BORDER', // Border color
+    'BG0', //    Background color 0
+    'BG1', //    Background color 1
+    'BG2', //    Background color 2
+    'BG3', //    Background color 3
+    'MOBMC0', // Sprite multicolor 0
+    'MOBMC1', // Sprite multicolor 1
+    'MOB0C', //  Sprite 0 color
+    'MOB1C', //  Sprite 1 color
+    'MOB2C', //  Sprite 2 color
+    'MOB3C', //  Sprite 3 color
+    'MOB4C', //  Sprite 4 color
+    'MOB5C', //  Sprite 5 color
+    'MOB6C', //  Sprite 6 color
+    'MOB7C', //  Sprite 7 color
+    // 17 unused registers, named UNUSED1 to UNUSED17, are not actually created. Their
+    // contents are always read as 0xff, and writes to them have no effect. This is handled
+    // by the readRegister/writeRegister functions without needing actual registers.
+  )
+
+  const regAddrPins = [...range(24, 30, true)].map(pin => pins[pin])
+  const regDataPins = [...range(8)].map(pin => pins[`D${pin}`])
+
+  const readRegister = index => {
+    if (index >= UNUSED1) return 0xff
+    const value = registers[index]
+    if (index === MOBMOB || index === MOBDAT) {
+      registers[index] = 0
+    }
+    return value
+  }
+
+  const writeRegister = (index, value) => {
+    if (index < UNUSED1 && index !== MOBMOB && index !== MOBDAT) {
+      registers[index] = value
+    }
+  }
+
+  const enableListener = () => pin => {
+    if (pin.low) {
+      const index = pinsToValue(...regAddrPins)
+      if (pins.R_W.low) {
+        const value = pinsToValue(...regDataPins)
+        writeRegister(index, value)
+      } else {
+        const value = readRegister(index)
+        valueToPins(...regDataPins, value)
+      }
+    }
+  }
+
+  pins.CS.addListener(enableListener())
+
+  return Chip(pins, registers)
 }

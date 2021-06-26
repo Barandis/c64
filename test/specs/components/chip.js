@@ -5,6 +5,7 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { assert } from 'test/helper'
 
 const { INPUT, OUTPUT } = Pin
@@ -26,17 +27,17 @@ describe('Chip', () => {
     Vcc: Pin(14, 'Vcc'),
     GND: Pin(7, 'GND'),
   }
-  const chip = new Chip(...Object.values(pins))
+  const chip = new Chip(Pins(...Object.values(pins)))
 
   it('has properties named after each of its pins', () => {
     for (const [name, pin] of Object.entries(pins)) {
-      assert(chip[name] === pin, `Pin ${name} is the wrong pin`)
+      assert(chip.pins[name] === pin, `Pin ${name} is the wrong pin`)
     }
   })
 
   it('has indices for each pin based on its pin number', () => {
     for (const pin of Object.values(pins)) {
-      assert(chip[pin.number] === pin, `Pin ${pin.number} is the wrong pin`)
+      assert(chip.pins[pin.number] === pin, `Pin ${pin.number} is the wrong pin`)
     }
   })
 })

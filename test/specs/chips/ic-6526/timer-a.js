@@ -130,7 +130,7 @@ export function taPbPulse({ chip, tr, writeRegister, readRegister }) {
 
   assert.equal(readRegister(TALO), 5)
   assert.equal(readRegister(TAHI), 0)
-  assert.mode(chip.PB6, OUTPUT)
+  assert.mode(chip.pins.PB6, OUTPUT)
   assert.isLow(tr.PB6)
 
   for (const _ of range(3)) {
@@ -152,7 +152,7 @@ export function taPbToggle({ chip, tr, writeRegister, readRegister }) {
 
   assert.equal(readRegister(TALO), 5)
   assert.equal(readRegister(TAHI), 0)
-  assert.mode(chip.PB6, OUTPUT)
+  assert.mode(chip.pins.PB6, OUTPUT)
   assert.isLow(tr.PB6)
 
   for (const i of range(3)) {
@@ -172,13 +172,13 @@ export function taPbRemove({ chip, tr, writeRegister }) {
   writeRegister(TAHI, 0)
   writeRegister(CRA, (1 << LOAD) | (1 << PBON))
 
-  assert.mode(chip.PB6, OUTPUT)
+  assert.mode(chip.pins.PB6, OUTPUT)
   assert.isLow(tr.PB6)
 
   writeRegister(DDRA, 0xff)
   // PBON gets reset
   writeRegister(CRA, 1 << START)
-  assert.mode(chip.PB6, OUTPUT)
+  assert.mode(chip.pins.PB6, OUTPUT)
 }
 
 export function taIrqDefault({ tr, writeRegister, readRegister }) {

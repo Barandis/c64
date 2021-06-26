@@ -177,7 +177,7 @@ export function tbPbPulse({ chip, tr, writeRegister, readRegister }) {
 
   assert.equal(readRegister(TBLO), 5)
   assert.equal(readRegister(TBHI), 0)
-  assert.mode(chip.PB7, OUTPUT)
+  assert.mode(chip.pins.PB7, OUTPUT)
   assert.isLow(tr.PB7)
 
   for (const _ of range(3)) {
@@ -199,7 +199,7 @@ export function tbPbToggle({ chip, tr, writeRegister, readRegister }) {
 
   assert.equal(readRegister(TBLO), 5)
   assert.equal(readRegister(TBHI), 0)
-  assert.mode(chip.PB7, OUTPUT)
+  assert.mode(chip.pins.PB7, OUTPUT)
   assert.isLow(tr.PB7)
 
   for (const i of range(3)) {
@@ -219,13 +219,13 @@ export function tbPbRemove({ chip, tr, writeRegister }) {
   writeRegister(TBHI, 0)
   writeRegister(CRB, (1 << LOAD) | (1 << PBON))
 
-  assert.mode(chip.PB7, OUTPUT)
+  assert.mode(chip.pins.PB7, OUTPUT)
   assert.isLow(tr.PB7)
 
   writeRegister(DDRB, 0xff)
   // PBON gets reset
   writeRegister(CRB, 1 << START)
-  assert.mode(chip.PB7, OUTPUT)
+  assert.mode(chip.pins.PB7, OUTPUT)
 }
 
 export function tbIrqDefault({ tr, writeRegister, readRegister }) {

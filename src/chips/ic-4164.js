@@ -102,12 +102,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { pinsToValue, range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic4164() {
-  const chip = Chip(
+  const pins = Pins(
     // The row address strobe. Setting this low latches the values of A0-A7, saving them
     // to be part of the address used to access the memory array.
     Pin(4, 'RAS', INPUT),
@@ -147,7 +148,7 @@ export default function Ic4164() {
     Pin(16, 'Vss'),
   )
 
-  const addrPins = [...range(8)].map(pin => chip[`A${pin}`])
+  const addrPins = [...range(8)].map(pin => pins[`A${pin}`])
 
   // 2048 32-bit unsigned integers is 65,536 bits. The choice of array size is arbitrary,
   // since we don't have a Uint256Array to model it as the 256 x 256 memory array that it is
@@ -175,7 +176,7 @@ export default function Ic4164() {
   const read = () => {
     const [index, bit] = resolve()
     const value = (memory[index] & (1 << bit)) >> bit
-    chip.Q.level = value
+    pins.Q.level = value
   }
 
   // Writes the value of the D pin to a single bit in the memory array. If the Q pin is also
@@ -188,8 +189,8 @@ export default function Ic4164() {
     } else {
       memory[index] &= ~(1 << bit)
     }
-    if (!chip.Q.floating) {
-      chip.Q.level = data
+    if (!pins.Q.floating) {
+      pins.Q.level = data
     }
   }
 
@@ -223,14 +224,14 @@ export default function Ic4164() {
   const casListener = () => pin => {
     if (pin.low) {
       col = pinsToValue(...addrPins)
-      if (chip.WE.low) {
-        data = chip.D.level
+      if (pins.WE.low) {
+        data = pins.D.level
         write()
       } else {
         read()
       }
     } else {
-      chip.Q.float()
+      pins.Q.float()
       col = null
       data = null
     }
@@ -253,20 +254,20 @@ export default function Ic4164() {
   const writeListener = () => pin => {
     if (pin.low) {
       // ? chip.D.clear()
-      if (chip.CAS.low) {
-        data = chip.D.level
+      if (pins.CAS.low) {
+        data = pins.D.level
         write()
       } else {
-        chip.Q.float()
+        pins.Q.float()
       }
     } else {
       data = null
     }
   }
 
-  chip.RAS.addListener(rasListener())
-  chip.CAS.addListener(casListener())
-  chip.WE.addListener(writeListener())
+  pins.RAS.addListener(rasListener())
+  pins.CAS.addListener(casListener())
+  pins.WE.addListener(writeListener())
 
-  return chip
+  return Chip(pins)
 }

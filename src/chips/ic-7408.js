@@ -39,12 +39,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic7408() {
-  const chip = Chip(
+  const pins = Pins(
     // Gate 1 inputs and output
     Pin(1, 'A1', INPUT),
     Pin(2, 'B1', INPUT),
@@ -71,17 +72,17 @@ export default function Ic7408() {
   )
 
   const dataListener = gate => {
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
-    const ypin = chip[`Y${gate}`]
+    const apin = pins[`A${gate}`]
+    const bpin = pins[`B${gate}`]
+    const ypin = pins[`Y${gate}`]
 
     return () => (ypin.level = apin.level && bpin.level)
   }
 
   for (const i of range(1, 4, true)) {
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
+    pins[`A${i}`].addListener(dataListener(i))
+    pins[`B${i}`].addListener(dataListener(i))
   }
 
-  return chip
+  return Chip(pins)
 }

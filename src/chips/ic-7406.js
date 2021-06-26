@@ -34,12 +34,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic7406() {
-  const chip = Chip(
+  const pins = Pins(
     // Input pins. In the TI data sheet, these are named "1A", "2A", etc., and the C64
     // schematic does not suggest names for them. Since these names are not legal JS
     // variable names, I've switched the letter and number.
@@ -64,15 +65,15 @@ export default function Ic7406() {
   )
 
   const dataListener = gate => {
-    const apin = chip[`A${gate}`]
-    const ypin = chip[`Y${gate}`]
+    const apin = pins[`A${gate}`]
+    const ypin = pins[`Y${gate}`]
 
     return () => (ypin.level = +apin.low)
   }
 
   for (const i of range(1, 6, true)) {
-    chip[`A${i}`].addListener(dataListener(i))
+    pins[`A${i}`].addListener(dataListener(i))
   }
 
-  return chip
+  return Chip(pins)
 }

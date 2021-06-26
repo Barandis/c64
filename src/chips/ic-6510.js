@@ -5,11 +5,12 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic6510() {
-  const chip = Chip(
+  const pins = Pins(
     // Address bus pins A0-A15.
     Pin(7, 'A0', OUTPUT),
     Pin(8, 'A1', OUTPUT),
@@ -79,5 +80,5 @@ export default function Ic6510() {
     Pin(21, 'GND'),
   )
 
-  return chip
+  return Chip(pins)
 }

@@ -53,12 +53,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
 
 export default function Ic74373() {
-  const chip = Chip(
+  const pins = Pins(
     // Input pins.
     Pin(3, 'D0', INPUT),
     Pin(4, 'D1', INPUT),
@@ -96,10 +97,10 @@ export default function Ic74373() {
   const latches = Array(8).fill(null)
 
   const dataListener = latch => {
-    const qpin = chip[`Q${latch}`]
+    const qpin = pins[`Q${latch}`]
 
     return pin => {
-      if (chip.LE.high && chip.OE.low) {
+      if (pins.LE.high && pins.OE.low) {
         qpin.level = pin.level
       }
     }
@@ -108,11 +109,11 @@ export default function Ic74373() {
   const latchListener = () => pin => {
     if (pin.low) {
       for (const i of range(8)) {
-        latches[i] = chip[`D${i}`].level
+        latches[i] = pins[`D${i}`].level
       }
     } else {
       for (const i of range(8)) {
-        chip[`Q${i}`].level = chip[`D${i}`].level
+        pins[`Q${i}`].level = pins[`D${i}`].level
         latches[i] = null
       }
     }
@@ -121,21 +122,21 @@ export default function Ic74373() {
   const enableListener = () => pin => {
     if (pin.high) {
       for (const i of range(8)) {
-        chip[`Q${i}`].float()
+        pins[`Q${i}`].float()
       }
     } else {
-      const le = chip.LE.low
+      const le = pins.LE.low
       for (const i of range(8)) {
-        chip[`Q${i}`].level = le ? latches[i] : chip[`D${i}`].level
+        pins[`Q${i}`].level = le ? latches[i] : pins[`D${i}`].level
       }
     }
   }
 
   for (const i of range(8)) {
-    chip[`D${i}`].addListener(dataListener(i))
+    pins[`D${i}`].addListener(dataListener(i))
   }
-  chip.LE.addListener(latchListener())
-  chip.OE.addListener(enableListener())
+  pins.LE.addListener(latchListener())
+  pins.OE.addListener(enableListener())
 
-  return chip
+  return Chip(pins)
 }

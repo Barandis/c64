@@ -85,12 +85,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { pinsToValue, valueToPins, range } from 'utils'
 
 const { INPUT, BIDIRECTIONAL } = Pin
 
 export default function Ic2114() {
-  const chip = Chip(
+  const pins = Pins(
     // Address pins A0...A9
     Pin(5, 'A0', INPUT),
     Pin(6, 'A1', INPUT),
@@ -121,8 +122,8 @@ export default function Ic2114() {
     Pin(9, 'GND'),
   )
 
-  const addrPins = [...range(10)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(4)].map(pin => chip[`D${pin}`])
+  const addrPins = [...range(10)].map(pin => pins[`A${pin}`])
+  const dataPins = [...range(4)].map(pin => pins[`D${pin}`])
 
   // Memory locations are all 4-bit, and we don't have a Uint4Array, so the choice of array
   // size is pretty much arbitrary
@@ -155,8 +156,8 @@ export default function Ic2114() {
   }
 
   const addressListener = () => () => {
-    if (chip.CS.low) {
-      if (chip.WE.high) {
+    if (pins.CS.low) {
+      if (pins.WE.high) {
         read()
       } else {
         write()
@@ -167,7 +168,7 @@ export default function Ic2114() {
   const selectListener = () => pin => {
     if (pin.high) {
       valueToPins(null, ...dataPins)
-    } else if (chip.WE.low) {
+    } else if (pins.WE.low) {
       write()
     } else {
       read()
@@ -175,7 +176,7 @@ export default function Ic2114() {
   }
 
   const writeListener = () => pin => {
-    if (chip.CS.low) {
+    if (pins.CS.low) {
       if (pin.low) {
         write()
       } else {
@@ -185,10 +186,10 @@ export default function Ic2114() {
   }
 
   for (const i of range(10)) {
-    chip[`A${i}`].addListener(addressListener())
+    pins[`A${i}`].addListener(addressListener())
   }
-  chip.CS.addListener(selectListener())
-  chip.WE.addListener(writeListener())
+  pins.CS.addListener(selectListener())
+  pins.WE.addListener(writeListener())
 
-  return chip
+  return Chip(pins)
 }

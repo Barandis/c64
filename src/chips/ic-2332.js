@@ -70,6 +70,7 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { pinsToValue, valueToPins, range } from 'utils'
 
 const { INPUT, OUTPUT } = Pin
@@ -79,7 +80,7 @@ const { INPUT, OUTPUT } = Pin
 // bytes. It is immediately loaded into the internal memory array, which afterwards does not
 // change.
 export default function Ic2332(buffer) {
-  const chip = Chip(
+  const pins = Pins(
     // Address pins A0-A11
     Pin(8, 'A0', INPUT),
     Pin(7, 'A1', INPUT),
@@ -114,8 +115,8 @@ export default function Ic2332(buffer) {
     Pin(12, 'GND'),
   )
 
-  const addrPins = [...range(12)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+  const addrPins = [...range(12)].map(pin => pins[`A${pin}`])
+  const dataPins = [...range(8)].map(pin => pins[`D${pin}`])
   const memory = new Uint8Array(buffer)
 
   // Reads the 8-bit value at the location indicated by the address pins and puts that value
@@ -126,15 +127,15 @@ export default function Ic2332(buffer) {
   }
 
   const enableListener = () => () => {
-    if (chip.CS1.low && chip.CS2.low) {
+    if (pins.CS1.low && pins.CS2.low) {
       read()
     } else {
       valueToPins(null, ...dataPins)
     }
   }
 
-  chip.CS1.addListener(enableListener())
-  chip.CS2.addListener(enableListener())
+  pins.CS1.addListener(enableListener())
+  pins.CS2.addListener(enableListener())
 
-  return chip
+  return Chip(pins)
 }

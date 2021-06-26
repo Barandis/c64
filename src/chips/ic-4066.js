@@ -54,12 +54,13 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import { range } from 'utils'
 
 const { INPUT, BIDIRECTIONAL } = Pin
 
 export default function Ic406() {
-  const chip = Chip(
+  const pins = Pins(
     // I/O and control pins for switch 1
     Pin(1, 'A1', BIDIRECTIONAL),
     Pin(2, 'B1', BIDIRECTIONAL),
@@ -88,9 +89,9 @@ export default function Ic406() {
   const last = [null, null, null, null]
 
   const controlListener = gate => {
-    const xpin = chip[`X${gate}`]
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
+    const xpin = pins[`X${gate}`]
+    const apin = pins[`A${gate}`]
+    const bpin = pins[`B${gate}`]
 
     return () => {
       if (xpin.high) {
@@ -113,9 +114,9 @@ export default function Ic406() {
   }
 
   const dataListener = gate => {
-    const xpin = chip[`X${gate}`]
-    const apin = chip[`A${gate}`]
-    const bpin = chip[`B${gate}`]
+    const xpin = pins[`X${gate}`]
+    const apin = pins[`A${gate}`]
+    const bpin = pins[`B${gate}`]
 
     return pin => {
       const outpin = pin === apin ? bpin : apin
@@ -127,10 +128,10 @@ export default function Ic406() {
   }
 
   for (const i of range(1, 4, true)) {
-    chip[`X${i}`].addListener(controlListener(i))
-    chip[`A${i}`].addListener(dataListener(i))
-    chip[`B${i}`].addListener(dataListener(i))
+    pins[`X${i}`].addListener(controlListener(i))
+    pins[`A${i}`].addListener(dataListener(i))
+    pins[`B${i}`].addListener(dataListener(i))
   }
 
-  return chip
+  return Chip(pins)
 }

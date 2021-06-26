@@ -13,24 +13,24 @@ const { INPUT, OUTPUT } = Pin
 export function ddrInput({ chip, writeRegister }) {
   writeRegister(DDRA, 0)
   for (const i of range(8)) {
-    assert.mode(chip[`PA${i}`], INPUT)
+    assert.mode(chip.pins[`PA${i}`], INPUT)
   }
 
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert.mode(chip[`PB${i}`], INPUT)
+    assert.mode(chip.pins[`PB${i}`], INPUT)
   }
 }
 
 export function ddrOutput({ chip, writeRegister }) {
   writeRegister(DDRA, 0xff)
   for (const i of range(8)) {
-    assert.mode(chip[`PA${i}`], OUTPUT)
+    assert.mode(chip.pins[`PA${i}`], OUTPUT)
   }
 
   writeRegister(DDRB, 0xff)
   for (const i of range(8)) {
-    assert.mode(chip[`PB${i}`], OUTPUT)
+    assert.mode(chip.pins[`PB${i}`], OUTPUT)
   }
 }
 
@@ -39,12 +39,12 @@ export function ddrCombo({ chip, writeRegister }) {
 
   writeRegister(DDRA, value)
   for (const i of range(8)) {
-    assert.equal(chip[`PA${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
+    assert.equal(chip.pins[`PA${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
   }
 
   writeRegister(DDRB, value)
   for (const i of range(8)) {
-    assert.equal(chip[`PB${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
+    assert.equal(chip.pins[`PB${i}`].mode, bitSet(value, i) ? OUTPUT : INPUT)
   }
 }
 
@@ -55,7 +55,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // Set DDR for port B to all inputs, bit 6 and should remain output
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert.mode(chip[`PB${i}`], i === 6 ? OUTPUT : INPUT)
+    assert.mode(chip.pins[`PB${i}`], i === 6 ? OUTPUT : INPUT)
   }
 
   // turn on PBON for timer B
@@ -65,7 +65,7 @@ export function ddrTimerOut({ chip, writeRegister }) {
   // outputs
   writeRegister(DDRB, 0)
   for (const i of range(8)) {
-    assert.mode(chip[`PB${i}`], i === 6 || i === 7 ? OUTPUT : INPUT)
+    assert.mode(chip.pins[`PB${i}`], i === 6 || i === 7 ? OUTPUT : INPUT)
   }
 }
 

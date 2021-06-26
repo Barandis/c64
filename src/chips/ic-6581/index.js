@@ -450,6 +450,7 @@
 
 import Chip from 'components/chip'
 import Pin from 'components/pin'
+import Pins from 'components/pins'
 import Registers from 'components/registers'
 import { setMode, valueToPins, pinsToValue, range } from 'utils'
 import {
@@ -495,7 +496,7 @@ const { INPUT, OUTPUT } = Pin
 const MAX_LAST_WRITE_TIME = 2000
 
 export default function Ic6581() {
-  const chip = Chip(
+  const pins = Pins(
     // Address pins to access internal registers
     Pin(9, 'A0', INPUT),
     Pin(10, 'A1', INPUT),
@@ -552,8 +553,8 @@ export default function Ic6581() {
     Pin(14, 'GND'),
   )
 
-  const addrPins = [...range(5)].map(pin => chip[`A${pin}`])
-  const dataPins = [...range(8)].map(pin => chip[`D${pin}`])
+  const addrPins = [...range(5)].map(pin => pins[`A${pin}`])
+  const dataPins = [...range(8)].map(pin => pins[`D${pin}`])
 
   // The 32 addressable registers on the 6581. Only 29 of these are actually used; reading
   // the others will always return 0xff and writing them will have no effect. All are
@@ -653,8 +654,8 @@ export default function Ic6581() {
     }
     for (const i of range(8)) {
       const name = `D${i}`
-      chip[name].mode = OUTPUT
-      chip[name].level = null
+      pins[name].mode = OUTPUT
+      pins[name].level = null
     }
     voice1.reset()
     voice2.reset()
@@ -784,7 +785,7 @@ export default function Ic6581() {
   const clockListener = () => pin => {
     if (pin.high) {
       // Check to see if RES has been held low for 10 cycles; if so, perform the reset
-      if (chip.RES.low && !hasReset) {
+      if (pins.RES.low && !hasReset) {
         resetClock += 1
         if (resetClock >= 10) {
           reset()
@@ -803,17 +804,17 @@ export default function Ic6581() {
       lastPotTime += 1
       if (lastPotTime >= 512) {
         lastPotTime = 0
-        registers.POTX = chip.POTX.level & 0xff
-        registers.POTY = chip.POTY.level & 0xff
+        registers.POTX = pins.POTX.level & 0xff
+        registers.POTY = pins.POTY.level & 0xff
       }
 
       // Clock sound components and put their output on the AUDIO pin
       voice1.clock()
       voice2.clock()
       voice3.clock()
-      filter.clock(voice1.output, voice2.output, voice3.output, chip.EXT.level)
+      filter.clock(voice1.output, voice2.output, voice3.output, pins.EXT.level)
       extfilter.clock(filter.output)
-      chip.AUDIO.level = extfilter.output
+      pins.AUDIO.level = extfilter.output
 
       registers.RANDOM = (voice3.waveform.output >> 4) & 0xff
       registers.ENV3 = voice3.envelope.output
@@ -826,7 +827,7 @@ export default function Ic6581() {
       valueToPins(null, ...dataPins)
     } else {
       const index = pinsToValue(...addrPins)
-      if (chip.R_W.high) {
+      if (pins.R_W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {
         setMode(INPUT, ...dataPins)
@@ -835,17 +836,13 @@ export default function Ic6581() {
     }
   }
 
-  chip.RES.addListener(resetListener())
-  chip.PHI2.addListener(clockListener())
-  chip.CS.addListener(enableListener())
+  pins.RES.addListener(resetListener())
+  pins.PHI2.addListener(clockListener())
+  pins.CS.addListener(enableListener())
 
   voice1.sync(voice3)
   voice2.sync(voice1)
   voice3.sync(voice2)
 
-  return Object.assign(chip, {
-    get registers() {
-      return registers
-    },
-  })
+  return Chip(pins, registers)
 }
