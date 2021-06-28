@@ -29,27 +29,27 @@
 // outputs from demux 1 to the enable pin of demux 2. The inputs are the address lines
 // A8-A11, and the enable pin of demux 1 comes directly from the PLA's IO output. Thus the
 // demultiplexers only do work when IO is selected, which requires that the address be from
-// 0xd000 - 0xdfff, among other things. A more specific table for this setup can thus be
+// $D000 - $DFFF, among other things. A more specific table for this setup can thus be
 // created.
 //
-// | IO  | A8  | A9  | A10 | A11 | Address         || Active Output |
-// | --- | --- | --- | --- | --- | --------------- || ------------- |
-// | H   | X   | X   | X   | X   | N/A             || None          |
-// | L   | X   | X   | L   | L   | 0xd000 - 0xd3ff || VIC           |
-// | L   | X   | X   | H   | L   | 0xd400 - 0xd7ff || SID           |
-// | L   | X   | X   | L   | H   | 0xd800 - 0xdBff || Color RAM     |
-// | L   | L   | L   | H   | H   | 0xdc00 - 0xdcff || CIA 1         |
-// | L   | H   | L   | H   | H   | 0xdd00 - 0xddff || CIA 2         |
-// | L   | L   | H   | H   | H   | 0xde00 - 0xdeff || I/O 1         |
-// | L   | H   | H   | H   | H   | 0xdf00 - 0xdfff || I/O 2         |
+// | IO  | A8  | A9  | A10 | A11 | Address       || Active Output |
+// | --- | --- | --- | --- | --- | ------------- || ------------- |
+// | H   | X   | X   | X   | X   | N/A           || None          |
+// | L   | X   | X   | L   | L   | $D000 - $D3FF || VIC           |
+// | L   | X   | X   | H   | L   | $D400 - $D7FF || SID           |
+// | L   | X   | X   | L   | H   | $D800 - $DBFF || Color RAM     |
+// | L   | L   | L   | H   | H   | $DC00 - $DCFF || CIA 1         |
+// | L   | H   | L   | H   | H   | $DD00 - $DDFF || CIA 2         |
+// | L   | L   | H   | H   | H   | $DE00 - $DEFF || I/O 1         |
+// | L   | H   | H   | H   | H   | $DF00 - $DFFF || I/O 2         |
 //
 // The decoding resolution is only 2 hexadecimal digits for the VIC, SID, and color RAM and
 // 3 hexadecimal digits for the CIAs and I/Os. This means that there will be memory
 // locations that repeat. For example, the VIC only uses 64 addressable locations for its
 // registers (47 registers and 17 more unused addresses) but gets a 1024-address block. The
-// decoding can't tell the difference between 0xD000, 0xD040, 0xD080, and so on because it
-// can only resolve the first two digits, so using any of those addresses will access the
-// VIC's first register, meaning that it's mirrored 16 times. The same goes for the SID (29
+// decoding can't tell the difference between $D000, $D040, $D080, and so on because it can
+// only resolve the first two digits, so using any of those addresses will access the VIC's
+// first register, meaning that it's mirrored 16 times. The same goes for the SID (29
 // registers and 3 usused addresses, mirrored in 1024 addresses 32 times) and the CIAs (16
 // registers mirrored in 256 addresses 16 times). The color RAM is not mirrored at all
 // (though it does use only 1000 of its 1024 addresses) and the I/O blocks are free to be

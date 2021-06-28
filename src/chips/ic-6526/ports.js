@@ -25,7 +25,7 @@ export default function PortModule(pins, registers) {
   // listener that changes the data in the register as well. Similarly, when data is pushed
   // into a register, the output pins associated with the register are changed to reflect
   // that new state. In other words, the contents of PRA and PRB are kept synched with
-  // PA0...PA7 and PB0...PB7, respectively.
+  // PA0-PA7 and PB0-PB7, respectively.
   //
   // Because of this, nothing special has to be done when reading a data port register - the
   // contents already match that of the pins. When writing, the output pins need to be set

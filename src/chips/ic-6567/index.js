@@ -100,8 +100,8 @@ export default function Ic6567() {
     Pin(11, 'R_W', INPUT),
 
     // Power supply and ground pins. These are not emulated.
-    Pin(40, 'VCC'),
-    Pin(13, 'VDD'),
+    Pin(40, 'Vcc'),
+    Pin(13, 'Vdd'),
     Pin(20, 'GND'),
   )
 

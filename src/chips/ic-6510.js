@@ -40,7 +40,7 @@ export default function Ic6510() {
     Pin(30, 'D7', OUTPUT),
 
     // I/O Port pins P0-P5. These are bidrectional, the direction depending on the settings
-    // in the virtual registers in memory addresses 0x0000 and 0x0001.
+    // in the virtual registers in memory addresses $0000 and $0001.
     Pin(29, 'P0', OUTPUT),
     Pin(28, 'P1', OUTPUT),
     Pin(27, 'P2', OUTPUT),

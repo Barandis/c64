@@ -134,7 +134,7 @@ export default function EnvelopeGenerator() {
   // Determines whether the envelope counter is capable of changing any further. Once the
   // counter reaches 0, it cannot move until the next attack. This is used to skip logic
   // that wouldn't run anyway becuase the envelope counter value is 0 and to implement the
-  // "bug" that causes the envelope counter to wrap to 0xff when setting GATE high and then
+  // "bug" that causes the envelope counter to wrap to $0xff when setting GATE high and then
   // immediately setting it low.
   let zeroFreeze = true
 

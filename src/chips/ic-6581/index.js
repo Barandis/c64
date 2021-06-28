@@ -21,38 +21,38 @@
 //
 // | Addr | Register | R/W | Description                                    |
 // | ---- | -------- | --- | ---------------------------------------------- |
-// | 0x00 | FRELO1   |  W  | Voice 1 frequency, low 8 bits                  |
-// | 0x01 | FREHI1   |  W  | Voice 1 frequency, high 8 bits                 |
-// | 0x02 | PWLO1    |  W  | Voice 1 pulse width, low 8 bits                |
-// | 0x03 | PWHI1    |  W  | Voice 1 pulse width, high 4 bits               |
-// | 0x04 | VCREG1   |  W  | Voice 1 control register                       |
-// | 0x05 | ATDCY1   |  W  | Voice 1 attack/decay                           |
-// | 0x06 | SUREL1   |  W  | Voice 1 sustain/release                        |
-// | 0x07 | FRELO2   |  W  | Voice 2 frequency, low 8 bits                  |
-// | 0x08 | FREHI2   |  W  | Voice 2 frequency, high 8 bits                 |
-// | 0x09 | PWLO2    |  W  | Voice 2 pulse width, low 8 bits                |
-// | 0x0a | PWHI2    |  W  | Voice 2 pulse width, high 4 bits               |
-// | 0x0b | VCREG2   |  W  | Voice 2 control register                       |
-// | 0x0c | ATDCY2   |  W  | Voice 2 attack/decay                           |
-// | 0x0d | SUREL2   |  W  | Voice 2 sustain/release                        |
-// | 0x0e | FRELO3   |  W  | Voice 3 frequency, low 8 bits                  |
-// | 0x0f | FREHI3   |  W  | Voice 3 frequency, high 8 bits                 |
-// | 0x10 | PWLO3    |  W  | Voice 3 pulse width, low 8 bits                |
-// | 0x11 | PWHI3    |  W  | Voice 3 pulse width, high 4 bits               |
-// | 0x12 | VCREG3   |  W  | Voice 3 control register                       |
-// | 0x13 | ATDCY3   |  W  | Voice 3 attack/decay                           |
-// | 0x14 | SUREL3   |  W  | Voice 3 sustain/release                        |
-// | 0x15 | CUTLO    |  W  | Filter cutoff, low 3 bits                      |
-// | 0x16 | CUTHI    |  W  | Filter cutoff, high 8 bits                     |
-// | 0x17 | RESON    |  W  | Filter voice switching and resonance           |
-// | 0x18 | SIGVOL   |  W  | Master volume and filter mode                  |
-// | 0x19 | POTX     |  R  | Potentiometer X current value                  |
-// | 0x1a | POTY     |  R  | Potentiometer Y current value                  |
-// | 0x1b | RANDOM   |  R  | Voice 3 waveform generator output, high 8 bits |
-// | 0x1c | ENV3     |  R  | Voice 3 envelope generator output              |
-// | 0x1d | UNUSED1  |     | Unused                                         |
-// | 0x1e | UNUSED2  |     | Unused                                         |
-// | 0x1f | UNUSED3  |     | Unused                                         |
+// | $00  | FRELO1   |  W  | Voice 1 frequency, low 8 bits                  |
+// | $01  | FREHI1   |  W  | Voice 1 frequency, high 8 bits                 |
+// | $02  | PWLO1    |  W  | Voice 1 pulse width, low 8 bits                |
+// | $03  | PWHI1    |  W  | Voice 1 pulse width, high 4 bits               |
+// | $04  | VCREG1   |  W  | Voice 1 control register                       |
+// | $05  | ATDCY1   |  W  | Voice 1 attack/decay                           |
+// | $06  | SUREL1   |  W  | Voice 1 sustain/release                        |
+// | $07  | FRELO2   |  W  | Voice 2 frequency, low 8 bits                  |
+// | $08  | FREHI2   |  W  | Voice 2 frequency, high 8 bits                 |
+// | $09  | PWLO2    |  W  | Voice 2 pulse width, low 8 bits                |
+// | $0A  | PWHI2    |  W  | Voice 2 pulse width, high 4 bits               |
+// | $0B  | VCREG2   |  W  | Voice 2 control register                       |
+// | $0C  | ATDCY2   |  W  | Voice 2 attack/decay                           |
+// | $0D  | SUREL2   |  W  | Voice 2 sustain/release                        |
+// | $0E  | FRELO3   |  W  | Voice 3 frequency, low 8 bits                  |
+// | $0F  | FREHI3   |  W  | Voice 3 frequency, high 8 bits                 |
+// | $10  | PWLO3    |  W  | Voice 3 pulse width, low 8 bits                |
+// | $11  | PWHI3    |  W  | Voice 3 pulse width, high 4 bits               |
+// | $12  | VCREG3   |  W  | Voice 3 control register                       |
+// | $13  | ATDCY3   |  W  | Voice 3 attack/decay                           |
+// | $14  | SUREL3   |  W  | Voice 3 sustain/release                        |
+// | $15  | CUTLO    |  W  | Filter cutoff, low 3 bits                      |
+// | $16  | CUTHI    |  W  | Filter cutoff, high 8 bits                     |
+// | $17  | RESON    |  W  | Filter voice switching and resonance           |
+// | $18  | SIGVOL   |  W  | Master volume and filter mode                  |
+// | $19  | POTX     |  R  | Potentiometer X current value                  |
+// | $1A  | POTY     |  R  | Potentiometer Y current value                  |
+// | $1B  | RANDOM   |  R  | Voice 3 waveform generator output, high 8 bits |
+// | $1C  | ENV3     |  R  | Voice 3 envelope generator output              |
+// | $1D  | UNUSED1  |     | Unused                                         |
+// | $1E  | UNUSED2  |     | Unused                                         |
+// | $1F  | UNUSED3  |     | Unused                                         |
 //
 // ## Voices
 //
@@ -164,22 +164,22 @@
 //
 // | Value | Attack rate |
 // | ----- | ----------- |
-// | 0x0   | 2 ms        |
-// | 0x1   | 8 ms        |
-// | 0x2   | 16 ms       |
-// | 0x3   | 24 ms       |
-// | 0x4   | 38 ms       |
-// | 0x5   | 56 ms       |
-// | 0x6   | 68 ms       |
-// | 0x7   | 80 ms       |
-// | 0x8   | 100 ms      |
-// | 0x9   | 250 ms      |
-// | 0xa   | 500 ms      |
-// | 0xb   | 800 ms      |
-// | 0xc   | 1 s         |
-// | 0xd   | 3 s         |
-// | 0xe   | 5 s         |
-// | 0xf   | 8 s         |
+// | $0    | 2 ms        |
+// | $1    | 8 ms        |
+// | $2    | 16 ms       |
+// | $3    | 24 ms       |
+// | $4    | 38 ms       |
+// | $5    | 56 ms       |
+// | $6    | 68 ms       |
+// | $7    | 80 ms       |
+// | $8    | 100 ms      |
+// | $9    | 250 ms      |
+// | $A    | 500 ms      |
+// | $B    | 800 ms      |
+// | $C    | 1 s         |
+// | $D    | 3 s         |
+// | $E    | 5 s         |
+// | $F    | 8 s         |
 //
 // Once the envelope output reaches 0xff, the decay phase begins. In this phase, the
 // envelope output falls at a rate determined by the low 4 bits of the ATDCYx register,
@@ -190,7 +190,7 @@
 // The decay continues until the envelope output reaches the sustain level, set by the high
 // 4 bits of the SURELx register. (Note that unlike attack and decay, this setting does not
 // control a *time*, it controls a *level*.) The actual sustain value is derived by doubling
-// the hexadecimal digit set in the register; setting sustain to 0xc, for instance, would
+// the hexadecimal digit set in the register; setting sustain to $C, for instance, would
 // cause the decay phase to end and the sustain phase to begin once the envelope output
 // falls to 0xcc. Nothing terribly interesting happens in the sustain phase; the envelope
 // output simply stays at the same level.
@@ -258,9 +258,9 @@
 // the curve for frequencies depending on the register setting is complex and even has a
 // discontinuiuty at one point. The cutoff frequency starts at about 220Hz at register value
 // zero and rises, slowly at first, and then much more quickly as it approaches the halfway
-// register value of 0x3ff; at 0x3ff, the frequency is about 6kHz. Then there is a sudden
-// drop to about 4.6kHz at register value 0x400. The frequency then again rises, quickly at
-// first and then slower as it approaches the max register value of 0x7ff, where the cutoff
+// register value of $3FF; at $3FF, the frequency is about 6kHz. Then there is a sudden drop
+// to about 4.6kHz at register value $400. The frequency then again rises, quickly at first
+// and then slower as it approaches the max register value of $7FF, where the cutoff
 // frequency is about 18kHz. There is no particular model to these values, and they vary
 // slightly between chips; the values in this emulator are interpolated from 27 sample
 // values taken from a physical 6581 chip.
@@ -406,7 +406,7 @@
 // | --- | ----- | ----------------------------------------------------------------------- |
 // | 9   | A0    | Address pins, controlling which register is read from/written to. Five  |
 // | 10  | A1    | pins can address 32 registers but there are only 29 present; addresses  |
-// | 11  | A2    | 0x1d, 0x1e, and 0x1f are unused.                                        |
+// | 11  | A2    | $1D, $1E, and $1F are unused.                                           |
 // | 12  | A3    |                                                                         |
 // | 13  | A4    |                                                                         |
 // | --- | ----- | ----------------------------------------------------------------------- |
@@ -438,13 +438,13 @@
 // | --- | ----- | ----------------------------------------------------------------------- |
 // | 28  | Vdd   | +12V power supply. Not emulated.                                        |
 //
-// In the Commodore 64, U18 is a 6581. It responds to addresses from 0xd400 to 0xd7ff. This
-// is many more addresses than are necessary to accomodate the 29 registers that are
-// actually present. These registers repeat every 32 (0x20) addresses through that space.
-// For example, writing 0xd400, 0xd420, 0xd440, etc. will all write to the FRELO1 register,
-// and reading 0xd419, 0xd439, 0xd459, etc. will all read from the POTX register. It's
-// recommended to ignore this "feature" and just read from/write to the lowest address
-// (0xd400 and 0xd419 in these examples).
+// In the Commodore 64, U18 is a 6581. It responds to addresses from $D400 to $D7FF. This is
+// many more addresses than are necessary to accomodate the 29 registers that are actually
+// present. These registers repeat every 32 ($20) addresses through that space. For example,
+// writing $D400, $D420, $D440, etc. will all write to the FRELO1 register, and reading
+// $D419, $D439, $D459, etc. will all read from the POTX register. It's recommended to
+// ignore this "feature" and just read from/write to the lowest address ($D400 and $D419 in
+// these examples).
 //
 // R7, R38, C13, C37, and Q8 make up the external filter.
 
@@ -557,7 +557,7 @@ export default function Ic6581() {
   const dataPins = [...range(8)].map(pin => pins[`D${pin}`])
 
   // The 32 addressable registers on the 6581. Only 29 of these are actually used; reading
-  // the others will always return 0xff and writing them will have no effect. All are
+  // the others will always return $FF and writing them will have no effect. All are
   // write-only except for the last four in use (which are read-only and marked so here).
   const registers = Registers(
     'FRELO1', //  Voice 1 frequency, low 8 bits
@@ -646,7 +646,7 @@ export default function Ic6581() {
   // set to zero, audio output is silenced, and data lines are set back to their normal
   // unconnected state.
   //
-  // Since the three unused registers always return 0xff, we just set that here and keep it
+  // Since the three unused registers always return $FF, we just set that here and keep it
   // from changing.
   const reset = () => {
     for (const i of range(32)) {
@@ -666,12 +666,12 @@ export default function Ic6581() {
 
   // Reads a SID register. This only works as expected for the four read-only registers.
   //
-  // The three unused registers always return 0xff. The write-only registers return the
-  // value of the last write made to *any* SID register. However, in the real chip this
-  // last-write value 'fades' over time until, after 2000-4000 clock cycles, it is zero. The
-  // model for this fading is unknown and is not properly emulated here; this emulation
-  // simply returns the last written value as long as the last write has happened in the
-  // last 2000 cycles; otherwise it returns 0.
+  // The three unused registers always return $FF. The write-only registers return the value
+  // of the last write made to *any* SID register. However, in the real chip this last-write
+  // value 'fades' over time until, after 2000-4000 clock cycles, it is zero. The model for
+  // this fading is unknown and is not properly emulated here; this emulation simply returns
+  // the last written value as long as the last write has happened in the last 2000 cycles;
+  // otherwise it returns 0.
   const readRegister = index => (index < POTX ? lastWriteValue : registers[index])
 
   // Writes a value to a register. This does not affect the read-only and unused registers,

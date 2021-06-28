@@ -10,27 +10,27 @@
 // interval timers, and a 0.1 second-accuracy time-of-day clock.
 //
 // These features are controlled and interacted with via 16 8-bit registers on the chip. In
-// the Commodore 64, these can be accessed with the base addresses of 0xdc00 (for CIA 1) and
-// 0xdd00 (for CIA 2).
+// the Commodore 64, these can be accessed with the base addresses of $DC00 (for CIA 1) and
+// $DD00 (for CIA 2).
 //
 // | Offset | Register | Function                     |
 // | ------ | -------- | ---------------------------- |
-// | 0x0    | PRA      | Parallel Data Register A     |
-// | 0x1    | PRB      | Parallel Data Register B     |
-// | 0x2    | DDRA     | Data Direction Register A    |
-// | 0x3    | DDRB     | Data Direction Register B    |
-// | 0x4    | TALO     | Timer A Low Register         |
-// | 0x5    | TAHI     | Timer A High Register        |
-// | 0x6    | TBLO     | Timer B Low Register         |
-// | 0x7    | TBHI     | Timer B High Register        |
-// | 0x8    | TOD10TH  | Time-of-Day Tenths Register  |
-// | 0x9    | TODSEC   | Time-of-Day Seconds Register |
-// | 0xa    | TODMIN   | Time-of-Day Minutes Register |
-// | 0xb    | TODHR    | Time-of-Day Hours Regsiter   |
-// | 0xc    | SDR      | Serial Data Register         |
-// | 0xd    | ICR      | Interrupt Control Register   |
-// | 0xe    | CRA      | Control Register A           |
-// | 0xf    | CRB      | Control Register B           |
+// | $0     | PRA      | Parallel Data Register A     |
+// | $1     | PRB      | Parallel Data Register B     |
+// | $2     | DDRA     | Data Direction Register A    |
+// | $3     | DDRB     | Data Direction Register B    |
+// | $4     | TALO     | Timer A Low Register         |
+// | $5     | TAHI     | Timer A High Register        |
+// | $6     | TBLO     | Timer B Low Register         |
+// | $7     | TBHI     | Timer B High Register        |
+// | $8     | TOD10TH  | Time-of-Day Tenths Register  |
+// | $9     | TODSEC   | Time-of-Day Seconds Register |
+// | $A     | TODMIN   | Time-of-Day Minutes Register |
+// | $B     | TODHR    | Time-of-Day Hours Regsiter   |
+// | $C     | SDR      | Serial Data Register         |
+// | $D     | ICR      | Interrupt Control Register   |
+// | $E     | CRA      | Control Register A           |
+// | $F     | CRB      | Control Register B           |
 //
 // ## Parallel Data Ports
 //
@@ -206,12 +206,11 @@
 // The SC bit indicates whether the write is setting bits (1) or clearing them (0).
 // Therefore, somewhat unintuitively, sending a 0 for a bit does not clear that bit; it
 // leaves it unaffected. To set bits, one writes a value that has a 1 in the SC bit; i.e.,
-// writing 0x85 (10000101) will set the ALRM and TA bits and leave the other bits
-// unaffected.
+// writing $85 (10000101) will set the ALRM and TA bits and leave the other bits unaffected.
 //
 // The same works for clearing bits, except that the SC bit is 0 in that case. Similarly,
-// writing 0x05 (00000101) will *clear* the ALRM and TA bits and leave the others unchanged.
-// This means that clearing every bit actually requires writing something like 0x1F
+// writing $05 (00000101) will *clear* the ALRM and TA bits and leave the others unchanged.
+// This means that clearing every bit actually requires writing something like $1F
 // (00011111, the values of bits 5 and 6 actually don't matter because they're not
 // associated with any interrupt flags).
 //
@@ -231,21 +230,21 @@
 // the IRQ pin will go low.
 //
 // Here is an example for illustration. The reset state of the 6526 has all interrupt masks
-// set to 0. If 0x82 (10000010) is written to the register, then the Timer B mask will be
+// set to 0. If $82 (10000010) is written to the register, then the Timer B mask will be
 // turned on and all the others will remain off. If Timer B was then set to count exactly
-// two Timer A underflows (TBLO is 0x02, TBHI is 0x00, and the INMODE1 and INMODE0 bits of
-// CRB are set to 10), then the first Timer A underflow will only request an interrupt for
-// Timer A and the second will request for both.
+// two Timer A underflows (TBLO is $02, TBHI is $00, and the INMODE1 and INMODE0 bits of CRB
+// are set to 10), then the first Timer A underflow will only request an interrupt for Timer
+// A and the second will request for both.
 //
 // In this scenario, when Timer A underflows for the first time, the IRQ pin will not be low
-// and reading the ICR will yield 0x01 (00000001). The Timer A underflow has happened (hence
+// and reading the ICR will yield $01 (00000001). The Timer A underflow has happened (hence
 // the `A bit being set when reading the ICR), but no interrupt has actually been requested
 // (the IR bit is 0 and the IRQ pin is not low). This is because the Timer A mask, set by
 // writing the ICR, was never set to 1.
 //
 // The *next* time Timer A underflows, it also causes a Timer B underflow (since the latter
 // was set to count 2 Timer A underflows). This time, the IRQ pin *will* go low, and reading
-// the ICR will produce 0x83 (10000011). The TA and TB bits are both set, and the IR bit is
+// the ICR will produce $83 (10000011). The TA and TB bits are both set, and the IR bit is
 // also set, because the Timer B mask was set to 1 (the TA bit is set because a Timer A
 // event happened, but the Timer B event is what actually set IR).
 //
@@ -338,7 +337,7 @@
 //
 // RES resets the chip when it's held low. Resetting makes all registers go to 0 (which, as
 // a side effect, sets all parallel port pins to inputs, stops the timers, etc.) except for
-// the interval timer registers, which are all set to 0xFF.
+// the interval timer registers, which are all set to $FF.
 //
 // Finally, there is an active low chip select pin CS. Most of the chip continues
 // functioning (running down interval timers, keeping track of the TOD, receiving data on
@@ -447,11 +446,11 @@
 // interrupts are tied to the CPU's NMI pin rather than the regular IRQ pin, so they will be
 // handled immediately even if the CPU is masking interrupts.
 //
-// Registers for CIA1 are available at addresses 0xdc00 to 0xdcff, and regisers for CIA2 are
-// available at addresses 0xdd00 to 0xddff. These 256-address blocks are much more than is
+// Registers for CIA1 are available at addresses $DC00 to $DCFF, and regisers for CIA2 are
+// available at addresses $DD00 to $DDFF. These 256-address blocks are much more than is
 // necessary for the 16 registers on each chip. The registers instead appear to repeat every
-// 16 addresses; reading 0xdd0c will read the SDR register of CIA2, but so will reading
-// 0xdd1c, 0xdd2c, etc. It's recommended to ignore this "feature" and simply use the base
+// 16 addresses; reading $DD0C will read the SDR register of CIA2, but so will reading
+// $DD1C, $DD2C, etc. It's recommended to ignore this "feature" and simply use the base
 // address for each register.
 
 import Chip from 'components/chip'
@@ -681,14 +680,14 @@ export default function Ic6526() {
   // all outputs.
   //
   // This function does the following:
-  // 1. Sets interval timer registers to max (0xff each)
-  // 2. Clears all other registers (0x00 each) *
+  // 1. Sets interval timer registers to max ($FF each)
+  // 2. Clears all other registers ($00 each) *
   // 3. Clears the IRQ mask in the ICR latch
   // 4. Disconnects all data lines
   // 5. Sets SP and CNT as inputs
-  // 6. Resets _IRQ and _PC outputs to their default values
+  // 6. Resets IRQ and PC outputs to their default values
   //
-  // * Note that pins PA0...PA7 and PB0...PB7 are pulled up by internal resistors, which is
+  // * Note that pins PA0-PA7 and PB0-PB7 are pulled up by internal resistors, which is
   //   emulated, so the PCR registers will read all 1's for unconnected lines on reset.
   const reset = () => {
     // Backwards order to hit control registers first, so we know we're setting the TOD
