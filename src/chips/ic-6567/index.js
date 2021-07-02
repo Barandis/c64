@@ -56,8 +56,20 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Pins from 'components/pins'
 import Registers from 'components/registers'
-import { bitSet, bitValue, modeToPins, pinsToValue, range, setBitValue, valueToPins } from 'utils'
-import { CTRL1, ERST, IRST, MOBDAT, MOBMOB, RASTER, RST8, UNUSED1 } from './constants'
+import { bitValue, modeToPins, pinsToValue, range, valueToPins } from 'utils'
+import {
+  BORDER,
+  CTRL1,
+  CTRL2,
+  IE,
+  IR,
+  MEMPTR,
+  MOBDAT,
+  MOBMOB,
+  RASTER,
+  RST8,
+  UNUSED1,
+} from './constants'
 import ClockModule from './clock'
 
 const { INPUT, OUTPUT } = Pin
@@ -88,12 +100,12 @@ export default function Ic6567() {
     // to, and for that reason the bottom 6 address lines are bidirectional (there are 48
     // registers, so 6 bits is required to address them). The direction of A0-A5 therefore
     // is controlled by the CS, AEC, and R_W pins.
-    Pin(24, 'A0_A8', OUTPUT),
-    Pin(25, 'A1_A9', OUTPUT),
-    Pin(26, 'A2_A10', OUTPUT),
-    Pin(27, 'A3_A11', OUTPUT),
-    Pin(28, 'A4_A12', OUTPUT),
-    Pin(29, 'A5_A13', OUTPUT),
+    Pin(24, 'A0_A8', INPUT),
+    Pin(25, 'A1_A9', INPUT),
+    Pin(26, 'A2_A10', INPUT),
+    Pin(27, 'A3_A11', INPUT),
+    Pin(28, 'A4_A12', INPUT),
+    Pin(29, 'A5_A13', INPUT),
     Pin(30, 'A6', OUTPUT),
     Pin(31, 'A7', OUTPUT),
     Pin(32, 'A8', OUTPUT),
@@ -133,7 +145,7 @@ export default function Ic6567() {
     // system clock (PHI0) output that drives the CPU.
     Pin(21, 'PHICOLOR', INPUT),
     Pin(22, 'PHIIN', INPUT),
-    Pin(17, 'PHI0', OUTPUT),
+    Pin(17, 'PHI0', OUTPUT).clear(),
 
     // Light pen pin. A transition to low on this pin indicates that a light pen is
     // connected and has activated.
@@ -223,6 +235,8 @@ export default function Ic6567() {
     // by the readRegister/writeRegister functions without needing actual registers.
   )
 
+  const clock = ClockModule(pins, registers)
+
   // --------------------------------------------------------------------------------------
   // Reading/writing registers
   //
@@ -230,25 +244,23 @@ export default function Ic6567() {
   // from the rest of the subsystems and their contents are regularly read and written by
   // most of the rest of the them.
 
-  const regAddrPins = [...range(24, 30, true)].map(pin => pins[pin])
+  const regAddrPins = [...range(24, 30)].map(pin => pins[pin])
   const regDataPins = [...range(8)].map(pin => pins[`D${pin}`])
-
-  let rasterLatch = 0
 
   // Some registers have unused bits. These bits are not connected (i.e., are not written
   // on writes) and return 1 on reads. This array has a 1 for each unused bit; these masks
-  // are bitwise ORed with the register value on read and their inverses are bitwise ANDed
-  // with the new register value on write.
+  // are bitwise ORed with the register value on read, and the stored register value on
+  // write is the provided value bitwise ORed with the same mask.
   //
   // The seventeen unused registers operate this way on all bits, but that behavior is hard
   // coded into readRegister and writeRegister.
   const REGISTER_MASKS = Array(47)
     .fill(0)
     .map((_, i) => {
-      if (i === 0x16) return 0b11000000
-      if (i === 0x18) return 0b00000001
-      if (i === 0x19) return 0b01110000
-      if (i === 0x1a || i >= 0x20) return 0b11110000
+      if (i === CTRL2) return 0b11000000
+      if (i === MEMPTR) return 0b00000001
+      if (i === IR) return 0b01110000
+      if (i === IE || i >= BORDER) return 0b11110000
       return 0x00000000
     })
 
@@ -273,33 +285,35 @@ export default function Ic6567() {
     // stored internally and used to determine upon which line number a raster interrupt
     // should be generated.
     if (index === RASTER) {
-      rasterLatch = (rasterLatch & 0b100000000) | (value & 0xff)
-    }
-    if (index === CTRL1) {
-      rasterLatch = (rasterLatch & 0b011111111) | (bitValue(value, RST8) << 8)
+      // RASTER isn't written to at all.
+      clock.setRasterLatchLow8(value)
+    } else if (index === CTRL1) {
+      // CTRL1's RST8 bit isn't writable, but the rest are.
+      clock.setRasterLatchMsb(bitValue(value, RST8))
+      registers.CTRL1 = (registers.CTRL1 & 0x80) | (value & 0x7f)
+    } else if (index < UNUSED1 && index !== MOBMOB && index !== MOBDAT) {
+      // Unused registers and sprite collision registers are not writable.
+      registers[index] = value | REGISTER_MASKS[index]
     }
 
-    // Unused registers and sprite collision registers are not writable.
-    if (index < UNUSED1 && index !== MOBMOB && index !== MOBDAT) {
-      registers[index] = value & ~REGISTER_MASKS[index]
+    // Reset the IRQ pin if the IR register is zeroed
+    if (index === IR && (value & 0b10001111) === 0) {
+      pins.IRQ.float()
     }
   }
 
   const enableListener = () => pin => {
-    if (pin.low) {
-      const index = pinsToValue(...regAddrPins)
-      if (pins.R_W.low) {
-        modeToPins(INPUT, ...regDataPins)
-        const value = pinsToValue(...regDataPins)
-        writeRegister(index, value)
-      } else {
-        modeToPins(OUTPUT, ...regDataPins)
-        const value = readRegister(index)
-        valueToPins(value, ...regDataPins)
-      }
-    } else {
+    if (pin.high) {
       modeToPins(OUTPUT, ...regDataPins)
       valueToPins(null, ...regDataPins)
+    } else {
+      const index = pinsToValue(...regAddrPins)
+      if (pins.R_W.high) {
+        valueToPins(readRegister(index), ...regDataPins)
+      } else {
+        modeToPins(INPUT, ...regDataPins)
+        writeRegister(index, pinsToValue(...regDataPins))
+      }
     }
   }
 
@@ -307,26 +321,6 @@ export default function Ic6567() {
 
   // --------------------------------------------------------------------------------------
   // Clock and timing
-
-  const clock = ClockModule(pins, registers)
-
-  // Handles setting the raster register bits (the RASTER register for the lower 8 and the
-  // RST8 bit of the CTRL1 register for the 9th) whenever the internal raster counter
-  // changes.
-  const handleRaster = () => {
-    const { raster } = clock
-    if (raster !== registers.RASTER + (bitValue(registers.CTRL1, RST8) << 8)) {
-      registers.RASTER = raster & 0xff
-      registers.CTRL1 = setBitValue(registers.CTRL1, RST8, (raster >> 8) & 0x01)
-
-      // Fire an interrupt if the raster line has just changed to the one set via register
-      // AND if the raster interrupt enable bit is set
-      if (raster === rasterLatch && bitSet(registers.indexOf, ERST)) {
-        registers.IR |= 1 << IRST
-        pins.IRQ.clear()
-      }
-    }
-  }
 
   const clockListener = () => () => {
     divider += 1
@@ -338,8 +332,7 @@ export default function Ic6567() {
       pins.CAS.set()
 
       // -- Do PHI0 things here --
-      clock.updateTimers()
-      handleRaster()
+      clock.update()
 
       pins.PHI0.level = phi
 

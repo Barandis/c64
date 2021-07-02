@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { bitSet, bitValue } from 'utils'
-import { DEN, RST8 } from './constants'
+import { bitSet, setBitValue } from 'utils'
+import { DEN, ERST, IRQ, IRST, RST8 } from './constants'
 
 // The number of clock cycles in a raster line. This is different between different VIC
 // versions and even revisions; the 6569 (the PAL equivalent) has 63 cycles per line, while
@@ -29,7 +29,11 @@ export default function ClockModule(pins, registers) {
   let den = false
   let badLine = false
 
-  const updateTimers = () => {
+  let updateRaster = false
+  let rasterLatch = 0
+
+  const update = () => {
+    updateRaster = false
     // All of this just ensures that phase resets to 1 after reaching 2, cycle resets to 1
     // after cycle 65, and the raster line resets to 0 after raster line 311. Cycle numbers
     // are 1-based mostly because that's how they are in all of the timing diagrams I have
@@ -41,7 +45,8 @@ export default function ClockModule(pins, registers) {
       if (cycle > CYCLES_PER_LINE) {
         cycle = 1
         raster += 1
-        if (raster > RASTER_LINES_PER_FRAME) {
+        updateRaster = true
+        if (raster >= RASTER_LINES_PER_FRAME) {
           raster = 0
         }
       }
@@ -51,7 +56,17 @@ export default function ClockModule(pins, registers) {
 
     // Raster value is 9 bits - the MSB comes from the RST8 bit in the CTRL1 register; the
     // other 8 bits come from the RASTER register
-    raster = registers.RASTER + (bitValue(registers.CTRL1, RST8) << 8)
+    if (updateRaster) {
+      registers.RASTER = raster & 0xff
+      registers.CTRL1 = setBitValue(registers.CTRL1, RST8, (raster & 0x100) >> 8)
+
+      // Fire an interrupt if the raster line has just changed to the one set via register
+      // AND if the raster interrupt enable bit is set
+      if (raster === rasterLatch && bitSet(registers.IE, ERST)) {
+        registers.IR |= (1 << IRQ) | (1 << IRST)
+        pins.IRQ.clear()
+      }
+    }
 
     // The value of the DEN (display enable) bit on raster line 0x30 is recorded and used
     // for the rest of the frame for determining whether a line is a bad line. (Whether the
@@ -76,8 +91,10 @@ export default function ClockModule(pins, registers) {
       den
   }
 
+  update()
+
   return {
-    updateTimers,
+    update,
 
     get phase() {
       return phase
@@ -93,6 +110,14 @@ export default function ClockModule(pins, registers) {
 
     get badLine() {
       return badLine
+    },
+
+    setRasterLatchLow8(value) {
+      rasterLatch = (rasterLatch & 0x100) | value
+    },
+
+    setRasterLatchMsb(value) {
+      rasterLatch = setBitValue(rasterLatch, 8, value)
     },
   }
 }

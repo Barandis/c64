@@ -123,7 +123,7 @@ export function lo4(byte) {
 
 export function dumpPins(chip, title = 'Pins') {
   let output = `${title}:`
-  for (const pin of chip) {
+  for (const pin of chip.pins) {
     if (pin) {
       const mode = ['U', 'I', 'O', 'B'][pin.mode]
       output += `\n  ${`${pin.name} (${mode}) ${'.'.repeat(12)}`.substring(0, 12)} ${pin.level}`
