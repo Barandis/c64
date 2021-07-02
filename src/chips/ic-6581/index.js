@@ -452,7 +452,7 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Pins from 'components/pins'
 import Registers from 'components/registers'
-import { setMode, valueToPins, pinsToValue, range } from 'utils'
+import { modeToPins, pinsToValue, range, valueToPins } from 'utils'
 import {
   ATDCY1,
   ATDCY2,
@@ -823,14 +823,14 @@ export default function Ic6581() {
 
   const enableListener = () => pin => {
     if (pin.high) {
-      setMode(OUTPUT, ...dataPins)
+      modeToPins(OUTPUT, ...dataPins)
       valueToPins(null, ...dataPins)
     } else {
       const index = pinsToValue(...addrPins)
       if (pins.R_W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {
-        setMode(INPUT, ...dataPins)
+        modeToPins(INPUT, ...dataPins)
         writeRegister(index, pinsToValue(...dataPins))
       }
     }

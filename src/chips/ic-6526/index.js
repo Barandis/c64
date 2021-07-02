@@ -457,7 +457,7 @@ import Chip from 'components/chip'
 import Pin from 'components/pin'
 import Pins from 'components/pins'
 import Registers from 'components/registers'
-import { valueToPins, pinsToValue, setMode, setBit, bitSet, range } from 'utils'
+import { bitSet, modeToPins, pinsToValue, range, setBit, valueToPins } from 'utils'
 import {
   PRA,
   PRB,
@@ -749,14 +749,14 @@ export default function Ic6526() {
   // CS from high to low.
   const enableListener = () => pin => {
     if (pin.high) {
-      setMode(OUTPUT, ...dataPins)
+      modeToPins(OUTPUT, ...dataPins)
       valueToPins(null, ...dataPins)
     } else {
       const index = pinsToValue(...addrPins)
       if (pins.R_W.high) {
         valueToPins(readRegister(index), ...dataPins)
       } else {
-        setMode(INPUT, ...dataPins)
+        modeToPins(INPUT, ...dataPins)
         writeRegister(index, pinsToValue(...dataPins))
       }
     }

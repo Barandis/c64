@@ -61,7 +61,7 @@ export function pinsToValue(...pins) {
   return value
 }
 
-export function setMode(mode, ...pins) {
+export function modeToPins(mode, ...pins) {
   for (const pin of pins) {
     pin.mode = mode
   }
@@ -89,6 +89,10 @@ export function clearBit(value, bit) {
 
 export function toggleBit(value, bit) {
   return value ^ (1 << bit)
+}
+
+export function setBitValue(value, bit, newValue) {
+  return (newValue & 1) === 1 ? setBit(value, bit) : clearBit(value, bit)
 }
 
 export function bin(value, digits = 8) {
