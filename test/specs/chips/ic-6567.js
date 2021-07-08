@@ -18,6 +18,14 @@ import {
   rasterIrqDisabled,
 } from './ic-6567/clock'
 import {
+  addressGen,
+  addressPins,
+  aecBgBadLine,
+  aecBgRegularLine,
+  baBgBadLine,
+  baBgRegularLine,
+} from './ic-6567/memory'
+import {
   readBottomFour,
   readCollision,
   readCtrl2,
@@ -100,5 +108,13 @@ describe('6567 VIC II', () => {
     it('modifies which lines are bad if YSCROLL is changed', test(badLineScroll))
     it('handles raster interrupts', test(rasterIrq))
     it('does not fire raster interrupts if they are are disabled', test(rasterIrqDisabled))
+  })
+  describe.only('memory manager', () => {
+    it('generates an address of the right type and value', test(addressGen))
+    it('applies the right values to the address pins at the right times', test(addressPins))
+    it('sets BA high on an entire regular line with no sprites', test(baBgRegularLine))
+    it('lowers BA in cycles 12-54 on a bad line', test(baBgBadLine))
+    it('alternates AEC with clock on a regular line with no sprites', test(aecBgRegularLine))
+    it('lowers AEC in cycles 15-54 on a bad line', test(aecBgBadLine))
   })
 })

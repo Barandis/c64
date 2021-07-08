@@ -10,9 +10,9 @@ import {
   IE,
   IR,
   MEMPTR,
-  MOBDAT,
-  MOBMOB,
   RASTER,
+  SDCOL,
+  SSCOL,
   UNUSED1,
   UNUSED17,
 } from 'chips/ic-6567/constants'
@@ -22,7 +22,7 @@ import { range } from 'utils'
 // Read from every register that uses all 8 bits
 export function readRegular({ chip, readRegister }) {
   for (const i of range(BORDER)) {
-    if (![CTRL2, MEMPTR, IR, IE, MOBMOB, MOBDAT].includes(i)) {
+    if (![CTRL2, MEMPTR, IR, IE, SSCOL, SDCOL].includes(i)) {
       const value = rand(256)
       chip.registers[i] = value
       assert.equal(readRegister(i), value)
@@ -34,7 +34,7 @@ export function readRegular({ chip, readRegister }) {
 // their writes are commited to a latch and do not affect the registers themselves.
 export function writeRegular({ chip, writeRegister }) {
   for (const i of range(BORDER)) {
-    if (![RASTER, CTRL1, CTRL2, MEMPTR, IR, IE, MOBMOB, MOBDAT].includes(i)) {
+    if (![RASTER, CTRL1, CTRL2, MEMPTR, IR, IE, SSCOL, SDCOL].includes(i)) {
       const value = rand(256)
       writeRegister(i, value)
       assert.equal(chip.registers[i], value)
@@ -110,12 +110,12 @@ export function readWriteUnused({ readRegister, writeRegister }) {
 export function readCollision({ chip, readRegister }) {
   for (const _ of range(8)) {
     const value = rand(256)
-    chip.registers.MOBMOB = value
-    chip.registers.MOBDAT = value
-    assert.equal(readRegister(MOBMOB), value)
-    assert.equal(chip.registers.MOBMOB, 0)
-    assert.equal(readRegister(MOBDAT), value)
-    assert.equal(chip.registers.MOBDAT, 0)
+    chip.registers.SSCOL = value
+    chip.registers.SDCOL = value
+    assert.equal(readRegister(SSCOL), value)
+    assert.equal(chip.registers.SSCOL, 0)
+    assert.equal(readRegister(SDCOL), value)
+    assert.equal(chip.registers.SDCOL, 0)
   }
 }
 
@@ -123,10 +123,10 @@ export function readCollision({ chip, readRegister }) {
 export function writeCollision({ chip, writeRegister }) {
   for (const _ of range(8)) {
     const value = rand(256)
-    writeRegister(MOBMOB, value)
-    writeRegister(MOBDAT, value)
-    assert.equal(chip.registers.MOBMOB, 0)
-    assert.equal(chip.registers.MOBDAT, 0)
+    writeRegister(SSCOL, value)
+    writeRegister(SDCOL, value)
+    assert.equal(chip.registers.SSCOL, 0)
+    assert.equal(chip.registers.SDCOL, 0)
   }
 }
 

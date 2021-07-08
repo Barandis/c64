@@ -4,22 +4,17 @@
 // https://opensource.org/licenses/MIT
 
 import { bitSet, setBitValue } from 'utils'
-import { DEN, ERST, IRQ, IRST, RST8 } from './constants'
-
-// The number of clock cycles in a raster line. This is different between different VIC
-// versions and even revisions; the 6569 (the PAL equivalent) has 63 cycles per line, while
-// the 6567R56A has 64 cycles per line. The particular one emulated here is the 6567R8,
-// which uses 65 cycles per line.
-const CYCLES_PER_LINE = 65
-
-// The number of raster lines in a single frame. This again is different between different
-// versions of the VIC; the 6567R56A has 262 while the 6569 has 312.
-const RASTER_LINES_PER_FRAME = 263
-
-// The minimum and maximum raster lines that produce visible graphic output. This does not
-// include the border. Bad line conditions can only happen on a line in the visible range.
-const RASTER_MIN_VISIBLE = 48
-const RASTER_MAX_VISIBLE = 247
+import {
+  CYCLES_PER_LINE,
+  DEN,
+  ERST,
+  IRQ,
+  IRST,
+  RASTER_LINES_PER_FRAME,
+  RASTER_MAX_VISIBLE,
+  RASTER_MIN_VISIBLE,
+  RST8,
+} from './constants'
 
 export default function ClockModule(pins, registers) {
   let raster = RASTER_LINES_PER_FRAME

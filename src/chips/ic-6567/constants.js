@@ -4,53 +4,55 @@
 // https://opensource.org/licenses/MIT
 
 // Register addresses
-export const MOB0X = 0x00
-export const MOB0Y = 0x01
-export const MOB1X = 0x02
-export const MOB1Y = 0x03
-export const MOB2X = 0x04
-export const MOB2Y = 0x05
-export const MOB3X = 0x06
-export const MOB3Y = 0x07
-export const MOB4X = 0x08
-export const MOB4Y = 0x09
-export const MOB5X = 0x0a
-export const MOB5Y = 0x0b
-export const MOB6X = 0x0c
-export const MOB6Y = 0x0d
-export const MOB7X = 0x0e
-export const MOB7Y = 0x0f
-export const MOBMSB = 0x10
+// There is no register naming scheme listed in any literature that I have seen. These names
+// are all made up by me.
+export const SPR0X = 0x00
+export const SPR0Y = 0x01
+export const SPR1X = 0x02
+export const SPR1Y = 0x03
+export const SPR2X = 0x04
+export const SPR2Y = 0x05
+export const SPR3X = 0x06
+export const SPR3Y = 0x07
+export const SPR4X = 0x08
+export const SPR4Y = 0x09
+export const SPR5X = 0x0a
+export const SPR5Y = 0x0b
+export const SPR6X = 0x0c
+export const SPR6Y = 0x0d
+export const SPR7X = 0x0e
+export const SPR7Y = 0x0f
+export const SPRMSX = 0x10
 export const CTRL1 = 0x11
 export const RASTER = 0x12
 export const LPX = 0x13
 export const LPY = 0x14
-export const MOBEN = 0x15
+export const SPREN = 0x15
 export const CTRL2 = 0x16
-export const MOBYE = 0x17
+export const SPRYEX = 0x17
 export const MEMPTR = 0x18
 export const IR = 0x19
 export const IE = 0x1a
-export const MOBDP = 0x1b
-export const MOBMC = 0x1c
-export const MOBXE = 0x1d
-export const MOBMOB = 0x1e
-export const MOBDAT = 0x1f
+export const SPRDP = 0x1b
+export const SPRMC = 0x1c
+export const SPRXEX = 0x1d
+export const SSCOL = 0x1e
+export const SDCOL = 0x1f
 export const BORDER = 0x20
 export const BG0 = 0x21
 export const BG1 = 0x22
 export const BG2 = 0x23
 export const BG3 = 0x24
-export const MOBMC0 = 0x25
-export const MOBMC1 = 0x26
-export const MOB0C = 0x27
-export const MOB1C = 0x28
-export const MOB2C = 0x29
-export const MOB3C = 0x2a
-export const MOB4C = 0x2b
-export const MOB5C = 0x2c
-export const MOB6C = 0x2d
-export const MOB7C = 0x2e
+export const SPRMC0 = 0x25
+export const SPRMC1 = 0x26
+export const SPR0C = 0x27
+export const SPR1C = 0x28
+export const SPR2C = 0x29
+export const SPR3C = 0x2a
+export const SPR4C = 0x2b
+export const SPR5C = 0x2c
+export const SPR6C = 0x2d
+export const SPR7C = 0x2e
 export const UNUSED1 = 0x2f
 export const UNUSED2 = 0x30
 export const UNUSED3 = 0x31
@@ -120,3 +122,30 @@ export const MDGRAY = 12
 export const LTGREEN = 13
 export const LTBLUE = 14
 export const LTGRAY = 15
+
+// Memory access types
+export const ACCESS_TYPE_CPU = 'x'
+export const ACCESS_TYPE_IDLE = 'i'
+export const ACCESS_TYPE_REFRESH = 'r'
+export const ACCESS_TYPE_VM_COLOR = 'c'
+export const ACCESS_TYPE_BM_CHAR = 'g'
+export const ACCESS_TYPE_SPR_PTR = 'p'
+export const ACCESS_TYPE_SPR_DATA = 's'
+
+export const SPR_PTR_CYCLES = [60, 62, 64, 1, 3, 5, 7, 9]
+
+// Raster-related constants
+// The number of clock cycles in a raster line. This is different between different VIC
+// versions and even revisions; the 6569 (the PAL equivalent) has 63 cycles per line, while
+// the 6567R56A has 64 cycles per line. The particular one emulated here is the 6567R8,
+// which uses 65 cycles per line.
+export const CYCLES_PER_LINE = 65
+
+// The number of raster lines in a single frame. This again is different between different
+// versions of the VIC; the 6567R56A has 262 while the 6569 has 312.
+export const RASTER_LINES_PER_FRAME = 263
+
+// The minimum and maximum raster lines that produce visible graphic output. This does not
+// include the border. Bad line conditions can only happen on a line in the visible range.
+export const RASTER_MIN_VISIBLE = 48
+export const RASTER_MAX_VISIBLE = 247

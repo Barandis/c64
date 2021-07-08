@@ -64,13 +64,15 @@ import {
   IE,
   IR,
   MEMPTR,
-  MOBDAT,
-  MOBMOB,
+  SDCOL,
+  SSCOL,
   RASTER,
   RST8,
   UNUSED1,
+  SPRYEX,
 } from './constants'
 import ClockModule from './clock'
+import MemoryController from './memory'
 
 const { INPUT, OUTPUT } = Pin
 
@@ -183,59 +185,60 @@ export default function Ic6567() {
   )
 
   const registers = Registers(
-    'MOB0X', //  Sprite 0 X coordinate
-    'MOB0Y', //  Sprite 0 Y coordinate
-    'MOB1X', //  Sprite 1 X coordinate
-    'MOB1Y', //  Sprite 1 Y coordinate
-    'MOB2X', //  Sprite 2 X coordinate
-    'MOB2Y', //  Sprite 2 Y coordinate
-    'MOB3X', //  Sprite 3 X coordinate
-    'MOB3Y', //  Sprite 3 Y coordinate
-    'MOB4X', //  Sprite 4 X coordinate
-    'MOB4Y', //  Sprite 4 Y coordinate
-    'MOB5X', //  Sprite 5 X coordinate
-    'MOB5Y', //  Sprite 5 Y coordinate
-    'MOB6X', //  Sprite 6 X coordinate
-    'MOB6Y', //  Sprite 6 Y coordinate
-    'MOB7X', //  Sprite 7 X coordinate
-    'MOB7Y', //  Sprite 7 Y coordinate
-    'MOBMSB', // Sprite X coordinate MSBs
+    'SPR0X', //  Sprite 0 X coordinate
+    'SPR0Y', //  Sprite 0 Y coordinate
+    'SPR1X', //  Sprite 1 X coordinate
+    'SPR1Y', //  Sprite 1 Y coordinate
+    'SPR2X', //  Sprite 2 X coordinate
+    'SPR2Y', //  Sprite 2 Y coordinate
+    'SPR3X', //  Sprite 3 X coordinate
+    'SPR3Y', //  Sprite 3 Y coordinate
+    'SPR4X', //  Sprite 4 X coordinate
+    'SPR4Y', //  Sprite 4 Y coordinate
+    'SPR5X', //  Sprite 5 X coordinate
+    'SPR5Y', //  Sprite 5 Y coordinate
+    'SPR6X', //  Sprite 6 X coordinate
+    'SPR6Y', //  Sprite 6 Y coordinate
+    'SPR7X', //  Sprite 7 X coordinate
+    'SPR7Y', //  Sprite 7 Y coordinate
+    'SPRMSX', // Sprite X coordinate MSBs
     'CTRL1', //  Control register 1
     'RASTER', // Raster counter
     'LPX', //    Light pen X coordinate
     'LPY', //    Light pen Y coordinate
-    'MOBEN', //  Sprite enable
+    'SPREN', //  Sprite enable
     'CTRL2', //  Control register 2
-    'MOBYE', //  Sprite Y expansion
+    'SPRYEX', // Sprite Y expansion
     'MEMPTR', // Memory pointers
     'IR', //     Interrupt register
     'IE', //     Interrupt enable
-    'MOBDP', //  Sprite data priority
-    'MOBMC', //  Sprite multicolor
-    'MOBXE', //  Sprite X expansion
-    'MOBMOB', // Sprite-sprite collision
-    'MOBDAT', // Sprite-data collision
+    'SPRDP', //  Sprite data priority
+    'SPRMC', //  Sprite multicolor
+    'SPRXEX', // Sprite X expansion
+    'SSCOL', //  Sprite-sprite collision
+    'SDCOL', //  Sprite-data collision
     'BORDER', // Border color
     'BG0', //    Background color 0
     'BG1', //    Background color 1
     'BG2', //    Background color 2
     'BG3', //    Background color 3
-    'MOBMC0', // Sprite multicolor 0
-    'MOBMC1', // Sprite multicolor 1
-    'MOB0C', //  Sprite 0 color
-    'MOB1C', //  Sprite 1 color
-    'MOB2C', //  Sprite 2 color
-    'MOB3C', //  Sprite 3 color
-    'MOB4C', //  Sprite 4 color
-    'MOB5C', //  Sprite 5 color
-    'MOB6C', //  Sprite 6 color
-    'MOB7C', //  Sprite 7 color
+    'SPRMC0', // Sprite multicolor 0
+    'SPRMC1', // Sprite multicolor 1
+    'SPR0C', //  Sprite 0 color
+    'SPR1C', //  Sprite 1 color
+    'SPR2C', //  Sprite 2 color
+    'SPR3C', //  Sprite 3 color
+    'SPR4C', //  Sprite 4 color
+    'SPR5C', //  Sprite 5 color
+    'SPR6C', //  Sprite 6 color
+    'SPR7C', //  Sprite 7 color
     // 17 unused registers, named UNUSED1 to UNUSED17, are not actually created. Their
     // contents are always read as 0xff, and writes to them have no effect. This is handled
     // by the readRegister/writeRegister functions without needing actual registers.
   )
 
   const clock = ClockModule(pins, registers)
+  const memory = MemoryController(pins, registers, clock)
 
   // --------------------------------------------------------------------------------------
   // Reading/writing registers
@@ -244,8 +247,8 @@ export default function Ic6567() {
   // from the rest of the subsystems and their contents are regularly read and written by
   // most of the rest of the them.
 
-  const regAddrPins = [...range(24, 30)].map(pin => pins[pin])
-  const regDataPins = [...range(8)].map(pin => pins[`D${pin}`])
+  const addrRegPins = [...range(24, 30)].map(pin => pins[pin])
+  const dataRegPins = [...range(8)].map(pin => pins[`D${pin}`])
 
   // Some registers have unused bits. These bits are not connected (i.e., are not written
   // on writes) and return 1 on reads. This array has a 1 for each unused bit; these masks
@@ -272,7 +275,7 @@ export default function Ic6567() {
     if (index >= UNUSED1) return 0xff
     const value = registers[index] | REGISTER_MASKS[index]
     // Sprite collision data is reset each time it's read.
-    if (index === MOBMOB || index === MOBDAT) {
+    if (index === SSCOL || index === SDCOL) {
       registers[index] = 0
     }
     return value
@@ -291,8 +294,22 @@ export default function Ic6567() {
       // CTRL1's RST8 bit isn't writable, but the rest are.
       clock.setRasterLatchMsb(bitValue(value, RST8))
       registers.CTRL1 = (registers.CTRL1 & 0x80) | (value & 0x7f)
-    } else if (index < UNUSED1 && index !== MOBMOB && index !== MOBDAT) {
+    } else if (index < UNUSED1 && index !== SSCOL && index !== SDCOL) {
       // Unused registers and sprite collision registers are not writable.
+      if (index === SPRYEX) {
+        // The memory module needs to know specifically as soon as a Y-expansion bit is
+        // cleared. This affects the way that the rest of a sprite is read, if the clearing
+        // is done in a specific phase (either cycle 16 phase 1 or cycle 15 phase 2,
+        // depending on the desired effect), so this information needs to be conveyed to the
+        // memory module immediately.
+        const oldValue = registers.SPRYEX
+        // The XOR results in 1-bits for any bit whose value is different between the old
+        // value and the new, and the AND then zeroes out any of those bits that were 0 in
+        // the old value. The result is a number whose bits are 1 if they were 1 in the old
+        // value and changed (i.e., were cleared) in the new value, and 0 for anything else.
+        const cleared = (oldValue ^ value) & oldValue
+        memory.clearYExp(cleared)
+      }
       registers[index] = value | REGISTER_MASKS[index]
     }
 
@@ -304,15 +321,15 @@ export default function Ic6567() {
 
   const enableListener = () => pin => {
     if (pin.high) {
-      modeToPins(OUTPUT, ...regDataPins)
-      valueToPins(null, ...regDataPins)
+      modeToPins(OUTPUT, ...dataRegPins)
+      valueToPins(null, ...dataRegPins)
     } else {
-      const index = pinsToValue(...regAddrPins)
+      const index = pinsToValue(...addrRegPins)
       if (pins.R_W.high) {
-        valueToPins(readRegister(index), ...regDataPins)
+        valueToPins(readRegister(index), ...dataRegPins)
       } else {
-        modeToPins(INPUT, ...regDataPins)
-        writeRegister(index, pinsToValue(...regDataPins))
+        modeToPins(INPUT, ...dataRegPins)
+        writeRegister(index, pinsToValue(...dataRegPins))
       }
     }
   }
@@ -333,17 +350,31 @@ export default function Ic6567() {
 
       // -- Do PHI0 things here --
       clock.update()
+      memory.preRead()
 
       pins.PHI0.level = phi
 
+      const [type, addr] = memory.generateAddress()
+
       // -- Do RAS things here --
+      memory.lowToPins(addr)
       pins.RAS.clear()
       // -- Do CAS things here --
+      memory.highToPins(addr)
       pins.CAS.clear()
+
+      memory.read(type)
     }
   }
 
   pins.PHIIN.addListener(clockListener())
 
-  return Chip(pins, registers)
+  return Object.assign(Chip(pins, registers), {
+    get clock() {
+      return clock
+    },
+    get memory() {
+      return memory
+    },
+  })
 }

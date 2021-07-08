@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import ClockModule from 'chips/ic-6567/clock'
 import { CTRL1, DEN, ERST, IE, IR, RASTER, RST8 } from 'chips/ic-6567/constants'
 import Pin from 'components/pin'
 import { assert } from 'test/helper'
@@ -63,7 +62,7 @@ export function activationOrder({ tr }) {
 
 // Phase moves back and forth between 1 and 2 with every clock transition
 export function phase({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
 
   assert.equal(clock.phase, 1)
   clock.update()
@@ -74,7 +73,7 @@ export function phase({ chip }) {
 
 // Cycle increments every *other* clock pulse, returning to 1 after reaching 65.
 export function cycle({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
 
   for (const i of range(1, 65, true)) {
     assert.equal(clock.cycle, i)
@@ -88,7 +87,7 @@ export function cycle({ chip }) {
 // Raster increments every 130 clock pulses (each time cycle returns to 0), returning to 0
 // after reaching 262. The contents of the raster registers also changes accordingly.
 export function raster({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
 
   for (const i of range(263)) {
     assert.equal(clock.raster, i, 'internal raster number incorrect')
@@ -105,7 +104,7 @@ export function raster({ chip }) {
 // Test that bad lines are indicated where they're supposed to be, with no y-scroll and with
 // the DEN bit of CTRL1 set. This is "normal" operation.
 export function badLineNormal({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
   chip.registers.CTRL1 = setBit(chip.registers.CTRL1, DEN)
 
   for (const i of range(263)) {
@@ -123,7 +122,7 @@ export function badLineNormal({ chip }) {
 
 // Test that there are no bad lines at all of DEN is cleared
 export function badLineDenOff({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
 
   // DEN is 0 by default, so doing nothing means it's cleared
   for (const i of range(263)) {
@@ -136,7 +135,7 @@ export function badLineDenOff({ chip }) {
 }
 
 export function badLineScroll({ chip }) {
-  const clock = ClockModule(chip.pins, chip.registers)
+  const { clock } = chip
   chip.registers.CTRL1 = setBit(chip.registers.CTRL1, DEN)
 
   for (const y of range(8)) {
